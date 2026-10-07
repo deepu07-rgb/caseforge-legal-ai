@@ -2860,8 +2860,38 @@ fn argument_tree_put(
     Ok(report)
 }
 
+/// Packaged-install layout (B-S4-00): Tauri places `resources` declared with `../` under `<install>/_up_/`.
+/// Returns that folder when it holds the bundled sidecars and contracts, i.e. when running from an installer.
+/// In a development build (`target/debug/caseforge.exe`) no such folder exists and nothing changes.
+pub fn installed_layout_root(exe_dir: &std::path::Path) -> Option<std::path::PathBuf> {
+    let root = exe_dir.join("_up_");
+    (root.join("contracts").join("constants.json").is_file()
+        && root.join("sidecars").join("infer_llm").join("infer_llm.py").is_file())
+    .then_some(root)
+}
+
+/// Make an installed copy find its bundled files without any developer setup:
+/// - working directory becomes the resource root, which every cwd-relative lookup (`contracts/...`, `sidecars/...`)
+///   already tries first;
+/// - `CASEFORGE_PYTHON` points to the bundled interpreter unless the user set their own.
+/// User data is unaffected: the vault lives under Tauri's absolute per-user app-data directory.
+fn bootstrap_installed_layout() {
+    let Some(exe_dir) = std::env::current_exe().ok().and_then(|p| p.parent().map(|d| d.to_path_buf())) else {
+        return;
+    };
+    let Some(root) = installed_layout_root(&exe_dir) else {
+        return;
+    };
+    let _ = std::env::set_current_dir(&root);
+    let python = root.join("runtime-python").join("python.exe");
+    if std::env::var_os("CASEFORGE_PYTHON").is_none() && python.is_file() {
+        std::env::set_var("CASEFORGE_PYTHON", python);
+    }
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    bootstrap_installed_layout();
     // Force process start clocks to initialize early.
     Lazy::force(&PROCESS_START);
     Lazy::force(&PROCESS_START_UNIX_MS);
@@ -3043,4 +3073,31 @@ pub fn run() {
         })
         .run(tauri::generate_context!())
         .expect("error while running CaseForge");
+}
+
+#[cfg(test)]
+mod installed_layout_tests {
+    use super::installed_layout_root;
+    use std::fs;
+
+    fn touch(path: &std::path::Path) {
+        fs::create_dir_all(path.parent().unwrap()).unwrap();
+        fs::write(path, b"x").unwrap();
+    }
+
+    #[test]
+    fn installed_layout_requires_both_contracts_and_the_llm_sidecar() {
+        let exe_dir = tempfile::tempdir().unwrap();
+        // Development layout: nothing bundled next to the executable.
+        assert!(installed_layout_root(exe_dir.path()).is_none());
+
+        // Partial bundle (contracts only) must not be mistaken for an install.
+        let up = exe_dir.path().join("_up_");
+        touch(&up.join("contracts").join("constants.json"));
+        assert!(installed_layout_root(exe_dir.path()).is_none());
+
+        // Complete bundle: resource root is `<exe dir>/_up_`.
+        touch(&up.join("sidecars").join("infer_llm").join("infer_llm.py"));
+        assert_eq!(installed_layout_root(exe_dir.path()), Some(up));
+    }
 }

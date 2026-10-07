@@ -28,9 +28,10 @@
     "active": true,
     "targets": "all",
     "resources": [
-      "../sidecars/docpipe/**/*",
-      "../contracts/ocr_config.json",
-      "../contracts/constants.json"
+      "../sidecars/**/*",
+      "../contracts/**/*",
+      "../packs/official/**/*",
+      "../runtime-python/**/*"
     ],
     "icon": [
       "icons/32x32.png",
