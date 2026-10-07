@@ -1,0 +1,5 @@
+[CASEFORGE_SYNTH_NOT_LAW pack=S-SYNTH-GRETRIEVAL-v1]
+Neutral citation: [2018] INSC DEMO 3
+Court: synthetic India
+The Court held that arbitration agreement must be in writing.
+This excerpt is product-owner synthetic GOLDEN material for retrieval metrics only.

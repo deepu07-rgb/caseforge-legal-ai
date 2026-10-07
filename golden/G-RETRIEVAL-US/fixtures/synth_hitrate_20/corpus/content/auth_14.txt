@@ -1,0 +1,5 @@
+[CASEFORGE_SYNTH_NOT_LAW pack=S-SYNTH-GRETRIEVAL-v1]
+Neutral citation: 547 U.S. DEMO 14
+Court: synthetic United States
+The Court held that securities fraud requires material misstatement.
+This excerpt is product-owner synthetic GOLDEN material for retrieval metrics only.

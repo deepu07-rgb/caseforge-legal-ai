@@ -1,0 +1,34 @@
+[SYNTHETIC_DEMO_NOT_LAW — fictional teaching packet]
+
+CASE TITLE: M/s Blue River Traders v. Rohan Mehta
+JURISDICTION: India
+COURT: Commercial Court / Magistrate Court (teaching stub)
+MATTER TYPE: Negotiable Instruments — cheque dishonour
+USER SIDE: Plaintiff / Complainant
+
+PARTIES
+1. Blue River Traders (partnership firm) — Complainant / Payee
+2. Rohan Mehta — Accused / Drawer of cheque
+
+CHRONOLOGY
+- 2025-01-10: Goods supply invoice INV-BRT-1042 for INR 4,50,000 raised on Rohan Mehta.
+- 2025-01-12: Mehta issues cheque no. 778821 drawn on "Demo Bank Ltd., Pune Branch" for INR 4,50,000, payable to Blue River Traders, dated 2025-01-12.
+- 2025-01-20: Cheque presented through Complainant's bank.
+- 2025-01-22: Cheque returned unpaid with bank memo: "Funds insufficient".
+- 2025-01-28: Statutory demand notice under NI Act s.138 issued by RPAD to Mehta's last known address (ACK teaching stub: delivered 2025-01-30).
+- 2025-02-20: No payment within 15 days of receipt of notice.
+- 2025-03-05: Complaint filed within limitation teaching window.
+
+DOCUMENTS (inventory for intake dogfood)
+1. Invoice INV-BRT-1042
+2. Cheque image / photocopy 778821
+3. Bank return memo dated 2025-01-22
+4. Legal notice + postal receipt + acknowledgment
+5. Complaint draft
+
+PRAYER / RELIEF (teaching)
+- Convict under NI Act s.138 (criminal complaint path) and/or recover INR 4,50,000 with interest and costs (civil recovery path as pleaded in teaching stub).
+
+NOTES FOR COUNSEL (easy case)
+- Single transaction, single cheque, clear dishonour memo, notice served, no payment.
+- Primary dispute if any: identity of signatory is not contested in this demo.

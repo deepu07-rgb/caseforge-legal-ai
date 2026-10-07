@@ -1,0 +1,27 @@
+{
+  "project": "CaseForge G-DOCS MVP-80",
+  "batch": "B-S1-05",
+  "rubric_version": "LABELING_RUBRIC.md",
+  "roles": {
+    "labeler_a": {
+      "name": null,
+      "email_or_handle": null,
+      "trained_at": null
+    },
+    "labeler_b": {
+      "name": null,
+      "email_or_handle": null,
+      "trained_at": null
+    },
+    "adjudicator": {
+      "name": null,
+      "email_or_handle": null,
+      "trained_at": null
+    },
+    "content_owner": {
+      "name": null,
+      "email_or_handle": null
+    }
+  },
+  "notes": "Copy to ROSTER.json and fill. Do not lock GOLDEN without dual review."
+}

@@ -1,0 +1,66 @@
+﻿{
+    "mode":  "voice_duplex",
+    "steps":  [
+                  {
+                      "step":  1,
+                      "action":  "voice_court.gate",
+                      "expect_full_or_unknown":  true
+                  },
+                  {
+                      "step":  2,
+                      "source":  "stt+case_graph",
+                      "action":  "voice_court.turn",
+                      "role":  "adversary"
+                  },
+                  {
+                      "step":  3,
+                      "source":  "stt+case_graph",
+                      "action":  "voice_court.turn",
+                      "role":  "bench"
+                  },
+                  {
+                      "step":  4,
+                      "source":  "stt+case_graph",
+                      "action":  "voice_court.turn",
+                      "role":  "adversary"
+                  },
+                  {
+                      "action":  "assert.network_off",
+                      "step":  5
+                  },
+                  {
+                      "step":  6,
+                      "ac":  "AC-3.3",
+                      "budget":  15,
+                      "action":  "assert.turn_latency_s"
+                  },
+                  {
+                      "action":  "voice_court.debrief",
+                      "step":  7
+                  },
+                  {
+                      "step":  8,
+                      "code":  "CF_VOICE_COURT_LITE_REFUSE",
+                      "force_tier":  "lite",
+                      "action":  "assert.lite_refuse"
+                  }
+              ],
+    "pipeline_id":  "caseforge.voice_court.v1",
+    "network_required":  false,
+    "batch":  "B-S2-04",
+    "user_lines":  [
+                       "My Lord, I seek interim relief as pleaded on the case graph.",
+                       "The chronology and exhibit support urgency.",
+                       "I close without predicting the outcome."
+                   ],
+    "format":  "Bail_Interim_Motion",
+    "authoritative":  true,
+    "tts_roles":  [
+                      "bench",
+                      "opposition",
+                      "witness"
+                  ],
+    "language":  "English",
+    "status":  "GOLDEN",
+    "script_id":  "script-voice-bail-01"
+}

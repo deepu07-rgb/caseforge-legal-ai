@@ -1,0 +1,28 @@
+{
+  "batch": "B-S3-12",
+  "status": "PASS",
+  "checks": {
+    "encrypted_case_migration": true,
+    "suggest_confirm_update_apis": true,
+    "exact_text_inspection": true,
+    "counsel_controls": true,
+    "pin_and_controlling_controls": true,
+    "ambiguous_regime_confirmation": true,
+    "rerun_preserves_decisions": true,
+    "superseded_cannot_reenter": true,
+    "versioned_output_provenance": true,
+    "stable_authority_identity": true
+  },
+  "behavioural_tests": [
+    "b_s3_12_counsel_decisions_survive_restart_rerun_and_pack_update",
+    "b_s3_12_downstream_selector_records_version_and_authority_ids"
+  ],
+  "confirmation_semantics": "Conservative owner-authorized batch implementation: proposals are non-controlling; counsel must confirm a surfaced regime and individually include/confirm current authorities.",
+  "acceptance": {
+    "AC-S3-12.1": "PASS",
+    "AC-S3-12.2": "PASS",
+    "AC-S3-12.3": "PASS",
+    "AC-S3-12.4": "PASS \u2014 selector and immutable output provenance contract; consumer integrations continue in their scheduled batches",
+    "AC-S3-12.5": "PASS"
+  }
+}

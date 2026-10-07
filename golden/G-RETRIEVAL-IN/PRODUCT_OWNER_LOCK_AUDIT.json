@@ -1,0 +1,14 @@
+{
+  "pack": "S-SYNTH-GRETRIEVAL-v1",
+  "owner": "CaseForge Product Owner",
+  "locked_at": "2026-08-06",
+  "sets": [
+    "G-RETRIEVAL-IN/synth_hitrate_20",
+    "G-RETRIEVAL-US/synth_hitrate_20"
+  ],
+  "acs": [
+    "AC-4.3",
+    "AC-7.2"
+  ],
+  "note": "Synthetic GOLDEN authorized for Stage-1 retrieval metrics; not legal authority."
+}

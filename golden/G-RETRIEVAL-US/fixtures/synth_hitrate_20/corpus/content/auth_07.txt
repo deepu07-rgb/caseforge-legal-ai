@@ -1,0 +1,5 @@
+[CASEFORGE_SYNTH_NOT_LAW pack=S-SYNTH-GRETRIEVAL-v1]
+Neutral citation: 554 U.S. DEMO 7
+Court: synthetic United States
+The Court held that standing requires injury in fact fairly traceable.
+This excerpt is product-owner synthetic GOLDEN material for retrieval metrics only.

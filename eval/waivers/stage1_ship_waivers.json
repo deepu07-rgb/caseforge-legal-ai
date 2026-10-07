@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0.0",
+  "batch": "B-S1-22",
+  "product": "CaseForge",
+  "release": "v1.0.0-rc1",
+  "description": "Documented SKIP waivers for Stage 1 ship gate. Any SKIP without an entry here fails ship.",
+  "waivers": [
+    {
+      "id": "W-AC-3.2",
+      "ac": "AC-3.2",
+      "result": "SKIP",
+      "reason": "Full-tier overnight 300-page / 8h budget requires reference hardware measurement. Checkpoint resume logic PASS (B-S1-10); wall-clock budget deferred.",
+      "authority": "product_owner",
+      "expires": "before commercial audit with Full-tier lab machine"
+    },
+    {
+      "id": "W-AC-3.4",
+      "ac": "AC-3.4",
+      "result": "SKIP",
+      "reason": "40-page digest ≤5 min requires Full-tier timed run. Budget frozen in constants; path implemented; lab timing deferred.",
+      "authority": "product_owner",
+      "expires": "before commercial audit with Full-tier lab machine"
+    },
+    {
+      "id": "W-AC-3.1-RSS",
+      "ac": "AC-3.1",
+      "result": "PARTIAL",
+      "reason": "Cold-start and idle-RAM measured when OS APIs available (choreography metrics). Structural wiring PASS; lab sign-off optional if RSS probe unavailable on CI host.",
+      "authority": "product_owner",
+      "note": "Ship gate treats structural choreography PASS as acceptable; FAIL only if hard_fail_primary_vision or concurrent large models."
+    },
+    {
+      "id": "W-AC-4.2",
+      "ac": "AC-4.2",
+      "result": "SKIP",
+      "reason": "Worst-case 7.2 GB RSS needs scripted Full-tier session with models loaded. Budget + supervisor PASS; lab measurement deferred.",
+      "authority": "product_owner",
+      "expires": "before commercial audit"
+    },
+    {
+      "id": "W-AC-5.1",
+      "ac": "AC-5.1",
+      "result": "SKIP",
+      "reason": "Auto-type ≥80% on 60-file golden not fully authored. Manual type + correction path PASS (B-S1-04).",
+      "authority": "product_owner",
+      "expires": "when G-DOCS type-classifier GOLDEN lands"
+    },
+    {
+      "id": "W-AC-9.1",
+      "ac": "AC-9.1",
+      "result": "SKIP",
+      "reason": "WER numeric threshold not in PRD Layer 1; G-AUDIO not GOLDEN. Voice path AC-9.2/9.3/9.4 structural PASS.",
+      "authority": "product_owner",
+      "expires": "when G-AUDIO GOLDEN + WER freeze"
+    },
+    {
+      "id": "W-AC-15.1-FULL",
+      "ac": "AC-15.1",
+      "result": "PARTIAL",
+      "reason": "Stage-1 subset 24 prompts PASS (B-S1-21). Full ≥200 deferred to B-S2-06 per batch plan.",
+      "authority": "product_owner",
+      "note": "Ship gate requires stage1 red-team PASS only."
+    },
+    {
+      "id": "W-AC-16.3",
+      "ac": "AC-16.3",
+      "result": "SKIP",
+      "reason": ".akcase package format not specified in Layer 1. Vault encryption AC-16.2 PASS.",
+      "authority": "product_owner",
+      "expires": "when Layer 2 .akcase contract freezes"
+    }
+  ]
+}

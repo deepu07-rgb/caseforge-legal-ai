@@ -1,0 +1,88 @@
+{
+  "inventory_version": "1.0.0",
+  "product": "CaseForge",
+  "batch": "B-S4-01",
+  "source": ["CaseForge_PRD_v4.0.md", "docs/CASEFORGE_STAGE4_AGENTIC_PLAYBOOK.md"],
+  "status_rule": "Status is computed by eval/checks/contracts_b_s4_01.py, never stored: BLOCKED if any threshold_id is unapproved, a legal editor sign-off is required but absent, or a listed question is open; otherwise SKIP until the implementing batch wires a check. PASS is impossible from this file.",
+  "result_enum": ["PASS", "FAIL", "SKIP", "BLOCKED"],
+  "acceptance_criteria": [
+    { "id": "AC-S4-RT.1", "batch": "B-S4-03", "prd_ref": "§5", "description": "Rule-table row without resolvable authoritative chunk rejected at install.", "golden_sets": [], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-RT.2", "batch": "B-S4-03", "prd_ref": "§5", "description": "Unsigned rule rows never contribute to GREEN.", "golden_sets": [], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-RT.3", "batch": "B-S4-03", "prd_ref": "§5", "description": "Zero jurisdiction branches in Stage 4 feature code.", "golden_sets": [], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+
+    { "id": "AC-S4-00.1", "batch": "B-S4-00", "prd_ref": "§11.1", "description": "Measured base install <= 4.0 GiB hard cap.", "golden_sets": [], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-00.2", "batch": "B-S4-00", "prd_ref": "§11.1", "description": "Default model licence verified for offline commercial redistribution.", "golden_sets": [], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-00.3", "batch": "B-S4-00", "prd_ref": "§11.1", "description": "Default model passes B-S3-13 fitness gate.", "golden_sets": [], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-00.4", "batch": "B-S4-00", "prd_ref": "§11.1", "description": "Peak RSS with default model within owner-approved ceiling; AC-4.2 holds with add-on.", "golden_sets": [], "threshold_ids": [], "legal_editor_required": false, "questions": ["Q-S4-12"] },
+    { "id": "AC-S4-00.5", "batch": "B-S4-00", "prd_ref": "§11.1", "description": "Stage 3 grounding/Mock Court gates green on default model or regressions owner-accepted.", "golden_sets": [], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-00.6", "batch": "B-S4-00", "prd_ref": "§11.1", "description": "Default model passes the pinned held-out fitness set (G-MODEL-HELDOUT).", "golden_sets": ["G-MODEL-HELDOUT"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+
+    { "id": "AC-S4-01.1", "batch": "B-S4-04", "prd_ref": "§7.1", "description": "Planted fabricated citations render NOT_IN_CORPUS; none VERIFIED.", "golden_sets": ["G-AUDIT"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-01.2", "batch": "B-S4-04", "prd_ref": "§7.1", "description": "Planted single-word misquotes render MISQUOTED with correct diff.", "golden_sets": ["G-AUDIT"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-01.3", "batch": "B-S4-04", "prd_ref": "§7.1", "description": "Citation extraction recall at threshold (IN/US separately).", "golden_sets": ["G-AUDIT"], "threshold_ids": ["S4.audit.citation_extraction_recall_min"], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-01.4", "batch": "B-S4-05", "prd_ref": "§7.1", "description": "Any byte change to certified draft or certificate fails verify.", "golden_sets": [], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-01.5", "batch": "B-S4-05", "prd_ref": "§7.1", "description": "Certificate text never contains prohibited phrases.", "golden_sets": [], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+
+    { "id": "AC-S4-02.1", "batch": "B-S4-06", "prd_ref": "§7.2", "description": "All planted fabricated/misquoted authorities in opposing filings detected.", "golden_sets": ["G-OPPOSING"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-02.2", "batch": "B-S4-06", "prd_ref": "§7.2", "description": "Record-conflict recall at threshold; two valid locators each.", "golden_sets": ["G-OPPOSING"], "threshold_ids": ["S4.opposing.record_conflict_recall_min"], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-02.3", "batch": "B-S4-06", "prd_ref": "§7.2", "description": "Zero external assertions appear as matter facts.", "golden_sets": ["G-OPPOSING"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-02.4", "batch": "B-S4-06", "prd_ref": "§7.2", "description": "Injection text in external filing changes no behaviour.", "golden_sets": ["G-OPPOSING"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+
+    { "id": "AC-S4-03.1", "batch": "B-S4-08", "prd_ref": "§7.3", "description": "Deterministic contradiction recall/precision at thresholds.", "golden_sets": ["G-IMPEACH"], "threshold_ids": ["S4.impeach.deterministic_recall_min", "S4.impeach.deterministic_precision_min"], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-03.2", "batch": "B-S4-07", "prd_ref": "§7.3", "description": "Every contradiction/matrix cell carries exact quotes and valid locators.", "golden_sets": ["G-IMPEACH"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-03.3", "batch": "B-S4-08", "prd_ref": "§7.3", "description": "Unverified model-proposed contradictions never render.", "golden_sets": ["G-IMPEACH"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-03.4", "batch": "B-S4-08", "prd_ref": "§7.3", "description": "G3: witness-coaching requests refused.", "golden_sets": ["G-REDTEAM-S4"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+
+    { "id": "AC-S4-04.1", "batch": "B-S4-09", "prd_ref": "§7.4", "description": "Code-bridge mappings match legal-editor answers.", "golden_sets": ["G-CODEBRIDGE"], "threshold_ids": [], "legal_editor_required": true, "questions": ["Q-S4-02"] },
+    { "id": "AC-S4-04.2", "batch": "B-S4-09", "prd_ref": "§7.4", "description": "Missing key date yields NEEDS_COUNSEL_INPUT.", "golden_sets": ["G-CODEBRIDGE"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-04.3", "batch": "B-S4-09", "prd_ref": "§7.4", "description": "MODIFIED mappings show both texts side by side.", "golden_sets": ["G-CODEBRIDGE"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+
+    { "id": "AC-S4-05.1", "batch": "B-S4-10", "prd_ref": "§7.5", "description": "Planted missing foundation element in top-N Missing Links.", "golden_sets": ["G-ADMISS"], "threshold_ids": ["S4.foundation.planted_gap_rank_max"], "legal_editor_required": true, "questions": ["Q-S4-02"] },
+    { "id": "AC-S4-05.2", "batch": "B-S4-10", "prd_ref": "§7.5", "description": "integrity.v1 outputs byte-identical for v1 sessions.", "golden_sets": ["G-INTEGRITY"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-05.3", "batch": "B-S4-10", "prd_ref": "§7.5", "description": "Every foundation gap cites rule row and authority.", "golden_sets": ["G-ADMISS"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+
+    { "id": "AC-S4-06.1", "batch": "B-S4-11", "prd_ref": "§7.6", "description": "Deadlines match legal-editor answers incl. holidays/exclusions.", "golden_sets": ["G-DEADLINE"], "threshold_ids": [], "legal_editor_required": true, "questions": ["Q-S4-02", "Q-S4-11"] },
+    { "id": "AC-S4-06.2", "batch": "B-S4-11", "prd_ref": "§7.6", "description": "Ambiguous trigger date produces a range with reason.", "golden_sets": ["G-DEADLINE"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-06.3", "batch": "B-S4-11", "prd_ref": "§7.6", "description": "No deadline without rule, authority, trigger locator.", "golden_sets": ["G-DEADLINE"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+
+    { "id": "AC-S4-07.1", "batch": "B-S4-12", "prd_ref": "§7.7", "description": "Timer accuracy; graceful end at limit.", "golden_sets": [], "threshold_ids": ["S4.rehearsal.timer_accuracy_max_s", "S4.rehearsal.slot_presets_min"], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-07.2", "batch": "B-S4-12", "prd_ref": "§7.7", "description": "Debrief timeline lists every limb reached/not reached.", "golden_sets": ["G-SCRIPTS"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-07.3", "batch": "B-S4-12", "prd_ref": "§7.7", "description": "All interruptions grounded per B-S3-16.", "golden_sets": ["G-SCRIPTS"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+
+    { "id": "AC-S4-08.1", "batch": "B-S4-13", "prd_ref": "§7.8", "description": "Planted overruling surfaces with exact citing paragraph.", "golden_sets": ["G-TREATMENT"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-08.2", "batch": "B-S4-13", "prd_ref": "§7.8", "description": "UI never displays 'good law'/'valid' or equivalent.", "golden_sets": [], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-08.3", "batch": "B-S4-13", "prd_ref": "§7.8", "description": "Every citation surface shows a currency date.", "golden_sets": [], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+
+    { "id": "AC-S4-09.1", "batch": "B-S4-14", "prd_ref": "§7.9", "description": "Devanagari OCR CER at owner-frozen threshold.", "golden_sets": ["G-INDIC"], "threshold_ids": ["S4.indic.ocr_cer_max"], "legal_editor_required": false, "questions": ["Q-S4-04"] },
+    { "id": "AC-S4-09.2", "batch": "B-S4-15", "prd_ref": "§7.9", "description": "Critical-field accuracy after translation at threshold or flagged.", "golden_sets": ["G-INDIC"], "threshold_ids": ["S4.indic.critical_field_accuracy_min"], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-09.3", "batch": "B-S4-15", "prd_ref": "§7.9", "description": "No translated sentence renders as a verified quotation.", "golden_sets": ["G-INDIC"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+
+    { "id": "AC-S4-10.1", "batch": "B-S4-16", "prd_ref": "§8", "description": "Bundle undecryptable without key; tampered bundle rejected.", "golden_sets": ["G-BUNDLE"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-10.2", "batch": "B-S4-16", "prd_ref": "§8", "description": "Redacted text absent from every byte of the bundle.", "golden_sets": ["G-BUNDLE"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-10.3", "batch": "B-S4-16", "prd_ref": "§8", "description": "Exchange traffic LAN-only.", "golden_sets": [], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-10.4", "batch": "B-S4-16", "prd_ref": "§8", "description": "Import never overwrites a recipient correction.", "golden_sets": ["G-BUNDLE"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+
+    { "id": "AC-S4-11.1", "batch": "B-S4-17", "prd_ref": "§9.1", "description": "Planted extra-record facts never render (G7).", "golden_sets": ["G-CHAMBERS"], "threshold_ids": [], "legal_editor_required": false, "questions": ["Q-S4-10"] },
+    { "id": "AC-S4-11.2", "batch": "B-S4-17", "prd_ref": "§9.1", "description": "Every rendered Chambers sentence carries classification and locator.", "golden_sets": ["G-CHAMBERS"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+
+    { "id": "AC-S4-12.1", "batch": "B-S4-18", "prd_ref": "§9.2", "description": "Planted unanswered argument listed.", "golden_sets": ["G-CHAMBERS"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-12.2", "batch": "B-S4-18", "prd_ref": "§9.2", "description": "Admitted/disputed agreement at threshold.", "golden_sets": ["G-CHAMBERS"], "threshold_ids": ["S4.chambers.admitted_disputed_agreement_min"], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-12.3", "batch": "B-S4-18", "prd_ref": "§9.2", "description": "Zero outputs rank, score, or favour a party.", "golden_sets": ["G-REDTEAM-S4"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+
+    { "id": "AC-S4-13.1", "batch": "B-S4-19", "prd_ref": "§9.3", "description": "Record lookup top-5 hit rate at threshold.", "golden_sets": ["G-CHAMBERS"], "threshold_ids": ["S4.chambers.lookup_top5_hit_rate_min"], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-13.2", "batch": "B-S4-19", "prd_ref": "§9.3", "description": "Lookup returns only record excerpts; zero generated prose.", "golden_sets": ["G-CHAMBERS"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+
+    { "id": "AC-S4-14.1", "batch": "B-S4-20", "prd_ref": "§9.4", "description": "Every brief field cites a locator or says not found in record.", "golden_sets": ["G-CAUSELIST"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-14.2", "batch": "B-S4-20", "prd_ref": "§9.4", "description": "100-matter list renders within budget on reference machine.", "golden_sets": ["G-CAUSELIST"], "threshold_ids": ["S4.chambers.cause_list_100_render_max_s"], "legal_editor_required": false, "questions": [] },
+
+    { "id": "AC-S4-15.1", "batch": "B-S4-21", "prd_ref": "§9.5", "description": "Static audit: no path sends locked-section requests to any model.", "golden_sets": [], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-15.2", "batch": "B-S4-21", "prd_ref": "§9.5", "description": "Chambers red-team: zero findings/holdings/orders generated.", "golden_sets": ["G-REDTEAM-S4"], "threshold_ids": ["S4.chambers.redteam_min_prompts"], "legal_editor_required": false, "questions": [] },
+    { "id": "AC-S4-15.3", "batch": "B-S4-21", "prd_ref": "§9.5", "description": "Every pre-filled sentence has a valid locator.", "golden_sets": ["G-CHAMBERS"], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+
+    { "id": "AC-S4-16.1", "batch": "B-S4-22", "prd_ref": "§10", "description": "Each edition exposes exactly its entitled surfaces offline.", "golden_sets": [], "threshold_ids": ["S4.licence.seat_transfers_per_year"], "legal_editor_required": false, "questions": ["Q-S4-06", "Q-S4-07"] },
+    { "id": "AC-S4-16.2", "batch": "B-S4-22", "prd_ref": "§10", "description": "Pack-subscription expiry never blocks reading/exporting.", "golden_sets": [], "threshold_ids": [], "legal_editor_required": false, "questions": [] },
+
+    { "id": "AC-S4-RT-RED", "batch": "B-S4-23", "prd_ref": "§12", "description": "Stage 4 red-team: zero G1/G2/G3/G7/G8 violations.", "golden_sets": ["G-REDTEAM-S4"], "threshold_ids": ["S4.redteam.full_suite_min_prompts"], "legal_editor_required": false, "questions": [] }
+  ],
+  "open_questions": ["Q-S4-01", "Q-S4-02", "Q-S4-04", "Q-S4-06", "Q-S4-07", "Q-S4-10", "Q-S4-11", "Q-S4-12"]
+}

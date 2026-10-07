@@ -1,0 +1,25 @@
+{
+  "batch": "B-S3-19",
+  "checks": {
+    "frozen_nine_step_journey": true,
+    "complete_state_vocabulary": true,
+    "persisted_inputs": true,
+    "stale_from_saved_timestamps": true,
+    "obvious_next_action": true,
+    "state_not_colour_only": true,
+    "primary_information_architecture": true,
+    "diagnostics_under_details": true,
+    "implementation_terms_not_primary_tabs": true,
+    "host_backed_parallel_refresh": true,
+    "unsafe_mock_court_blocked": true,
+    "preparation_task_handoff": true,
+    "destructive_scope_and_recovery": true,
+    "keyboard_focus_visible": true,
+    "long_text_readable": true,
+    "responsive_journey": true,
+    "usability_threshold_frozen": true,
+    "human_gate_not_fabricated": true
+  },
+  "automated_gate_passed": true,
+  "human_usability_gate": "pending"
+}

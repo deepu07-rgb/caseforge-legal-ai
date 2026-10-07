@@ -1,0 +1,2 @@
+# Preserve exact bytes: contracts and golden data are pinned by SHA-256, so no line-ending conversion anywhere.
+* -text

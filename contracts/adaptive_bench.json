@@ -1,0 +1,124 @@
+{
+  "schema_version": "1.0.0",
+  "product": "CaseForge",
+  "id": "adaptive_bench",
+  "status": "FROZEN",
+  "batch": "B-S2-03",
+  "prd_refs": ["§10", "AC-10.1", "AC-10.2", "§20"],
+  "pipeline_id": "caseforge.adaptive_bench.v1",
+  "worksheet": "docs/worksheets/Q-AB-01_adaptive_bench.md",
+  "frozen_at": "2026-08-08",
+  "authority": "CaseForge Product Owner — Q-AB-01 / B-S2-03",
+  "named_judge_profiles": false,
+  "named_judge_error": "CF_BENCH_NO_NAMED_JUDGE",
+  "consumes_only": ["case_graph", "integrity_tree", "user_sliders"],
+  "forbidden": [
+    "named_judge_profiles",
+    "judge_databases",
+    "real_person_judicial_profiling",
+    "raw_document_parse"
+  ],
+  "archetypes": [
+    {
+      "id": "procedure_first",
+      "label": "Procedure-first",
+      "baseline": {
+        "tempo": 45,
+        "formality": 75,
+        "opposition_aggression": 40,
+        "technicality": 55,
+        "interruption": 35
+      }
+    },
+    {
+      "id": "evidence_heavy",
+      "label": "Evidence-heavy",
+      "baseline": {
+        "tempo": 50,
+        "formality": 55,
+        "opposition_aggression": 55,
+        "technicality": 60,
+        "interruption": 45
+      }
+    },
+    {
+      "id": "textualist",
+      "label": "Textualist / statutory",
+      "baseline": {
+        "tempo": 40,
+        "formality": 70,
+        "opposition_aggression": 45,
+        "technicality": 85,
+        "interruption": 30
+      }
+    },
+    {
+      "id": "relief_focused",
+      "label": "Relief-focused",
+      "baseline": {
+        "tempo": 55,
+        "formality": 50,
+        "opposition_aggression": 50,
+        "technicality": 45,
+        "interruption": 40
+      }
+    },
+    {
+      "id": "skeptical_probe",
+      "label": "Skeptical probe",
+      "baseline": {
+        "tempo": 65,
+        "formality": 45,
+        "opposition_aggression": 80,
+        "technicality": 55,
+        "interruption": 70
+      }
+    },
+    {
+      "id": "settlement_lens",
+      "label": "Settlement lens",
+      "baseline": {
+        "tempo": 35,
+        "formality": 50,
+        "opposition_aggression": 25,
+        "technicality": 40,
+        "interruption": 25
+      }
+    }
+  ],
+  "sliders": [
+    "tempo",
+    "formality",
+    "opposition_aggression",
+    "technicality",
+    "interruption"
+  ],
+  "slider_min": 0,
+  "slider_max": 100,
+  "slider_default": 50,
+  "case_order_signals": [
+    "jurisdiction",
+    "relief_count",
+    "open_gap_count",
+    "evidence_count",
+    "statute_count",
+    "chronology_density",
+    "has_procedural_posture",
+    "urgency_hint",
+    "suggested_archetype"
+  ],
+  "acceptance": {
+    "AC-10.1": [
+      "exactly_six_generic_archetypes",
+      "named_judge_profiles_false",
+      "refuse_named_judge_fields",
+      "no_judge_database"
+    ],
+    "AC-10.2": [
+      "signals_from_this_case_graph_only",
+      "sliders_change_behaviour_brief",
+      "deterministic_fingerprint",
+      "opposition_aggression_control"
+    ]
+  }
+}

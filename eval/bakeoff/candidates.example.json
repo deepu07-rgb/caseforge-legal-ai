@@ -1,0 +1,20 @@
+{
+  "bakeoff_version": "1.0.0",
+  "description": "Copy to candidates.json and edit. Paths are local-only; do not commit model weights.",
+  "candidates": [
+    {
+      "id": "caseforge.triage.heuristic.v1",
+      "adapter": "heuristic",
+      "provisional": true,
+      "notes": "Built-in baseline; no vision weights."
+    },
+    {
+      "id": "TBD.vision.candidate.b",
+      "adapter": "external_cli",
+      "provisional": true,
+      "enabled": false,
+      "command": ["python", "path/to/your_adapter_cli.py"],
+      "notes": "Enable after bake-off model chosen. CLI must read JSON pages on stdin, write JSON results on stdout."
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "fixture_id": "G-REDTEAM/stage2_200",
+  "set_id": "G-REDTEAM",
+  "status": "GOLDEN",
+  "authoritative": true,
+  "batch": "B-S2-06",
+  "primary_acs": [
+    "AC-15.1"
+  ],
+  "description": "Full Stage-2 red-team suite >=200 prompts G1-G3",
+  "inputs": {
+    "prompts": "prompts.json"
+  }
+}

@@ -1,0 +1,224 @@
+{
+  "batch": "B-S3-05",
+  "implementation_status": "PASS",
+  "formal_acceptance_status": "BLOCKED",
+  "calibration_id": "caseforge.tesseract-eng-fast.synthetic-isotonic.v1",
+  "dataset_sha256": "1649b0806ea234f2dece4d5a373aaebedbab2213dcc7068ea8e258c213298a3f",
+  "train_count": 24,
+  "held_out_count": 16,
+  "held_out_metrics": {
+    "ece": 0.08125000000000002,
+    "brier": 0.045306250000000006
+  },
+  "critical_field_examples": {
+    "valid": [
+      {
+        "field_index": 0,
+        "field_type": "date",
+        "text": "March 12, 2024",
+        "char_start": 3,
+        "char_end": 17,
+        "bbox": {
+          "x": 0.1,
+          "y": 0.1,
+          "w": 0.1,
+          "h": 0.02
+        },
+        "raw_engine_confidence": 0.99,
+        "calibrated_confidence": 0.985,
+        "field_confidence": 0.985,
+        "confidence_state": "calibrated",
+        "syntactically_valid": true,
+        "validation_reasons": [
+          "calendar-valid named-month date"
+        ],
+        "force_review": false,
+        "suppress_from_auto": false,
+        "counsel_confirmed": false,
+        "validator_id": "caseforge.critical-fields.deterministic.v1"
+      },
+      {
+        "field_index": 1,
+        "field_type": "money",
+        "text": "$10,000",
+        "char_start": 34,
+        "char_end": 41,
+        "bbox": {
+          "x": 0.1,
+          "y": 0.1,
+          "w": 0.1,
+          "h": 0.02
+        },
+        "raw_engine_confidence": 0.99,
+        "calibrated_confidence": 0.985,
+        "field_confidence": 0.985,
+        "confidence_state": "calibrated",
+        "syntactically_valid": true,
+        "validation_reasons": [
+          "currency marker and numeric grouping validated"
+        ],
+        "force_review": false,
+        "suppress_from_auto": false,
+        "counsel_confirmed": false,
+        "validator_id": "caseforge.critical-fields.deterministic.v1"
+      },
+      {
+        "field_index": 2,
+        "field_type": "citation",
+        "text": "410 U.S. 113",
+        "char_start": 69,
+        "char_end": 81,
+        "bbox": {
+          "x": 0.1,
+          "y": 0.1,
+          "w": 0.1,
+          "h": 0.02
+        },
+        "raw_engine_confidence": 0.99,
+        "calibrated_confidence": 0.985,
+        "field_confidence": 0.985,
+        "confidence_state": "calibrated",
+        "syntactically_valid": true,
+        "validation_reasons": [
+          "reporter and numeric components present"
+        ],
+        "force_review": false,
+        "suppress_from_auto": false,
+        "counsel_confirmed": false,
+        "validator_id": "caseforge.critical-fields.deterministic.v1"
+      },
+      {
+        "field_index": 3,
+        "field_type": "provision",
+        "text": "Section 10",
+        "char_start": 48,
+        "char_end": 58,
+        "bbox": {
+          "x": 0.1,
+          "y": 0.1,
+          "w": 0.1,
+          "h": 0.02
+        },
+        "raw_engine_confidence": 0.99,
+        "calibrated_confidence": 0.985,
+        "field_confidence": 0.985,
+        "confidence_state": "calibrated",
+        "syntactically_valid": true,
+        "validation_reasons": [
+          "provision prefix and identifier present"
+        ],
+        "force_review": false,
+        "suppress_from_auto": false,
+        "counsel_confirmed": false,
+        "validator_id": "caseforge.critical-fields.deterministic.v1"
+      }
+    ],
+    "ocr_corrupted": [
+      {
+        "field_index": 0,
+        "field_type": "date",
+        "text": "32/13/2024",
+        "char_start": 3,
+        "char_end": 13,
+        "bbox": {
+          "x": 0.1,
+          "y": 0.1,
+          "w": 0.1,
+          "h": 0.02
+        },
+        "raw_engine_confidence": 0.99,
+        "calibrated_confidence": 0.985,
+        "field_confidence": 0.49,
+        "confidence_state": "calibrated",
+        "syntactically_valid": false,
+        "validation_reasons": [
+          "calendar-invalid date"
+        ],
+        "force_review": true,
+        "suppress_from_auto": true,
+        "counsel_confirmed": false,
+        "validator_id": "caseforge.critical-fields.deterministic.v1"
+      },
+      {
+        "field_index": 1,
+        "field_type": "money",
+        "text": "$1O,000",
+        "char_start": 30,
+        "char_end": 37,
+        "bbox": {
+          "x": 0.1,
+          "y": 0.1,
+          "w": 0.1,
+          "h": 0.02
+        },
+        "raw_engine_confidence": 0.99,
+        "calibrated_confidence": 0.985,
+        "field_confidence": 0.49,
+        "confidence_state": "calibrated",
+        "syntactically_valid": false,
+        "validation_reasons": [
+          "OCR-confusable character pattern detected",
+          "currency marker and numeric grouping validated"
+        ],
+        "force_review": true,
+        "suppress_from_auto": true,
+        "counsel_confirmed": false,
+        "validator_id": "caseforge.critical-fields.deterministic.v1"
+      },
+      {
+        "field_index": 2,
+        "field_type": "citation",
+        "text": "4IO U.S. 113",
+        "char_start": 65,
+        "char_end": 77,
+        "bbox": {
+          "x": 0.1,
+          "y": 0.1,
+          "w": 0.1,
+          "h": 0.02
+        },
+        "raw_engine_confidence": 0.99,
+        "calibrated_confidence": 0.985,
+        "field_confidence": 0.49,
+        "confidence_state": "calibrated",
+        "syntactically_valid": false,
+        "validation_reasons": [
+          "OCR-confusable character pattern detected",
+          "reporter and numeric components present"
+        ],
+        "force_review": true,
+        "suppress_from_auto": true,
+        "counsel_confirmed": false,
+        "validator_id": "caseforge.critical-fields.deterministic.v1"
+      },
+      {
+        "field_index": 3,
+        "field_type": "provision",
+        "text": "Section 1O",
+        "char_start": 44,
+        "char_end": 54,
+        "bbox": {
+          "x": 0.1,
+          "y": 0.1,
+          "w": 0.1,
+          "h": 0.02
+        },
+        "raw_engine_confidence": 0.99,
+        "calibrated_confidence": 0.985,
+        "field_confidence": 0.49,
+        "confidence_state": "calibrated",
+        "syntactically_valid": false,
+        "validation_reasons": [
+          "OCR-confusable character pattern detected",
+          "provision prefix and identifier present"
+        ],
+        "force_review": true,
+        "suppress_from_auto": true,
+        "counsel_confirmed": false,
+        "validator_id": "caseforge.critical-fields.deterministic.v1"
+      }
+    ]
+  },
+  "blocking_reason": "Owner approval is absent for ECE/Brier limits and per-field error costs; existing 0.99 accuracy and 0.55 downstream block thresholds remain enforced.",
+  "errors": []
+}

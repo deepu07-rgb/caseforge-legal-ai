@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0.0",
+  "batch": "B-S2-07",
+  "product": "CaseForge",
+  "release": "v2.0.0-rc1",
+  "description": "Documented waivers for Stage 2 ship gate. AC-15.1 full suite is NOT waived. Lab timing ACs remain deferred.",
+  "waivers": [
+    {
+      "id": "W-AC-3.3-LAB",
+      "ac": "AC-3.3",
+      "result": "PARTIAL",
+      "reason": "Deterministic offline turn path and budgets PASS (B-S2-02/04). Live LLM wall-clock ≤15s for ~300-token adversary requires Full-tier lab measurement with models loaded.",
+      "authority": "product_owner",
+      "expires": "before commercial audit with Full-tier lab machine"
+    },
+    {
+      "id": "W-AC-9.1",
+      "ac": "AC-9.1",
+      "result": "SKIP",
+      "reason": "WER numeric still not frozen in Layer 1; G-AUDIO not GOLDEN. Voice-in-court structural AC-9.3/9.4 + Lite refuse PASS (B-S2-04).",
+      "authority": "product_owner",
+      "expires": "when G-AUDIO GOLDEN + WER freeze"
+    },
+    {
+      "id": "W-AC-4.2",
+      "ac": "AC-4.2",
+      "result": "SKIP",
+      "reason": "7.2 GB RSS worst-case Full-tier scripted session still lab-deferred (same as Stage 1).",
+      "authority": "product_owner",
+      "expires": "before commercial audit"
+    }
+  ],
+  "not_waived": [
+    {
+      "ac": "AC-15.1",
+      "note": "Full ≥200 G1–G3 red-team must PASS with zero violations (B-S2-06)."
+    },
+    {
+      "ac": "AC-2.1",
+      "note": "Docpipe must remain free of Stage 2 imports."
+    },
+    {
+      "ac": "AC-8.x",
+      "note": "Integrity engine AC-8.1–8.3 must PASS."
+    },
+    {
+      "ac": "AC-10.x",
+      "note": "Adaptive Bench AC-10.1–10.2 must PASS."
+    }
+  ]
+}

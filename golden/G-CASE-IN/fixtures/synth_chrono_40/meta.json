@@ -1,0 +1,22 @@
+{
+  "fixture_id": "G-CASE-IN/synth_chrono_40",
+  "set_id": "G-CASE-IN",
+  "fixture_version": "1.0.0-GOLDEN",
+  "status": "GOLDEN",
+  "authoritative": true,
+  "batch": "B-S1-07",
+  "primary_acs": [
+    "AC-6.2"
+  ],
+  "jurisdiction": "India",
+  "description": "40-page synthetic chronology GOLDEN for AC-6.2 (product-owner)",
+  "inputs": {
+    "case_packet": "case_packet.txt",
+    "pages_dir": "pages"
+  },
+  "known_answer": "known_answer.json",
+  "authored_by": "CaseForge Product Owner",
+  "reviewed_by": "CaseForge Product Owner",
+  "locked_at": "2026-08-06T18:20:21.075259+00:00",
+  "content_hash": null
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "query": "When may the court order sale instead of physical division in a partition suit?",
+    "expected": "Partition Act section 2",
+    "must_gap": false
+  },
+  {
+    "query": "What is the route of an appeal from an original decree?",
+    "expected": "Code of Civil Procedure section 96",
+    "must_gap": false
+  },
+  {
+    "query": "What must accompany a delayed appeal?",
+    "expected": "Order XLI rule 3A",
+    "must_gap": false
+  },
+  {
+    "query": "What limitation entry applies to an appeal to a High Court under the CPC?",
+    "expected": "Limitation Act Schedule article 116",
+    "must_gap": false
+  },
+  {
+    "query": "What filing rule applies in the Bombay High Court?",
+    "expected": "REPOSITORY_GAP: state/specific High Court rules absent",
+    "must_gap": true
+  },
+  {
+    "query": "What share does a Muslim heir receive in this partition?",
+    "expected": "REPOSITORY_GAP: personal-law sources absent",
+    "must_gap": true
+  }
+]

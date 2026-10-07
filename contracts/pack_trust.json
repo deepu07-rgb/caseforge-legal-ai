@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0.0",
+  "batch": "B-S1-12",
+  "description": "Trusted Ed25519 public keys for official CaseForge .akpkg packs. Private keys never ship in the app.",
+  "keys": [
+    {
+      "key_id": "caseforge-official-dev-2026",
+      "algorithm": "Ed25519",
+      "public_key_hex": "c3c98a5c228e71f4617394f859187ae7d1ee08789d8f1c9cfe00bd065403def9",
+      "status": "active",
+      "notes": "Dev/product-owner official signer for Stage-1 pack pipeline tests. Replaced by release key ceremony later."
+    }
+  ]
+}

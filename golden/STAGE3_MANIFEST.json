@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "batch": "B-S3-02",
+  "frozen_at": "2026-08-13",
+  "policy": {
+    "pass_requires_golden_fixture": true,
+    "synthetic_real_aggregation_forbidden": true,
+    "missing_evidence_state": "BLOCKED",
+    "human_scored_reviewers_required": 2,
+    "adjudication_required_for_disagreement": true
+  },
+  "suites": [
+    {"id":"G-DOCS-REAL","required_source_class":"REAL_WORLD_RIGHTS_CLEARED","manifest_glob":"golden/G-DOCS-REAL/fixtures/*/manifest.json"},
+    {"id":"G-CASE-CONTROLLED","required_source_class":"SYNTHETIC_CONTROLLED","manifest_glob":"golden/G-CASE-CONTROLLED/fixtures/*/manifest.json"},
+    {"id":"G-LEGAL-GROUNDING","required_source_class":"AUTHORITATIVE_LEGAL","manifest_glob":"golden/G-LEGAL-GROUNDING/fixtures/*/manifest.json"},
+    {"id":"G-INJECTION","required_source_class":"ADVERSARIAL_SYNTHETIC","manifest_glob":"golden/G-INJECTION/fixtures/*/manifest.json"},
+    {"id":"G-PERFORMANCE","required_source_class":"SYNTHETIC_CONTROLLED","manifest_glob":"golden/G-PERFORMANCE/fixtures/*/manifest.json"},
+    {"id":"G-AUDIO-S3","required_source_class":"HUMAN_AUDIO_RIGHTS_CLEARED","manifest_glob":"golden/G-AUDIO-S3/fixtures/*/manifest.json"}
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "caseforge.core.india.placeholder",
+  "pack_kind": "official",
+  "jurisdiction": "India",
+  "version": "0.1.0",
+  "display_name": "India Core Placeholder",
+  "description": null,
+  "content_sha256": "41c8ddb7b58cd052434fee74823ecfc597faf4a809bebf0304800971283e1a8a",
+  "files": [
+    {
+      "path": "content/neutral_citation_sample.txt",
+      "sha256": "bb9c529d5a7006cbe6d4bcad6351c0946207f829d2357636ae7260a2efc7c92d",
+      "bytes": 242
+    }
+  ],
+  "headnotes_stripped": true,
+  "signature_alg": "Ed25519",
+  "signer_key_id": "caseforge-official-dev-2026"
+}

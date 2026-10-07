@@ -1,0 +1,26 @@
+{
+  "batch": "B-S3-20",
+  "checks": {
+    "production_local_status": true,
+    "offline_only": true,
+    "real_audio_required": true,
+    "stub_ineligible_even_in_dev": true,
+    "local_model_no_download": true,
+    "persistent_warmed_worker": true,
+    "offline_tts_waveform": true,
+    "microphone_permission_lifecycle": true,
+    "capture_cancel_cleanup": true,
+    "editable_confirmed_staging": true,
+    "audio_provenance_no_retention": true,
+    "encrypted_commit": true,
+    "mock_court_real_audio_proof": true,
+    "text_only_fallback": true,
+    "frozen_metrics": true,
+    "rights_cleared_evaluator": true,
+    "human_audio_not_fabricated": true,
+    "licence_selection_documented": true
+  },
+  "engineering_gate_passed": true,
+  "g_audio_status": "AWAITING_RIGHTS_CLEARED_HUMAN_AUDIO",
+  "controlled_voice_readiness": false
+}

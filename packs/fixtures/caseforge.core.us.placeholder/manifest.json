@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "caseforge.core.us.placeholder",
+  "pack_kind": "official",
+  "jurisdiction": "United States",
+  "version": "0.1.0",
+  "display_name": "US Core Placeholder",
+  "description": null,
+  "content_sha256": "297381b4e2656db07dcf3da5dcbba523ca2064bf16a762cc4896ce5e55118e5b",
+  "files": [
+    {
+      "path": "content/neutral_citation_sample.txt",
+      "sha256": "fe14b651d6920d2b01a572f278ac2d3a8661d554be98c38532ece128a7ec2969",
+      "bytes": 242
+    }
+  ],
+  "headnotes_stripped": true,
+  "signature_alg": "Ed25519",
+  "signer_key_id": "caseforge-official-dev-2026"
+}

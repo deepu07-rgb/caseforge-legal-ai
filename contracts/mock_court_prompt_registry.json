@@ -1,0 +1,11 @@
+{
+  "schema_version": "caseforge.prompt-registry.v1",
+  "prompt_id": "caseforge.mock-court.v2",
+  "version": "2.0.0",
+  "file": "contracts/prompts/mock_court_v2.txt",
+  "turn_schema": "contracts/mock_court_turn_v2.schema.json",
+  "sha256": "3afce1eb1d38295ad37eea924c7181394655534d9231ae3a8d38c9fe6d82e14a",
+  "max_schema_repair_attempts": 1,
+  "turn_timeout_seconds": 15,
+  "max_output_tokens": 112
+}

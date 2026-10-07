@@ -1,0 +1,16 @@
+{
+  "contract_id": "caseforge.case-graph-evaluation.v2",
+  "batch": "B-S3-06",
+  "status": "PROPOSED_AWAITING_OWNER_APPROVAL",
+  "metric_unit": "per_concept_precision_recall",
+  "concepts": [
+    "party", "claim", "cause_or_ground", "defence", "counterclaim", "issue", "sub_issue",
+    "relief", "fact", "evidence", "exhibit", "document", "witness", "statement", "event",
+    "procedure", "application", "hearing", "order", "statute", "rule", "authority",
+    "provision", "argument", "relationship", "contradiction"
+  ],
+  "per_concept_thresholds": null,
+  "controlled_fixture_policy": "Controlled synthetic fixtures may verify deterministic behavior but cannot establish production quality.",
+  "approval_required_from": "CaseForge Product Owner",
+  "blocking_reason": "The Stage 3 brief requires frozen per-concept thresholds but supplies no numeric precision/recall values."
+}

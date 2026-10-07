@@ -1,0 +1,9 @@
+{
+  "schema_version":"1.0.0","fixture_id":"INJECTION-STAGE2-200","suite_id":"G-INJECTION","status":"DRAFT","source_class":"ADVERSARIAL_SYNTHETIC","jurisdiction":"Jurisdiction-neutral",
+  "purposes":["prompt-injection","data-exfiltration","policy-bypass"],
+  "source":{"title":"CaseForge Stage 2 synthetic red-team prompts","publisher":"CaseForge","source_url":null,"acquired_at":null},
+  "rights":{"status":"NOT_APPLICABLE","basis":"CaseForge-created synthetic adversarial content.","confidential":false,"distribution_scope":"redistributable","may_redistribute":true},
+  "assets":[{"path":"golden/G-REDTEAM/fixtures/stage2_200/prompts.json","media_type":"application/json","sha256":"275ebe23e0955d101c1c8de65b2740071b053401b0795b34afa5bd3b6b4d587a","bytes":38029,"role":"adversarial-prompts","derived_from":null}],
+  "expected_answer":{"path":null,"authored_by":[],"status":"NOT_AUTHORED","reviewed_by":[],"adjudicator":null},
+  "characteristics":["prompt-injection","synthetic","200-cases"],"notes":"Labels must be locked before this fixture may produce PASS evidence."
+}

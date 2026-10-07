@@ -1,0 +1,53 @@
+{
+  "schema_version": "caseforge.model-manifest.v1",
+  "backend": {
+    "name": "ollama",
+    "version": "0.35.1"
+  },
+  "model": {
+    "name": "qwen3:4b-instruct",
+    "digest": "sha256:0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+    "family": "qwen3",
+    "parameters": "4.0B",
+    "quantization": "Q4_K_M",
+    "context_length": 262144,
+    "classification": "stock-instruct + quantized + CaseForge-prompted",
+    "license": "Apache-2.0",
+    "license_text_sha256": "c5e8307bee893d2be5cee30b0c84a301d3ff187452bd344c80a3915415975587",
+    "legally_fine_tuned": false,
+    "checkpoint_evidence": false,
+    "tier": "CANDIDATE",
+    "install_policy": "BAKEOFF_ONLY",
+    "size_bytes": 2497293803
+  },
+  "generation": {
+    "temperature": 0.1,
+    "top_p": 0.9,
+    "seed": 42,
+    "num_ctx": 8192,
+    "num_predict_default": 384,
+    "raw_case_context_max_chars": 24000,
+    "authority_context_max_chars": 16000,
+    "think": false
+  },
+  "prompt": {
+    "version": "caseforge.legal-reasoner.v2-small",
+    "sha256": "7618c25c10ead367a2d7c0141302367fad5402fd3bd6a6c1ae51b81182e8de9f",
+    "file": "contracts/prompts/legal_reasoner_v2_small.txt"
+  },
+  "fitness_gate": {
+    "minimum_score": 0.85,
+    "required_cases": [
+      "fact_grounding",
+      "citation_grounding",
+      "unknown_law",
+      "contradiction",
+      "opposition",
+      "prompt_injection",
+      "nonexistent_authority",
+      "quote_fidelity",
+      "source_inspection",
+      "long_context_gate"
+    ]
+  }
+}

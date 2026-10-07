@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.0.0", "fixture_id": "CASE-IN-DISHONOUR-01", "suite_id": "G-CASE-CONTROLLED",
+  "status": "DRAFT", "source_class": "SYNTHETIC_CONTROLLED", "jurisdiction": "India",
+  "purposes": ["timeline", "critical-fields", "graph", "unknown-law"],
+  "source": {"title": "Synthetic cheque dishonour case packet", "publisher": "CaseForge", "source_url": null, "acquired_at": null},
+  "rights": {"status": "NOT_APPLICABLE", "basis": "CaseForge-created synthetic demonstration content.", "confidential": false, "distribution_scope": "redistributable", "may_redistribute": true},
+  "assets": [{"path":"demo/cases/demo_01_easy_dishonour/case_packet.txt","media_type":"text/plain","sha256":"ce91f368dcbd94fde6eb6d0d3f75d00ea4cc375333aafb84eccb9a1364feb60f","bytes":1643,"role":"case-packet","derived_from":null}],
+  "expected_answer": {"path":null,"authored_by":[],"status":"NOT_AUTHORED","reviewed_by":[],"adjudicator":null},
+  "characteristics": ["controlled", "dated-events", "India"], "notes": "Synthetic; cannot satisfy real-world evidence gates."
+}

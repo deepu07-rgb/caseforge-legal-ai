@@ -1,0 +1,5 @@
+[CASEFORGE_SYNTH_NOT_LAW pack=S-SYNTH-GRETRIEVAL-v1]
+Neutral citation: [2017] INSC DEMO 4
+Court: synthetic India
+The Court held that limitation period for suit on promissory note.
+This excerpt is product-owner synthetic GOLDEN material for retrieval metrics only.

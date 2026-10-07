@@ -1,0 +1,20 @@
+{
+  "schema_version": "0.1.0-PLACEHOLDER",
+  "authoritative": false,
+  "status": "SYNTHETIC_PLACEHOLDER",
+  "fixture_id": "G-CASE-US/micro_001",
+  "case_graph_contract": "contracts/case_graph.schema.json",
+  "case_graph_schema_status": "BLOCKED",
+  "jurisdiction": "United States",
+  "concept_shell": {
+    "chronology_dated_events": [],
+    "parties_and_roles": [],
+    "statutes_rules_invoked": [],
+    "evidence_inventory": [],
+    "procedural_posture": null,
+    "prayer_relief": null,
+    "contradiction_report": [],
+    "notes": "Empty arrays intentionally. Real GOLDEN answers must be human-authored; do not invent events."
+  },
+  "eval_policy": "SKIP_IF_STATUS_NOT_GOLDEN"
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/confidence_calibration.schema.json",
+  "title": "ConfidenceCalibration",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "calibration_id", "status", "engine_classes", "critical_field_types", "confidence_states", "quality_gates"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "calibration_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["PROPOSED_AWAITING_OWNER_APPROVAL", "FROZEN"]},
+    "engine_classes": {"type": "array", "items": {"enum": ["tesseract_eng_fast_scan", "pdfium_native"]}},
+    "critical_field_types": {"type": "array", "items": {"enum": ["name", "date", "money", "citation", "provision", "case_number", "exhibit_label"]}},
+    "confidence_states": {"type": "array", "items": {"enum": ["calibrated", "raw_only", "missing", "counsel_confirmed"]}},
+    "quality_gates": {
+      "type": "object",
+      "required": ["critical_field_accuracy_min", "item_block_downstream_below", "ece_max", "brier_max"],
+      "properties": {
+        "critical_field_accuracy_min": {"type": "number", "const": 0.99},
+        "item_block_downstream_below": {"type": "number", "const": 0.55},
+        "ece_max": {"type": ["number", "null"]},
+        "brier_max": {"type": ["number", "null"]}
+      }
+    }
+  },
+  "x-caseforge": {
+    "batch": "B-S3-05",
+    "status": "PROPOSED_AWAITING_OWNER_APPROVAL",
+    "owner_approval_missing": ["ece_max", "brier_max", "critical_field_error_costs_by_type"],
+    "frozen_existing_values_from": ["eval/stage3_metrics.json", "contracts/constants.json"]
+  }
+}

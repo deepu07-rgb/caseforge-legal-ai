@@ -1,0 +1,73 @@
+﻿{
+    "batch":  "B-S2-02",
+    "forbidden_sources":  [
+                              "raw_document",
+                              "page_text_layer",
+                              "pdf_parse"
+                          ],
+    "requires_prior_format_pass":  "Bail_Interim_Motion",
+    "user_lines":  [
+                       "Counsel opens Final Arguments with the pleaded relief.",
+                       "Counsel addresses the open gap and principal exhibit.",
+                       "Counsel closes without predicting outcome."
+                   ],
+    "format":  "Final_Arguments",
+    "mode":  "text_only",
+    "script_id":  "script-Final_Arguments",
+    "steps":  [
+                  {
+                      "step":  1,
+                      "format":  "Final_Arguments",
+                      "action":  "mock_court.start_session"
+                  },
+                  {
+                      "step":  2,
+                      "source":  "case_graph+retrieval",
+                      "action":  "mock_court.turn",
+                      "role":  "adversary"
+                  },
+                  {
+                      "step":  3,
+                      "source":  "case_graph+retrieval",
+                      "action":  "mock_court.turn",
+                      "role":  "bench"
+                  },
+                  {
+                      "step":  4,
+                      "source":  "case_graph+retrieval",
+                      "action":  "mock_court.turn",
+                      "role":  "adversary"
+                  },
+                  {
+                      "action":  "assert.no_raw_document",
+                      "step":  5
+                  },
+                  {
+                      "step":  6,
+                      "stages":  [
+                                     "DECOMPOSE",
+                                     "RETRIEVE",
+                                     "GENERATE",
+                                     "VERIFY",
+                                     "SCORE",
+                                     "RENDER"
+                                 ],
+                      "action":  "assert.pipeline_stages"
+                  },
+                  {
+                      "step":  7,
+                      "ac":  "AC-3.3",
+                      "budget":  15,
+                      "action":  "assert.turn_latency_s"
+                  }
+              ],
+    "label":  "Final Arguments",
+    "pipeline_id":  "caseforge.mock_court.v1",
+    "status":  "GOLDEN",
+    "format_order":  2,
+    "authoritative":  true,
+    "consumes_only":  [
+                          "case_graph",
+                          "retrieval"
+                      ]
+}

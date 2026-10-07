@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "status": "DRAFT",
+  "source_page_count": 5,
+  "source_page_order": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "mixed_page_count": 5,
+  "scanned_page_count": 5,
+  "critical_fields": [],
+  "review_note": "Objective page facts are machine-derived and require human fixture review before GOLDEN lock."
+}

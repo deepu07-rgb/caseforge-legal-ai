@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "dataset_id": "caseforge.synthetic-legal-token-calibration.v1",
+  "source_class": "SYNTHETIC_CONTROLLED",
+  "purpose": "Calibration development only; never legal evidence and never part of the real-scan evaluation set.",
+  "training": [
+    {"id":"tr01","raw":0.08,"correct":0},{"id":"tr02","raw":0.14,"correct":0},{"id":"tr03","raw":0.22,"correct":0},{"id":"tr04","raw":0.31,"correct":0},
+    {"id":"tr05","raw":0.39,"correct":0},{"id":"tr06","raw":0.46,"correct":1},{"id":"tr07","raw":0.53,"correct":0},{"id":"tr08","raw":0.58,"correct":1},
+    {"id":"tr09","raw":0.64,"correct":1},{"id":"tr10","raw":0.69,"correct":0},{"id":"tr11","raw":0.73,"correct":1},{"id":"tr12","raw":0.77,"correct":1},
+    {"id":"tr13","raw":0.81,"correct":1},{"id":"tr14","raw":0.84,"correct":1},{"id":"tr15","raw":0.87,"correct":1},{"id":"tr16","raw":0.89,"correct":1},
+    {"id":"tr17","raw":0.91,"correct":1},{"id":"tr18","raw":0.93,"correct":1},{"id":"tr19","raw":0.95,"correct":1},{"id":"tr20","raw":0.97,"correct":1},
+    {"id":"tr21","raw":0.98,"correct":1},{"id":"tr22","raw":0.99,"correct":1},{"id":"tr23","raw":0.995,"correct":1},{"id":"tr24","raw":0.999,"correct":1}
+  ],
+  "held_out": [
+    {"id":"ho01","raw":0.10,"correct":0},{"id":"ho02","raw":0.20,"correct":0},{"id":"ho03","raw":0.35,"correct":0},{"id":"ho04","raw":0.48,"correct":0},
+    {"id":"ho05","raw":0.55,"correct":1},{"id":"ho06","raw":0.62,"correct":0},{"id":"ho07","raw":0.70,"correct":1},{"id":"ho08","raw":0.76,"correct":1},
+    {"id":"ho09","raw":0.82,"correct":1},{"id":"ho10","raw":0.86,"correct":1},{"id":"ho11","raw":0.90,"correct":1},{"id":"ho12","raw":0.94,"correct":1},
+    {"id":"ho13","raw":0.96,"correct":1},{"id":"ho14","raw":0.98,"correct":1},{"id":"ho15","raw":0.99,"correct":1},{"id":"ho16","raw":0.999,"correct":1}
+  ]
+}

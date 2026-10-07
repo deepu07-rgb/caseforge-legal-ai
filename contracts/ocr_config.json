@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0.0",
+  "batch": "B-S3-04",
+  "status": "FROZEN",
+  "recognizer_id": "caseforge.ocr.tesseract-eng-fast.v1",
+  "engine": {
+    "name": "Tesseract OCR",
+    "tested_version": "5.5.3.20260724",
+    "source_license": "Apache-2.0",
+    "offline_only": true
+  },
+  "model": {
+    "family": "tessdata_fast",
+    "filename": "eng.traineddata",
+    "sha256": "7d4322bd2a7749724879683fc3912cb542f19906c83bcc1a52132556427170b2",
+    "license": "Apache-2.0"
+  },
+  "language": "eng",
+  "oem": 1,
+  "psm": 3,
+  "render_dpi": 300,
+  "timeout_seconds_per_page": 120,
+  "preprocessing": ["osd", "small-angle-deskew", "min-long-edge-2200", "grayscale", "autocontrast", "median-3", "contrast-1.15"],
+  "quality_gate": {
+    "critical_field_accuracy_min": 0.99,
+    "clean_scan_cer_max": 0.03,
+    "clean_scan_wer_max": 0.05,
+    "degraded_scan_cer_max": 0.10,
+    "degraded_scan_wer_max": 0.15,
+    "below_gate_action": "require_human_review_and_block_automatic_extraction"
+  },
+  "hardware_tiers": {
+    "lite": {"cpu_threads": 1, "batch_pages": 1},
+    "full": {"cpu_threads": 2, "batch_pages": 1}
+  }
+}

@@ -1,0 +1,3 @@
+[SYNTHETIC_PLACEHOLDER_NOT_LAW]
+Reference transcript stub: the court shall hear the application.
+Not a real recording. Do not score WER against this as GOLDEN.

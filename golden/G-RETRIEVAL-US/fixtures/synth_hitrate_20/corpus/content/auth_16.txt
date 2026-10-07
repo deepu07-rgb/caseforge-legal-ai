@@ -1,0 +1,5 @@
+[CASEFORGE_SYNTH_NOT_LAW pack=S-SYNTH-GRETRIEVAL-v1]
+Neutral citation: 545 U.S. DEMO 16
+Court: synthetic United States
+The Court held that patent obviousness under section 103.
+This excerpt is product-owner synthetic GOLDEN material for retrieval metrics only.

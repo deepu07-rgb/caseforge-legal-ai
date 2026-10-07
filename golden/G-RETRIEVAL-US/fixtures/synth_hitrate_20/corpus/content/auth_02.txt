@@ -1,0 +1,5 @@
+[CASEFORGE_SYNTH_NOT_LAW pack=S-SYNTH-GRETRIEVAL-v1]
+Neutral citation: 559 U.S. DEMO 2
+Court: synthetic United States
+The Court held that summary judgment requires no genuine dispute of material fact.
+This excerpt is product-owner synthetic GOLDEN material for retrieval metrics only.

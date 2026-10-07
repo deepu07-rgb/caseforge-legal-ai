@@ -1,0 +1,2 @@
+[CASEFORGE_TRIAGE_CLASS:messy_handwriting]
+Messy handwriting sample page (synthetic).

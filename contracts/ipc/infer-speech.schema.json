@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/ipc/infer-speech.schema.json",
+  "title": "InferSpeechIpc",
+  "description": "JSON-RPC methods for production offline English speech. B-S3-20 freeze.",
+  "schema_version": "2.0.0",
+  "type": "object",
+  "required": ["schema_version", "sidecar", "methods"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "2.0.0" },
+    "sidecar": { "type": "string", "const": "infer-speech" },
+    "methods": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "speech.ping",
+          "speech.status",
+          "speech.warmup",
+          "speech.stt",
+          "speech.tts"
+        ]
+      },
+      "minItems": 5,
+      "uniqueItems": true
+    }
+  },
+  "x-caseforge": {
+    "status": "FROZEN_PRODUCTION",
+    "batch": "B-S3-20",
+    "prd_refs": ["§4.1", "§4.2", "§9", "AC-9.1", "AC-9.3", "AC-9.4"],
+    "sidecar": "infer-speech",
+    "pipeline_id": "caseforge.speech.offline-en.v2",
+    "whisper": {
+      "size": "small",
+      "status": "PRODUCTION_LOCAL",
+      "resolved_question": "Q-WHISPER-01 / PRD §21 #2",
+      "rationale": "Faster-Whisper Small uses the frozen Small model, local-files-only resolution, and the existing client size budget."
+    },
+    "methods_detail": {
+      "speech.ping": "Health check; no network.",
+      "speech.status": "Backend readiness, whisper size, language pin, cloud=false.",
+      "speech.warmup": "Load the local STT model in the persistent worker without network access.",
+      "speech.stt": "Transcribe real audio_base64; developer stubs require an explicit flag and are readiness-ineligible.",
+      "speech.tts": "Synthesize an offline Windows SAPI WAV for a role preset."
+    },
+    "tts_role_presets_from_prd": ["bench", "opposition", "witness"],
+    "language_primary": "English",
+    "network_required": false,
+    "frozen_at": "2026-08-08",
+    "authority": "CaseForge Product Owner — B-S1-16 infer-speech method catalogue + Whisper small provisional"
+  }
+}

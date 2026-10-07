@@ -1,0 +1,74 @@
+[SYNTHETIC_DEMO_NOT_LAW — fictional teaching packet · DO NOT CITE AS LAW]
+
+CASE TITLE: Smt. Kavita Sharma & Anr. v. Shri Devendra Sharma & Ors.
+JURISDICTION: India
+COURT: Civil Judge (Senior Division) — teaching stub
+MATTER TYPE: Partition of ancestral / joint family property + declaration + injunction
+USER SIDE: Plaintiffs (claiming 1/2 share)
+
+PARTIES
+1. Smt. Kavita Sharma — Plaintiff 1 (daughter of late Om Prakash Sharma)
+2. Shri Ankit Sharma — Plaintiff 2 (son of Kavita; grandson of Om Prakash)
+3. Shri Devendra Sharma — Defendant 1 (son of Om Prakash; brother of Kavita)
+4. Smt. Meera Sharma — Defendant 2 (wife of Devendra)
+5. Municipal Corporation (Demo Nagar) — proforma Defendant 3 (mutation authority)
+
+PROPERTY (teaching)
+- House property: Plot 14, Lane 3, Demo Nagar, described in old sale deed of 1978 in name of Om Prakash Sharma.
+- Alleged HUF character disputed.
+
+COMPETING STORIES
+A. Plaintiffs' story:
+  - Property is ancestral HUF estate of Om Prakash.
+  - 1998: family oral settlement allegedly gave Kavita equal half share; she lived elsewhere for marriage.
+  - 2010: Om Prakash died intestate.
+  - 2015–2024: Devendra exclusive possession; refused partition talks.
+  - 2024-11: Plaintiffs file suit for partition, separate possession, mesne profits, and declaration that 2019 gift deed is void.
+
+B. Defendants' story (from written statement teaching stub):
+  - Property was self-acquired by Om Prakash.
+  - 2008: Om Prakash executed registered gift deed to Devendra alone (plaintiffs deny knowledge until 2023).
+  - Alternatively: 2019 registered gift/relinquishment by Om Prakash (dates conflict across drafts — planted inconsistency).
+  - Limitation: plaintiffs out of possession since 1998 marriage; suit barred.
+  - Adverse possession / ouster perfected.
+  - Counterclaim: declare defendants' exclusive title; permanent injunction against plaintiffs; mesne profits if plaintiffs ever occupied outhouse.
+
+CHRONOLOGY (mixed, partially inconsistent — intentional)
+- 1978-06-12: Sale deed to Om Prakash (document exists).
+- 1998-04-??: Alleged oral family settlement (NO contemporaneous writing).
+- 2008-09-15: Registered gift deed Om Prakash → Devendra (defendants produce; plaintiffs allege forgery / undue influence without expert report yet).
+- 2010-01-03: Om Prakash death certificate.
+- 2012-08: Mutation in Devendra's name (municipal extract).
+- 2019-02-20: Second instrument labeled "gift/relinquishment" appears in one defendant list but not another (CONTRADICTION plant).
+- 2023-07: Plaintiffs obtain certified copies; claim first knowledge of gift.
+- 2024-11-02: Suit filed.
+
+DOCUMENTS PRESENT
+1. 1978 sale deed (Om Prakash)
+2. Death certificate 2010
+3. 2008 gift deed certified copy
+4. Mutation extract 2012
+5. Suit plaint + WS stub
+6. Photographs of house (undated)
+
+DOCUMENTS / PROOF MISSING (hard gaps)
+- No writing of 1998 oral settlement
+- No partition list of properties / shares historically
+- No handwriting/forensic report on 2008 deed
+- No continuous tax receipts in plaintiffs' names
+- No clear date when plaintiffs demanded partition before 2023
+- Conflicting defendant schedules on 2019 instrument
+
+PRAYER
+- Preliminary decree of partition (1/2 share teaching claim)
+- Declaration that gift deed(s) void
+- Mesne profits
+- Permanent injunction against alienation
+
+DEFENDANT COUNTERCLAIM PRAYER
+- Exclusive title declaration
+- Injunction against interference
+- Costs
+
+COUNSEL WARNING (teaching)
+This is the hard case: even if sympathy favors plaintiffs, Law (oral gift/settlement, limitation, HUF proof) and Exposure (counterclaim + mutation long standing) are severely stressed.

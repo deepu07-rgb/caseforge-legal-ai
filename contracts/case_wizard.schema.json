@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/case_wizard.schema.json",
+  "title": "CaseWizardInput",
+  "description": "New Case wizard fields (PRD §5). B-S1-03. Jurisdiction required and immutable after create.",
+  "schema_version": "0.1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "cause_title",
+    "court",
+    "jurisdiction",
+    "matter_type",
+    "user_side"
+  ],
+  "properties": {
+    "cause_title": { "type": "string", "minLength": 1 },
+    "court": { "type": "string", "minLength": 1 },
+    "jurisdiction": {
+      "type": "string",
+      "enum": ["India", "United States", "Other"],
+      "description": "Set at case creation; immutable for the life of the case."
+    },
+    "matter_type": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Free text — PRD does not freeze a matter-type enum."
+    },
+    "user_side": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Free text — e.g. user’s side in the matter."
+    },
+    "code_era": {
+      "type": "string",
+      "description": "Auto-suggested stub allowed; user may edit."
+    },
+    "language": {
+      "type": "string",
+      "const": "English",
+      "description": "English primary for Stage 1."
+    }
+  },
+  "x-caseforge": {
+    "status": "FROZEN",
+    "batch": "B-S1-03",
+    "prd_refs": ["§5"],
+    "immutability": ["jurisdiction"],
+    "out_of_scope": ["document_upload", "pack_install", "AI_suggestions"]
+  }
+}

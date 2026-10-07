@@ -1,0 +1,5 @@
+[CASEFORGE_SYNTH_NOT_LAW pack=S-SYNTH-GRETRIEVAL-v1]
+Neutral citation: 551 U.S. DEMO 10
+Court: synthetic United States
+The Court held that class certification under Rule 23 commonality.
+This excerpt is product-owner synthetic GOLDEN material for retrieval metrics only.

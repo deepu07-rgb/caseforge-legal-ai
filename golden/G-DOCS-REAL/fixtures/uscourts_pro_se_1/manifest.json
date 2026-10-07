@@ -1,0 +1,115 @@
+{
+  "schema_version": "1.0.0",
+  "fixture_id": "USCOURTS-PRO-SE-1-2016",
+  "suite_id": "G-DOCS-REAL",
+  "status": "READY_FOR_REVIEW",
+  "source_class": "REAL_WORLD_RIGHTS_CLEARED",
+  "jurisdiction": "United States",
+  "purposes": [
+    "page-model",
+    "native-text",
+    "ocr",
+    "mixed-page-routing",
+    "format-import"
+  ],
+  "source": {
+    "title": "Complaint for a Civil Case (Pro Se 1)",
+    "publisher": "Administrative Office of the U.S. Courts",
+    "source_url": "https://www.uscourts.gov/forms-rules/forms/complaint-a-civil-case",
+    "acquired_at": "2026-08-13T16:59:12Z"
+  },
+  "rights": {
+    "status": "VERIFIED",
+    "basis": "Publicly downloadable official U.S. Courts form used for internal evaluation; external redistribution is intentionally not asserted.",
+    "confidential": false,
+    "distribution_scope": "internal_only",
+    "may_redistribute": false
+  },
+  "assets": [
+    {
+      "path": "golden/G-DOCS-REAL/fixtures/uscourts_pro_se_1/assets/complaint_for_a_civil_case.pdf",
+      "media_type": "application/pdf",
+      "sha256": "9fe218570d311b0deab9413e39efda41210e60f2a5221eb360d43912ce05a118",
+      "bytes": 1054771,
+      "role": "official-native-source",
+      "derived_from": null
+    },
+    {
+      "path": "golden/G-DOCS-REAL/fixtures/uscourts_pro_se_1/assets/complaint_for_a_civil_case.docx",
+      "media_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "sha256": "007f462fe3ae66a547646014b0adede3a591564748974494160c56a91a6bb265",
+      "bytes": 30119,
+      "role": "official-docx-source",
+      "derived_from": null
+    },
+    {
+      "path": "golden/G-DOCS-REAL/fixtures/uscourts_pro_se_1/assets/complaint_for_a_civil_case.txt",
+      "media_type": "text/plain",
+      "sha256": "627663ea77a1e2b98eebb20b222ec535b2513ccc2dc59566110a7324e77eaacc",
+      "bytes": 7013,
+      "role": "machine-extracted-reference-draft",
+      "derived_from": "golden/G-DOCS-REAL/fixtures/uscourts_pro_se_1/assets/complaint_for_a_civil_case.pdf"
+    },
+    {
+      "path": "golden/G-DOCS-REAL/fixtures/uscourts_pro_se_1/assets/page_1.png",
+      "media_type": "image/png",
+      "sha256": "b4459d883abb756bd0dd25d5c46004b97a05a69ebac59642d95840d96ebea542",
+      "bytes": 120868,
+      "role": "rendered-page",
+      "derived_from": "golden/G-DOCS-REAL/fixtures/uscourts_pro_se_1/assets/complaint_for_a_civil_case.pdf"
+    },
+    {
+      "path": "golden/G-DOCS-REAL/fixtures/uscourts_pro_se_1/assets/page_1.jpg",
+      "media_type": "image/jpeg",
+      "sha256": "8042e2c20fb45fe91ba27428d087a66dec252ee94af7dfd7e2d62de103e1e8ab",
+      "bytes": 92163,
+      "role": "rendered-page-lossy",
+      "derived_from": "golden/G-DOCS-REAL/fixtures/uscourts_pro_se_1/assets/complaint_for_a_civil_case.pdf"
+    },
+    {
+      "path": "golden/G-DOCS-REAL/fixtures/uscourts_pro_se_1/assets/page_1_rotated_degraded.jpg",
+      "media_type": "image/jpeg",
+      "sha256": "fdca01f91e0ba01d68af0e56a1ec16dfeacde7eda3302f288be4f34af33aa687",
+      "bytes": 17352,
+      "role": "rotated-degraded-derivative",
+      "derived_from": "golden/G-DOCS-REAL/fixtures/uscourts_pro_se_1/assets/complaint_for_a_civil_case.pdf"
+    },
+    {
+      "path": "golden/G-DOCS-REAL/fixtures/uscourts_pro_se_1/assets/complaint_scanned_derivative.pdf",
+      "media_type": "application/pdf",
+      "sha256": "b4226906bec9622c0caa528d4042a1224b95c4762898ebda14809c351cdf834d",
+      "bytes": 486564,
+      "role": "image-only-scanned-derivative",
+      "derived_from": "golden/G-DOCS-REAL/fixtures/uscourts_pro_se_1/assets/complaint_for_a_civil_case.pdf"
+    },
+    {
+      "path": "golden/G-DOCS-REAL/fixtures/uscourts_pro_se_1/assets/complaint_mixed_derivative.pdf",
+      "media_type": "application/pdf",
+      "sha256": "6e806d469a357d149a80209a28ae6c17d13bf5390e1a11b47d560a699ce0f575",
+      "bytes": 688078,
+      "role": "mixed-native-scanned-derivative",
+      "derived_from": "golden/G-DOCS-REAL/fixtures/uscourts_pro_se_1/assets/complaint_for_a_civil_case.pdf"
+    }
+  ],
+  "expected_answer": {
+    "path": "golden/G-DOCS-REAL/fixtures/uscourts_pro_se_1/expected_answer.json",
+    "authored_by": [
+      "fetch_stage3_public_fixtures.py"
+    ],
+    "status": "DRAFT",
+    "reviewed_by": [],
+    "adjudicator": null
+  },
+  "characteristics": [
+    "native",
+    "scanned-derivative",
+    "mixed-derivative",
+    "DOCX",
+    "TXT",
+    "JPG",
+    "PNG",
+    "rotated",
+    "low-quality"
+  ],
+  "notes": "Derivatives preserve provenance to the official source. This fixture cannot produce PASS evidence until a human locks its expected answer."
+}

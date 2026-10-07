@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/treatment_edge.schema.json",
+  "title": "CaseForge treatment edge (akpkg v2.1 TREATMENT_EDGES content)",
+  "description": "A pack-build artefact recording that one installed judgment treats another (PRD v4.0 §7.8). DERIVED content: shown with its exact citing excerpt; never changes supersession status and never asserts 'good law'.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "edge_id", "citing", "cited_source_id", "treatment", "detection", "content_kind", "affects_supersession", "pack_build"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "edge_id": { "type": "string", "minLength": 1 },
+    "citing": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_id", "chunk_id", "char_start", "char_end", "excerpt"],
+      "properties": {
+        "source_id": { "type": "string", "minLength": 1 }, "chunk_id": { "type": "string", "minLength": 1 },
+        "paragraph": { "type": ["string", "null"] },
+        "char_start": { "type": "integer", "minimum": 0 }, "char_end": { "type": "integer", "minimum": 0 },
+        "excerpt": { "type": "string", "minLength": 1, "description": "Exact stored substring of the citing chunk." }
+      }
+    },
+    "cited_source_id": { "type": "string", "minLength": 1 },
+    "treatment": { "enum": ["OVERRULED", "REVERSED", "DISTINGUISHED", "FOLLOWED", "DOUBTED", "PER_INCURIAM", "REFERRED_TO_LARGER_BENCH"] },
+    "detection": {
+      "type": "object", "additionalProperties": false, "required": ["method", "pattern_id"],
+      "properties": { "method": { "const": "PATTERN_PLUS_VERIFIER" }, "pattern_id": { "type": "string", "minLength": 1 } }
+    },
+    "content_kind": { "const": "DERIVED" },
+    "affects_supersession": { "const": false },
+    "pack_build": {
+      "type": "object", "additionalProperties": false, "required": ["pack_id", "version", "built_at"],
+      "properties": { "pack_id": { "type": "string" }, "version": { "type": "string" }, "built_at": { "type": "string", "format": "date-time" } }
+    }
+  },
+  "x-caseforge": {
+    "status": "FROZEN_FOR_IMPLEMENTATION",
+    "batch": "B-S4-01",
+    "implemented_by": ["B-S4-13"],
+    "prd_refs": ["PRD v4.0 §7.8", "AC-S4-08.1", "AC-S4-08.2"],
+    "absence_rule": "No edge for a source renders as 'no treatment found in installed corpus'."
+  }
+}

@@ -1,0 +1,61 @@
+[
+  {
+    "title": "The Partition Act, 1893",
+    "issuing_authority": "Parliament of India",
+    "publisher": "India Code, Ministry of Law and Justice, Legislative Department",
+    "source_url": "https://www.indiacode.nic.in/bitstream/123456789/5657/1/189304.pdf",
+    "acquired_at": "2026-08-16",
+    "official_pdf_sha256": "080054eb4b50690727288384c95e4eed520e421c516bcb30d1f2eef5b9a9b4bb",
+    "selected_pdf_pages": [
+      1,
+      2,
+      3
+    ],
+    "version_status": "CURRENT_AS_PUBLISHED_ON_ACQUISITION_DATE",
+    "permitted_use_basis": "Copyright Act, 1957, section 52(1)(q)(ii); reproduced with CaseForge original matter",
+    "non_endorsement": "No Government of India or India Code endorsement is claimed"
+  },
+  {
+    "title": "The Code of Civil Procedure, 1908",
+    "issuing_authority": "Parliament of India",
+    "publisher": "India Code, Ministry of Law and Justice, Legislative Department",
+    "source_url": "https://www.indiacode.nic.in/bitstream/123456789/2191/1/aA1908-05.pdf",
+    "acquired_at": "2026-08-16",
+    "official_pdf_sha256": "81a542d54d30d22a580b4d0ffc27cc82982714e2c8fe739634536df6babda26c",
+    "selected_pdf_pages": [
+      68,
+      69,
+      70,
+      218,
+      219,
+      220,
+      221,
+      222,
+      223,
+      224,
+      225
+    ],
+    "version_status": "CURRENT_AS_PUBLISHED_ON_ACQUISITION_DATE",
+    "permitted_use_basis": "Copyright Act, 1957, section 52(1)(q)(ii); reproduced with CaseForge original matter",
+    "non_endorsement": "No Government of India or India Code endorsement is claimed"
+  },
+  {
+    "title": "The Limitation Act, 1963",
+    "issuing_authority": "Parliament of India",
+    "publisher": "India Code, Ministry of Law and Justice, Legislative Department",
+    "source_url": "https://www.indiacode.nic.in/bitstream/123456789/1565/5/A1963-36.pdf",
+    "acquired_at": "2026-08-16",
+    "official_pdf_sha256": "1ad1f2964881272f5ae8769b238ea6ee2bb3e126edbae39dd6bb00794d9f2d82",
+    "selected_pdf_pages": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      22
+    ],
+    "version_status": "CURRENT_AS_PUBLISHED_ON_ACQUISITION_DATE",
+    "permitted_use_basis": "Copyright Act, 1957, section 52(1)(q)(ii); reproduced with CaseForge original matter",
+    "non_endorsement": "No Government of India or India Code endorsement is claimed"
+  }
+]

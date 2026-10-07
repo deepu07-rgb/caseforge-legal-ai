@@ -1,0 +1,133 @@
+{
+  "schema_version": "0.1.0-DEMO",
+  "authoritative": false,
+  "status": "DEMO_SYNTHETIC",
+  "fixture_id": "demo/demo_03_hard_partition",
+  "case_graph_contract": "contracts/case_graph.schema.json",
+  "case_graph_schema_status": "BLOCKED — concept_shell only (Q-CG-01)",
+  "jurisdiction": "India",
+  "difficulty": "hard",
+  "concept_shell": {
+    "chronology_dated_events": [
+      {
+        "event_id": "e1",
+        "date": "1978-06-12",
+        "summary": "Sale deed: Plot 14 acquired in name of Om Prakash Sharma",
+        "source": { "doc": "sale_deed_1978" },
+        "confidence": 0.95
+      },
+      {
+        "event_id": "e2",
+        "date": "1998-04-01",
+        "summary": "Alleged oral family settlement (date approximate; no writing)",
+        "source": { "doc": "plaint_averment", "marker": "SOURCED_BY_COUNSEL" },
+        "confidence": 0.35
+      },
+      {
+        "event_id": "e3",
+        "date": "2008-09-15",
+        "summary": "Registered gift deed Om Prakash → Devendra (disputed validity)",
+        "source": { "doc": "gift_deed_2008" },
+        "confidence": 0.9
+      },
+      {
+        "event_id": "e4",
+        "date": "2010-01-03",
+        "summary": "Death of Om Prakash",
+        "source": { "doc": "death_certificate" },
+        "confidence": 0.98
+      },
+      {
+        "event_id": "e5",
+        "date": "2012-08-01",
+        "summary": "Mutation in Devendra's name",
+        "source": { "doc": "mutation_2012" },
+        "confidence": 0.9
+      },
+      {
+        "event_id": "e6",
+        "date": "2019-02-20",
+        "summary": "Alleged second gift/relinquishment instrument (inconsistent across defendant lists)",
+        "source": { "doc": "ws_schedules" },
+        "confidence": 0.4
+      },
+      {
+        "event_id": "e7",
+        "date": "2023-07-15",
+        "summary": "Plaintiffs claim first knowledge of gift on obtaining certified copies",
+        "source": { "doc": "plaint" },
+        "confidence": 0.55
+      },
+      {
+        "event_id": "e8",
+        "date": "2024-11-02",
+        "summary": "Partition suit filed",
+        "source": { "doc": "plaint" },
+        "confidence": 0.95
+      }
+    ],
+    "parties_and_roles": [
+      { "party_id": "p1", "name": "Kavita Sharma", "role": "plaintiff_daughter", "side": "plaintiff" },
+      { "party_id": "p2", "name": "Ankit Sharma", "role": "plaintiff_grandson", "side": "plaintiff" },
+      { "party_id": "p3", "name": "Devendra Sharma", "role": "defendant_son_in_possession", "side": "defendant" },
+      { "party_id": "p4", "name": "Meera Sharma", "role": "defendant_spouse", "side": "defendant" },
+      { "party_id": "p5", "name": "Municipal Corporation Demo Nagar", "role": "proforma_mutation_authority", "side": "proforma" }
+    ],
+    "statutes_rules_invoked": [
+      {
+        "citation_label": "Transfer of Property / registration requirements teaching label [SYNTHETIC_DEMO_NOT_LAW]",
+        "role": "attack_oral_transfer"
+      },
+      {
+        "citation_label": "Limitation Act teaching label — partition / declaration [SYNTHETIC_DEMO_NOT_LAW]",
+        "role": "limitation_defense_exposure"
+      },
+      {
+        "citation_label": "Evidence Act teaching label — proof of HUF / oral settlement [SYNTHETIC_DEMO_NOT_LAW]",
+        "role": "proof_burden"
+      }
+    ],
+    "evidence_inventory": [
+      { "evidence_id": "ev1", "label": "1978 sale deed", "gap": false },
+      { "evidence_id": "ev2", "label": "2008 gift deed certified copy", "gap": false },
+      { "evidence_id": "ev3", "label": "2012 mutation", "gap": false },
+      { "evidence_id": "ev4", "label": "Death certificate 2010", "gap": false },
+      { "evidence_id": "ev_gap_1", "label": "MISSING: written 1998 settlement", "gap": true },
+      { "evidence_id": "ev_gap_2", "label": "MISSING: forensic report on 2008 deed", "gap": true },
+      { "evidence_id": "ev_gap_3", "label": "MISSING: plaintiffs' tax/possession trail", "gap": true },
+      { "evidence_id": "ev_gap_4", "label": "MISSING: clear pre-suit demand chronology", "gap": true }
+    ],
+    "procedural_posture": {
+      "stage": "suit_pending_pleadings",
+      "forum": "Civil Judge (SD) teaching stub",
+      "next_expected": "issues / evidence",
+      "counterclaim": true
+    },
+    "prayer_relief": {
+      "primary": "Partition 1/2 share + void gift + mesne profits + injunction",
+      "defendant_counterclaim": "Exclusive title + permanent injunction + costs"
+    },
+    "contradiction_report": [
+      {
+        "id": "c1",
+        "summary": "Plaintiffs assert continuous HUF share; mutation + exclusive possession since 2012 contradict practical joint enjoyment",
+        "severity": "high",
+        "items": ["e2", "e5"]
+      },
+      {
+        "id": "c2",
+        "summary": "Defendant materials conflict on existence/date of 2019 second instrument",
+        "severity": "medium",
+        "items": ["e6"]
+      },
+      {
+        "id": "c3",
+        "summary": "Oral settlement 1998 lacks writing; gift 2008 is registered — formal strength favors defendants unless deed attacked with proof",
+        "severity": "high",
+        "items": ["e2", "e3"]
+      }
+    ],
+    "notes": "Hard demo: high contradiction density and legal instability by design."
+  },
+  "eval_policy": "NEVER_SHIP_GATE — DEMO_SYNTHETIC only"
+}

@@ -1,0 +1,23 @@
+{
+  "batch": "B-S3-18",
+  "checks": {
+    "debrief_v2_schema": true,
+    "verified_ledger_input": true,
+    "turn_and_source_trace": true,
+    "observed_inference_gap_distinct": true,
+    "planted_recall_threshold": true,
+    "generic_filler_rejected": true,
+    "encrypted_immutable_snapshot": true,
+    "task_crud_separate_from_truth": true,
+    "text_and_voice_session_input": true,
+    "comparison_no_prediction": true,
+    "forbidden_outcome_language": true,
+    "source_specific_ui": true,
+    "counsel_task_controls": true,
+    "host_commands": true,
+    "operator_documentation": true
+  },
+  "planted_weakness_recall": 1.0,
+  "threshold": 0.8,
+  "passed": true
+}

@@ -1,0 +1,95 @@
+{
+  "schema_version": "0.1.0-DEMO",
+  "authoritative": false,
+  "status": "DEMO_SYNTHETIC",
+  "fixture_id": "demo/demo_01_easy_dishonour",
+  "case_graph_contract": "contracts/case_graph.schema.json",
+  "case_graph_schema_status": "BLOCKED — concept_shell only (Q-CG-01)",
+  "jurisdiction": "India",
+  "difficulty": "easy",
+  "concept_shell": {
+    "chronology_dated_events": [
+      {
+        "event_id": "e1",
+        "date": "2025-01-10",
+        "summary": "Invoice INV-BRT-1042 for INR 4,50,000 for goods supply",
+        "source": { "doc": "invoice", "note": "SYNTHETIC" },
+        "confidence": 0.95
+      },
+      {
+        "event_id": "e2",
+        "date": "2025-01-12",
+        "summary": "Cheque 778821 issued for INR 4,50,000",
+        "source": { "doc": "cheque", "note": "SYNTHETIC" },
+        "confidence": 0.95
+      },
+      {
+        "event_id": "e3",
+        "date": "2025-01-22",
+        "summary": "Cheque returned — funds insufficient",
+        "source": { "doc": "return_memo", "note": "SYNTHETIC" },
+        "confidence": 0.98
+      },
+      {
+        "event_id": "e4",
+        "date": "2025-01-28",
+        "summary": "s.138 demand notice issued; receipt teaching stub 2025-01-30",
+        "source": { "doc": "notice_packet", "note": "SYNTHETIC" },
+        "confidence": 0.92
+      },
+      {
+        "event_id": "e5",
+        "date": "2025-02-20",
+        "summary": "No payment within 15 days of notice receipt",
+        "source": { "doc": "counsel_note", "marker": "SOURCED_BY_COUNSEL" },
+        "confidence": 0.9
+      },
+      {
+        "event_id": "e6",
+        "date": "2025-03-05",
+        "summary": "Complaint filed",
+        "source": { "doc": "complaint", "note": "SYNTHETIC" },
+        "confidence": 0.9
+      }
+    ],
+    "parties_and_roles": [
+      {
+        "party_id": "p1",
+        "name": "Blue River Traders",
+        "role": "complainant_payee",
+        "side": "plaintiff"
+      },
+      {
+        "party_id": "p2",
+        "name": "Rohan Mehta",
+        "role": "drawer_accused",
+        "side": "defendant"
+      }
+    ],
+    "statutes_rules_invoked": [
+      {
+        "citation_label": "NI Act s.138 [SYNTHETIC_DEMO_NOT_LAW teaching label]",
+        "role": "primary_offence",
+        "planted_status": "TEACHING_ONLY"
+      }
+    ],
+    "evidence_inventory": [
+      { "evidence_id": "ev1", "label": "Invoice INV-BRT-1042", "supports": ["e1", "debt_existence"] },
+      { "evidence_id": "ev2", "label": "Cheque 778821", "supports": ["e2"] },
+      { "evidence_id": "ev3", "label": "Bank return memo 2025-01-22", "supports": ["e3"] },
+      { "evidence_id": "ev4", "label": "Notice + RPAD + ACK", "supports": ["e4"] }
+    ],
+    "procedural_posture": {
+      "stage": "complaint_filed",
+      "forum": "Magistrate / Commercial Court teaching stub",
+      "next_expected": "process / summons teaching stub"
+    },
+    "prayer_relief": {
+      "primary": "s.138 conviction path and/or recovery of INR 4,50,000 with interest and costs",
+      "amount_inr": 450000
+    },
+    "contradiction_report": [],
+    "notes": "Easy demo: no planted contradictions. All concept areas filled for teaching, not GOLDEN eval."
+  },
+  "eval_policy": "NEVER_SHIP_GATE — DEMO_SYNTHETIC only"
+}

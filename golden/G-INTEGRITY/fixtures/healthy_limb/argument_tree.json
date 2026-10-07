@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0.0",
+  "case_id": "golden_healthy_limb",
+  "generated_at": "2026-08-08T00:00:00Z",
+  "pipeline": {
+    "scorer_id": "caseforge.integrity.v1",
+    "builder_id": null,
+    "notes": "Control limb — all links above threshold"
+  },
+  "scoring_rules": {
+    "formula": "VI = 100 - min(Fact, Evidence, Law, Exposure)",
+    "missing_link_threshold": 60,
+    "link_scale": "0-100 integer",
+    "prd_ref": "§8"
+  },
+  "relief_root": {
+    "node_id": "R1",
+    "node_role": "relief_root",
+    "label": "Healthy control relief (GOLDEN synthetic)",
+    "jurisdiction": "United States",
+    "relief_ref": null
+  },
+  "limbs": [
+    {
+      "node_id": "L1",
+      "node_role": "argument_limb",
+      "parent": "R1",
+      "label": "Well-supported control limb",
+      "theory": "All four links score high; Missing Links empty.",
+      "links": {
+        "Fact": 92,
+        "Evidence": 90,
+        "Law": 88,
+        "Exposure": 85
+      },
+      "expected_VI": 15,
+      "anchors": [
+        {
+          "node_id": "A1",
+          "node_role": "anchor_leaf",
+          "kind": "fact",
+          "ref": "f1",
+          "text": "Key fact present",
+          "case_graph_path": "counsel_facts[0]"
+        },
+        {
+          "node_id": "A2",
+          "node_role": "anchor_leaf",
+          "kind": "evidence",
+          "ref": "ev1",
+          "text": "Exhibit on file",
+          "case_graph_path": "evidence[0]"
+        },
+        {
+          "node_id": "A3",
+          "node_role": "anchor_leaf",
+          "kind": "law",
+          "ref": "law1",
+          "text": "Authority on file",
+          "case_graph_path": "statutes[0]"
+        },
+        {
+          "node_id": "A4",
+          "node_role": "anchor_leaf",
+          "kind": "exposure",
+          "ref": "exp1",
+          "text": "Counter-exposure addressed",
+          "case_graph_path": null
+        }
+      ],
+      "planted_gaps": []
+    }
+  ],
+  "meta": {
+    "status": "GOLDEN",
+    "authoritative": true,
+    "fixture_id": "G-INTEGRITY/healthy_limb",
+    "difficulty": "control"
+  }
+}

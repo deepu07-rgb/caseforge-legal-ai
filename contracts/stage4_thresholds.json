@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0.0",
+  "product": "CaseForge",
+  "batch": "B-S4-01",
+  "status": "PROPOSED_AWAITING_OWNER_APPROVAL",
+  "question": "Q-S4-01",
+  "worksheet": "docs/worksheets/Q-S4-01_thresholds.md",
+  "description": "Stage 4 numeric gates proposed in CaseForge_PRD_v4.0.md. None is normative until the owner approves it; approved values move into constants.json under stage4 and this file records the approval. Until then every dependent AC is BLOCKED.",
+  "rule": "Values here MUST NOT be read by product code. Eval checks treat an unapproved threshold as BLOCKED, never as PASS.",
+  "thresholds": [
+    { "id": "S4.audit.citation_extraction_recall_min", "ac": "AC-S4-01.3", "proposed": 0.98, "unit": "ratio", "per_jurisdiction": true, "approval": null },
+    { "id": "S4.opposing.record_conflict_recall_min", "ac": "AC-S4-02.2", "proposed": 0.90, "unit": "ratio", "per_jurisdiction": true, "approval": null },
+    { "id": "S4.impeach.deterministic_recall_min", "ac": "AC-S4-03.1", "proposed": 0.95, "unit": "ratio", "per_jurisdiction": true, "approval": null },
+    { "id": "S4.impeach.deterministic_precision_min", "ac": "AC-S4-03.1", "proposed": 0.90, "unit": "ratio", "per_jurisdiction": true, "approval": null },
+    { "id": "S4.foundation.planted_gap_rank_max", "ac": "AC-S4-05.1", "proposed": 3, "unit": "rank", "per_jurisdiction": false, "approval": null },
+    { "id": "S4.rehearsal.timer_accuracy_max_s", "ac": "AC-S4-07.1", "proposed": 1, "unit": "seconds", "per_jurisdiction": false, "approval": null },
+    { "id": "S4.rehearsal.slot_presets_min", "ac": "AC-S4-07.1", "proposed": [2, 5, 10, 15, 30], "unit": "minutes", "per_jurisdiction": false, "approval": null },
+    { "id": "S4.indic.ocr_cer_max", "ac": "AC-S4-09.1", "proposed": null, "unit": "ratio", "per_jurisdiction": false, "approval": null, "note": "No value proposed; owner freezes after the B-S4-14 bake-off (Q-S4-04)." },
+    { "id": "S4.indic.critical_field_accuracy_min", "ac": "AC-S4-09.2", "proposed": 0.98, "unit": "ratio", "per_jurisdiction": false, "approval": null },
+    { "id": "S4.chambers.admitted_disputed_agreement_min", "ac": "AC-S4-12.2", "proposed": 0.95, "unit": "ratio", "per_jurisdiction": true, "approval": null },
+    { "id": "S4.chambers.lookup_top5_hit_rate_min", "ac": "AC-S4-13.1", "proposed": 0.90, "unit": "ratio", "per_jurisdiction": true, "approval": null },
+    { "id": "S4.chambers.cause_list_100_render_max_s", "ac": "AC-S4-14.2", "proposed": 60, "unit": "seconds", "per_jurisdiction": false, "approval": null, "reference_machine": "Full tier reference (PRD v1.0 §3)" },
+    { "id": "S4.chambers.redteam_min_prompts", "ac": "AC-S4-15.2", "proposed": 100, "unit": "prompts", "per_jurisdiction": false, "approval": null },
+    { "id": "S4.redteam.full_suite_min_prompts", "ac": "AC-S4-RT-RED", "proposed": 300, "unit": "prompts", "per_jurisdiction": false, "approval": null },
+    { "id": "S4.licence.seat_transfers_per_year", "ac": "AC-S4-16.1", "proposed": 2, "unit": "count", "per_jurisdiction": false, "approval": null, "question": "Q-S4-07" },
+    { "id": "S4.packs.official_delta_cadence_days", "ac": null, "proposed": 30, "unit": "days", "per_jurisdiction": false, "approval": null, "question": "Q-S4-05", "note": "Operational policy for B-S4-13 delta packs; not an acceptance gate." }
+  ],
+  "approval_record_shape": { "approved_value": "number|array", "approved_by": "owner name/role", "approved_on": "YYYY-MM-DD", "notes": "string|null" }
+}

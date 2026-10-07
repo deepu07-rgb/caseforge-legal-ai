@@ -1,0 +1,11 @@
+{
+  "schema_version": "0.1.0-PLACEHOLDER",
+  "authoritative": false,
+  "status": "SYNTHETIC_PLACEHOLDER",
+  "fixture_id": "G-AUDIO/micro_001",
+  "reference_transcript": "the court shall hear the application",
+  "lexicon_entries_expected": [],
+  "wer_target": null,
+  "notes": "AC-9 WER numeric targets not frozen in PRD Layer 1. Do not invent a WER number here.",
+  "eval_policy": "SKIP_IF_STATUS_NOT_GOLDEN"
+}

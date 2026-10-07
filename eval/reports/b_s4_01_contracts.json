@@ -1,0 +1,330 @@
+{
+  "batch": "B-S4-01",
+  "generated_at": "2026-10-07T20:17:57Z",
+  "implementation_status": "PASS",
+  "formal_acceptance_status": "BLOCKED",
+  "formal_blockers": [
+    "Q-S4-01 thresholds awaiting owner approval",
+    "Q-S4-02 legal editors not named",
+    "Q-S4-12 resource allocations/RAM ceiling awaiting approval"
+  ],
+  "contracts": 22,
+  "pinned_unchanged": [
+    "akpkg.schema.json",
+    "case_graph.schema.json",
+    "document_intake.schema.json",
+    "guardrails.json",
+    "licence_payload.schema.json",
+    "mock_court_debrief_v2.schema.json",
+    "proposition_ledger.schema.json",
+    "supported_models.json"
+  ],
+  "adversarial_cases": {
+    "total": 36,
+    "rejected": 36
+  },
+  "stage4_ac_counts": {
+    "PASS": 0,
+    "FAIL": 0,
+    "SKIP": 42,
+    "BLOCKED": 17
+  },
+  "stage4_ac_status": {
+    "AC-S4-RT.1": {
+      "status": "SKIP",
+      "batch": "B-S4-03",
+      "reason": "not implemented (wired by B-S4-03)"
+    },
+    "AC-S4-RT.2": {
+      "status": "SKIP",
+      "batch": "B-S4-03",
+      "reason": "not implemented (wired by B-S4-03)"
+    },
+    "AC-S4-RT.3": {
+      "status": "SKIP",
+      "batch": "B-S4-03",
+      "reason": "not implemented (wired by B-S4-03)"
+    },
+    "AC-S4-00.1": {
+      "status": "SKIP",
+      "batch": "B-S4-00",
+      "reason": "not implemented (wired by B-S4-00)"
+    },
+    "AC-S4-00.2": {
+      "status": "SKIP",
+      "batch": "B-S4-00",
+      "reason": "not implemented (wired by B-S4-00)"
+    },
+    "AC-S4-00.3": {
+      "status": "SKIP",
+      "batch": "B-S4-00",
+      "reason": "not implemented (wired by B-S4-00)"
+    },
+    "AC-S4-00.4": {
+      "status": "BLOCKED",
+      "batch": "B-S4-00",
+      "reason": "open question Q-S4-12"
+    },
+    "AC-S4-00.5": {
+      "status": "SKIP",
+      "batch": "B-S4-00",
+      "reason": "not implemented (wired by B-S4-00)"
+    },
+    "AC-S4-00.6": {
+      "status": "SKIP",
+      "batch": "B-S4-00",
+      "reason": "not implemented (wired by B-S4-00)"
+    },
+    "AC-S4-01.1": {
+      "status": "SKIP",
+      "batch": "B-S4-04",
+      "reason": "not implemented (wired by B-S4-04)"
+    },
+    "AC-S4-01.2": {
+      "status": "SKIP",
+      "batch": "B-S4-04",
+      "reason": "not implemented (wired by B-S4-04)"
+    },
+    "AC-S4-01.3": {
+      "status": "BLOCKED",
+      "batch": "B-S4-04",
+      "reason": "threshold S4.audit.citation_extraction_recall_min unapproved (Q-S4-01)"
+    },
+    "AC-S4-01.4": {
+      "status": "SKIP",
+      "batch": "B-S4-05",
+      "reason": "not implemented (wired by B-S4-05)"
+    },
+    "AC-S4-01.5": {
+      "status": "SKIP",
+      "batch": "B-S4-05",
+      "reason": "not implemented (wired by B-S4-05)"
+    },
+    "AC-S4-02.1": {
+      "status": "SKIP",
+      "batch": "B-S4-06",
+      "reason": "not implemented (wired by B-S4-06)"
+    },
+    "AC-S4-02.2": {
+      "status": "BLOCKED",
+      "batch": "B-S4-06",
+      "reason": "threshold S4.opposing.record_conflict_recall_min unapproved (Q-S4-01)"
+    },
+    "AC-S4-02.3": {
+      "status": "SKIP",
+      "batch": "B-S4-06",
+      "reason": "not implemented (wired by B-S4-06)"
+    },
+    "AC-S4-02.4": {
+      "status": "SKIP",
+      "batch": "B-S4-06",
+      "reason": "not implemented (wired by B-S4-06)"
+    },
+    "AC-S4-03.1": {
+      "status": "BLOCKED",
+      "batch": "B-S4-08",
+      "reason": "threshold S4.impeach.deterministic_recall_min unapproved (Q-S4-01); threshold S4.impeach.deterministic_precision_min unapproved (Q-S4-01)"
+    },
+    "AC-S4-03.2": {
+      "status": "SKIP",
+      "batch": "B-S4-07",
+      "reason": "not implemented (wired by B-S4-07)"
+    },
+    "AC-S4-03.3": {
+      "status": "SKIP",
+      "batch": "B-S4-08",
+      "reason": "not implemented (wired by B-S4-08)"
+    },
+    "AC-S4-03.4": {
+      "status": "SKIP",
+      "batch": "B-S4-08",
+      "reason": "not implemented (wired by B-S4-08)"
+    },
+    "AC-S4-04.1": {
+      "status": "BLOCKED",
+      "batch": "B-S4-09",
+      "reason": "legal-editor sign-off absent (Q-S4-02); open question Q-S4-02"
+    },
+    "AC-S4-04.2": {
+      "status": "SKIP",
+      "batch": "B-S4-09",
+      "reason": "not implemented (wired by B-S4-09)"
+    },
+    "AC-S4-04.3": {
+      "status": "SKIP",
+      "batch": "B-S4-09",
+      "reason": "not implemented (wired by B-S4-09)"
+    },
+    "AC-S4-05.1": {
+      "status": "BLOCKED",
+      "batch": "B-S4-10",
+      "reason": "threshold S4.foundation.planted_gap_rank_max unapproved (Q-S4-01); legal-editor sign-off absent (Q-S4-02); open question Q-S4-02"
+    },
+    "AC-S4-05.2": {
+      "status": "SKIP",
+      "batch": "B-S4-10",
+      "reason": "not implemented (wired by B-S4-10)"
+    },
+    "AC-S4-05.3": {
+      "status": "SKIP",
+      "batch": "B-S4-10",
+      "reason": "not implemented (wired by B-S4-10)"
+    },
+    "AC-S4-06.1": {
+      "status": "BLOCKED",
+      "batch": "B-S4-11",
+      "reason": "legal-editor sign-off absent (Q-S4-02); open question Q-S4-02; open question Q-S4-11"
+    },
+    "AC-S4-06.2": {
+      "status": "SKIP",
+      "batch": "B-S4-11",
+      "reason": "not implemented (wired by B-S4-11)"
+    },
+    "AC-S4-06.3": {
+      "status": "SKIP",
+      "batch": "B-S4-11",
+      "reason": "not implemented (wired by B-S4-11)"
+    },
+    "AC-S4-07.1": {
+      "status": "BLOCKED",
+      "batch": "B-S4-12",
+      "reason": "threshold S4.rehearsal.timer_accuracy_max_s unapproved (Q-S4-01); threshold S4.rehearsal.slot_presets_min unapproved (Q-S4-01)"
+    },
+    "AC-S4-07.2": {
+      "status": "SKIP",
+      "batch": "B-S4-12",
+      "reason": "not implemented (wired by B-S4-12)"
+    },
+    "AC-S4-07.3": {
+      "status": "SKIP",
+      "batch": "B-S4-12",
+      "reason": "not implemented (wired by B-S4-12)"
+    },
+    "AC-S4-08.1": {
+      "status": "SKIP",
+      "batch": "B-S4-13",
+      "reason": "not implemented (wired by B-S4-13)"
+    },
+    "AC-S4-08.2": {
+      "status": "SKIP",
+      "batch": "B-S4-13",
+      "reason": "not implemented (wired by B-S4-13)"
+    },
+    "AC-S4-08.3": {
+      "status": "SKIP",
+      "batch": "B-S4-13",
+      "reason": "not implemented (wired by B-S4-13)"
+    },
+    "AC-S4-09.1": {
+      "status": "BLOCKED",
+      "batch": "B-S4-14",
+      "reason": "threshold S4.indic.ocr_cer_max unapproved (Q-S4-01); open question Q-S4-04"
+    },
+    "AC-S4-09.2": {
+      "status": "BLOCKED",
+      "batch": "B-S4-15",
+      "reason": "threshold S4.indic.critical_field_accuracy_min unapproved (Q-S4-01)"
+    },
+    "AC-S4-09.3": {
+      "status": "SKIP",
+      "batch": "B-S4-15",
+      "reason": "not implemented (wired by B-S4-15)"
+    },
+    "AC-S4-10.1": {
+      "status": "SKIP",
+      "batch": "B-S4-16",
+      "reason": "not implemented (wired by B-S4-16)"
+    },
+    "AC-S4-10.2": {
+      "status": "SKIP",
+      "batch": "B-S4-16",
+      "reason": "not implemented (wired by B-S4-16)"
+    },
+    "AC-S4-10.3": {
+      "status": "SKIP",
+      "batch": "B-S4-16",
+      "reason": "not implemented (wired by B-S4-16)"
+    },
+    "AC-S4-10.4": {
+      "status": "SKIP",
+      "batch": "B-S4-16",
+      "reason": "not implemented (wired by B-S4-16)"
+    },
+    "AC-S4-11.1": {
+      "status": "BLOCKED",
+      "batch": "B-S4-17",
+      "reason": "open question Q-S4-10"
+    },
+    "AC-S4-11.2": {
+      "status": "SKIP",
+      "batch": "B-S4-17",
+      "reason": "not implemented (wired by B-S4-17)"
+    },
+    "AC-S4-12.1": {
+      "status": "SKIP",
+      "batch": "B-S4-18",
+      "reason": "not implemented (wired by B-S4-18)"
+    },
+    "AC-S4-12.2": {
+      "status": "BLOCKED",
+      "batch": "B-S4-18",
+      "reason": "threshold S4.chambers.admitted_disputed_agreement_min unapproved (Q-S4-01)"
+    },
+    "AC-S4-12.3": {
+      "status": "SKIP",
+      "batch": "B-S4-18",
+      "reason": "not implemented (wired by B-S4-18)"
+    },
+    "AC-S4-13.1": {
+      "status": "BLOCKED",
+      "batch": "B-S4-19",
+      "reason": "threshold S4.chambers.lookup_top5_hit_rate_min unapproved (Q-S4-01)"
+    },
+    "AC-S4-13.2": {
+      "status": "SKIP",
+      "batch": "B-S4-19",
+      "reason": "not implemented (wired by B-S4-19)"
+    },
+    "AC-S4-14.1": {
+      "status": "SKIP",
+      "batch": "B-S4-20",
+      "reason": "not implemented (wired by B-S4-20)"
+    },
+    "AC-S4-14.2": {
+      "status": "BLOCKED",
+      "batch": "B-S4-20",
+      "reason": "threshold S4.chambers.cause_list_100_render_max_s unapproved (Q-S4-01)"
+    },
+    "AC-S4-15.1": {
+      "status": "SKIP",
+      "batch": "B-S4-21",
+      "reason": "not implemented (wired by B-S4-21)"
+    },
+    "AC-S4-15.2": {
+      "status": "BLOCKED",
+      "batch": "B-S4-21",
+      "reason": "threshold S4.chambers.redteam_min_prompts unapproved (Q-S4-01)"
+    },
+    "AC-S4-15.3": {
+      "status": "SKIP",
+      "batch": "B-S4-21",
+      "reason": "not implemented (wired by B-S4-21)"
+    },
+    "AC-S4-16.1": {
+      "status": "BLOCKED",
+      "batch": "B-S4-22",
+      "reason": "threshold S4.licence.seat_transfers_per_year unapproved (Q-S4-01); open question Q-S4-06; open question Q-S4-07"
+    },
+    "AC-S4-16.2": {
+      "status": "SKIP",
+      "batch": "B-S4-22",
+      "reason": "not implemented (wired by B-S4-22)"
+    },
+    "AC-S4-RT-RED": {
+      "status": "BLOCKED",
+      "batch": "B-S4-23",
+      "reason": "threshold S4.redteam.full_suite_min_prompts unapproved (Q-S4-01)"
+    }
+  },
+  "errors": []
+}

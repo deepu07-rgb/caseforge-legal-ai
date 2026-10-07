@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "caseforge.mock-court-debrief.v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "debrief_id", "case_id", "session_id", "turns_completed", "findings", "tasks", "comparison", "source_fingerprint", "rubric_version", "generic_tasks_rejected", "disclaimer"],
+  "properties": {
+    "schema_version": { "const": "caseforge.mock-court-debrief.v2" },
+    "debrief_id": { "type": "string", "minLength": 1 },
+    "case_id": { "type": "string", "minLength": 1 },
+    "session_id": { "type": "string", "minLength": 1 },
+    "format": { "type": "string" },
+    "created_at_unix_ms": { "type": "integer" },
+    "turns_completed": { "type": "integer", "minimum": 1 },
+    "findings": { "type": "array", "items": { "$ref": "#/$defs/finding" } },
+    "tasks": { "type": "array", "items": { "$ref": "#/$defs/task" } },
+    "comparison": {
+      "type": "object",
+      "required": ["observed_change", "supported_rate_current", "outcome_prediction"],
+      "properties": {
+        "previous_debrief_id": { "type": ["string", "null"] },
+        "observed_change": { "type": "string" },
+        "supported_rate_previous": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "supported_rate_current": { "type": "number", "minimum": 0, "maximum": 1 },
+        "outcome_prediction": { "const": false }
+      }
+    },
+    "source_fingerprint": { "type": "string", "minLength": 32 },
+    "rubric_version": { "const": "caseforge.debrief-usefulness.v1" },
+    "generic_tasks_rejected": { "type": "integer", "minimum": 0 },
+    "disclaimer": { "type": "string", "minLength": 1 }
+  },
+  "$defs": {
+    "source_ref": {
+      "type": "object",
+      "required": ["source_kind", "stable_id", "locator", "title", "verification_status"],
+      "properties": {
+        "source_kind": { "type": "string" }, "stable_id": { "type": "string" }, "locator": { "type": "string" },
+        "title": { "type": "string" }, "excerpt": { "type": ["string", "null"] }, "verification_status": { "enum": ["GREEN", "AMBER", "RED", "UNSUPPORTED"] }
+      }
+    },
+    "finding": {
+      "type": "object",
+      "required": ["finding_id", "category", "title", "detail", "turn_ids", "source_refs", "epistemic_status", "severity"],
+      "properties": {
+        "finding_id": { "type": "string" }, "category": { "enum": ["WEAKNESS_DISCOVERED", "CONTRADICTION_PRESSED", "UNANSWERED_QUESTION", "FACTUAL_OR_EVIDENTIARY_GAP", "LEGAL_GAP_OR_MISUSE", "MISSED_AUTHORITY", "UNSUPPORTED_PERSUASION"] },
+        "title": { "type": "string" }, "detail": { "type": "string" }, "turn_ids": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "source_refs": { "type": "array", "items": { "$ref": "#/$defs/source_ref" } }, "epistemic_status": { "enum": ["OBSERVED", "INFERENCE", "EXPLICIT_GAP"] }, "severity": { "enum": ["LOW", "MEDIUM", "HIGH"] }
+      }
+    },
+    "task": {
+      "type": "object",
+      "required": ["task_id", "debrief_id", "title", "detail", "status", "turn_ids", "finding_ids", "source_refs", "epistemic_status", "usefulness_score", "updated_at_unix_ms"],
+      "properties": {
+        "task_id": { "type": "string" }, "debrief_id": { "type": "string" }, "title": { "type": "string", "minLength": 24 }, "detail": { "type": "string" },
+        "status": { "enum": ["PROPOSED", "ACCEPTED", "DISMISSED", "COMPLETED"] }, "turn_ids": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "finding_ids": { "type": "array", "minItems": 1, "items": { "type": "string" } }, "source_refs": { "type": "array", "items": { "$ref": "#/$defs/source_ref" } },
+        "epistemic_status": { "enum": ["OBSERVED", "INFERENCE", "EXPLICIT_GAP"] }, "usefulness_score": { "type": "integer", "minimum": 3, "maximum": 4 },
+        "counsel_note": { "type": ["string", "null"] }, "updated_at_unix_ms": { "type": "integer" }
+      }
+    }
+  }
+}

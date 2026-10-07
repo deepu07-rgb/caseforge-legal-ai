@@ -1,0 +1,44 @@
+{
+  "$id": "caseforge.lawyer-workflow-usability.v1",
+  "batch": "B-S3-19",
+  "frozen_on": "2026-08-21",
+  "journey": [
+    "Add Case Material",
+    "Review Document Quality",
+    "Review What CaseForge Understood",
+    "Complete Missing Facts",
+    "Case Digest",
+    "Legal Authorities",
+    "Argument Analysis",
+    "Mock Court",
+    "Preparation Tasks"
+  ],
+  "thresholds": {
+    "screen_purpose_and_action_within_seconds": 15,
+    "screen_identification_success_rate_min": 0.8,
+    "controlled_journey_completion_rate_min": 0.8,
+    "critical_safety_failures_max": 0,
+    "keyboard_blockers_max": 0
+  },
+  "participants": {
+    "minimum": 5,
+    "unfamiliar_with_build": true,
+    "preferred_litigators_minimum": 3
+  },
+  "state_vocabulary": [
+    "EMPTY",
+    "LOADING",
+    "PARTIAL",
+    "FAILED",
+    "BLOCKED",
+    "CANCELLED",
+    "STALE",
+    "READY",
+    "COMPLETE"
+  ],
+  "safety_rules": [
+    "Mock Court remains blocked until host-backed retrieval readiness is ready.",
+    "Progress is derived from saved matter state, not navigation history.",
+    "Destructive actions name their scope and explain recoverability before execution."
+  ]
+}

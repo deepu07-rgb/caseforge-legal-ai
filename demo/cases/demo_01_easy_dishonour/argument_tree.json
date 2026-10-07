@@ -1,0 +1,97 @@
+{
+  "schema_version": "0.1.0-DEMO",
+  "status": "DEMO_SYNTHETIC",
+  "authoritative": false,
+  "fixture_id": "demo/demo_01_easy_dishonour",
+  "difficulty": "easy",
+  "scoring_rules": {
+    "formula": "VI = 100 - min(Fact, Evidence, Law, Exposure)",
+    "link_scale": "0-100 integer",
+    "missing_link_threshold": 60,
+    "prd_ref": "§8",
+    "note": "Eval stub only until Q-AN-01 freezes production argument_node schema"
+  },
+  "relief_root": {
+    "node_id": "R1",
+    "node_role": "relief_root",
+    "label": "Recover INR 4,50,000 (and related s.138 relief as pleaded)",
+    "jurisdiction": "India"
+  },
+  "limbs": [
+    {
+      "node_id": "L1",
+      "node_role": "argument_limb",
+      "parent": "R1",
+      "label": "Legally enforceable debt + dishonoured cheque + compliant statutory notice",
+      "theory": "Drawer issued cheque toward existing liability; bank returned for insufficient funds; demand notice served; no payment in statutory window.",
+      "links": {
+        "Fact": 92,
+        "Evidence": 90,
+        "Law": 88,
+        "Exposure": 85
+      },
+      "expected_VI": 15,
+      "anchors": [
+        {
+          "node_id": "A1",
+          "node_role": "anchor_leaf",
+          "kind": "fact",
+          "ref": "e2",
+          "text": "Cheque 778821 dated 2025-01-12 for INR 4,50,000"
+        },
+        {
+          "node_id": "A2",
+          "node_role": "anchor_leaf",
+          "kind": "evidence",
+          "ref": "ev3",
+          "text": "Return memo: funds insufficient (2025-01-22)"
+        },
+        {
+          "node_id": "A3",
+          "node_role": "anchor_leaf",
+          "kind": "law",
+          "ref": "NI Act s.138 teaching label",
+          "text": "Elements mapped: drawer, payee, dishonour, notice, non-payment"
+        },
+        {
+          "node_id": "A4",
+          "node_role": "anchor_leaf",
+          "kind": "exposure",
+          "ref": "counsel_note",
+          "text": "Low counterclaim exposure in this simplified demo; limitation appears within teaching window"
+        }
+      ],
+      "strength_assessment": {
+        "overall": "STRONG",
+        "why": "All four links score high; VI is low. This is the control case for a healthy limb.",
+        "where_argument_needs_more_strength": [
+          {
+            "link": "Exposure",
+            "current_score": 85,
+            "gap": "minor",
+            "action": "Pre-empt a bare denial of service of notice by organizing ACK + tracking printout in a single exhibit set."
+          },
+          {
+            "link": "Law",
+            "current_score": 88,
+            "gap": "minor",
+            "action": "Keep a one-page checklist of s.138 elements with exhibit cross-refs so the bench sees no missing statutory step."
+          }
+        ],
+        "missing_links_expected": []
+      }
+    }
+  ],
+  "pedagogy": {
+    "learning_objective": "See a clean Argument Tree where min(links) is high and Missing Links is empty.",
+    "expected_scorer_summary": {
+      "weakest_limb": "L1",
+      "weakest_VI": 15,
+      "missing_links_count": 0
+    },
+    "compare_with": [
+      "demo_02_medium_wrongful_term — evidence collapses one limb",
+      "demo_03_hard_partition — law and exposure both fail"
+    ]
+  }
+}

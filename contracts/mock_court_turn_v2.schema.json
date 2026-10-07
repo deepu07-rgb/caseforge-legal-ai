@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "caseforge.mock-court-turn.v2",
+  "title": "CaseForge structured Mock Court model candidate",
+  "type": "object",
+  "required": ["challenges", "propositions", "unanswered_questions", "next_focus"],
+  "additionalProperties": false,
+  "properties": {
+    "challenges": {
+      "type": "array", "minItems": 1, "maxItems": 1,
+      "items": { "$ref": "#/$defs/reference_group" }
+    },
+    "propositions": {
+      "type": "array", "minItems": 1, "maxItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["proposition_id", "class", "text", "support_ids", "basis_ids"],
+        "additionalProperties": false,
+        "properties": {
+          "proposition_id": { "type": "string", "minLength": 1, "maxLength": 80 },
+          "class": { "enum": ["FACTUAL_BASIS", "LEGAL_BASIS", "INFERENCE", "COUNSEL_INPUT", "UNSUPPORTED_OR_GAP"] },
+          "text": { "type": "string", "minLength": 1, "maxLength": 500 },
+          "support_ids": { "type": "array", "maxItems": 4, "items": { "type": "string" }, "uniqueItems": true },
+          "basis_ids": { "type": "array", "maxItems": 4, "items": { "type": "string" }, "uniqueItems": true }
+        }
+      }
+    },
+    "unanswered_questions": {
+      "type": "array", "maxItems": 0,
+      "items": { "$ref": "#/$defs/reference_group" }
+    },
+    "next_focus": { "$ref": "#/$defs/reference_group" }
+  },
+  "$defs": {
+    "reference_group": {
+      "type": "object",
+      "required": ["id", "proposition_ids"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "proposition_ids": {
+          "type": "array", "minItems": 1, "maxItems": 8,
+          "items": { "type": "string", "minLength": 1, "maxLength": 80 },
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}

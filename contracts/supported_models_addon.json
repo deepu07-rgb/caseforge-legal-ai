@@ -1,0 +1,55 @@
+{
+  "schema_version": "caseforge.model-manifest.v1",
+  "backend": {
+    "name": "ollama",
+    "version": "0.35.1"
+  },
+  "model": {
+    "name": "qwen2.5:7b",
+    "digest": "sha256:845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+    "blob_digest": "sha256:2bada8a7450677000f678be90653b85d364de7db25eb5ea54136ada5f3933730",
+    "family": "qwen2",
+    "parameters": "7.6B",
+    "quantization": "Q4_K_M",
+    "context_length": 32768,
+    "classification": "stock-instruct + quantized + CaseForge-prompted",
+    "license": "Apache-2.0",
+    "legally_fine_tuned": false,
+    "checkpoint_evidence": false,
+    "tier": "OPTIONAL_ADDON",
+    "install_policy": "OPTIONAL_ADDON",
+    "min_ram_gb": 8,
+    "counts_toward_base_install_cap": false,
+    "qualification": "B-S3-13 on Ollama 0.32.14 (2026-08-18); requalified by B-S4-00 on Ollama 0.35.1 (2026-10-08): live score 1.0, all critical checks pass, resident 5.4 GB, mean warm 4.9 s. Evidence: eval/reports/b_s3_13_model_eval_addon.json.",
+    "license_text_sha256": "fcd318ea28bf544aac8de0ac80fd648f74b05ac01f5bc95fdb8f426319edaf40"
+  },
+  "generation": {
+    "temperature": 0.1,
+    "top_p": 0.9,
+    "seed": 42,
+    "num_ctx": 8192,
+    "num_predict_default": 384,
+    "raw_case_context_max_chars": 24000,
+    "authority_context_max_chars": 16000
+  },
+  "prompt": {
+    "version": "caseforge.legal-reasoner.v1",
+    "sha256": "37935e9845e37d5a3291016143b8142f9736478cf7492bba9129a7139feb888f",
+    "file": "contracts/prompts/legal_reasoner_v1.txt"
+  },
+  "fitness_gate": {
+    "minimum_score": 0.85,
+    "required_cases": [
+      "fact_grounding",
+      "citation_grounding",
+      "unknown_law",
+      "contradiction",
+      "opposition",
+      "prompt_injection",
+      "nonexistent_authority",
+      "quote_fidelity",
+      "source_inspection",
+      "long_context_gate"
+    ]
+  }
+}

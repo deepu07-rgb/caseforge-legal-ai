@@ -1,0 +1,112 @@
+{
+  "schema_version": "1.0.0",
+  "product": "CaseForge",
+  "batch": "B-S4-01",
+  "status": "OWNER_APPROVED_CAP__PROPOSED_ALLOCATIONS",
+  "description": "Disk and RAM budget for the shipped app from Stage 4 onward. The cap and the tiered-model policy are owner decisions; the per-component allocations and RAM ceiling are proposals awaiting owner approval (Q-S4-12).",
+  "owner_decisions": [
+    {
+      "id": "OD-S4-SIZE-01",
+      "decision": "Base installed app (everything a user needs to run all entitled features) must not exceed 4 GiB; target 3 GiB. Keep RAM use low.",
+      "approved_by": "CaseForge owner (chat instruction)",
+      "approved_on": "2026-10-08"
+    },
+    {
+      "id": "OD-S4-MODEL-01",
+      "decision": "Tiered model policy: a 3B/4B-class local model is the default and ships in the base install; the 7B-class model becomes an optional add-on download for Pro/Judiciary users and is excluded from the base cap.",
+      "approved_by": "CaseForge owner (chat answer)",
+      "approved_on": "2026-10-08"
+    },
+    {
+      "id": "OD-S4-CLEAN-01",
+      "decision": "Remove regenerable clutter from the working folder (build logs, debug build cache).",
+      "approved_by": "CaseForge owner (chat answer)",
+      "approved_on": "2026-10-08",
+      "executed": "44 cargo/pid log files and eval/__pycache__ sent to Recycle Bin; src-tauri/target removed with `cargo clean` (1.9 GiB)."
+    },
+    {
+      "id": "OD-S4-MODEL-02",
+      "decision": "Continue the small-default search two ways: bake off phi4-mini and llama3.2:3b (1a) and a versioned small-model prompt requalified on existing gates plus new held-out cases (1b).",
+      "approved_by": "CaseForge owner (chat answer)",
+      "approved_on": "2026-10-08"
+    },
+    {
+      "id": "OD-S4-RUNTIME-01",
+      "decision": "Base install ships Ollama core + CPU + Vulkan backends only; CUDA/ROCm libraries are an optional GPU accelerator add-on outside the base cap.",
+      "approved_by": "CaseForge owner (chat answer)",
+      "approved_on": "2026-10-08"
+    },
+    {
+      "id": "OD-S4-TOOLCHAIN-01",
+      "decision": "Repair the local Rust toolchain: reinstall Strawberry Perl and make msvc-env.ps1 discover the installed MSVC toolset.",
+      "approved_by": "CaseForge owner (chat answer)",
+      "approved_on": "2026-10-08",
+      "executed": "Strawberry Perl 5.42.3.1 installed via winget (installer hash verified); msvc-env.ps1 now discovers the newest MSVC toolset containing cl.exe and the newest complete Windows SDK."
+    }
+  ],
+  "base_install": {
+    "hard_cap_gib": 4.0,
+    "target_gib": 3.0,
+    "counts": ["app binaries + UI", "docpipe sidecar + OCR runtime + traineddata", "default LLM weights", "speech STT/TTS models", "embedding model", "translation model (Stage 4)", "installed official packs + indexes at first install"],
+    "excludes": ["optional 7B add-on", "user case vaults", "later pack deltas"],
+    "measured_baseline": {
+      "measured_on": "2026-10-08",
+      "tool": "python scripts/check_size_budget.py",
+      "estimated_installed_gib": 4.964,
+      "breakdown_gib": { "llm_qwen2.5_7b_q4_k_m": 4.377, "faster_whisper_small": 0.453, "app_payload_pre_bundle": 0.109 },
+      "verdict": "OVER CAP - the 7B default model alone exceeds the remaining budget; resolved by OD-S4-MODEL-01 in B-S4-00."
+    }
+  },
+  "proposed_allocations_gib": {
+    "status": "PROPOSED_AWAITING_OWNER_APPROVAL",
+    "default_llm_max": 2.5,
+    "speech_max": 0.5,
+    "app_docpipe_ocr_max": 0.3,
+    "llm_runtime_core_max": 0.15,
+    "embeddings_max": 0.15,
+    "stage4_indic_models_max": 0.3,
+    "packs_and_indexes_at_install_max": 0.1,
+    "sum": 4.0
+  },
+  "runtime_packaging": {
+    "status": "OWNER_APPROVED",
+    "approved_by": "CaseForge owner (chat answer)",
+    "approved_on": "2026-10-08",
+    "finding_2026_10_08": "B-S3-01 size script counted only ollama.exe (25 MB). The real Ollama install is 2.79 GiB: CUDA v12 1.11 GiB, CUDA v13 0.62 GiB, ROCm 0.94 GiB, Vulkan 0.04 GiB, CPU 0.04 GiB, core exe.",
+    "proposal": "Base install ships the Ollama core + CPU + Vulkan backends (~0.11 GiB); Vulkan accelerates NVIDIA/AMD/Intel GPUs generically. CUDA/ROCm libraries become an optional 'GPU accelerator' add-on outside the base cap.",
+    "verification": "Installer build must prove the CPU+Vulkan-only runtime loads the default model and passes the fitness gate (B-S4-23)."
+  },
+  "ram": {
+    "frozen_existing": "AC-4.2 total RSS <= 7.2 GB on Full tier (unchanged until owner replaces it)",
+    "proposed_default_model_peak_rss_gib_max": 4.5,
+    "proposed_status": "PROPOSED_AWAITING_OWNER_APPROVAL",
+    "rules": [
+      "One large model resident at a time (constants.model_choreography, unchanged).",
+      "Optional 7B add-on keeps the existing 7.2 GB ceiling and is never auto-loaded on machines under 8 GB RAM.",
+      "Stage 4 deterministic engines (rule tables, audit, deadlines, contradiction detection, issue matrix) must run with no model loaded."
+    ]
+  },
+  "default_model_candidates": {
+    "status": "BAKE_OFF_REQUIRED (B-S4-00)",
+    "selection_rules": [
+      "Licence must permit offline commercial redistribution; verify from the official model card at bake-off time.",
+      "Q4_K_M (or equivalent) weights <= default_llm_max.",
+      "Must pass the existing B-S3-13 fitness gate (minimum_score 0.85, all required cases) with the CaseForge prompt, or the model is rejected.",
+      "Stage 3 grounding verifier remains the only trust path; a smaller model changes proposal quality, never trust rules."
+    ],
+    "candidates": [
+      { "family": "qwen3:4b-instruct (Qwen3-4B-Instruct-2507, non-thinking)", "reported_licence": "Apache-2.0", "approx_q4_gib": 2.5, "download_approved": "2026-10-08" },
+      { "family": "Phi-3.5-mini / Phi-4-mini instruct", "reported_licence": "MIT", "approx_q4_gib": 2.3 },
+      { "family": "Llama-3.2-3B-Instruct", "reported_licence": "Llama 3.2 Community Licence (commercial with conditions)", "approx_q4_gib": 2.0 }
+    ],
+    "excluded": [
+      { "family": "Qwen2.5-3B-Instruct", "reason": "Reported as Qwen Research Licence (non-commercial); unusable for a paid product unless the licence is confirmed otherwise." },
+      { "family": "qwen3:4b (Ollama tag = Qwen3-4B thinking-2507 build)", "reason": "B-S4-00 bake-off 2026-10-08: thinking-only model; with think=false it narrates reasoning in the answer and failed 4 critical fitness cases (score 0.667); with think=true it answered correctly but needed ~600 tokens / 27 s per turn, breaking AC-3.3. Evidence: eval/bakeoff/b_s4_00_qwen3_4b_thinking_fitness.json." }
+    ],
+    "note": "Reported licences and sizes are leads for the bake-off, not verified facts; B-S4-00 must record the verified licence text hash and measured file size."
+  },
+  "enforcement": {
+    "check": "eval/checks/contracts_b_s4_01.py validates this contract; B-S4-00 adds a hard gate to scripts/check_size_budget.py once the default model is switched (doing it now would fail B-S3-01 before the model exists).",
+    "ship_gate": "B-S4-23 refuses READY if the measured base install exceeds hard_cap_gib."
+  }
+}

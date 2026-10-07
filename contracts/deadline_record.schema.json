@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/deadline_record.schema.json",
+  "title": "CaseForge deadline / limitation computation",
+  "description": "A deterministic, fully explained deadline computation to VERIFY (PRD v4.0 §7.6, G9). Never advice; uncertain inputs produce a range with reasons, never a single date.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "deadline_id", "case_id", "label", "rule_id", "authority", "trigger", "computation", "result", "verify_label", "guardrail", "computed_at", "engine_version"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "deadline_id": { "type": "string" },
+    "case_id": { "type": "string" },
+    "label": { "type": "string", "minLength": 1 },
+    "rule_id": { "type": "string", "minLength": 1 },
+    "authority": { "type": "object", "additionalProperties": true, "required": ["pack_id", "source_id", "chunk_id"] },
+    "trigger": {
+      "type": "object", "additionalProperties": false,
+      "required": ["event_node_id", "event_type", "date", "date_precision", "locator", "origin"],
+      "properties": {
+        "event_node_id": { "type": "string" },
+        "event_type": { "type": "string" },
+        "date": { "type": ["string", "null"], "format": "date" },
+        "date_precision": { "enum": ["DAY", "MONTH", "YEAR", "RANGE", "UNKNOWN"] },
+        "date_range": { "type": ["object", "null"], "required": ["from", "to"], "properties": { "from": { "type": "string", "format": "date" }, "to": { "type": "string", "format": "date" } } },
+        "locator": { "type": "object", "required": ["doc_id", "excerpt"] },
+        "origin": { "enum": ["SOURCED_BY_COUNSEL", "EXTRACTED", "USER_EDIT"] }
+      }
+    },
+    "computation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["period", "exclude_trigger_day", "exclusions_applied", "calendar_rule_ids", "rolled_forward_from"],
+      "properties": {
+        "period": { "type": "object", "required": ["value", "unit"], "properties": { "value": { "type": "integer", "minimum": 0 }, "unit": { "enum": ["DAYS", "MONTHS", "YEARS"] } } },
+        "exclude_trigger_day": { "type": "boolean" },
+        "exclusions_applied": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["exclusion_id", "rule_id", "days_excluded", "triggering_fact_node_id", "locator"],
+            "properties": { "exclusion_id": { "type": "string" }, "rule_id": { "type": "string" }, "days_excluded": { "type": "integer", "minimum": 0 }, "triggering_fact_node_id": { "type": "string" }, "locator": { "type": "object", "required": ["doc_id", "excerpt"] } }
+          }
+        },
+        "calendar_rule_ids": { "type": "array", "items": { "type": "string" } },
+        "rolled_forward_from": { "type": ["string", "null"], "format": "date" }
+      }
+    },
+    "result": {
+      "type": "object", "additionalProperties": false,
+      "required": ["kind", "date", "range_from", "range_to", "uncertainty_reasons"],
+      "properties": {
+        "kind": { "enum": ["DATE", "RANGE"] },
+        "date": { "type": ["string", "null"], "format": "date" },
+        "range_from": { "type": ["string", "null"], "format": "date" },
+        "range_to": { "type": ["string", "null"], "format": "date" },
+        "uncertainty_reasons": { "type": "array", "items": { "enum": ["TRIGGER_DATE_IMPRECISE", "TRIGGER_DATE_CONFLICT", "CALENDAR_MISSING", "EXCLUSION_FACT_UNCONFIRMED", "RULE_WINDOW_AMBIGUOUS"] }, "uniqueItems": true }
+      },
+      "allOf": [
+        { "if": { "properties": { "kind": { "const": "DATE" } } }, "then": { "properties": { "date": { "type": "string" }, "range_from": { "type": "null" }, "range_to": { "type": "null" }, "uncertainty_reasons": { "maxItems": 0 } } } },
+        { "if": { "properties": { "kind": { "const": "RANGE" } } }, "then": { "properties": { "date": { "type": "null" }, "range_from": { "type": "string" }, "range_to": { "type": "string" }, "uncertainty_reasons": { "minItems": 1 } } } }
+      ]
+    },
+    "verify_label": { "const": "VERIFY" },
+    "guardrail": { "const": "G9" },
+    "computed_at": { "type": "string", "format": "date-time" },
+    "engine_version": { "const": "caseforge.deadlines.v1" }
+  },
+  "x-caseforge": {
+    "status": "FROZEN_FOR_IMPLEMENTATION",
+    "batch": "B-S4-01",
+    "implemented_by": ["B-S4-11"],
+    "prd_refs": ["PRD v4.0 §7.6", "§12 G9", "AC-S4-06.1", "AC-S4-06.2", "AC-S4-06.3"],
+    "network": "Reminders and .ics export are local only."
+  }
+}

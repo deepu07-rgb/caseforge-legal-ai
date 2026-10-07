@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/foundation_check.schema.json",
+  "title": "CaseForge admissibility / foundation check",
+  "description": "Status of each foundation element required for one evidence or exhibit node (PRD v4.0 §7.5). Deterministic; elements come from ADMISSIBILITY_REQUIREMENT rule rows.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "check_id", "evidence_node_id", "evidence_type", "evidence_type_status", "rule_id", "elements", "scorer_version"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "check_id": { "type": "string" },
+    "evidence_node_id": { "type": "string" },
+    "evidence_type": { "type": "string", "minLength": 1 },
+    "evidence_type_status": { "enum": ["PROPOSED", "COUNSEL_CONFIRMED"] },
+    "rule_id": { "type": "string", "minLength": 1 },
+    "elements": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["element_id", "label", "status", "locators", "authority"],
+        "properties": {
+          "element_id": { "type": "string" },
+          "label": { "type": "string" },
+          "status": { "enum": ["PRESENT", "ABSENT", "UNKNOWN"] },
+          "locators": { "type": "array", "items": { "type": "object", "required": ["doc_id", "excerpt"] } },
+          "authority": { "type": "object", "required": ["pack_id", "source_id", "chunk_id"] }
+        },
+        "allOf": [ { "if": { "properties": { "status": { "const": "PRESENT" } } }, "then": { "properties": { "locators": { "minItems": 1 } } } } ]
+      }
+    },
+    "scorer_version": { "enum": ["caseforge.integrity.v1", "caseforge.integrity.v2"] }
+  },
+  "x-caseforge": {
+    "status": "FROZEN_FOR_IMPLEMENTATION",
+    "batch": "B-S4-01",
+    "implemented_by": ["B-S4-10"],
+    "prd_refs": ["PRD v4.0 §7.5", "AC-S4-05.1", "AC-S4-05.2", "AC-S4-05.3"],
+    "scoring_rule": "integrity.v2 adds a foundation factor to the Evidence link; integrity.v1 stays selectable and byte-identical for v1 sessions. The v2 formula is frozen in B-S4-10 via argument_node schema bump before any scorer code, and requires owner approval like VI v1.",
+    "no_llm": true
+  }
+}

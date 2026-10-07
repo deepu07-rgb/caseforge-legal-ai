@@ -1,0 +1,5 @@
+[CASEFORGE_SYNTH_NOT_LAW pack=S-SYNTH-GRETRIEVAL-v1]
+Neutral citation: [2012] INSC DEMO 9
+Court: synthetic India
+The Court held that consumer complaint maintainability.
+This excerpt is product-owner synthetic GOLDEN material for retrieval metrics only.

@@ -1,0 +1,12 @@
+﻿{
+    "fixture_id":  "G-SCRIPTS/voice_01_bail_interim",
+    "primary_acs":  [
+                        "AC-3.3",
+                        "AC-9.3",
+                        "AC-9.4"
+                    ],
+    "batch":  "B-S2-04",
+    "set_id":  "G-SCRIPTS",
+    "description":  "Voice duplex multi-turn Bail/Interim + Lite refuse + debrief",
+    "status":  "GOLDEN"
+}

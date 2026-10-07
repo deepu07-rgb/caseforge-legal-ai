@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/audit_certificate.schema.json",
+  "title": "CaseForge Audit Certificate",
+  "description": "Tamper-evident, honestly scoped record that an audit was run (PRD v4.0 §7.1). Certifies the procedure, corpus and date only - never legal correctness or court-rule compliance.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "certificate_id", "issued_at", "app_version", "draft_sha256", "audit_report_sha256", "audit_report", "pack_snapshot", "model_fingerprint", "summary", "scope_statement", "disclosure", "signing"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "certificate_id": { "type": "string", "minLength": 1 },
+    "issued_at": { "type": "string", "format": "date-time" },
+    "app_version": { "type": "string", "minLength": 1 },
+    "draft_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "audit_report_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "audit_report": { "type": "object", "description": "Full embedded audit_report.schema.json instance; its canonical bytes hash to audit_report_sha256." },
+    "pack_snapshot": {
+      "type": "array", "minItems": 1,
+      "items": { "type": "object", "additionalProperties": false, "required": ["pack_id", "version", "currency_date"], "properties": { "pack_id": { "type": "string" }, "version": { "type": "string" }, "currency_date": { "type": ["string", "null"], "format": "date" } } }
+    },
+    "model_fingerprint": { "type": ["string", "null"] },
+    "summary": {
+      "type": "object", "additionalProperties": false, "required": ["total_items", "counts"],
+      "properties": { "total_items": { "type": "integer", "minimum": 0 }, "counts": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } } }
+    },
+    "scope_statement": {
+      "const": "This certificate records that CaseForge compared the citations and quotations in the identified document against the listed installed legal packs on the stated date. It does not certify that the document is legally correct, complete, or compliant with the rules of any court. Items marked NOT_IN_CORPUS were not found in the installed packs; that is not a finding that they do not exist."
+    },
+    "disclosure": {
+      "type": "object", "additionalProperties": false,
+      "required": ["included", "template_id", "text", "user_confirmed"],
+      "properties": { "included": { "type": "boolean" }, "template_id": { "type": ["string", "null"] }, "text": { "type": ["string", "null"] }, "user_confirmed": { "type": "boolean" } },
+      "allOf": [
+        { "if": { "properties": { "included": { "const": true } } }, "then": { "properties": { "text": { "type": "string", "minLength": 1 }, "user_confirmed": { "const": true } } } },
+        { "if": { "properties": { "included": { "const": false } } }, "then": { "properties": { "text": { "type": "null" } } } }
+      ]
+    },
+    "export_footer_id": { "const": "caseforge.export_footer.v1" },
+    "signing": {
+      "type": "object", "additionalProperties": false,
+      "required": ["alg", "key_kind", "key_id", "public_key_hex", "canonicalization", "signature_hex"],
+      "properties": {
+        "alg": { "const": "Ed25519" },
+        "key_kind": { "enum": ["PER_INSTALL", "INSTITUTION"] },
+        "key_id": { "type": "string", "minLength": 1 },
+        "public_key_hex": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "canonicalization": { "const": "JSON object without signing.signature_hex, keys sorted, compact separators, UTF-8" },
+        "signature_hex": { "type": "string", "pattern": "^[a-f0-9]{128}$" }
+      }
+    }
+  },
+  "x-caseforge": {
+    "status": "FROZEN_FOR_IMPLEMENTATION",
+    "batch": "B-S4-01",
+    "implemented_by": ["B-S4-05"],
+    "prd_refs": ["PRD v4.0 §1", "§7.1", "AC-S4-01.4", "AC-S4-01.5"],
+    "verify_rule": "verify recomputes draft_sha256 (when the draft is supplied), audit_report_sha256 and the Ed25519 signature; any mismatch -> CF_AUDIT_CERT_* error.",
+    "prohibited_copy": "contracts/guardrails_stage4.json prohibited_copy applies to every human-readable field.",
+    "open_question": "Q-S4-09 decides whether INSTITUTION keys are enabled; until then only PER_INSTALL is issuable."
+  }
+}

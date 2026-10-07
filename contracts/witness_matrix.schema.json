@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/witness_matrix.schema.json",
+  "title": "CaseForge Witness Statement Matrix",
+  "description": "Per-witness, topic-aligned view of every statement on record (PRD v4.0 §7.3). Built only from case graph v2 witness/statement/witness_to_statement/alias_of structures.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "matrix_id", "case_id", "built_at", "graph_version", "statement_kind_vocabulary", "witnesses"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "matrix_id": { "type": "string" },
+    "case_id": { "type": "string" },
+    "built_at": { "type": "string", "format": "date-time" },
+    "graph_version": { "type": "string" },
+    "statement_kind_vocabulary": {
+      "type": "object", "additionalProperties": false, "required": ["pack_id", "table_id"],
+      "properties": { "pack_id": { "type": ["string", "null"] }, "table_id": { "type": ["string", "null"] } },
+      "description": "Statement kinds are pack data, not code. Null means no vocabulary installed and kinds render as OTHER."
+    },
+    "witnesses": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["witness_id", "display_name", "alias_node_ids", "resolution", "statements", "topics", "cells"],
+        "properties": {
+          "witness_id": { "type": "string", "description": "Graph witness node_id." },
+          "display_name": { "type": "string" },
+          "alias_node_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+          "resolution": { "enum": ["PROPOSED", "COUNSEL_CONFIRMED"] },
+          "statements": {
+            "type": "array",
+            "items": {
+              "type": "object", "additionalProperties": false,
+              "required": ["statement_id", "statement_kind", "recorded_on", "doc_id", "locator_kind", "sequence_index"],
+              "properties": {
+                "statement_id": { "type": "string", "description": "Graph statement node_id." },
+                "statement_kind": { "type": "string", "minLength": 1 },
+                "recorded_on": { "type": ["string", "null"], "format": "date" },
+                "doc_id": { "type": "string" },
+                "locator_kind": { "enum": ["PAGE_SPAN", "PAGE_LINE"] },
+                "sequence_index": { "type": "integer", "minimum": 0, "description": "Chronological order used for earlier/later comparisons; ties broken by counsel." }
+              }
+            }
+          },
+          "topics": {
+            "type": "array",
+            "items": {
+              "type": "object", "additionalProperties": false, "required": ["topic_id", "topic_kind", "label"],
+              "properties": { "topic_id": { "type": "string" }, "topic_kind": { "enum": ["WHO", "WHAT", "WHEN", "WHERE", "AMOUNT", "IDENTIFICATION", "SEQUENCE", "OTHER"] }, "label": { "type": "string" } }
+            }
+          },
+          "cells": {
+            "type": "array",
+            "items": {
+              "type": "object", "additionalProperties": false, "required": ["topic_id", "statement_id", "assertions"],
+              "properties": {
+                "topic_id": { "type": "string" }, "statement_id": { "type": "string" },
+                "assertions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object", "additionalProperties": false, "required": ["assertion_id", "text", "locator"],
+                    "properties": { "assertion_id": { "type": "string" }, "text": { "type": "string", "minLength": 1 }, "locator": { "$ref": "#/$defs/MatterLocator" } }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "MatterLocator": {
+      "type": "object", "additionalProperties": false,
+      "required": ["doc_id", "page_index", "char_start", "char_end", "excerpt"],
+      "properties": {
+        "doc_id": { "type": "string" }, "page_index": { "type": ["integer", "null"], "minimum": 0 },
+        "char_start": { "type": "integer", "minimum": 0 }, "char_end": { "type": "integer", "minimum": 0 },
+        "line_start": { "type": ["integer", "null"], "minimum": 1 }, "line_end": { "type": ["integer", "null"], "minimum": 1 },
+        "excerpt": { "type": "string", "minLength": 1 }
+      }
+    }
+  },
+  "x-caseforge": {
+    "status": "FROZEN_FOR_IMPLEMENTATION",
+    "batch": "B-S4-01",
+    "implemented_by": ["B-S4-07"],
+    "prd_refs": ["PRD v4.0 §7.3", "AC-S4-03.2"],
+    "authority_rule": "Counsel merge/split of witnesses follows correction_authority (B-S3-07) and survives rerun."
+  }
+}

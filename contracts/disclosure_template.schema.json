@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/disclosure_template.schema.json",
+  "title": "CaseForge AI-use disclosure template (akpkg v2.1 DISCLOSURE_TEMPLATES content)",
+  "description": "Optional, user-editable AI-use disclosure paragraph text shipped in a pack (PRD v4.0 §7.1). Never auto-asserted: the user must edit/confirm before it appears on an Audit Certificate.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "template_id", "jurisdiction", "court_scope", "text", "authority", "editable", "auto_assert"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "template_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$" },
+    "jurisdiction": { "type": "string", "minLength": 1 },
+    "court_scope": { "type": "string", "minLength": 1, "description": "Court or court class the template was written for." },
+    "text": { "type": "string", "minLength": 1 },
+    "authority": {
+      "oneOf": [
+        { "type": "null" },
+        { "type": "object", "additionalProperties": false, "required": ["pack_id", "source_id", "chunk_id"], "properties": { "pack_id": { "type": "string" }, "source_id": { "type": "string" }, "chunk_id": { "type": "string" } } }
+      ],
+      "description": "Order/rule requiring disclosure, when one exists in an installed pack."
+    },
+    "editable": { "const": true },
+    "auto_assert": { "const": false }
+  },
+  "x-caseforge": {
+    "status": "FROZEN_FOR_IMPLEMENTATION",
+    "batch": "B-S4-01",
+    "implemented_by": ["B-S4-05"],
+    "prd_refs": ["PRD v4.0 §7.1", "§15"],
+    "compliance_note": "Templates only; CaseForge makes no claim of compliance with any court's AI-disclosure rules."
+  }
+}

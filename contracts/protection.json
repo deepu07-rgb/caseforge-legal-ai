@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0.0",
+  "product": "CaseForge",
+  "batch": "B-S1-19",
+  "status": "FROZEN",
+  "pipeline_id": "caseforge.protection.v1",
+  "prd_refs": ["§14", "AC-14.1", "AC-14.2"],
+  "description": "Economic at-rest protection for models/packs. User case vaults are separate (SQLCipher + passphrase) and never ransomed by this layer.",
+  "effort_budget_percent_of_total": 8,
+  "strategy": "economic_not_unbreakable",
+  "algorithm": {
+    "cipher": "AES-256-GCM",
+    "key_derivation": "SHA-256 over machine fingerprint components + protection salt",
+    "integrity": "SHA-256 of ciphertext per asset + manifest seal",
+    "nonce": "12-byte random per file"
+  },
+  "protected_asset_kinds": ["knowledge_pack_content", "model_weights"],
+  "never_protected_by_this_layer": [
+    "user_case_db",
+    "user_documents_in_case_vault",
+    "app_vault_user_records"
+  ],
+  "tamper_behaviour": "graceful_degrade",
+  "tamper_actions": [
+    "mark_asset_unusable",
+    "exclude_from_retrieval",
+    "surface_honesty_notice",
+    "never_delete_or_lock_user_vault"
+  ],
+  "ac_14_1_copied_folder": {
+    "description": "Copying app/packs folder to another machine: protected assets fail decrypt (machine-bound key); user vault still opens with passphrase.",
+    "user_data_accessible_with_passphrase": true,
+    "protected_assets_usable_on_foreign_machine": false
+  },
+  "ac_14_2_no_ransom": {
+    "user_data_may_be_ransomed": false,
+    "protection_may_withhold_user_vault_key": false,
+    "expired_licence_deletes_user_data": false,
+    "online_kill_switch_for_user_files": false
+  },
+  "envelope_extension": ".cfenc",
+  "manifest_filename": "protection_manifest.json",
+  "frozen_at": "2026-08-08",
+  "authority": "CaseForge Product Owner — B-S1-19 protection freeze (budget ≤8%)"
+}

@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/page_triage.schema.json",
+  "title": "PageTriage",
+  "description": "Per-page triage label + confidence (PRD §6.1). B-S1-05. No OCR word boxes.",
+  "schema_version": "0.1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "doc_id",
+    "page_index",
+    "triage_class",
+    "confidence",
+    "classifier_id",
+    "classified_at_unix_ms"
+  ],
+  "properties": {
+    "doc_id": { "type": "string", "minLength": 1 },
+    "page_index": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "0-based page index within the document."
+    },
+    "triage_class": {
+      "type": "string",
+      "enum": [
+        "typed_english",
+        "other",
+        "mixed",
+        "clean_handwriting",
+        "messy_handwriting",
+        "non_text"
+      ],
+      "description": "Frozen PRD §6.1 triage classes."
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Page-level confidence in [0,1]. B-S1-05 freeze (does not resolve Q-CONST-01 word thresholds)."
+    },
+    "classifier_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Identifier of classifier implementation (provisional heuristic until vision bake-off)."
+    },
+    "classified_at_unix_ms": { "type": "integer" },
+    "notes": {
+      "type": ["string", "null"],
+      "description": "Optional diagnostic note; not a legal fact."
+    }
+  },
+  "x-caseforge": {
+    "status": "FROZEN",
+    "batch": "B-S1-05",
+    "prd_refs": ["§6.1", "AC-6.1"],
+    "out_of_scope": ["ocr_word_boxes", "skeleton_extraction", "vision_llm_concurrent_with_primary"]
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/page_source.schema.json",
+  "title": "CaseForge page source and layout",
+  "description": "Frozen B-S3-03 page model. Coordinates are normalized to [0,1], origin top-left, after PDF page rotation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "doc_id", "page_index", "source_kind", "state", "width_points", "height_points", "rotation_degrees", "native_text", "text_spans", "layout_blocks", "ocr", "capabilities", "parser_id", "source_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "doc_id": {"type": "string", "minLength": 1},
+    "page_index": {"type": "integer", "minimum": 0},
+    "source_kind": {"enum": ["native", "scanned", "mixed", "empty", "unsupported"]},
+    "state": {"enum": ["ready", "ocr_required", "cancelled", "malformed", "encrypted", "oversized", "unsupported"]},
+    "width_points": {"type": "number", "exclusiveMinimum": 0},
+    "height_points": {"type": "number", "exclusiveMinimum": 0},
+    "rotation_degrees": {"enum": [0, 90, 180, 270]},
+    "native_text": {"type": "string"},
+    "text_spans": {"type": "array", "items": {"$ref": "#/$defs/TextSpan"}},
+    "layout_blocks": {"type": "array", "items": {"$ref": "#/$defs/LayoutBlock"}},
+    "ocr": {
+      "type": "object", "additionalProperties": false,
+      "required": ["required", "reason", "rendered", "render_media_type", "render_sha256", "render_base64", "render_size"],
+      "properties": {
+        "required": {"type": "boolean"}, "reason": {"type": ["string", "null"]},
+        "rendered": {"type": "boolean"}, "render_media_type": {"type": ["string", "null"]},
+        "render_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+        "render_base64": {"type": ["string", "null"], "contentEncoding": "base64"},
+        "render_size": {
+          "oneOf": [
+            {"type": "null"},
+            {"type":"object","additionalProperties":false,"required":["width","height","dpi"],"properties":{"width":{"type":"integer","minimum":1},"height":{"type":"integer","minimum":1},"dpi":{"type":"integer","minimum":72}}}
+          ]
+        }
+      }
+    },
+    "capabilities": {
+      "type": "object", "additionalProperties": false,
+      "required": ["tables", "footnotes", "headings", "signatures", "stamps", "page_numbers"],
+      "properties": {
+        "tables": {"$ref": "#/$defs/Capability"}, "footnotes": {"$ref": "#/$defs/Capability"},
+        "headings": {"$ref": "#/$defs/Capability"}, "signatures": {"$ref": "#/$defs/Capability"},
+        "stamps": {"$ref": "#/$defs/Capability"}, "page_numbers": {"$ref": "#/$defs/Capability"}
+      }
+    },
+    "parser_id": {"type": "string", "minLength": 1},
+    "source_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "$defs": {
+    "BBox": {
+      "type": "object", "additionalProperties": false, "required": ["x", "y", "w", "h"],
+      "properties": {"x":{"type":"number","minimum":0,"maximum":1},"y":{"type":"number","minimum":0,"maximum":1},"w":{"type":"number","minimum":0,"maximum":1},"h":{"type":"number","minimum":0,"maximum":1}}
+    },
+    "TextSpan": {
+      "type": "object", "additionalProperties": false,
+      "required": ["char_start", "char_end", "text", "bbox", "role"],
+      "properties": {"char_start":{"type":"integer","minimum":0},"char_end":{"type":"integer","minimum":0},"text":{"type":"string"},"bbox":{"$ref":"#/$defs/BBox"},"role":{"enum":["heading","paragraph","table_text","footnote","signature","stamp","page_number","unknown"]}}
+    },
+    "LayoutBlock": {
+      "type": "object", "additionalProperties": false,
+      "required": ["block_index", "kind", "bbox", "text", "char_start", "char_end"],
+      "properties": {"block_index":{"type":"integer","minimum":0},"kind":{"enum":["text","image","vector"]},"bbox":{"$ref":"#/$defs/BBox"},"text":{"type":["string","null"]},"char_start":{"type":["integer","null"],"minimum":0},"char_end":{"type":["integer","null"],"minimum":0}}
+    },
+    "Capability": {
+      "type": "object", "additionalProperties": false, "required": ["status", "note"],
+      "properties": {"status":{"enum":["retained","heuristic","not_present","unsupported"]},"note":{"type":"string"}}
+    }
+  },
+  "x-caseforge": {"status":"FROZEN","batch":"B-S3-03","coordinate_system":"normalized_top_left_after_rotation","frozen_at":"2026-08-13"}
+}

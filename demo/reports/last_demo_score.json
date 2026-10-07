@@ -1,0 +1,429 @@
+{
+  "product": "CaseForge",
+  "layer": "demo",
+  "formula": "VI = 100 - min(Fact, Evidence, Law, Exposure)",
+  "reports": [
+    {
+      "case_id": "demo_01_easy_dishonour",
+      "fixture_id": "demo/demo_01_easy_dishonour",
+      "difficulty": "easy",
+      "status": "DEMO_SYNTHETIC",
+      "authoritative": false,
+      "threshold": 60,
+      "relief": "Recover INR 4,50,000 (and related s.138 relief as pleaded)",
+      "limbs": [
+        {
+          "node_id": "L1",
+          "label": "Legally enforceable debt + dishonoured cheque + compliant statutory notice",
+          "links": {
+            "Fact": 92,
+            "Evidence": 90,
+            "Law": 88,
+            "Exposure": 85
+          },
+          "min_link": "Exposure",
+          "min_score": 85,
+          "VI": 15,
+          "missing_links": [],
+          "overall": "STRONG",
+          "why": "All four links score high; VI is low. This is the control case for a healthy limb.",
+          "where_argument_needs_more_strength": [
+            {
+              "link": "Exposure",
+              "current_score": 85,
+              "gap": "minor",
+              "action": "Pre-empt a bare denial of service of notice by organizing ACK + tracking printout in a single exhibit set."
+            },
+            {
+              "link": "Law",
+              "current_score": 88,
+              "gap": "minor",
+              "action": "Keep a one-page checklist of s.138 elements with exhibit cross-refs so the bench sees no missing statutory step."
+            }
+          ],
+          "expected_VI": 15,
+          "expected_VI_match": true
+        }
+      ],
+      "weakest_limb": "L1",
+      "weakest_VI": 15,
+      "missing_links_panel": [],
+      "pedagogy": {
+        "learning_objective": "See a clean Argument Tree where min(links) is high and Missing Links is empty.",
+        "expected_scorer_summary": {
+          "weakest_limb": "L1",
+          "weakest_VI": 15,
+          "missing_links_count": 0
+        },
+        "compare_with": [
+          "demo_02_medium_wrongful_term \u2014 evidence collapses one limb",
+          "demo_03_hard_partition \u2014 law and exposure both fail"
+        ]
+      },
+      "all_expected_VI_match": true
+    },
+    {
+      "case_id": "demo_02_medium_wrongful_term",
+      "fixture_id": "demo/demo_02_medium_wrongful_term",
+      "difficulty": "medium",
+      "status": "DEMO_SYNTHETIC",
+      "authoritative": false,
+      "threshold": 60,
+      "relief": "Compensation for unpaid bonus and wrongful / discriminatory termination",
+      "limbs": [
+        {
+          "node_id": "L1",
+          "label": "Bonus became a non-discretionary earned wage once performance conditions were met",
+          "links": {
+            "Fact": 78,
+            "Evidence": 42,
+            "Law": 55,
+            "Exposure": 70
+          },
+          "min_link": "Evidence",
+          "min_score": 42,
+          "VI": 58,
+          "missing_links": [
+            "Evidence",
+            "Law"
+          ],
+          "overall": "MODERATE_WEAK",
+          "why": "Narrative is plausible, but Evidence is the bottleneck (42). Law is also soft (55) because offer letter says discretionary.",
+          "where_argument_needs_more_strength": [
+            {
+              "link": "Evidence",
+              "current_score": 42,
+              "gap": "critical",
+              "action": "Obtain Finance records that FY2023 targets were met; subpoena bonus board minutes; collect peer bonus payouts as pattern evidence."
+            },
+            {
+              "link": "Law",
+              "current_score": 55,
+              "gap": "material",
+              "action": "Research teaching jurisdiction cases on when 'discretionary' bonuses become wages; prepare alternative quantum meruit theory with clear elements checklist."
+            },
+            {
+              "link": "Fact",
+              "current_score": 78,
+              "gap": "minor",
+              "action": "Lock down base salary figure and exact bonus % math in a one-page damages spreadsheet tied to offer letter."
+            }
+          ],
+          "expected_VI": 58,
+          "expected_VI_match": true
+        },
+        {
+          "node_id": "L2",
+          "label": "Termination was age discrimination, not true reorganization",
+          "links": {
+            "Fact": 65,
+            "Evidence": 38,
+            "Law": 72,
+            "Exposure": 60
+          },
+          "min_link": "Evidence",
+          "min_score": 38,
+          "VI": 62,
+          "missing_links": [
+            "Evidence"
+          ],
+          "overall": "WEAK_ON_EVIDENCE",
+          "why": "Law path exists (72) but Evidence (38) cannot currently prove pretext or animus. This limb should top Missing Links.",
+          "where_argument_needs_more_strength": [
+            {
+              "link": "Evidence",
+              "current_score": 38,
+              "gap": "critical",
+              "action": "Discovery: who was hired/reassigned into Cole's duties; age composition of reduction-in-force; any age-related remarks; comparator performance files."
+            },
+            {
+              "link": "Fact",
+              "current_score": 65,
+              "gap": "material",
+              "action": "Interview Jordan Hale and peers; timeline of restructuring decision relative to performance review."
+            },
+            {
+              "link": "Exposure",
+              "current_score": 60,
+              "gap": "borderline",
+              "action": "Prepare for after-acquired evidence and mitigation defenses; document plaintiff's job search for back-pay math."
+            }
+          ],
+          "expected_VI": 62,
+          "expected_VI_match": true
+        }
+      ],
+      "weakest_limb": "L2",
+      "weakest_VI": 62,
+      "missing_links_panel": [
+        {
+          "limb": "L1",
+          "link": "Evidence",
+          "score": 42,
+          "threshold": 60
+        },
+        {
+          "limb": "L1",
+          "link": "Law",
+          "score": 55,
+          "threshold": 60
+        },
+        {
+          "limb": "L2",
+          "link": "Evidence",
+          "score": 38,
+          "threshold": 60
+        }
+      ],
+      "pedagogy": {
+        "learning_objective": "Two limbs; Evidence gaps dominate VI; do not let a good story outrun the file.",
+        "expected_scorer_summary": {
+          "weakest_limb": "L2",
+          "weakest_VI": 62,
+          "missing_links_count_at_least": 2
+        },
+        "compare_with": [
+          "demo_01_easy_dishonour \u2014 no evidence gaps",
+          "demo_03_hard_partition \u2014 law itself is unstable"
+        ]
+      },
+      "all_expected_VI_match": true
+    },
+    {
+      "case_id": "demo_03_hard_partition",
+      "fixture_id": "demo/demo_03_hard_partition",
+      "difficulty": "hard",
+      "status": "DEMO_SYNTHETIC",
+      "authoritative": false,
+      "threshold": 60,
+      "relief": "Preliminary decree for partition (1/2) and related declarations",
+      "limbs": [
+        {
+          "node_id": "L1",
+          "label": "Property is HUF / ancestral; plaintiffs entitled to half on partition",
+          "links": {
+            "Fact": 58,
+            "Evidence": 45,
+            "Law": 40,
+            "Exposure": 35
+          },
+          "min_link": "Exposure",
+          "min_score": 35,
+          "VI": 65,
+          "missing_links": [
+            "Fact",
+            "Evidence",
+            "Law",
+            "Exposure"
+          ],
+          "overall": "WEAK",
+          "why": "Fact of acquisition is clear, but HUF character is not proven. Law and Exposure both suffer.",
+          "where_argument_needs_more_strength": [
+            {
+              "link": "Law",
+              "current_score": 40,
+              "gap": "critical",
+              "action": "Build authority map for when property in karta/father's name is HUF vs self-acquired; plead and prove nucleus with accounts if any."
+            },
+            {
+              "link": "Exposure",
+              "current_score": 35,
+              "gap": "critical",
+              "action": "Model defendant exclusive-title counterclaim and adverse possession; prepare limitation clock analysis year-by-year from 1998/2010/2012/2023."
+            },
+            {
+              "link": "Evidence",
+              "current_score": 45,
+              "gap": "material",
+              "action": "Gather family genealogy, other estate assets, tax/electricity patterns, witness affidavits of joint family status."
+            }
+          ],
+          "expected_VI": 65,
+          "expected_VI_match": true
+        },
+        {
+          "node_id": "L2",
+          "label": "1998 oral family settlement crystallized Kavita's half share",
+          "links": {
+            "Fact": 40,
+            "Evidence": 22,
+            "Law": 28,
+            "Exposure": 30
+          },
+          "min_link": "Evidence",
+          "min_score": 22,
+          "VI": 78,
+          "missing_links": [
+            "Fact",
+            "Evidence",
+            "Law",
+            "Exposure"
+          ],
+          "overall": "VERY_WEAK \u2014 primary integrity failure",
+          "why": "This is the intentional collapse limb. Evidence 22 and Law 28 drag VI to ~78. Do not lead with this limb until fortified.",
+          "where_argument_needs_more_strength": [
+            {
+              "link": "Evidence",
+              "current_score": 22,
+              "gap": "critical",
+              "action": "Find any contemporaneous letter, diary, panchayat note, or conduct (e.g., contribution to construction) that corroborates settlement; without it, de-emphasize limb."
+            },
+            {
+              "link": "Law",
+              "current_score": 28,
+              "gap": "critical",
+              "action": "If oral arrangement cannot be saved, reframe as pure inheritance/partition rights independent of 1998 story \u2014 do not rest the case on unprovable oral gift/settlement."
+            },
+            {
+              "link": "Fact",
+              "current_score": 40,
+              "gap": "material",
+              "action": "Stop using approximate '1998-04' unless a witness pins a better date; vague dates invite adverse inference."
+            },
+            {
+              "link": "Exposure",
+              "current_score": 30,
+              "gap": "critical",
+              "action": "Anticipate estoppel/waiver arguments from long silence (1998\u20132023); document any demands made earlier."
+            }
+          ],
+          "expected_VI": 78,
+          "expected_VI_match": true
+        },
+        {
+          "node_id": "L3",
+          "label": "2008 gift deed is void (undue influence / forgery / not binding on coparceners)",
+          "links": {
+            "Fact": 50,
+            "Evidence": 30,
+            "Law": 48,
+            "Exposure": 42
+          },
+          "min_link": "Evidence",
+          "min_score": 30,
+          "VI": 70,
+          "missing_links": [
+            "Fact",
+            "Evidence",
+            "Law",
+            "Exposure"
+          ],
+          "overall": "WEAK_WITHOUT_FORENSICS",
+          "why": "You cannot beat a registered deed with suspicion alone. Evidence 30 is the choke point; Exposure includes limitation risk.",
+          "where_argument_needs_more_strength": [
+            {
+              "link": "Evidence",
+              "current_score": 30,
+              "gap": "critical",
+              "action": "Commission handwriting/medical capacity evidence; examine attesting witnesses; obtain original deed production."
+            },
+            {
+              "link": "Exposure",
+              "current_score": 42,
+              "gap": "material",
+              "action": "Prepare limitation reply: when cause of action for declaration arose; knowledge pleadings must be particularized."
+            },
+            {
+              "link": "Law",
+              "current_score": 48,
+              "gap": "material",
+              "action": "Separate void vs voidable theories; plead particulars of undue influence; map who can challenge a gift of alleged HUF property."
+            }
+          ],
+          "expected_VI": 70,
+          "expected_VI_match": true
+        }
+      ],
+      "weakest_limb": "L2",
+      "weakest_VI": 78,
+      "missing_links_panel": [
+        {
+          "limb": "L1",
+          "link": "Fact",
+          "score": 58,
+          "threshold": 60
+        },
+        {
+          "limb": "L1",
+          "link": "Evidence",
+          "score": 45,
+          "threshold": 60
+        },
+        {
+          "limb": "L1",
+          "link": "Law",
+          "score": 40,
+          "threshold": 60
+        },
+        {
+          "limb": "L1",
+          "link": "Exposure",
+          "score": 35,
+          "threshold": 60
+        },
+        {
+          "limb": "L2",
+          "link": "Fact",
+          "score": 40,
+          "threshold": 60
+        },
+        {
+          "limb": "L2",
+          "link": "Evidence",
+          "score": 22,
+          "threshold": 60
+        },
+        {
+          "limb": "L2",
+          "link": "Law",
+          "score": 28,
+          "threshold": 60
+        },
+        {
+          "limb": "L2",
+          "link": "Exposure",
+          "score": 30,
+          "threshold": 60
+        },
+        {
+          "limb": "L3",
+          "link": "Fact",
+          "score": 50,
+          "threshold": 60
+        },
+        {
+          "limb": "L3",
+          "link": "Evidence",
+          "score": 30,
+          "threshold": 60
+        },
+        {
+          "limb": "L3",
+          "link": "Law",
+          "score": 48,
+          "threshold": 60
+        },
+        {
+          "limb": "L3",
+          "link": "Exposure",
+          "score": 42,
+          "threshold": 60
+        }
+      ],
+      "pedagogy": {
+        "learning_objective": "Multi-limb tree where the emotionally attractive oral-settlement limb is the integrity disaster. Scorer should surface L2 as weakest (VI ~78).",
+        "expected_scorer_summary": {
+          "weakest_limb": "L2",
+          "weakest_VI": 78,
+          "missing_links_count_at_least": 6
+        },
+        "strategy_note": "Lead with improved L1 (HUF/partition) only after evidence; treat L2 as optional/abandoned until corroborated; L3 requires forensics before trial emphasis.",
+        "compare_with": [
+          "demo_01_easy_dishonour \u2014 single strong limb",
+          "demo_02_medium_wrongful_term \u2014 evidence gap but law path still coherent"
+        ]
+      },
+      "all_expected_VI_match": true
+    }
+  ]
+}

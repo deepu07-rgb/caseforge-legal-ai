@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/impeachment_kit.schema.json",
+  "title": "CaseForge Impeachment Kit",
+  "description": "Contradictions and omissions across one witness's statements, with exact quotes and locators on both sides (PRD v4.0 §7.3). Suggested confrontation order is preparation guidance only.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "kit_id", "case_id", "witness_id", "matrix_id", "generated_at", "findings", "export_footer_id"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "kit_id": { "type": "string" },
+    "case_id": { "type": "string" },
+    "witness_id": { "type": "string" },
+    "matrix_id": { "type": "string" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "model_fingerprint": { "type": ["string", "null"] },
+    "findings": { "type": "array", "items": { "$ref": "#/$defs/Finding" } },
+    "export_footer_id": { "const": "caseforge.export_footer.v1" }
+  },
+  "$defs": {
+    "MatterLocator": {
+      "type": "object", "additionalProperties": false,
+      "required": ["doc_id", "page_index", "char_start", "char_end", "excerpt"],
+      "properties": {
+        "doc_id": { "type": "string" }, "page_index": { "type": ["integer", "null"], "minimum": 0 },
+        "char_start": { "type": "integer", "minimum": 0 }, "char_end": { "type": "integer", "minimum": 0 },
+        "line_start": { "type": ["integer", "null"], "minimum": 1 }, "line_end": { "type": ["integer", "null"], "minimum": 1 },
+        "excerpt": { "type": "string", "minLength": 1 }
+      }
+    },
+    "Side": {
+      "type": "object", "additionalProperties": false, "required": ["statement_id", "quote", "locator"],
+      "properties": {
+        "statement_id": { "type": "string" },
+        "quote": { "type": ["string", "null"], "description": "Exact stored substring; null only for the earlier side of an OMISSION." },
+        "locator": { "oneOf": [{ "$ref": "#/$defs/MatterLocator" }, { "type": "null" }] },
+        "absence_note": { "type": ["string", "null"] }
+      }
+    },
+    "Finding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["finding_id", "finding_kind", "detection", "dimension", "topic_id", "earlier", "later", "proposition_ids", "counsel_judgement_required", "confrontation_order", "status"],
+      "properties": {
+        "finding_id": { "type": "string" },
+        "finding_kind": { "enum": ["CONTRADICTION", "OMISSION"] },
+        "detection": { "enum": ["DETERMINISTIC", "MODEL_VERIFIED"] },
+        "dimension": { "enum": ["DATE", "TIME", "AMOUNT", "COUNT", "PLACE", "PERSON", "PRESENCE", "SEQUENCE", "SEMANTIC", "MATERIAL_FACT"] },
+        "topic_id": { "type": "string" },
+        "earlier": { "$ref": "#/$defs/Side" },
+        "later": { "$ref": "#/$defs/Side" },
+        "proposition_ids": { "type": "array", "items": { "type": "string" } },
+        "counsel_judgement_required": { "type": "boolean" },
+        "confrontation_order": { "type": "integer", "minimum": 1 },
+        "status": { "enum": ["PROPOSED", "COUNSEL_ACCEPTED", "COUNSEL_REJECTED"] }
+      },
+      "allOf": [
+        { "properties": { "later": { "properties": { "quote": { "type": "string", "minLength": 1 }, "locator": { "$ref": "#/$defs/MatterLocator" } } } } },
+        { "if": { "properties": { "finding_kind": { "const": "CONTRADICTION" } } }, "then": { "properties": { "earlier": { "properties": { "quote": { "type": "string", "minLength": 1 }, "locator": { "$ref": "#/$defs/MatterLocator" } } } } } },
+        { "if": { "properties": { "finding_kind": { "const": "OMISSION" } } }, "then": { "properties": { "dimension": { "const": "MATERIAL_FACT" }, "counsel_judgement_required": { "const": true }, "earlier": { "properties": { "absence_note": { "type": "string", "minLength": 1 } }, "required": ["absence_note"] } } } },
+        { "if": { "properties": { "detection": { "const": "MODEL_VERIFIED" } } }, "then": { "properties": { "proposition_ids": { "minItems": 1 } } } }
+      ]
+    }
+  },
+  "x-caseforge": {
+    "status": "FROZEN_FOR_IMPLEMENTATION",
+    "batch": "B-S4-01",
+    "implemented_by": ["B-S4-08"],
+    "prd_refs": ["PRD v4.0 §7.3", "AC-S4-03.1", "AC-S4-03.2", "AC-S4-03.3", "AC-S4-03.4"],
+    "render_rule": "MODEL_VERIFIED findings exist only if every quote passed the B-S3-14 exact-substring verifier; failures are discarded, not stored.",
+    "guardrail": "G3 applies: requests to change, align, or rehearse altered testimony are refused."
+  }
+}

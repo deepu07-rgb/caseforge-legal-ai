@@ -1,0 +1,144 @@
+# --- CaseForge .gitignore (B-S0-01) ---
+# Models, packs, secrets, build artefacts. Do not commit proprietary or large binary assets.
+
+# OS / editor
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*~
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json.example
+
+# Secrets & local env
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+**/credentials*
+**/machine_fingerprint*
+
+# Licence / activation local state
+*.lic.local
+.licence/
+.activation/
+
+# ML models (GGUF and related) — large, versioned via signed packs, not git
+*.gguf
+*.ggml
+*.bin
+!**/package-lock.json
+models/
+**/models/**
+*.safetensors
+*.onnx
+*.pt
+*.pth
+*.ckpt
+
+# Knowledge / product packs
+*.akpkg
+*.akcase
+packs/
+**/packs/**
+corpus/
+**/corpus/**
+
+# Embeddings / FAISS indexes (regenerable)
+*.faiss
+*.index
+**/faiss/**
+**/indexes/**
+
+# Case vaults / local databases (user data)
+*.db
+*.sqlite
+*.sqlite3
+*.sqlcipher
+vaults/
+**/vaults/**
+data/cases/
+**/case_data/**
+
+# Build / dependency artefacts
+node_modules/
+dist/
+build/
+out/
+target/
+.cargo/
+*.dll
+*.so
+*.dylib
+*.app
+*.dmg
+*.msi
+*.AppImage
+.tauri/
+src-tauri/target/
+src-tauri/gen/
+*.local
+# Keep shell tooling scripts; ignore built installers only
+src-tauri/*.exe
+
+# Logs & temp
+logs/
+*.log
+tmp/
+temp/
+.cache/
+*.tmp
+
+# Test / eval local outputs (keep golden fixtures under /golden tracked)
+eval/results/
+eval/reports/
+coverage/
+.nyc_output/
+*.lcov
+
+# Python (if used by docpipe / eval tooling later)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+
+# Rust
+**/*.rs.bk
+
+# Captured network / audit dumps (may contain sensitive paths)
+*.pcap
+*.pcapng
+
+# --- Repository backup exceptions (2026-10-08) -------------------------------------------
+# The rules above are broad ("**/packs/**", "*.dll", "**/corpus/**", "tmp/", "eval/reports/") and would
+# silently drop real source, fixtures, bundled OCR runtime and evidence from the repository.
+# Re-include them explicitly. Order matters: a parent directory must be re-included before its children.
+!src-tauri/src/packs/
+!src-tauri/src/packs/**
+!/packs/
+!/packs/**
+!golden/**/corpus/
+!golden/**/corpus/**
+!sidecars/docpipe/runtime/
+!sidecars/docpipe/runtime/**
+!eval/reports/
+!eval/reports/**
+!eval/results/
+!eval/results/**
+!tmp/
+tmp/*
+!tmp/pdfs/
+
+# --- Secrets: NEVER commit signing keys, even development ones ---------------------------
+eval/tools/.licence_keys/
+eval/tools/.pack_keys/
+**/*.sk.pem
+**/*.pk.pem
+*.pem
+*.key

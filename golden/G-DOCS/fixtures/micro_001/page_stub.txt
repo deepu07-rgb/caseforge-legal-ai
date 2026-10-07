@@ -1,0 +1,3 @@
+[CASEFORGE_TRIAGE_CLASS:typed_english]
+[SYNTHETIC_PLACEHOLDER_NOT_LAW]
+This is not a real case page. The court and the plaintiff and the defendant and section.

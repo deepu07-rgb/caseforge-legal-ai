@@ -1,0 +1,21 @@
+{
+  "fixture_id": "graph-india-controlled-001",
+  "status": "CONTROLLED_SYNTHETIC_NOT_REAL_EVAL",
+  "jurisdiction": "India",
+  "pages": [
+    {
+      "doc_id": "india-pleading",
+      "page_index": 0,
+      "mean_confidence": 0.94,
+      "text": "Plaintiff: Asha Rao also known as A. Rao\nDefendant: Dev Mehta\nClaim: breach of the supply agreement\nDefence: goods were non-conforming\nCounterclaim: loss caused by delayed delivery\nIssue: whether payment was due\nSub-issue: whether inspection was waived\nAdmitted Fact: agreement was signed\nDisputed Fact: payment was made\nDisputed Fact: payment was not made\nEvidence: bank statement\nExhibit: Supply Agreement A\nWitness: Priya Sen\nStatement: Priya observed delivery\nApplication: interim injunction request\nHearing: interim application heard\nOrder: parties directed to preserve goods\nProcedural history: plaint filed and summons issued\nRelief: damages and specific performance\nSection 10 of the Indian Contract Act\nRule 9\n2020 SCC 15\nOn 3 March 2025 the plaint was filed."
+    }
+  ],
+  "expected_counts": {
+    "party": 2, "claim": 1, "defence": 1, "counterclaim": 1, "issue": 1, "sub_issue": 1,
+    "fact": 3, "evidence": 1, "exhibit": 1, "witness": 1, "statement": 1,
+    "application": 1, "hearing": 1, "order": 1, "procedure": 1, "relief": 1,
+    "provision": 1, "rule": 1, "authority": 1, "event": 1, "interpretation": 1
+  },
+  "expected_contradictions": 1,
+  "ambiguous_dates": 0
+}

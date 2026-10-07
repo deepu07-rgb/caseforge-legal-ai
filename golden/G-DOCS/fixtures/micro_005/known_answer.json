@@ -1,0 +1,18 @@
+{
+  "schema_version": "0.1.0-PLACEHOLDER",
+  "authoritative": false,
+  "status": "SYNTHETIC_PLACEHOLDER",
+  "fixture_id": "G-DOCS/micro_005",
+  "triage": {
+    "page_index": 0,
+    "class": "messy_handwriting",
+    "notes": "Synthetic marker fixture \u2014 not gold."
+  },
+  "document": {
+    "doc_id": "synth-doc-gdocs-micro_005",
+    "type_tag": "OTHER_SYNTHETIC",
+    "language_tag": "en",
+    "per_page_quality_grade": null
+  },
+  "eval_policy": "SKIP_IF_STATUS_NOT_GOLDEN"
+}

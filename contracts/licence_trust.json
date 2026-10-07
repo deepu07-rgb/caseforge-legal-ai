@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0.0",
+  "batch": "B-S1-18",
+  "description": "Trusted Ed25519 public keys for CaseForge offline licences. Private keys never ship in the app.",
+  "keys": [
+    {
+      "key_id": "caseforge-licence-dev-2026",
+      "algorithm": "Ed25519",
+      "public_key_hex": "5eab9c32c8dc64ecc6764f4473f125565b2166f02d8cce8dc353364c905f3fe3",
+      "status": "active",
+      "notes": "Dev/product-owner licence signer for Stage-1 activation tests. Replaced by release key ceremony later."
+    }
+  ]
+}

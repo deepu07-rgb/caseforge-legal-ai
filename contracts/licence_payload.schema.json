@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/licence_payload.schema.json",
+  "title": "LicencePayload",
+  "description": "Offline licence payload; Ed25519-signed (PRD §13, §16). B-S1-18 freeze.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "licence_id",
+    "product",
+    "tier",
+    "issued_at_unix_ms",
+    "expires_at_unix_ms",
+    "fingerprint_components",
+    "features",
+    "signer_key_id",
+    "signature_alg",
+    "signature_hex"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "1.0.0" },
+    "licence_id": { "type": "string", "minLength": 1 },
+    "product": { "type": "string", "const": "CaseForge" },
+    "tier": {
+      "type": "string",
+      "enum": ["solo", "pro", "firm", "institutional", "enterprise"]
+    },
+    "issued_at_unix_ms": { "type": "integer", "minimum": 0 },
+    "expires_at_unix_ms": {
+      "type": ["integer", "null"],
+      "description": "null = no expiry (perpetual). Past timestamp => EXPIRED state."
+    },
+    "fingerprint_components": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hostname", "username", "machine_guid", "disk_root"],
+      "properties": {
+        "hostname": { "type": "string", "minLength": 8 },
+        "username": { "type": "string", "minLength": 8 },
+        "machine_guid": { "type": "string", "minLength": 8 },
+        "disk_root": { "type": "string", "minLength": 8 }
+      },
+      "description": "SHA-256 hex of each component at activation. Match requires 3-of-4."
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["digest", "voice", "retrieval", "export", "mock_court"]
+      },
+      "minItems": 1
+    },
+    "air_gap_allowed": { "type": "boolean", "default": true },
+    "signer_key_id": { "type": "string", "minLength": 1 },
+    "signature_alg": { "type": "string", "const": "Ed25519" },
+    "signature_hex": {
+      "type": "string",
+      "minLength": 128,
+      "maxLength": 128,
+      "description": "Ed25519 signature over canonical signing bytes (hex)."
+    },
+    "notes": { "type": ["string", "null"] }
+  },
+  "x-caseforge": {
+    "status": "FROZEN",
+    "batch": "B-S1-18",
+    "prd_refs": ["§13", "§16", "AC-13.1"],
+    "resolved_question": "Q-LIC-01",
+    "state_machine": ["UNLICENSED", "ACTIVE", "EXPIRED"],
+    "state_rules": {
+      "UNLICENSED": "No valid licence installed; vault writable with honesty notice (activation pending).",
+      "ACTIVE": "Signature valid, fingerprint 3-of-4, not past expires_at.",
+      "EXPIRED": "Past expires_at_unix_ms OR marked expired; vault READ-ONLY; data never ransomed/deleted."
+    },
+    "fingerprint": {
+      "components": ["hostname", "username", "machine_guid", "disk_root"],
+      "total": 4,
+      "required_to_match": 3,
+      "hash": "sha256_hex_of_utf8_component"
+    },
+    "signing": {
+      "algorithm": "Ed25519",
+      "canonical": "JSON object without signature_hex/signature_alg fields, keys sorted, compact separators",
+      "trust_file": "contracts/licence_trust.json"
+    },
+    "expired_behaviour": "read_only_vault",
+    "user_data_may_be_ransomed": false,
+    "air_gap": "kills_all_networking_when_enabled",
+    "case_data_network_code_path_allowed": false,
+    "frozen_at": "2026-08-08",
+    "authority": "CaseForge Product Owner — B-S1-18 Q-LIC-01 freeze"
+  }
+}

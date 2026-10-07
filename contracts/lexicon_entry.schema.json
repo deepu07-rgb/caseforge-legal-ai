@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/lexicon_entry.schema.json",
+  "title": "LexiconEntry",
+  "description": "Self-correcting lexicon entry for STT corrections and TTS pronunciation overrides (PRD §9, §16). B-S1-16 freeze.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "entry_id",
+    "entry_kind",
+    "language",
+    "surface_form",
+    "active",
+    "pattern_type",
+    "source",
+    "created_at_unix_ms",
+    "updated_at_unix_ms"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "1.0.0" },
+    "entry_id": { "type": "string", "minLength": 1 },
+    "entry_kind": {
+      "type": "string",
+      "enum": ["stt_correction", "tts_pronunciation_override"],
+      "description": "PRD §9: STT corrections and TTS pronunciation overrides."
+    },
+    "language": {
+      "type": "string",
+      "const": "English",
+      "description": "English is primary (AC-9.4 language pinning)."
+    },
+    "surface_form": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Heard / written form to match (STT raw or TTS orthography)."
+    },
+    "corrected_form": {
+      "type": ["string", "null"],
+      "description": "Required for stt_correction: permanent replacement text."
+    },
+    "pronunciation": {
+      "type": ["string", "null"],
+      "description": "Required for tts_pronunciation_override: spoken form / phonetic cue."
+    },
+    "pattern_type": {
+      "type": "string",
+      "enum": ["legal_english", "statute_name", "proper_name", "custom"]
+    },
+    "source": {
+      "type": "string",
+      "enum": ["preseed", "user", "import"]
+    },
+    "active": { "type": "boolean" },
+    "scope": {
+      "type": "string",
+      "enum": ["global"],
+      "description": "Stage 1: global app-vault lexicon only."
+    },
+    "notes": { "type": ["string", "null"] },
+    "created_at_unix_ms": { "type": "integer", "minimum": 0 },
+    "updated_at_unix_ms": { "type": "integer", "minimum": 0 }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "entry_kind": { "const": "stt_correction" } } },
+      "then": { "required": ["corrected_form"] }
+    },
+    {
+      "if": { "properties": { "entry_kind": { "const": "tts_pronunciation_override" } } },
+      "then": { "required": ["pronunciation"] }
+    }
+  ],
+  "x-caseforge": {
+    "status": "FROZEN",
+    "batch": "B-S1-16",
+    "prd_refs": ["§9", "§16", "AC-9.2", "AC-9.4"],
+    "resolved_question": "Q-LX-01",
+    "export_format": {
+      "file_extension": ".cflex.json",
+      "envelope": {
+        "schema_version": "1.0.0",
+        "product": "CaseForge",
+        "kind": "lexicon_export",
+        "language": "English",
+        "entries": "LexiconEntry[]"
+      }
+    },
+    "normative_invariants": [
+      "English is primary.",
+      "STT path: Whisper → editable staging box → commit.",
+      "Lexicon stores STT corrections and TTS pronunciation overrides permanently and applies them forever.",
+      "Lexicon is exportable and importable.",
+      "Pre-seeded with legal English + statute names + proper-name patterns."
+    ],
+    "frozen_at": "2026-08-08",
+    "authority": "CaseForge Product Owner — B-S1-16 Q-LX-01 field freeze from PRD §9 known inventory"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/retrieval_index.schema.json",
+  "title": "CaseForge persisted hybrid retrieval index metadata",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "index_id", "corpus_checksum", "chunk_count",
+    "semantic_engine_id", "semantic_engine_license", "embedding_dimensions"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "index_id": { "const": "caseforge.retrieve.hybrid.v1" },
+    "corpus_checksum": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "chunk_count": { "type": "integer", "minimum": 0 },
+    "semantic_engine_id": { "const": "caseforge.legal-concept-hash-384.v1" },
+    "semantic_engine_license": { "type": "string", "minLength": 1 },
+    "embedding_dimensions": { "const": 384 }
+  }
+}

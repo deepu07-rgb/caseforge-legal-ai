@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/model_manifest.schema.json",
+  "title": "CaseForge controlled-beta local model manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "backend", "model", "generation", "prompt", "fitness_gate"],
+  "properties": {
+    "schema_version": { "const": "caseforge.model-manifest.v1" },
+    "backend": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": { "name": { "type": "string" }, "version": { "type": "string" } }
+    },
+    "model": {
+      "type": "object",
+      "required": ["name", "digest", "family", "parameters", "quantization", "context_length", "classification", "license", "legally_fine_tuned", "checkpoint_evidence"],
+      "properties": {
+        "name": { "type": "string" }, "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "family": { "type": "string" }, "parameters": { "type": "string" }, "quantization": { "type": "string" },
+        "context_length": { "type": "integer", "minimum": 1 }, "classification": { "type": "string" },
+        "license": { "type": "string" }, "legally_fine_tuned": { "type": "boolean" }, "checkpoint_evidence": { "type": "boolean" }
+      }
+    },
+    "generation": { "type": "object" },
+    "prompt": { "type": "object", "required": ["version", "sha256", "file"] },
+    "fitness_gate": { "type": "object", "required": ["minimum_score", "required_cases"] }
+  }
+}

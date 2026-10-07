@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0.0",
+  "batch": "B-S3-03",
+  "generated_at": "2026-08-13T19:18:49Z",
+  "implementation_state": "PASS",
+  "real_world_golden_state": "BLOCKED",
+  "fixture_status": "READY_FOR_REVIEW",
+  "parser": {
+    "id": "caseforge.pdfium.page-source.v1",
+    "pypdfium2": "5.3.0",
+    "pdfium": "145.0.7616.0"
+  },
+  "fixtures": {
+    "native": {
+      "page_count": 5,
+      "kinds": [
+        "native",
+        "native",
+        "native",
+        "native",
+        "native"
+      ]
+    },
+    "scanned": {
+      "page_count": 5,
+      "kinds": [
+        "scanned",
+        "scanned",
+        "scanned",
+        "scanned",
+        "scanned"
+      ]
+    },
+    "mixed": {
+      "page_count": 5,
+      "kinds": [
+        "native",
+        "native",
+        "scanned",
+        "native",
+        "native"
+      ]
+    }
+  },
+  "acceptance": {
+    "AC-S3-3.1": "ENGINEERING_PASS_GOLDEN_BLOCKED",
+    "AC-S3-3.2": "PASS",
+    "AC-S3-3.3": "PASS",
+    "AC-S3-3.4": "PASS",
+    "AC-S3-3.5": "PASS",
+    "AC-S3-3.6": "PARTIAL_BLOCKED_REAL_COMPLEX_LAYOUT_FIXTURE"
+  },
+  "notes": [
+    "No synthetic or READY_FOR_REVIEW fixture is reported as GOLDEN.",
+    "Full OCR recognition is B-S3-04 scope."
+  ]
+}

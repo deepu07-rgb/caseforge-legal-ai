@@ -1,0 +1,9 @@
+{
+  "metric_id": "correction_survival",
+  "value": 1.0,
+  "numerator": 8,
+  "denominator": 8,
+  "threshold": 1.0,
+  "source_class": "SYNTHETIC_CONTROLLED",
+  "batch": "B-S3-07"
+}

@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/proposition_ledger.schema.json",
+  "title": "CaseForge Proposition Ledger",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "batch", "output_kind", "propositions", "rendered_text", "all_legal_grounded", "all_quotes_exact"],
+  "properties": {
+    "schema_version": { "const": "caseforge.proposition-ledger.v1" },
+    "batch": { "const": "B-S3-14" },
+    "output_kind": { "enum": ["DIGEST", "DRAFTING", "ARGUMENT_INTEGRITY", "MOCK_COURT", "REASONING"] },
+    "rendered_text": { "type": "string" },
+    "trusted_count": { "type": "integer", "minimum": 0 },
+    "gap_count": { "type": "integer", "minimum": 0 },
+    "blocked_count": { "type": "integer", "minimum": 0 },
+    "all_legal_grounded": { "type": "boolean" },
+    "all_quotes_exact": { "type": "boolean" },
+    "propositions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["proposition_id", "class", "text", "support_ids", "basis_ids", "support_claims", "verification_status", "render_action", "verified_support_ids", "rejected_support_ids", "reason"],
+        "properties": {
+          "proposition_id": { "type": "string", "minLength": 1 },
+          "class": { "enum": ["FACTUAL_BASIS", "LEGAL_BASIS", "INFERENCE", "COUNSEL_INPUT", "UNSUPPORTED_OR_GAP"] },
+          "text": { "type": "string", "minLength": 1 },
+          "support_ids": { "type": "array", "items": { "type": "string" } },
+          "basis_ids": { "type": "array", "items": { "type": "string" } },
+          "support_claims": { "type": "array", "items": { "$ref": "#/$defs/supportClaim" } },
+          "quotation": { "anyOf": [{ "$ref": "#/$defs/supportClaim" }, { "type": "null" }] },
+          "verification_status": { "enum": ["GREEN", "AMBER", "RED"] },
+          "render_action": { "enum": ["TRUSTED", "LABELLED", "REPOSITORY_GAP", "BLOCKED"] },
+          "verified_support_ids": { "type": "array", "items": { "type": "string" } },
+          "rejected_support_ids": { "type": "array", "items": { "type": "string" } },
+          "quote_offsets": { "anyOf": [{ "$ref": "#/$defs/offsets" }, { "type": "null" }] },
+          "reason": { "type": "string" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "supportClaim": {
+      "type": "object", "additionalProperties": false, "required": ["support_id", "exact_excerpt"],
+      "properties": { "support_id": { "type": "string" }, "exact_excerpt": { "type": "string", "minLength": 1 } }
+    },
+    "offsets": {
+      "type": "object", "additionalProperties": false, "required": ["support_id", "char_start", "char_end"],
+      "properties": { "support_id": { "type": "string" }, "char_start": { "type": "integer", "minimum": 0 }, "char_end": { "type": "integer", "minimum": 0 } }
+    }
+  },
+  "x-caseforge": {
+    "batch": "B-S3-14",
+    "invariants": [
+      "The host, never the model, assigns verification_status and render_action.",
+      "Legal GREEN requires an exact excerpt from a permitted, official, applicable, current authority.",
+      "Direct quotations require an exact stored-text match and character offsets.",
+      "Unknown or fabricated support IDs cannot render as trusted."
+    ]
+  }
+}

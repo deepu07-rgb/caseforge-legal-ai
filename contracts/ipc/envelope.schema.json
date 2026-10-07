@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/ipc/envelope.schema.json",
+  "title": "JsonRpcEnvelope",
+  "description": "JSON-RPC 2.0 message envelope for CaseForge sidecar IPC over stdio (PRD §4.1). Product method names are NOT defined here.",
+  "$comment": "PARTIAL — JSON-RPC 2.0 is the protocol named by the PRD. Method catalogues per sidecar are BLOCKED (Q-IPC-01).",
+  "oneOf": [
+    { "$ref": "#/$defs/request" },
+    { "$ref": "#/$defs/success_response" },
+    { "$ref": "#/$defs/error_response" }
+  ],
+  "$defs": {
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["jsonrpc", "method"],
+      "properties": {
+        "jsonrpc": { "type": "string", "const": "2.0" },
+        "method": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Method name must match a frozen sidecar catalogue once Q-IPC-01 is resolved."
+        },
+        "params": {
+          "description": "Positional array or named object per JSON-RPC 2.0. Exact shapes per method are BLOCKED."
+        },
+        "id": {
+          "description": "Request id; omit for notification.",
+          "type": ["string", "number", "null"]
+        }
+      }
+    },
+    "success_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["jsonrpc", "result", "id"],
+      "properties": {
+        "jsonrpc": { "type": "string", "const": "2.0" },
+        "result": true,
+        "id": { "type": ["string", "number", "null"] }
+      }
+    },
+    "error_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["jsonrpc", "error", "id"],
+      "properties": {
+        "jsonrpc": { "type": "string", "const": "2.0" },
+        "error": {
+          "type": "object",
+          "required": ["code", "message"],
+          "additionalProperties": false,
+          "properties": {
+            "code": { "type": "integer" },
+            "message": { "type": "string" },
+            "data": true
+          }
+        },
+        "id": { "type": ["string", "number", "null"] }
+      }
+    }
+  },
+  "x-caseforge": {
+    "status": "PARTIAL",
+    "batch": "B-S0-02",
+    "prd_refs": ["§4.1"],
+    "normative_invariants": [
+      "IPC is typed JSON-RPC over stdio.",
+      "Schemas for product methods live under /contracts/ipc/*.json and must be frozen before AC-4.1 can fully pass."
+    ],
+    "open_questions": ["Q-IPC-01"],
+    "stable_error_codes": {
+      "$comment": "Product-stable error codes for vault/licence/IPC are batch B-S0-03 (errors.json). JSON-RPC reserved codes (-32700..-32600) apply at the protocol layer."
+    }
+  }
+}

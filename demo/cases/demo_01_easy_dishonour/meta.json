@@ -1,0 +1,21 @@
+{
+  "fixture_id": "demo/demo_01_easy_dishonour",
+  "status": "DEMO_SYNTHETIC",
+  "authoritative": false,
+  "difficulty": "easy",
+  "jurisdiction": "India",
+  "label": "Easy — cheque dishonour recovery",
+  "batch_note": "Not B-S1-06. Pedagogical only. Does not unlock AC-6.1 or Stage 2 ship.",
+  "primary_teaching": [
+    "Strong Fact/Evidence/Law/Exposure alignment",
+    "Low Vulnerability Index on the single relief limb",
+    "Clear chronology and prayer"
+  ],
+  "inputs": {
+    "case_packet": "case_packet.txt",
+    "known_answer": "known_answer.json",
+    "argument_tree": "argument_tree.json",
+    "narrative": "narrative.md"
+  },
+  "disclaimer": "SYNTHETIC_DEMO_NOT_LAW — fictional parties, amounts, and authorities for product testing only."
+}

@@ -1,0 +1,5 @@
+[CASEFORGE_SYNTH_NOT_LAW pack=S-SYNTH-GRETRIEVAL-v1]
+Neutral citation: 546 U.S. DEMO 15
+Court: synthetic United States
+The Court held that antitrust rule of reason analysis.
+This excerpt is product-owner synthetic GOLDEN material for retrieval metrics only.

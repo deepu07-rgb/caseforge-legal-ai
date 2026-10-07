@@ -1,0 +1,72 @@
+{
+  "bakeoff_version": "1.0.0",
+  "description": "CaseForge triage bake-off candidates (Q-VISION-01). Heuristic baseline is always on. Vision slots stay disabled until local weights + CLI exist. Do not commit model weights.",
+  "docs": [
+    "eval/bakeoff/CANDIDATES.md",
+    "eval/bakeoff/protocol.md",
+    "contracts/QUESTIONS.md#q-vision-01"
+  ],
+  "candidates": [
+    {
+      "id": "caseforge.triage.heuristic.v1",
+      "adapter": "heuristic",
+      "provisional": true,
+      "enabled": true,
+      "notes": "Built-in baseline. Uses text/markers only. Not a vision model. Always available."
+    },
+    {
+      "id": "caseforge.triage.vision.slot_b",
+      "adapter": "external_cli",
+      "provisional": true,
+      "enabled": false,
+      "slot": "B",
+      "research_hint": "3B-class VLM #1 e.g. Qwen2-VL / Qwen2.5-VL ~2B Q4 (owner license check required)",
+      "command": [
+        "python",
+        "eval/bakeoff/adapters/external_cli.py",
+        "--help-as-stub"
+      ],
+      "env": {
+        "CASEFORGE_VISION_MODEL_PATH": "",
+        "CASEFORGE_VISION_SLOT": "B"
+      },
+      "notes": "Enable after: (1) local model path set, (2) real CLI that classifies pages to the 6 triage classes, (3) license OK. Replace command with your adapter."
+    },
+    {
+      "id": "caseforge.triage.vision.slot_c",
+      "adapter": "external_cli",
+      "provisional": true,
+      "enabled": false,
+      "slot": "C",
+      "research_hint": "3B-class VLM #2 e.g. InternVL2-2B or MiniCPM-V (owner license check required)",
+      "command": [
+        "python",
+        "eval/bakeoff/adapters/external_cli.py",
+        "--help-as-stub"
+      ],
+      "env": {
+        "CASEFORGE_VISION_MODEL_PATH": "",
+        "CASEFORGE_VISION_SLOT": "C"
+      },
+      "notes": "Second vision candidate for head-to-head bake-off. Keep disabled until ready."
+    },
+    {
+      "id": "caseforge.triage.vision.slot_d",
+      "adapter": "external_cli",
+      "provisional": true,
+      "enabled": false,
+      "slot": "D",
+      "research_hint": "Optional classical CV + layout / OCR hybrid (no large VLM)",
+      "command": [
+        "python",
+        "eval/bakeoff/adapters/external_cli.py",
+        "--help-as-stub"
+      ],
+      "env": {
+        "CASEFORGE_VISION_MODEL_PATH": "",
+        "CASEFORGE_VISION_SLOT": "D"
+      },
+      "notes": "Optional low-RAM slot. Enable only if product wants a non-VLM alternative."
+    }
+  ]
+}

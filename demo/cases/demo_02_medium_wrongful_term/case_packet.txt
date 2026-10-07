@@ -1,0 +1,44 @@
+[SYNTHETIC_DEMO_NOT_LAW — fictional teaching packet]
+
+CASE TITLE: Avery Cole v. Northline Analytics LLC
+JURISDICTION: United States (teaching stub: state court / federal diversity not decided)
+COURT: State trial court (teaching)
+MATTER TYPE: Employment — alleged wrongful termination + unpaid performance bonus
+USER SIDE: Plaintiff (employee)
+
+PARTIES
+1. Avery Cole — Plaintiff / former Senior Analyst
+2. Northline Analytics LLC — Defendant / employer
+3. Jordan Hale — Defendant's VP of People (witness; not sued)
+
+CHRONOLOGY
+- 2022-03-01: Cole hired under written offer letter; role "Senior Analyst"; at-will language present; bonus plan "eligible for annual discretionary performance bonus up to 15% of base if Company performance targets met."
+- 2023-12-15: Year-end review email from manager: "Meets expectations; recommend full bonus if Finance confirms targets."
+- 2024-01-10: Company announces restructuring of Analytics pod.
+- 2024-01-18: Cole terminated effective same day; termination letter cites "position elimination / reorganization."
+- 2024-01-20: Cole emails HR requesting bonus for FY2023 and copy of written bonus criteria used.
+- 2024-02-05: HR reply: "Bonus is discretionary; no amount owed." No spreadsheet or criteria attached.
+- 2024-03-01: Cole files charge with teaching EEOC stub alleging age discrimination (Cole age 54; retained peer age 31 on similar projects). Charge pending.
+- 2024-06-01: Civil complaint for: (1) breach of implied contract / bonus; (2) age discrimination under teaching ADEA label; (3) failure to pay wages under teaching state wage statute label.
+
+DOCUMENTS PRESENT
+1. Offer letter (at-will + discretionary bonus language)
+2. 2023-12-15 review email
+3. Termination letter 2024-01-18
+4. HR email 2024-02-05
+5. EEOC charge stub
+
+DOCUMENTS MISSING (planted gaps — critical for medium difficulty)
+- No signed bonus plan with objective metrics
+- No Finance confirmation that company targets were met
+- No contemporaneous notes of age-related comments (only Cole's later declaration draft)
+- No org chart proving "position elimination" vs replacement by younger hire
+
+PRAYER / RELIEF
+- Unpaid bonus (~USD 18,000 teaching figure) + liquidated damages if available
+- Back pay / front pay on discrimination claim
+- Declaratory relief and costs
+
+COUNSEL NOTES
+- Limb A (bonus): contract language is discretionary — law is soft; evidence of target attainment missing.
+- Limb B (age discrimination): comparator story exists, but evidence is thin (no age comments on record).

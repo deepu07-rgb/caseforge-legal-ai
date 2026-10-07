@@ -1,0 +1,26 @@
+{
+  "script_id": "script-cold-start-ipc-ping",
+  "authoritative": false,
+  "status": "SYNTHETIC_PLACEHOLDER",
+  "steps": [
+    {
+      "step": 1,
+      "action": "app.cold_start",
+      "measure": "elapsed_s",
+      "budget_ref": "contracts/constants.json#performance_budgets.cold_start_max_s"
+    },
+    {
+      "step": 2,
+      "action": "ipc.ping",
+      "target": "shell",
+      "expect": "jsonrpc_pong"
+    },
+    {
+      "step": 3,
+      "action": "assert.idle_ram_mb",
+      "budget_ref": "contracts/constants.json#performance_budgets.idle_ram_max_mb_models_unloaded",
+      "models_unloaded": true
+    }
+  ],
+  "notes": "Actions are harness-facing names only; product IPC methods remain BLOCKED (Q-IPC-01)."
+}

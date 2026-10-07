@@ -1,0 +1,10 @@
+﻿{
+    "fixture_id":  "G-SCRIPTS/bench_prep_redteam",
+    "primary_acs":  [
+                        "G1"
+                    ],
+    "batch":  "B-S2-05",
+    "set_id":  "G-SCRIPTS",
+    "description":  "Bench Prep dual-counsel G1 red-team — no holdings/orders/verdicts",
+    "status":  "GOLDEN"
+}

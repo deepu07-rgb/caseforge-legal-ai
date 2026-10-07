@@ -1,0 +1,18 @@
+TYPED NOTICE (synthetic mixed page #25)
+
+To,
+The Manager,
+Sample Cooperative Bank
+
+Subject: Dishonour of Cheque No. 2025
+
+Please take notice that Cheque No. 2025 drawn on your bank for INR 1,25,000/-
+was returned unpaid on 18.01.2024. You are called upon to make payment within 15 days.
+
+--- HANDWRITTEN MARGIN NOTES (synthetic) ---
+OK to send? — yes, after confirm address
+Add ACK request  [initials]
+Call client re quantum — maybe 1,50,000?
+
+[CASEFORGE_SYNTHETIC_PAGE]
+page_index: 25

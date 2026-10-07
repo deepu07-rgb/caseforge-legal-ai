@@ -1,0 +1,165 @@
+{
+  "batch": "B-S1-22",
+  "release": "v1.0.0-rc1",
+  "generated_at": "2026-08-08T02:23:19.476403+00:00",
+  "summary": {
+    "pass": 25,
+    "fail": 0,
+    "skip": 0,
+    "errors": 0
+  },
+  "results": [
+    {
+      "batch": "B-S1-01",
+      "script": "shell_ipc_ping.py",
+      "status": "PASS",
+      "detail": "commands: shell_ping, shell_version, shell_heavy_job_start, shell_heavy_job_status, shell_sidecar_status"
+    },
+    {
+      "batch": "B-S1-01",
+      "script": "shell_ac_wiring.py",
+      "status": "PASS",
+      "detail": "PASS  AC-3.1/3.5 structural wiring (instrumentation present; hardware measure still required)"
+    },
+    {
+      "batch": "B-S1-02",
+      "script": "vault_ac_16_2.py",
+      "status": "PASS",
+      "detail": "note: run `cargo test -p caseforge --lib vault::tests` for live SQLCipher AC-16.2 when MSVC available"
+    },
+    {
+      "batch": "B-S1-03",
+      "script": "case_wizard_b_s1_03.py",
+      "status": "PASS",
+      "detail": "PASS  B-S1-03 case wizard structural (PRD \ufffd5 fields, jurisdiction required+immutable)"
+    },
+    {
+      "batch": "B-S1-04",
+      "script": "doc_intake_b_s1_04.py",
+      "status": "PASS",
+      "detail": "PASS  B-S1-04 document intake structural (PDF/DOCX/JPG/PNG/TXT, type tag correction)"
+    },
+    {
+      "batch": "B-S1-05",
+      "script": "docpipe_triage_b_s1_05.py",
+      "status": "PASS",
+      "detail": "NOTE  Ship accuracy is scored separately: python eval/checks/ac_6_1_triage_score.py (GOLDEN only)"
+    },
+    {
+      "batch": "B-S1-06",
+      "script": "docpipe_recognize_b_s1_06.py",
+      "status": "PASS",
+      "detail": "PASS  B-S1-06 docpipe recognition structural (thresholds frozen, schema, vault, IPC, word flags, sidecar RPC)"
+    },
+    {
+      "batch": "B-S1-07",
+      "script": "skeleton_b_s1_07.py",
+      "status": "PASS",
+      "detail": "PASS  B-S1-07 skeleton structural (case_graph FROZEN, extractor, source pointers, IPC, sidecar RPC)"
+    },
+    {
+      "batch": "B-S1-08",
+      "script": "review_b_s1_08.py",
+      "status": "PASS",
+      "detail": "NOTE  AC-6.3/6.4 full UI automation is covered by structural wiring + data-testid hooks"
+    },
+    {
+      "batch": "B-S1-09",
+      "script": "interview_b_s1_09.py",
+      "status": "PASS",
+      "detail": "PASS  B-S1-09 interview structural (max_q=12, min_completion=90%, SOURCED_BY_COUNSEL, pause/resume/skip/reopen wiring, AC-6.5 dry-run)"
+    },
+    {
+      "batch": "B-S1-10",
+      "script": "batch_b_s1_10.py",
+      "status": "PASS",
+      "detail": "NOTE  AC-3.2 SKIP: AC-3.2 Full-tier hardware measurement not run in this environment. Budget frozen: pages<=300 hours<=8. Do not lower AC silently; measure on reference Full tier for ship."
+    },
+    {
+      "batch": "B-S1-11",
+      "script": "companion_b_s1_11.py",
+      "status": "PASS",
+      "detail": "NOTE  Full AC-6.7 ship evidence still requires human packet capture per docs/B-S1-11_phone_capture.md"
+    },
+    {
+      "batch": "B-S1-12",
+      "script": "packs_b_s1_12.py",
+      "status": "PASS",
+      "detail": "PASS  B-S1-12 packs structural (akpkg schema, Ed25519 official, custom isolation, AC-7.1 headnote reject on official)"
+    },
+    {
+      "batch": "B-S1-13",
+      "script": "retrieval_b_s1_13.py",
+      "status": "PASS",
+      "detail": "PASS  B-S1-13 retrieval structural + AC-4.3 RED + AC-7.2 IN=100.0% (20/20) US=100.0% (20/20) index=caseforge.retrieve.lexical.v1"
+    },
+    {
+      "batch": "B-S1-14",
+      "script": "digest_b_s1_14.py",
+      "status": "PASS",
+      "detail": "PASS  B-S1-14 digest surfaces + caseforge.prep_completeness.v1 (empty=0 full=100 partial=40; formula frozen; no LLM)"
+    },
+    {
+      "batch": "B-S1-15",
+      "script": "drafting_b_s1_15.py",
+      "status": "PASS",
+      "detail": "PASS  B-S1-15 drafting + DOCX/PDF export (caseforge.export_footer.v1; templates=4; G4 footer + G5 provenance)"
+    },
+    {
+      "batch": "B-S1-16",
+      "script": "voice_b_s1_16.py",
+      "status": "PASS",
+      "detail": "PASS  B-S1-16 voice + lexicon (caseforge.speech.provisional.v1; whisper=small provisional; AC-9.2 persist apply; AC-9.3 offline 10-turn; AC-9.4 English pin; AC-9.1 WER SKIP until G-AUDIO GOLDEN)"
+    },
+    {
+      "batch": "B-S1-17",
+      "script": "experience_b_s1_17.py",
+      "status": "PASS",
+      "detail": "PASS  B-S1-17 experience store (caseforge.experience.v1; top_k=5; AC-11.1 injection ranking; AC-11.2 fleet off by default / no network upload)"
+    },
+    {
+      "batch": "B-S1-18",
+      "script": "licence_b_s1_18.py",
+      "status": "PASS",
+      "detail": "PASS  B-S1-18 licence + air-gap (caseforge.licence.v1; 3-of-4 fingerprint; EXPIRED=read-only no ransom; AC-13.1 policy)"
+    },
+    {
+      "batch": "B-S1-19",
+      "script": "protection_b_s1_19.py",
+      "status": "PASS",
+      "detail": "PASS  B-S1-19 protection (caseforge.protection.v1; AES-256-GCM packs/models; AC-14.1 copied-folder; AC-14.2 no ransom; <=8%)"
+    },
+    {
+      "batch": "B-S1-20",
+      "script": "choreography_b_s1_20.py",
+      "status": "PASS",
+      "detail": "PASS  B-S1-20 choreography (caseforge.choreography.v1; max 1 large model; primary!=vision concurrent; status chip; budgets AC-3.1/3.4/3.5/4.2 wired; hardware RSS PASS/SKIP at runtime)"
+    },
+    {
+      "batch": "B-S1-21",
+      "script": "guardrails_b_s1_21.py",
+      "status": "PASS",
+      "detail": "PASS  B-S1-21 guardrails (caseforge.guardrails.v1; G1-G6; stage1 red-team 24 prompts zero G1-G3 misses; G4/G5 export wired; partial AC-15.1)"
+    },
+    {
+      "batch": "AC-2.1",
+      "script": "ac_2_1_stage2_dependency.py",
+      "status": "PASS",
+      "detail": "PASS  AC-2.1 Stage-2 dependency audit (8 docpipe files; zero Stage-2 imports into document pipeline)"
+    },
+    {
+      "batch": "AC-6.1",
+      "script": "ac_6_1_triage_score.py",
+      "status": "PASS",
+      "detail": "synthetic_dev: pages=7 correct=7 acc=100.0% (not ship)"
+    },
+    {
+      "batch": "AC-6.2",
+      "script": "ac_6_2_chronology_recall.py",
+      "status": "PASS",
+      "detail": "PASS  AC-6.2  dated-event recall 100.0% (20/20) on synth_chrono_40 pages=40 (need >= 95.0% on >= 40 pages)"
+    }
+  ],
+  "errors": [],
+  "ship_ok": true
+}

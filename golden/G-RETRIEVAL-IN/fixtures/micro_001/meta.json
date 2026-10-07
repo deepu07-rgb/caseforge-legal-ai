@@ -1,0 +1,18 @@
+{
+  "fixture_id": "G-RETRIEVAL-IN/micro_001",
+  "set_id": "G-RETRIEVAL-IN",
+  "fixture_version": "0.1.0",
+  "status": "SYNTHETIC_PLACEHOLDER",
+  "authoritative": false,
+  "batch": "B-S0-04",
+  "primary_acs": ["AC-4.3", "AC-7.2"],
+  "jurisdiction": "India",
+  "description": "Synthetic retrieval query + planted fake citation for harness wiring. No real authorities.",
+  "inputs": {
+    "query_file": "query.txt"
+  },
+  "known_answer": "known_answer.json",
+  "authored_by": null,
+  "reviewed_by": null,
+  "locked_at": null
+}

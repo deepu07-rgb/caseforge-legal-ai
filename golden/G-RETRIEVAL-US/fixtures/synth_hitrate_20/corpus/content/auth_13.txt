@@ -1,0 +1,5 @@
+[CASEFORGE_SYNTH_NOT_LAW pack=S-SYNTH-GRETRIEVAL-v1]
+Neutral citation: 548 U.S. DEMO 13
+Court: synthetic United States
+The Court held that habeas corpus successive petition limits.
+This excerpt is product-owner synthetic GOLDEN material for retrieval metrics only.

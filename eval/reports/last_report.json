@@ -1,0 +1,521 @@
+{
+  "product": "CaseForge",
+  "batch": "B-S0-05",
+  "generated_at": "2026-10-07T18:46:05.553071+00:00",
+  "root": "C:\\Users\\puroh\\Downloads\\Case Forge- Legal AI app",
+  "product_implemented": true,
+  "golden_set_status": {
+    "G-DOCS": "HAS_GOLDEN",
+    "G-CASE-IN": "HAS_GOLDEN",
+    "G-CASE-US": "SCAFFOLD_ONLY",
+    "G-AUDIO": "SCAFFOLD_ONLY",
+    "G-RETRIEVAL-IN": "HAS_GOLDEN",
+    "G-RETRIEVAL-US": "HAS_GOLDEN",
+    "G-REDTEAM": "HAS_GOLDEN",
+    "G-SCRIPTS": "SCAFFOLD_ONLY",
+    "G-INTEGRITY": "MISSING"
+  },
+  "counts": {
+    "PASS": 17,
+    "FAIL": 2,
+    "SKIP": 21,
+    "BLOCKED": 1
+  },
+  "results": [
+    {
+      "id": "HARNESS-INVENTORY",
+      "status": "PASS",
+      "stage": "S0",
+      "check_kind": "harness",
+      "description": "Harness structural check HARNESS-INVENTORY",
+      "reason": "Inventory lists 38 ACs with unique ids",
+      "golden_sets": [],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "HARNESS-GOLDEN-DISCOVERY",
+      "status": "PASS",
+      "stage": "S0",
+      "check_kind": "harness",
+      "description": "Harness structural check HARNESS-GOLDEN-DISCOVERY",
+      "reason": "Discovered 9 sets; GOLDEN=5; SCAFFOLD_ONLY=3.",
+      "golden_sets": [],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "HARNESS-CONSTANTS-BUDGETS",
+      "status": "PASS",
+      "stage": "S0",
+      "check_kind": "harness",
+      "description": "Harness structural check HARNESS-CONSTANTS-BUDGETS",
+      "reason": "PRD performance budget numbers present in constants.json",
+      "golden_sets": [],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-2.1",
+      "status": "SKIP",
+      "stage": "S2_dependency",
+      "check_kind": "static_audit",
+      "description": "Static dependency audit shows zero imports from Stage 2 modules into the document pipeline.",
+      "reason": "check_not_wired (kind=static_audit); product may exist but AC runner stub only in B-S0-05.",
+      "golden_sets": [
+        "G-SCRIPTS"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-3.1",
+      "status": "PASS",
+      "stage": "S1",
+      "check_kind": "performance",
+      "description": "Cold start \u2264 6 s; idle RAM \u2264 400 MB (models unloaded).",
+      "reason": "partial structural: PASS  AC-3.1/3.5 structural wiring (instrumentation present; hardware measure still required) \u2014 Full-tier hardware measurement still required for ship.",
+      "golden_sets": [
+        "G-SCRIPTS"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-3.2",
+      "status": "SKIP",
+      "stage": "S1",
+      "check_kind": "performance",
+      "description": "Overnight batch of 300-page mixed case file \u2264 8 hours.",
+      "reason": "AC-3.2 Full-tier hardware measurement not run in this environment. Budget frozen: pages<=300 hours<=8. Do not lower AC silently; measure on reference Full tier for ship.",
+      "golden_sets": [
+        "G-SCRIPTS",
+        "G-CASE-IN",
+        "G-CASE-US"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-3.3",
+      "status": "SKIP",
+      "stage": "S2",
+      "check_kind": "performance",
+      "description": "Mock Court turn latency \u2264 15 s for ~300-token adversary response (including sequential model swap).",
+      "reason": "check_not_wired (kind=performance); product may exist but AC runner stub only in B-S0-05.",
+      "golden_sets": [
+        "G-SCRIPTS"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-3.4",
+      "status": "SKIP",
+      "stage": "S1",
+      "check_kind": "performance",
+      "description": "Digest of 40-page typed chargesheet or clean US complaint \u2264 5 minutes foreground.",
+      "reason": "check_not_wired (kind=performance); product may exist but AC runner stub only in B-S0-05.",
+      "golden_sets": [
+        "G-SCRIPTS",
+        "G-CASE-IN",
+        "G-CASE-US"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-3.5",
+      "status": "PASS",
+      "stage": "S1",
+      "check_kind": "performance",
+      "description": "No UI thread freeze > 200 ms. All heavy work in Rust sidecar with progress reporting.",
+      "reason": "partial structural: PASS  AC-3.1/3.5 structural wiring (instrumentation present; hardware measure still required) \u2014 Full-tier hardware measurement still required for ship.",
+      "golden_sets": [
+        "G-SCRIPTS"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-4.1",
+      "status": "PASS",
+      "stage": "S1",
+      "check_kind": "ipc_contract",
+      "description": "Full IPC contract round-trip test suite must pass.",
+      "reason": "partial shell IPC: PASS  AC-4.1 partial (shell.ping/version contract + command wiring) |   commands: shell_ping, shell_version, shell_heavy_job_start, shell_heavy_job_status, shell_sidecar_status \u2014 full sidecar round-trip still blocked (Q-IPC-01).",
+      "golden_sets": [
+        "G-SCRIPTS"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-4.2",
+      "status": "SKIP",
+      "stage": "S1",
+      "check_kind": "performance",
+      "description": "Worst-case scripted session never exceeds 7.2 GB total RSS.",
+      "reason": "check_not_wired (kind=performance); product may exist but AC runner stub only in B-S0-05.",
+      "golden_sets": [
+        "G-SCRIPTS"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-4.3",
+      "status": "PASS",
+      "stage": "S1",
+      "check_kind": "retrieval_citation",
+      "description": "Planted fake citation always renders RED and is excluded from downstream reasoning unless user confirms.",
+      "reason": "planted fake always RED + excluded unless user confirms; outside-RETRIEVE RED (G2) | PASS  B-S1-13 retrieval structural + AC-4.3 RED + AC-7.2 IN=100.0% (20/20) US=100.0% (20/20) index=caseforge.retrieve.lexical.v1",
+      "golden_sets": [
+        "G-RETRIEVAL-IN",
+        "G-RETRIEVAL-US"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-5.1",
+      "status": "SKIP",
+      "stage": "S1",
+      "check_kind": "golden_metric",
+      "description": "60-file intake achieves \u2265 80% correct auto-type suggestions on golden set; one-click correction.",
+      "reason": "check_not_wired (kind=golden_metric); product may exist but AC runner stub only in B-S0-05.",
+      "golden_sets": [
+        "G-DOCS"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-6.1",
+      "status": "PASS",
+      "stage": "S1",
+      "check_kind": "golden_metric",
+      "description": "\u2265 92% accuracy on 500-page golden triage set.",
+      "reason": "GOLDEN accuracy 100.0% on 500 pages (>= 92.0% and >= 500 pages). | structural: PASS  B-S1-05 docpipe triage structural (classes, IPC, sidecar ping, synthetic markers) | NOTE  Ship accuracy is scored separately: python eval/checks/ac_6_1_triage_score.py (GOLDEN only)",
+      "golden_sets": [
+        "G-DOCS"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-6.2",
+      "status": "FAIL",
+      "stage": "S1",
+      "check_kind": "golden_metric",
+      "description": "\u2265 95% recall of known dated events on golden 40-page document.",
+      "reason": "B-S1-07 skeleton structural failed: FAIL  B-S1-07 skeleton structural |   - case_graph schema not FROZEN |   - case_graph schema_version const must be 1.0.0 |   - graph schema_version not 1.0.0",
+      "golden_sets": [
+        "G-CASE-IN",
+        "G-CASE-US"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-6.3",
+      "status": "PASS",
+      "stage": "S1",
+      "check_kind": "ui_interaction",
+      "description": "Click any fact \u2192 source page with span highlighted.",
+      "reason": "click fact -> source span (UI wired: review-fact + review-source-span) | PASS  B-S1-08 review structural (side-by-side UI, click->span wiring, <=2 interaction correct path, thin experience hook) | NOTE  AC-6.3/6.4 full UI automation is covered by structural wiring + data-testid hooks",
+      "golden_sets": [
+        "G-CASE-IN",
+        "G-CASE-US"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-6.4",
+      "status": "PASS",
+      "stage": "S1",
+      "check_kind": "ui_interaction",
+      "description": "\u2264 2 interactions to correct a highlighted word.",
+      "reason": "<=2 interactions to correct (select+save; host rejects >2) | PASS  B-S1-08 review structural (side-by-side UI, click->span wiring, <=2 interaction correct path, thin experience hook) | NOTE  AC-6.3/6.4 full UI automation is covered by structural wiring + data-testid hooks",
+      "golden_sets": [
+        "G-CASE-IN",
+        "G-CASE-US"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-6.5",
+      "status": "PASS",
+      "stage": "S1",
+      "check_kind": "golden_metric",
+      "description": "\u2264 12 questions complete skeleton to \u2265 90% of known-answer graph.",
+      "reason": "<=12 questions complete skeleton to >=90% (dry-run + constants + SOURCED_BY_COUNSEL) | PASS  B-S1-09 interview structural (max_q=12, min_completion=90%, SOURCED_BY_COUNSEL, pause/resume/skip/reopen wiring, AC-6.5 dry-run)",
+      "golden_sets": [
+        "G-CASE-IN",
+        "G-CASE-US"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-6.6",
+      "status": "PASS",
+      "stage": "S1",
+      "check_kind": "behavioural",
+      "description": "Guided Intake Interview is resumable, skippable, re-openable.",
+      "reason": "resumable/skippable/re-openable session state machine wired | PASS  B-S1-09 interview structural (max_q=12, min_completion=90%, SOURCED_BY_COUNSEL, pause/resume/skip/reopen wiring, AC-6.5 dry-run)",
+      "golden_sets": [
+        "G-CASE-IN",
+        "G-CASE-US"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-6.7",
+      "status": "PASS",
+      "stage": "S1",
+      "check_kind": "network_audit",
+      "description": "Packet capture confirms zero non-LAN traffic for Phone Capture Companion.",
+      "reason": "LAN-only companion policy + packet-capture runbook wired | PASS  B-S1-11 companion structural (LAN bind policy, peer reject, QR/upload flow, packet-capture doc, AC-6.7 wiring) | NOTE  Full AC-6.7 ship evidence still requires human packet capture per docs/B-S1-11_phone_capture.md",
+      "golden_sets": [
+        "G-SCRIPTS"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-6.8",
+      "status": "PASS",
+      "stage": "S1",
+      "check_kind": "behavioural",
+      "description": "Kill mid-batch \u2192 restart resumes correctly.",
+      "reason": "kill mid-batch -> resume via durable checkpoints | PASS  B-S1-10 batch structural (durable checkpoints, kill/resume wiring, simulate-kill hook, AC-6.8 logic) | NOTE  AC-3.2 SKIP: AC-3.2 Full-tier hardware measurement not run in this environment. Budget frozen: pages<=300 hours<=8. Do not lower AC silently; measure on reference Full tier for ship.",
+      "golden_sets": [
+        "G-SCRIPTS",
+        "G-CASE-IN",
+        "G-CASE-US"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-7.1",
+      "status": "FAIL",
+      "stage": "S1",
+      "check_kind": "pack_policy",
+      "description": "Automated headnote scan returns zero matches on official packs.",
+      "reason": "B-S1-12 packs check failed: FAIL  B-S1-12 packs structural |   - akpkg schema not FROZEN",
+      "golden_sets": [],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-7.2",
+      "status": "PASS",
+      "stage": "S1",
+      "check_kind": "golden_metric",
+      "description": "Retrieval returns known-relevant authority in top-8 for \u2265 85% of golden queries (India and US sets).",
+      "reason": "retrieval top-8 hit rate >=85% on G-RETRIEVAL-IN + G-RETRIEVAL-US GOLDEN | PASS  B-S1-13 retrieval structural + AC-4.3 RED + AC-7.2 IN=100.0% (20/20) US=100.0% (20/20) index=caseforge.retrieve.lexical.v1",
+      "golden_sets": [
+        "G-RETRIEVAL-IN",
+        "G-RETRIEVAL-US"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-8.1",
+      "status": "SKIP",
+      "stage": "S2",
+      "check_kind": "integrity_engine",
+      "description": "Planted gap appears in top-2 Missing Links.",
+      "reason": "check_not_wired (kind=integrity_engine); product may exist but AC runner stub only in B-S0-05.",
+      "golden_sets": [
+        "G-SCRIPTS"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-8.2",
+      "status": "SKIP",
+      "stage": "S2",
+      "check_kind": "performance",
+      "description": "VI recomputation \u2264 5 s.",
+      "reason": "check_not_wired (kind=performance); product may exist but AC runner stub only in B-S0-05.",
+      "golden_sets": [
+        "G-SCRIPTS"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-8.3",
+      "status": "SKIP",
+      "stage": "S2",
+      "check_kind": "static_audit",
+      "description": "Scoring is pure deterministic code; no LLM inside scoring path.",
+      "reason": "check_not_wired (kind=static_audit); product may exist but AC runner stub only in B-S0-05.",
+      "golden_sets": [
+        "G-SCRIPTS"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-9.1",
+      "status": "SKIP",
+      "stage": "S1",
+      "check_kind": "voice",
+      "description": "STT word-error-rate target on G-AUDIO (WER).",
+      "reason": "golden_not_authored (sets G-AUDIO are SCAFFOLD_ONLY / not GOLDEN).",
+      "golden_sets": [
+        "G-AUDIO"
+      ],
+      "detail_status": "PARTIAL"
+    },
+    {
+      "id": "AC-9.2",
+      "status": "SKIP",
+      "stage": "S1",
+      "check_kind": "voice",
+      "description": "Lexicon STT/TTS corrections persist and apply permanently.",
+      "reason": "golden_not_authored (sets G-AUDIO are SCAFFOLD_ONLY / not GOLDEN).",
+      "golden_sets": [
+        "G-AUDIO"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-9.3",
+      "status": "SKIP",
+      "stage": "S1",
+      "check_kind": "voice",
+      "description": "Full voice-only rehearsal path succeeds (network disabled for eval).",
+      "reason": "golden_not_authored (sets G-AUDIO, G-SCRIPTS are SCAFFOLD_ONLY / not GOLDEN).",
+      "golden_sets": [
+        "G-AUDIO",
+        "G-SCRIPTS"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-9.4",
+      "status": "SKIP",
+      "stage": "S1",
+      "check_kind": "voice",
+      "description": "Language pinning (English primary) enforced for voice path.",
+      "reason": "golden_not_authored (sets G-AUDIO are SCAFFOLD_ONLY / not GOLDEN).",
+      "golden_sets": [
+        "G-AUDIO"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-10.1",
+      "status": "SKIP",
+      "stage": "S2",
+      "check_kind": "bench",
+      "description": "Per-Case Adaptive Bench: no named-judge profiles; behaviour from six generic archetypes + case-order signals + sliders (criterion 1).",
+      "reason": "check_not_wired (kind=bench); product may exist but AC runner stub only in B-S0-05.",
+      "golden_sets": [
+        "G-SCRIPTS"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-10.2",
+      "status": "SKIP",
+      "stage": "S2",
+      "check_kind": "bench",
+      "description": "Per-Case Adaptive Bench secondary acceptance (criterion 2 per PRD \u00a710).",
+      "reason": "check_not_wired (kind=bench); product may exist but AC runner stub only in B-S0-05.",
+      "golden_sets": [
+        "G-SCRIPTS"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-11.1",
+      "status": "SKIP",
+      "stage": "S1",
+      "check_kind": "experience_store",
+      "description": "Experience Store local encrypted accumulation and retrieval injection (criterion 1).",
+      "reason": "check_not_wired (kind=experience_store); product may exist but AC runner stub only in B-S0-05.",
+      "golden_sets": [],
+      "detail_status": "PARTIAL"
+    },
+    {
+      "id": "AC-11.2",
+      "status": "SKIP",
+      "stage": "S1",
+      "check_kind": "experience_store",
+      "description": "Experience Store fleet contribution only after explicit user review / related criterion 2.",
+      "reason": "check_not_wired (kind=experience_store); product may exist but AC runner stub only in B-S0-05.",
+      "golden_sets": [],
+      "detail_status": "PARTIAL"
+    },
+    {
+      "id": "AC-13.1",
+      "status": "SKIP",
+      "stage": "S1",
+      "check_kind": "network_audit",
+      "description": "Network-capture audit shows zero user-document content leaving the machine.",
+      "reason": "check_not_wired (kind=network_audit); product may exist but AC runner stub only in B-S0-05.",
+      "golden_sets": [
+        "G-SCRIPTS"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-14.1",
+      "status": "SKIP",
+      "stage": "S1",
+      "check_kind": "protection",
+      "description": "Copied-folder / protection integrity test (PRD construction guidance; data never ransomed).",
+      "reason": "check_not_wired (kind=protection); product may exist but AC runner stub only in B-S0-05.",
+      "golden_sets": [
+        "G-SCRIPTS"
+      ],
+      "detail_status": "PARTIAL"
+    },
+    {
+      "id": "AC-14.2",
+      "status": "SKIP",
+      "stage": "S1",
+      "check_kind": "protection",
+      "description": "Protection AC-14.2 must pass; data is never ransomed.",
+      "reason": "check_not_wired (kind=protection); product may exist but AC runner stub only in B-S0-05.",
+      "golden_sets": [
+        "G-SCRIPTS"
+      ],
+      "detail_status": "PARTIAL"
+    },
+    {
+      "id": "AC-15.1",
+      "status": "SKIP",
+      "stage": "S1_S2",
+      "check_kind": "redteam",
+      "description": "\u2265 200-prompt red-team suite \u2192 zero G1\u2013G3 violations.",
+      "reason": "check_not_wired (kind=redteam); product may exist but AC runner stub only in B-S0-05.",
+      "golden_sets": [
+        "G-REDTEAM"
+      ],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-16.1",
+      "status": "PASS",
+      "stage": "S0_S1",
+      "check_kind": "structural_contracts",
+      "description": "Schema validation suite loads and validates Layer 2 contracts.",
+      "reason": "Loaded 18 contract JSON files. 1 schema(s) still marked BLOCKED (field freeze incomplete; load OK).",
+      "golden_sets": [],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-16.2",
+      "status": "PASS",
+      "stage": "S1",
+      "check_kind": "vault",
+      "description": "Case/app vault unreadable without passphrase.",
+      "reason": "structural: PASS  AC-16.2 structural (Argon2id frozen + vault module + commands wired) |   note: run `cargo test -p caseforge --lib vault::tests` for live SQLCipher AC-16.2 when MSVC available",
+      "golden_sets": [],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-16.3",
+      "status": "BLOCKED",
+      "stage": "S1",
+      "check_kind": "package",
+      "description": ".akcase round-trip succeeds.",
+      "reason": "Q-PKG-01: .akcase format not specified in Layer 1; cannot implement or pass round-trip.",
+      "golden_sets": [],
+      "detail_status": "FROZEN"
+    }
+  ],
+  "policy": {
+    "silent_pass_forbidden": true,
+    "skip_is_not_pass": true,
+    "exit_fail_on": [
+      "FAIL"
+    ]
+  }
+}

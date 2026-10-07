@@ -1,0 +1,25 @@
+{
+  "batch": "B-S3-15",
+  "status": "PASS",
+  "checks": {
+    "host_owned_retrieval": true,
+    "versioned_ipc": true,
+    "readiness_gate": true,
+    "strict_source_filter": true,
+    "missing_authority_blocks": true,
+    "immutable_output_provenance": true,
+    "safe_cache_key": true,
+    "per_turn_exact_text": true,
+    "voice_is_grounded": true,
+    "no_grounded_fallback": true,
+    "behavioural_tests": true,
+    "operator_documentation": true
+  },
+  "acceptance": {
+    "AC-S3-15.1": "PASS \u2014 host blocks empty legal retrieval",
+    "AC-S3-15.2": "PASS \u2014 turn text and response carry verified authority/chunk IDs",
+    "AC-S3-15.3": "PASS \u2014 host filters jurisdiction, decision, trust, temporal, and supersession state",
+    "AC-S3-15.4": "PASS \u2014 readiness and per-turn panels expose exact stored chunk text",
+    "AC-S3-15.5": "PASS \u2014 graph/working-set versions are pinned and stale requests fail closed"
+  }
+}

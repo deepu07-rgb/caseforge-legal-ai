@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/correction_authority.schema.json",
+  "title": "CorrectionAuthorityEvent",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["event_id", "case_id", "event_type", "target_kind", "target_key", "base_value", "counsel_value", "reason", "actor", "created_at", "anchor", "immutable_hash"],
+  "properties": {
+    "event_id": {"type": "string", "minLength": 1}, "case_id": {"type": "string", "minLength": 1},
+    "event_type": {"enum": ["CORRECT", "REVERT", "DELETE", "RESOLVE_KEEP_COUNSEL", "RESOLVE_ACCEPT_GENERATED"]},
+    "target_kind": {"enum": ["graph_item", "word_span"]}, "target_key": {"type": "string", "pattern": "^cfat:v1:"},
+    "base_value": {"type": ["string", "null"]}, "counsel_value": {"type": ["string", "null"]},
+    "reason": {"type": "string", "minLength": 1}, "actor": {"const": "COUNSEL"},
+    "created_at": {"type": "string", "format": "date-time"}, "supersedes_event_id": {"type": ["string", "null"]},
+    "anchor": {
+      "type": "object",
+      "required": ["match_policy", "source_content_hash", "source_doc_id", "source_page_index", "original_item_id", "original_word_index", "original_char_start", "original_char_end", "original_bbox"],
+      "properties": {
+        "match_policy": {"const": "exact_then_source_hash_then_unique_base"},
+        "source_content_hash": {"type": ["string", "null"]}, "source_doc_id": {"type": ["string", "null"]},
+        "source_page_index": {"type": ["integer", "null"]}, "original_item_id": {"type": ["string", "null"]},
+        "original_word_index": {"type": ["integer", "null"]}, "original_char_start": {"type": ["integer", "null"]},
+        "original_char_end": {"type": ["integer", "null"]}, "original_bbox": {"type": ["string", "null"]}
+      }
+    },
+    "immutable_hash": {"type": "string", "pattern": "^sha256:"}
+  },
+  "x-caseforge": {
+    "status": "FROZEN_FOR_IMPLEMENTATION", "batch": "B-S3-07",
+    "precedence": ["explicit_counsel_delete", "active_counsel_overlay", "new_generated_state"],
+    "three_way_merge": ["prior_generated_base", "active_counsel_overlay", "new_generated_state"],
+    "conflict_rule": "Material disagreement or an ambiguous/deleted target creates an open conflict; generated state never silently replaces an active counsel overlay.",
+    "storage": "encrypted per-case SQLCipher vault"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/licence_payload_v2.schema.json",
+  "title": "LicencePayload v2 (Stage 4 editions)",
+  "description": "Offline Ed25519-signed licence with editions and a pack subscription separate from the app licence (PRD v4.0 §10). licence_payload.schema.json v1.0.0 stays frozen and valid; v1 licences keep v1 semantics and unlock no Stage 4 surface unless reissued as v2.",
+  "schema_version": "2.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "licence_id", "product", "edition", "issued_at_unix_ms", "expires_at_unix_ms", "pack_subscription_until_unix_ms", "fingerprint_components", "features", "air_gap_forced", "telemetry_allowed", "seat_transfers_per_year", "signer_key_id", "signature_alg", "signature_hex"],
+  "properties": {
+    "schema_version": { "const": "2.0.0" },
+    "licence_id": { "type": "string", "minLength": 1 },
+    "product": { "const": "CaseForge" },
+    "edition": { "enum": ["ADVOCATE", "PRO", "CHAMBERS_FIRM", "JUDICIARY"] },
+    "issued_to_kind": { "enum": ["INDIVIDUAL", "FIRM", "INSTITUTION"] },
+    "issued_at_unix_ms": { "type": "integer", "minimum": 0 },
+    "expires_at_unix_ms": { "type": ["integer", "null"], "description": "App licence expiry. Past => EXPIRED => vault read-only (v1 rule unchanged)." },
+    "pack_subscription_until_unix_ms": { "type": ["integer", "null"], "description": "After this, installed packs stay usable at their last currency_date with an 'updates expired' notice; no new deltas. Never blocks reading or exporting existing work." },
+    "fingerprint_components": {
+      "type": "object", "additionalProperties": false,
+      "required": ["hostname", "username", "machine_guid", "disk_root"],
+      "properties": {
+        "hostname": { "type": "string", "minLength": 8 }, "username": { "type": "string", "minLength": 8 },
+        "machine_guid": { "type": "string", "minLength": 8 }, "disk_root": { "type": "string", "minLength": 8 }
+      }
+    },
+    "features": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": { "enum": ["digest", "voice", "retrieval", "export", "mock_court", "audit", "audit_certificate", "opposition_scan", "witness_matrix", "impeachment_kit", "code_bridge", "foundation_gaps", "deadline_watch", "timed_rehearsal", "currency_treatment", "indic_ingestion", "bundle_exchange", "chambers"] }
+    },
+    "air_gap_forced": { "type": "boolean" },
+    "telemetry_allowed": { "type": "boolean" },
+    "seat_transfers_per_year": { "type": ["integer", "null"], "minimum": 0, "description": "Owner decision Q-S4-07; null = not yet decided (transfer disabled)." },
+    "institution_key_id": { "type": ["string", "null"], "description": "Institution-issued certificate signing key (Q-S4-09); null = per-install key only." },
+    "signer_key_id": { "type": "string", "minLength": 1 },
+    "signature_alg": { "const": "Ed25519" },
+    "signature_hex": { "type": "string", "minLength": 128, "maxLength": 128 },
+    "notes": { "type": ["string", "null"] }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "edition": { "const": "JUDICIARY" } } },
+      "then": { "properties": { "air_gap_forced": { "const": true }, "telemetry_allowed": { "const": false }, "issued_to_kind": { "const": "INSTITUTION" } }, "required": ["issued_to_kind"] }
+    },
+    {
+      "if": { "properties": { "edition": { "not": { "const": "JUDICIARY" } } } },
+      "then": { "properties": { "features": { "not": { "contains": { "const": "chambers" } } } } }
+    }
+  ],
+  "x-caseforge": {
+    "status": "FROZEN_FOR_IMPLEMENTATION",
+    "batch": "B-S4-01",
+    "implemented_by": ["B-S4-22"],
+    "coexists_with": "licence_payload.schema.json v1.0.0 (unchanged)",
+    "prd_refs": ["PRD v4.0 §10", "AC-S4-16.1", "AC-S4-16.2"],
+    "state_machine": ["UNLICENSED", "ACTIVE", "EXPIRED"],
+    "pack_subscription_states": ["SUBSCRIBED", "UPDATES_EXPIRED"],
+    "inherits": "fingerprint 3-of-4, canonical signing bytes, trust file, EXPIRED=read_only_vault and user_data_may_be_ransomed=false from v1 apply unchanged.",
+    "edition_to_feature_map": "Not frozen here. Edition boundaries and prices are owner decision Q-S4-06; the entitlement map is authored in B-S4-22. Until then features[] in each signed payload is the only source of entitlement.",
+    "v1_compatibility": "A valid v1 payload stays ACTIVE/EXPIRED under v1 rules and grants none of the Stage 4 feature ids."
+  }
+}

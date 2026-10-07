@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/bundle_manifest.schema.json",
+  "title": "CaseForge encrypted bundle manifest (.cfbundle)",
+  "description": "Offline, recipient-encrypted, sender-signed exchange of case work (PRD v4.0 §8). USB or LAN only; no cloud, relay, or server. Redacted text never appears anywhere in the bundle.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "bundle_id", "created_at", "app_version", "source_case_id", "sender", "recipients", "crypto", "contents", "redaction_log", "signature_hex"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "bundle_id": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "app_version": { "type": "string" },
+    "source_case_id": { "type": "string" },
+    "sender": {
+      "type": "object", "additionalProperties": false, "required": ["key_id", "signing_public_key_hex", "display_name"],
+      "properties": { "key_id": { "type": "string" }, "signing_public_key_hex": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "display_name": { "type": "string" } }
+    },
+    "recipients": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["key_id", "agreement_public_key_hex", "wrapped_content_key_b64"],
+        "properties": { "key_id": { "type": "string" }, "agreement_public_key_hex": { "type": "string", "pattern": "^[a-f0-9]{64}$" }, "wrapped_content_key_b64": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "crypto": {
+      "type": "object", "additionalProperties": false, "required": ["key_agreement", "kdf", "content_cipher", "signature"],
+      "properties": {
+        "key_agreement": { "const": "X25519" },
+        "kdf": { "const": "HKDF-SHA256" },
+        "content_cipher": { "const": "AES-256-GCM" },
+        "signature": { "const": "Ed25519" }
+      }
+    },
+    "contents": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["item_id", "item_kind", "path", "ciphertext_sha256", "plaintext_bytes", "redacted"],
+        "properties": {
+          "item_id": { "type": "string" },
+          "item_kind": { "enum": ["DIGEST", "DOCUMENT", "GRAPH_SUBSET", "ARGUMENT_TREE", "IMPEACHMENT_KIT", "AUDIT_REPORT", "NOTES", "COUNSEL_CORRECTIONS"] },
+          "path": { "type": "string", "pattern": "^items/[A-Za-z0-9._-]+\\.bin$" },
+          "ciphertext_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "plaintext_bytes": { "type": "integer", "minimum": 0 },
+          "redacted": { "type": "boolean" }
+        }
+      }
+    },
+    "redaction_log": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["item_id", "redaction_count"],
+        "properties": { "item_id": { "type": "string" }, "redaction_count": { "type": "integer", "minimum": 1 } }
+      },
+      "description": "Counts only. Redacted text, offsets, or hashes of redacted text are forbidden."
+    },
+    "signature_hex": { "type": "string", "pattern": "^[a-f0-9]{128}$", "description": "Ed25519 over canonical manifest bytes without signature_hex." }
+  },
+  "x-caseforge": {
+    "status": "FROZEN_FOR_IMPLEMENTATION",
+    "batch": "B-S4-01",
+    "implemented_by": ["B-S4-16"],
+    "prd_refs": ["PRD v4.0 §8", "AC-S4-10.1", "AC-S4-10.2", "AC-S4-10.3", "AC-S4-10.4"],
+    "crypto_note": "Algorithms chosen to match existing primitives (Ed25519 licences/packs, AES-256-GCM protection) plus X25519 for recipient key agreement.",
+    "import_rule": "COUNSEL_CORRECTIONS import as COUNSEL_INPUT attributed to sender.key_id and never override recipient corrections (correction_authority B-S3-07).",
+    "transport": ["USB_FILE", "LAN"]
+  }
+}

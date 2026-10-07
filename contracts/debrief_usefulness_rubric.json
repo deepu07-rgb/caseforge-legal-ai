@@ -1,0 +1,14 @@
+{
+  "schema_version": "caseforge.debrief-usefulness.v1",
+  "human_review_required": true,
+  "minimum_usefulness_score": 3,
+  "planted_weakness_recall_min": 0.8,
+  "criteria": [
+    { "id": "specific_action", "question": "Does the task name a concrete preparation change rather than generic review?" },
+    { "id": "turn_trace", "question": "Does it identify the recorded turn(s) that exposed the issue?" },
+    { "id": "source_or_gap", "question": "Does it link verified sources or explicitly label an inference/gap?" },
+    { "id": "lawyer_usable", "question": "Can counsel accept, edit, dismiss, or complete it without changing source truth?" }
+  ],
+  "reject_examples": ["Review the case", "Prepare better", "Research more law"],
+  "prohibited_claims": ["likely outcome", "will win", "guilty", "sentence", "judge will"]
+}

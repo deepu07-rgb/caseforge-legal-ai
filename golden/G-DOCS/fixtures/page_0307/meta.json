@@ -1,0 +1,23 @@
+{
+  "fixture_id": "G-DOCS/page_0307",
+  "set_id": "G-DOCS",
+  "fixture_version": "1.0.0-GOLDEN",
+  "status": "GOLDEN",
+  "authoritative": true,
+  "batch": "B-S1-05",
+  "primary_acs": [
+    "AC-6.1"
+  ],
+  "jurisdiction": null,
+  "description": "GOLDEN synthetic pedagogy page (page_0307) \u2014 S-SYNTH-GDOCS-500; product-owner locked",
+  "inputs": {
+    "page_text_stub": "page_stub.txt",
+    "content_file": "page_0307.txt"
+  },
+  "known_answer": "known_answer.json",
+  "authored_by": "CaseForge Product Owner",
+  "reviewed_by": "CaseForge Product Owner",
+  "locked_at": "2026-08-06T16:15:22.865997+00:00",
+  "content_hash": "sha256:81e8baecc8296712c3e6cc25f73e782137fa1353695f6bf8a462f37eecaa5f81",
+  "scaffolded_at": "2026-08-06T16:14:59.092128+00:00"
+}

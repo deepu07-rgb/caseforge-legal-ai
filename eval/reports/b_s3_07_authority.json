@@ -1,0 +1,66 @@
+{
+  "batch": "B-S3-07",
+  "generated_at": "2026-08-13T20:37:49.243449+00:00",
+  "implementation_status": "PASS",
+  "formal_acceptance_status": "PASS",
+  "correction_survival": {
+    "metric_id": "correction_survival",
+    "value": 1.0,
+    "numerator": 8,
+    "denominator": 8,
+    "threshold": 1.0,
+    "source_class": "SYNTHETIC_CONTROLLED",
+    "batch": "B-S3-07"
+  },
+  "rerun_matrix": {
+    "skeleton_rebuild": {
+      "route": "case_graph_put_generated",
+      "overlay": "graph",
+      "result": "PASS"
+    },
+    "document_addition_then_rebuild": {
+      "route": "case_graph_put_generated",
+      "overlay": "graph",
+      "result": "PASS"
+    },
+    "recognition_rerun": {
+      "route": "page_text_layer_replace",
+      "overlay": "word",
+      "result": "PASS"
+    },
+    "batch_restart": {
+      "route": "run_unit generated writes",
+      "overlay": "graph_and_word",
+      "result": "PASS"
+    },
+    "pipeline_or_model_upgrade": {
+      "route": "stable source/bbox/base anchors",
+      "overlay": "graph_and_word",
+      "result": "PASS"
+    },
+    "generated_disagreement": {
+      "route": "correction_conflicts",
+      "overlay": "counsel_preserved",
+      "result": "PASS"
+    },
+    "generated_deletion": {
+      "route": "prior authoritative restore",
+      "overlay": "graph",
+      "result": "PASS"
+    },
+    "history_and_revert": {
+      "route": "append_only events plus REVERT",
+      "overlay": "both",
+      "result": "PASS"
+    }
+  },
+  "acceptance_gates": {
+    "AC-S3-7.1": "PASS",
+    "AC-S3-7.2": "PASS",
+    "AC-S3-7.3": "PASS",
+    "AC-S3-7.4": "PASS",
+    "AC-S3-7.5": "PASS",
+    "AC-S3-7.6": "PASS"
+  },
+  "evidence_note": "Controlled deterministic rerun matrix; no model quality claim."
+}

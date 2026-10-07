@@ -1,0 +1,5 @@
+﻿[CASEFORGE CALIBRATION PAGE — SYNTHETIC DRAFT ONLY]
+This is a plain typed English sample page for scaffold smoke-test.
+It is NOT GOLDEN. Not law. Not a client document.
+IN THE MATTER OF: Calibration Only
+ORDER: Labelers use this only to verify the scaffold tool path.

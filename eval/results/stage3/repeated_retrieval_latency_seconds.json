@@ -1,0 +1,6 @@
+{
+  "metric_id": "repeated_retrieval_latency_seconds",
+  "value": 0.14065089999348857,
+  "batch": "B-S3-11",
+  "measured_at": "2026-08-16"
+}

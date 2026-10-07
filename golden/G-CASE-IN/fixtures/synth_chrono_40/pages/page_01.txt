@@ -1,0 +1,11 @@
+IN THE COURT OF [SYNTHETIC CALIBRATION] — page 1 of 40
+Plaintiff: Acme Calibration Pvt. Ltd.
+Defendant: Northern Sample Traders
+
+On 12 March 2023, the parties exchanged correspondence regarding supply of goods.
+Exhibit A-1 was filed with the registry.
+Section 138 of the Negotiable Instruments Act is invoked.
+The plaintiff prays for interim protection and recovery of INR 1,25,000.
+
+[CASEFORGE_SYNTHETIC_CASE]
+NOT LAW — product-owner GOLDEN for AC-6.2 measurement.

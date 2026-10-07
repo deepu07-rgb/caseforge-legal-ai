@@ -1,0 +1,21 @@
+{
+  "fixture_id": "graph-us-controlled-001",
+  "status": "CONTROLLED_SYNTHETIC_NOT_REAL_EVAL",
+  "jurisdiction": "United States",
+  "pages": [
+    {
+      "doc_id": "us-complaint",
+      "page_index": 0,
+      "mean_confidence": 0.95,
+      "text": "Plaintiff: Northwind LLC\nDefendant: Contoso Inc.\nClaim: breach of contract\nDefence: failure to mitigate\nIssue: whether notice was timely\nFact: notice was delivered\nEvidence: certified mail receipt\nWitness: Jordan Lee\nStatement: Jordan mailed the notice\nApplication: motion for preliminary injunction\nHearing: motion hearing conducted\nOrder: motion taken under advisement\nProcedural history: complaint and answer filed\nRelief: compensatory damages\nSection 2 of the Uniform Commercial Code\nRule 65\n410 U.S. 113\nOn 04/05/2025 notice was delivered."
+    }
+  ],
+  "expected_counts": {
+    "party": 2, "claim": 1, "defence": 1, "issue": 1, "fact": 1,
+    "evidence": 1, "witness": 1, "statement": 1, "application": 1,
+    "hearing": 1, "order": 1, "procedure": 1, "relief": 1,
+    "provision": 1, "rule": 1, "authority": 1, "event": 1
+  },
+  "expected_contradictions": 0,
+  "ambiguous_dates": 1
+}

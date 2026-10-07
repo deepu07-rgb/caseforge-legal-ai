@@ -1,0 +1,76 @@
+{
+  "product": "CaseForge",
+  "tool": "eval/bakeoff/run_bakeoff.py",
+  "generated_at": "2026-08-06T16:15:53.705882+00:00",
+  "fixture_filter": "GOLDEN",
+  "fixture_count": 500,
+  "pages_labeled": 500,
+  "candidates": [
+    {
+      "candidate_id": "caseforge.triage.heuristic.v1",
+      "pages": 500,
+      "correct": 500,
+      "accuracy_percent": 100.0,
+      "per_class": {
+        "typed_english": {
+          "support": 200,
+          "correct": 200,
+          "recall_percent": 100.0
+        },
+        "other": {
+          "support": 62,
+          "correct": 62,
+          "recall_percent": 100.0
+        },
+        "mixed": {
+          "support": 63,
+          "correct": 63,
+          "recall_percent": 100.0
+        },
+        "clean_handwriting": {
+          "support": 75,
+          "correct": 75,
+          "recall_percent": 100.0
+        },
+        "messy_handwriting": {
+          "support": 63,
+          "correct": 63,
+          "recall_percent": 100.0
+        },
+        "non_text": {
+          "support": 37,
+          "correct": 37,
+          "recall_percent": 100.0
+        }
+      },
+      "confusion": {
+        "typed_english": {
+          "typed_english": 200
+        },
+        "clean_handwriting": {
+          "clean_handwriting": 75
+        },
+        "messy_handwriting": {
+          "messy_handwriting": 63
+        },
+        "mixed": {
+          "mixed": 63
+        },
+        "other": {
+          "other": 62
+        },
+        "non_text": {
+          "non_text": 37
+        }
+      },
+      "latency_ms_p50": 0.31949998810887337,
+      "latency_ms_p95": 0.4133000038564205,
+      "errors": []
+    }
+  ],
+  "policy": {
+    "synthetic_excluded": true,
+    "ac_6_1_still_requires_500_golden": true,
+    "note": "Bake-off is comparative; AC-6.1 ship gate is separate."
+  }
+}

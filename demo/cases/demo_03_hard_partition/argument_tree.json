@@ -1,0 +1,172 @@
+{
+  "schema_version": "0.1.0-DEMO",
+  "status": "DEMO_SYNTHETIC",
+  "authoritative": false,
+  "fixture_id": "demo/demo_03_hard_partition",
+  "difficulty": "hard",
+  "scoring_rules": {
+    "formula": "VI = 100 - min(Fact, Evidence, Law, Exposure)",
+    "link_scale": "0-100 integer",
+    "missing_link_threshold": 60,
+    "prd_ref": "§8"
+  },
+  "relief_root": {
+    "node_id": "R1",
+    "node_role": "relief_root",
+    "label": "Preliminary decree for partition (1/2) and related declarations",
+    "jurisdiction": "India"
+  },
+  "limbs": [
+    {
+      "node_id": "L1",
+      "node_role": "argument_limb",
+      "parent": "R1",
+      "label": "Property is HUF / ancestral; plaintiffs entitled to half on partition",
+      "theory": "1978 acquisition fed joint family estate; coparcenary/HUF rights survive; exclusive possession by brother does not extinguish share.",
+      "links": {
+        "Fact": 58,
+        "Evidence": 45,
+        "Law": 40,
+        "Exposure": 35
+      },
+      "expected_VI": 65,
+      "anchors": [
+        { "node_id": "A1", "kind": "fact", "ref": "e1", "text": "1978 sale deed in Om Prakash name only" },
+        { "node_id": "A2", "kind": "evidence", "ref": "ev_gap_1", "text": "No schedule of HUF nucleus / other properties" },
+        { "node_id": "A3", "kind": "law", "ref": "HUF proof teaching", "text": "Self-acquired vs HUF characterization is contested and under-documented" }
+      ],
+      "strength_assessment": {
+        "overall": "WEAK",
+        "why": "Fact of acquisition is clear, but HUF character is not proven. Law and Exposure both suffer.",
+        "where_argument_needs_more_strength": [
+          {
+            "link": "Law",
+            "current_score": 40,
+            "gap": "critical",
+            "action": "Build authority map for when property in karta/father's name is HUF vs self-acquired; plead and prove nucleus with accounts if any."
+          },
+          {
+            "link": "Exposure",
+            "current_score": 35,
+            "gap": "critical",
+            "action": "Model defendant exclusive-title counterclaim and adverse possession; prepare limitation clock analysis year-by-year from 1998/2010/2012/2023."
+          },
+          {
+            "link": "Evidence",
+            "current_score": 45,
+            "gap": "material",
+            "action": "Gather family genealogy, other estate assets, tax/electricity patterns, witness affidavits of joint family status."
+          }
+        ],
+        "missing_links_expected": ["Fact", "Evidence", "Law", "Exposure"]
+      }
+    },
+    {
+      "node_id": "L2",
+      "node_role": "argument_limb",
+      "parent": "R1",
+      "label": "1998 oral family settlement crystallized Kavita's half share",
+      "theory": "Family arrangement oral but acted upon; enforceable in equity teaching theory.",
+      "links": {
+        "Fact": 40,
+        "Evidence": 22,
+        "Law": 28,
+        "Exposure": 30
+      },
+      "expected_VI": 78,
+      "anchors": [
+        { "node_id": "A4", "kind": "fact", "ref": "e2", "text": "Oral settlement averred; date approximate" },
+        { "node_id": "A5", "kind": "evidence", "ref": "ev_gap_1", "text": "Zero contemporaneous writing" },
+        { "node_id": "A6", "kind": "law", "ref": "registration/evidence teaching", "text": "Immovable property arrangements often require formalities; oral path is fragile" }
+      ],
+      "strength_assessment": {
+        "overall": "VERY_WEAK — primary integrity failure",
+        "why": "This is the intentional collapse limb. Evidence 22 and Law 28 drag VI to ~78. Do not lead with this limb until fortified.",
+        "where_argument_needs_more_strength": [
+          {
+            "link": "Evidence",
+            "current_score": 22,
+            "gap": "critical",
+            "action": "Find any contemporaneous letter, diary, panchayat note, or conduct (e.g., contribution to construction) that corroborates settlement; without it, de-emphasize limb."
+          },
+          {
+            "link": "Law",
+            "current_score": 28,
+            "gap": "critical",
+            "action": "If oral arrangement cannot be saved, reframe as pure inheritance/partition rights independent of 1998 story — do not rest the case on unprovable oral gift/settlement."
+          },
+          {
+            "link": "Fact",
+            "current_score": 40,
+            "gap": "material",
+            "action": "Stop using approximate '1998-04' unless a witness pins a better date; vague dates invite adverse inference."
+          },
+          {
+            "link": "Exposure",
+            "current_score": 30,
+            "gap": "critical",
+            "action": "Anticipate estoppel/waiver arguments from long silence (1998–2023); document any demands made earlier."
+          }
+        ],
+        "missing_links_expected": ["Fact", "Evidence", "Law", "Exposure"]
+      }
+    },
+    {
+      "node_id": "L3",
+      "node_role": "argument_limb",
+      "parent": "R1",
+      "label": "2008 gift deed is void (undue influence / forgery / not binding on coparceners)",
+      "theory": "Attack deed to clear path to partition; registered form is not conclusive if voidable grounds proven.",
+      "links": {
+        "Fact": 50,
+        "Evidence": 30,
+        "Law": 48,
+        "Exposure": 42
+      },
+      "expected_VI": 70,
+      "anchors": [
+        { "node_id": "A7", "kind": "evidence", "ref": "ev2", "text": "Registered gift exists — formal strength currently favors defendants" },
+        { "node_id": "A8", "kind": "evidence", "ref": "ev_gap_2", "text": "No forensic report yet" },
+        { "node_id": "A9", "kind": "fact", "ref": "e7", "text": "Knowledge claimed only in 2023 — limitation battle" }
+      ],
+      "strength_assessment": {
+        "overall": "WEAK_WITHOUT_FORENSICS",
+        "why": "You cannot beat a registered deed with suspicion alone. Evidence 30 is the choke point; Exposure includes limitation risk.",
+        "where_argument_needs_more_strength": [
+          {
+            "link": "Evidence",
+            "current_score": 30,
+            "gap": "critical",
+            "action": "Commission handwriting/medical capacity evidence; examine attesting witnesses; obtain original deed production."
+          },
+          {
+            "link": "Exposure",
+            "current_score": 42,
+            "gap": "material",
+            "action": "Prepare limitation reply: when cause of action for declaration arose; knowledge pleadings must be particularized."
+          },
+          {
+            "link": "Law",
+            "current_score": 48,
+            "gap": "material",
+            "action": "Separate void vs voidable theories; plead particulars of undue influence; map who can challenge a gift of alleged HUF property."
+          }
+        ],
+        "missing_links_expected": ["Evidence", "Law", "Exposure"]
+      }
+    }
+  ],
+  "pedagogy": {
+    "learning_objective": "Multi-limb tree where the emotionally attractive oral-settlement limb is the integrity disaster. Scorer should surface L2 as weakest (VI ~78).",
+    "expected_scorer_summary": {
+      "weakest_limb": "L2",
+      "weakest_VI": 78,
+      "missing_links_count_at_least": 6
+    },
+    "strategy_note": "Lead with improved L1 (HUF/partition) only after evidence; treat L2 as optional/abandoned until corroborated; L3 requires forensics before trial emphasis.",
+    "compare_with": [
+      "demo_01_easy_dishonour — single strong limb",
+      "demo_02_medium_wrongful_term — evidence gap but law path still coherent"
+    ]
+  }
+}

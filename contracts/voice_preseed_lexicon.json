@@ -1,0 +1,130 @@
+{
+  "schema_version": "1.0.0",
+  "product": "CaseForge",
+  "kind": "lexicon_preseed",
+  "language": "English",
+  "batch": "B-S1-16",
+  "description": "Pre-seed legal English, statute-name, and proper-name patterns (PRD §9). Not law; preparation lexicon only.",
+  "entries": [
+    {
+      "entry_kind": "stt_correction",
+      "surface_form": "section one thirty eight",
+      "corrected_form": "Section 138",
+      "pattern_type": "statute_name"
+    },
+    {
+      "entry_kind": "stt_correction",
+      "surface_form": "i p c",
+      "corrected_form": "IPC",
+      "pattern_type": "statute_name"
+    },
+    {
+      "entry_kind": "stt_correction",
+      "surface_form": "c r p c",
+      "corrected_form": "CrPC",
+      "pattern_type": "statute_name"
+    },
+    {
+      "entry_kind": "stt_correction",
+      "surface_form": "res judicata",
+      "corrected_form": "res judicata",
+      "pattern_type": "legal_english"
+    },
+    {
+      "entry_kind": "stt_correction",
+      "surface_form": "prima facie",
+      "corrected_form": "prima facie",
+      "pattern_type": "legal_english"
+    },
+    {
+      "entry_kind": "stt_correction",
+      "surface_form": "habeas corpus",
+      "corrected_form": "habeas corpus",
+      "pattern_type": "legal_english"
+    },
+    {
+      "entry_kind": "stt_correction",
+      "surface_form": "interlocutory",
+      "corrected_form": "interlocutory",
+      "pattern_type": "legal_english"
+    },
+    {
+      "entry_kind": "stt_correction",
+      "surface_form": "affidavit",
+      "corrected_form": "affidavit",
+      "pattern_type": "legal_english"
+    },
+    {
+      "entry_kind": "stt_correction",
+      "surface_form": "plaintiff",
+      "corrected_form": "plaintiff",
+      "pattern_type": "legal_english"
+    },
+    {
+      "entry_kind": "stt_correction",
+      "surface_form": "defendant",
+      "corrected_form": "defendant",
+      "pattern_type": "legal_english"
+    },
+    {
+      "entry_kind": "stt_correction",
+      "surface_form": "honorable court",
+      "corrected_form": "Honourable Court",
+      "pattern_type": "legal_english"
+    },
+    {
+      "entry_kind": "stt_correction",
+      "surface_form": "my lords",
+      "corrected_form": "My Lords",
+      "pattern_type": "legal_english"
+    },
+    {
+      "entry_kind": "tts_pronunciation_override",
+      "surface_form": "CrPC",
+      "pronunciation": "see are pee see",
+      "pattern_type": "statute_name"
+    },
+    {
+      "entry_kind": "tts_pronunciation_override",
+      "surface_form": "IPC",
+      "pronunciation": "eye pee see",
+      "pattern_type": "statute_name"
+    },
+    {
+      "entry_kind": "tts_pronunciation_override",
+      "surface_form": "Section 138",
+      "pronunciation": "section one thirty eight",
+      "pattern_type": "statute_name"
+    },
+    {
+      "entry_kind": "tts_pronunciation_override",
+      "surface_form": "res judicata",
+      "pronunciation": "rayz joo-dih-kah-tah",
+      "pattern_type": "legal_english"
+    },
+    {
+      "entry_kind": "tts_pronunciation_override",
+      "surface_form": "prima facie",
+      "pronunciation": "pry-muh fay-shee",
+      "pattern_type": "legal_english"
+    },
+    {
+      "entry_kind": "stt_correction",
+      "surface_form": "negotiable instruments act",
+      "corrected_form": "Negotiable Instruments Act",
+      "pattern_type": "statute_name"
+    },
+    {
+      "entry_kind": "stt_correction",
+      "surface_form": "code of civil procedure",
+      "corrected_form": "Code of Civil Procedure",
+      "pattern_type": "statute_name"
+    },
+    {
+      "entry_kind": "stt_correction",
+      "surface_form": "supreme court",
+      "corrected_form": "Supreme Court",
+      "pattern_type": "proper_name"
+    }
+  ]
+}

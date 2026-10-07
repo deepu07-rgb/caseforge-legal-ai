@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/citation_record.schema.json",
+  "title": "CitationRecord",
+  "description": "Verified citation / authority record (PRD §2, §4.3, §7, §16). B-S1-13 freeze.",
+  "schema_version": "2.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "citation_id",
+    "authority_string",
+    "verification_status",
+    "match_score",
+    "retrieved",
+    "user_confirmed",
+    "pipeline",
+    "source_id",
+    "chunk_id",
+    "source_checksum",
+    "chunk_checksum",
+    "trust_level",
+    "authority_type",
+    "temporal_status",
+    "superseded_status",
+    "content_kind"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "2.0.0" },
+    "citation_id": { "type": "string", "minLength": 1 },
+    "query_id": { "type": ["string", "null"] },
+    "authority_string": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Authority / citation string shown to counsel."
+    },
+    "verification_status": {
+      "type": "string",
+      "enum": ["GREEN", "AMBER", "RED"],
+      "description": "Every authority labeled; nothing unlabeled."
+    },
+    "match_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "retrieved": {
+      "type": "boolean",
+      "description": "true if authority was in the RETRIEVE set (G2)."
+    },
+    "user_confirmed": {
+      "type": "boolean",
+      "description": "User override to allow RED into downstream reasoning."
+    },
+    "pack_id": { "type": ["string", "null"] },
+    "source_id": { "type": ["string", "null"] },
+    "chunk_id": { "type": ["string", "null"] },
+    "source_checksum": { "type": ["string", "null"], "pattern": "^(sha256:[a-f0-9]{64})?$" },
+    "chunk_checksum": { "type": ["string", "null"], "pattern": "^(sha256:[a-f0-9]{64})?$" },
+    "trust_level": { "enum": ["OFFICIAL_VERIFIED", "OFFICIAL_UNVERIFIED", "CUSTOM", "DEVELOPMENT_ONLY", "UNKNOWN"] },
+    "authority_type": { "enum": ["CONSTITUTION", "STATUTE", "REGULATION", "RULE", "JUDGMENT", "TREATY", "OFFICIAL_GUIDANCE", "SECONDARY", "CUSTOM", "UNKNOWN"] },
+    "temporal_status": { "enum": ["APPLICABLE", "NOT_YET_EFFECTIVE", "EXPIRED", "UNKNOWN"] },
+    "superseded_status": { "enum": ["CURRENT", "SUPERSEDED", "PARTIALLY_SUPERSEDED", "UNKNOWN"] },
+    "content_kind": { "enum": ["AUTHORITATIVE_TEXT", "DERIVED_SUMMARY", "UNKNOWN"] },
+    "corpus_locus": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "path": { "type": "string" },
+        "char_start": { "type": ["integer", "null"] },
+        "char_end": { "type": ["integer", "null"] },
+        "snippet": { "type": ["string", "null"] }
+      }
+    },
+    "planted_fake": {
+      "type": "boolean",
+      "description": "true for AC-4.3 planted negatives (PLANTED_FAKE)."
+    },
+    "exclude_from_downstream": {
+      "type": "boolean",
+      "description": "true when RED and not user_confirmed."
+    },
+    "pipeline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stages", "index_id"],
+      "properties": {
+        "stages": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["DECOMPOSE", "RETRIEVE", "GENERATE", "VERIFY", "SCORE", "RENDER"]
+          }
+        },
+        "index_id": { "type": "string" },
+        "notes": { "type": ["string", "null"] }
+      }
+    },
+    "notes": { "type": ["string", "null"] }
+  },
+  "x-caseforge": {
+    "status": "FROZEN",
+    "batch": "B-S3-08",
+    "frozen_at": "2026-08-07",
+    "prd_refs": ["§2", "§4.3", "§7", "§15 G2", "§16", "AC-4.3", "AC-7.2"],
+    "normative_invariants": [
+      "Every authority is labeled GREEN, AMBER, or RED.",
+      "Planted fake citation always renders RED (AC-4.3).",
+      "RED is excluded from downstream reasoning unless the user explicitly confirms.",
+      "No citation bypassing retrieval (Guardrail G2) — unretrieved cites are RED.",
+      "Official packs: raw judgment text + neutral citation only."
+      ,"GREEN requires AUTHORITATIVE_TEXT, OFFICIAL_VERIFIED trust, verified source/chunk checksums, APPLICABLE temporal status, and CURRENT supersession. Unknown metadata is never controlling."
+    ],
+    "status_rules": {
+      "GREEN": "Authority string resolves to retrieved corpus text (exact or high match).",
+      "AMBER": "Partial / fuzzy match in corpus or low score — counsel review.",
+      "RED": "Not in corpus, planted fake, or cite outside RETRIEVE set."
+    }
+  }
+}

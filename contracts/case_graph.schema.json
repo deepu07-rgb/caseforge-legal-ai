@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/case_graph.schema.json",
+  "title": "CaseGraph v2",
+  "description": "Litigation-grade case memory. Nodes and edges are authoritative; legacy projections remain for v1 consumers during the frozen migration window.",
+  "schema_version": "2.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "case_id", "jurisdiction", "generated_at", "pipeline", "nodes", "edges", "parties", "chronology", "statutes", "evidence", "prayer_relief", "contradictions", "gaps", "counsel_facts"],
+  "properties": {
+    "schema_version": { "const": "2.0.0" },
+    "case_id": { "type": "string", "minLength": 1 },
+    "jurisdiction": { "enum": ["India", "United States", "Other"] },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "migration": {
+      "type": "object", "additionalProperties": false,
+      "required": ["strategy", "legacy_projections", "migrated_from"],
+      "properties": {
+        "strategy": { "const": "normalized_v2_with_v1_read_projections" },
+        "legacy_projections": { "const": true },
+        "migrated_from": { "type": ["string", "null"] }
+      }
+    },
+    "pipeline": {
+      "type": "object", "additionalProperties": false,
+      "required": ["extractor_id", "recognizer_id", "classifier_id", "entity_resolver_id", "relationship_builder_id", "inference_policy"],
+      "properties": {
+        "extractor_id": { "type": "string" }, "recognizer_id": { "type": "string" }, "classifier_id": { "type": "string" },
+        "entity_resolver_id": { "type": "string" }, "relationship_builder_id": { "type": "string" },
+        "inference_policy": { "const": "inferences_are_never_document_facts" }, "notes": { "type": ["string", "null"] }
+      }
+    },
+    "completeness": { "$ref": "#/$defs/Completeness" },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["merge_engine_id", "precedence", "open_conflicts_from_merge"],
+      "properties": {
+        "merge_engine_id": {"const": "caseforge.authority-three-way-merge.v1"},
+        "precedence": {"const": "active_counsel_overlay_over_generated"},
+        "open_conflicts_from_merge": {"type": "integer", "minimum": 0}
+      }
+    },
+    "nodes": { "type": "array", "items": { "$ref": "#/$defs/GraphNode" } },
+    "edges": { "type": "array", "items": { "$ref": "#/$defs/GraphEdge" } },
+    "parties": { "type": "array", "items": { "$ref": "#/$defs/PartyProjection" } },
+    "chronology": { "type": "array", "items": { "$ref": "#/$defs/EventProjection" } },
+    "statutes": { "type": "array", "items": { "$ref": "#/$defs/LawProjection" } },
+    "evidence": { "type": "array", "items": { "$ref": "#/$defs/EvidenceProjection" } },
+    "procedural_posture": { "type": ["object", "null"] },
+    "prayer_relief": { "type": "array", "items": { "$ref": "#/$defs/ReliefProjection" } },
+    "contradictions": { "type": "array", "items": { "$ref": "#/$defs/Contradiction" } },
+    "gaps": { "type": "array", "items": { "$ref": "#/$defs/Gap" } },
+    "counsel_facts": { "type": "array", "items": { "type": "object" } }
+  },
+  "$defs": {
+    "SourcePointer": {
+      "type": "object", "additionalProperties": false,
+      "required": ["doc_id", "page_index", "kind", "char_start", "char_end", "quote", "content_hash"],
+      "properties": {
+        "doc_id": { "type": "string", "minLength": 1 }, "page_index": { "type": "integer", "minimum": 0 },
+        "kind": { "enum": ["pdf_span", "image_bbox", "page_only", "counsel"] },
+        "char_start": { "type": ["integer", "null"], "minimum": 0 }, "char_end": { "type": ["integer", "null"], "minimum": 0 },
+        "bbox": { "type": ["array", "null"], "items": { "type": "number" }, "minItems": 4, "maxItems": 4 },
+        "quote": { "type": ["string", "null"] }, "content_hash": { "type": ["string", "null"] }
+      }
+    },
+    "Provenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sources", "confidence", "origin", "pipeline_version", "recorded_at", "counsel_confirmed", "correction_lineage"],
+      "properties": {
+        "sources": { "type": "array", "items": { "$ref": "#/$defs/SourcePointer" }, "minItems": 1 },
+        "source": { "description": "v1 read projection of sources[0]; retained during migration", "oneOf": [{ "$ref": "#/$defs/SourcePointer" }, { "type": "array", "items": { "$ref": "#/$defs/SourcePointer" }, "minItems": 1 }] },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "origin": { "enum": ["EXTRACTED", "INFERRED", "SOURCED_BY_COUNSEL", "USER_EDIT", "MIGRATED"] },
+        "pipeline_version": { "type": "string", "minLength": 1 }, "recorded_at": { "type": "string", "format": "date-time" },
+        "counsel_confirmed": { "type": "boolean" }, "correction_lineage": { "type": "array", "items": { "type": "string" } },
+        "reviewed": { "type": "boolean" }, "notes": { "type": ["string", "null"] }
+      }
+    },
+    "DateExpression": {
+      "type": "object", "additionalProperties": false,
+      "required": ["raw", "kind", "precision", "status", "candidates", "resolved"],
+      "properties": {
+        "raw": { "type": "string" }, "kind": { "enum": ["exact", "partial", "range", "relative", "unknown"] },
+        "precision": { "enum": ["day", "month", "year", "range", "relative", "unknown"] },
+        "status": { "enum": ["resolved", "ambiguous", "unresolved", "disputed"] },
+        "candidates": { "type": "array", "items": { "type": "string" } }, "resolved": { "type": ["string", "null"] },
+        "range_start": { "type": ["string", "null"] }, "range_end": { "type": ["string", "null"] }, "relative_to": { "type": ["string", "null"] }
+      }
+    },
+    "GraphNode": {
+      "type": "object", "additionalProperties": false,
+      "required": ["node_id", "node_type", "label", "status", "attributes", "provenance"],
+      "properties": {
+        "node_id": { "type": "string", "minLength": 1 },
+        "node_type": { "enum": ["party", "claim", "cause_or_ground", "defence", "counterclaim", "issue", "sub_issue", "relief", "fact", "evidence", "exhibit", "document", "witness", "statement", "event", "procedure", "application", "hearing", "order", "statute", "rule", "authority", "provision", "argument", "interpretation"] },
+        "label": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["material", "admitted", "disputed", "inferred", "pleaded", "unknown"] },
+        "attributes": {
+          "type": "object", "additionalProperties": false,
+          "properties": {
+            "aliases": { "type": "array", "items": { "type": "string" } }, "role": { "type": ["string", "null"] }, "side": { "type": ["string", "null"] },
+            "event_type": { "type": ["string", "null"] }, "date": { "oneOf": [{ "$ref": "#/$defs/DateExpression" }, { "type": "null" }] },
+            "jurisdiction": { "type": ["string", "null"] }, "citation": { "type": ["string", "null"] },
+            "document_id": { "type": ["string", "null"] }, "statement_kind": { "type": ["string", "null"] },
+            "alternative_group": { "type": ["string", "null"] }
+          }
+        },
+        "provenance": { "$ref": "#/$defs/Provenance" }
+      }
+    },
+    "GraphEdge": {
+      "type": "object", "additionalProperties": false,
+      "required": ["edge_id", "edge_type", "from_node_id", "to_node_id", "status", "provenance"],
+      "properties": {
+        "edge_id": { "type": "string" },
+        "edge_type": { "enum": ["alias_of", "has_role", "asserts", "denies", "supports", "contradicts", "fact_to_document", "fact_to_evidence", "issue_to_fact", "issue_to_law", "argument_to_support", "witness_to_statement", "exhibit_to_document", "procedure_to_order", "sub_issue_of", "alternative_to", "mentions"] },
+        "from_node_id": { "type": "string" }, "to_node_id": { "type": "string" },
+        "status": { "enum": ["extracted", "candidate", "confirmed", "rejected", "inferred"] },
+        "provenance": { "$ref": "#/$defs/Provenance" }
+      }
+    },
+    "Contradiction": {
+      "type": "object", "additionalProperties": false,
+      "required": ["contradiction_id", "summary", "left_ref", "right_ref", "left_source", "right_source", "basis", "status", "confidence", "provenance"],
+      "properties": {
+        "contradiction_id": { "type": "string" }, "summary": { "type": "string" }, "left_ref": { "type": "string" }, "right_ref": { "type": "string" },
+        "left_source": { "$ref": "#/$defs/SourcePointer" }, "right_source": { "$ref": "#/$defs/SourcePointer" },
+        "basis": { "enum": ["explicit_negation", "incompatible_value", "temporal_impossibility"] }, "status": { "enum": ["candidate", "confirmed", "rejected"] },
+        "severity": { "enum": ["low", "medium", "high"] }, "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "provenance": { "$ref": "#/$defs/Provenance" }
+      }
+    },
+    "Gap": {
+      "type": "object", "additionalProperties": false,
+      "required": ["gap_id", "concept", "topic", "reason", "status"],
+      "properties": {
+        "gap_id": { "type": "string" }, "concept": { "type": "string" }, "topic": { "type": "string" }, "reason": { "enum": ["not_found", "low_confidence", "unresolved_reference", "ambiguous", "incomplete_link"] },
+        "question_prompt": { "type": ["string", "null"] }, "status": { "enum": ["open", "answered", "skipped"] }, "answered_fact_id": { "type": ["string", "null"] }
+      }
+    },
+    "Completeness": { "type": ["object", "null"], "properties": { "score_0_100": { "type": "integer", "minimum": 0, "maximum": 100 }, "open_gaps": { "type": "integer", "minimum": 0 }, "formula": { "type": "string" }, "score_id": { "type": ["string", "null"] } } },
+    "ProjectionProvenance": { "$ref": "#/$defs/Provenance" },
+    "PartyProjection": { "type": "object", "required": ["party_id", "display_name", "role", "provenance"], "properties": { "party_id": { "type": "string" }, "display_name": { "type": "string" }, "role": { "type": "string" }, "side": { "type": ["string", "null"] }, "aliases": { "type": "array", "items": { "type": "string" } }, "provenance": { "$ref": "#/$defs/ProjectionProvenance" } } },
+    "EventProjection": { "type": "object", "required": ["event_id", "date", "date_precision", "date_expression", "summary", "sort_key", "provenance"], "properties": { "event_id": { "type": "string" }, "date": { "type": "string" }, "date_precision": { "type": "string" }, "date_expression": { "$ref": "#/$defs/DateExpression" }, "summary": { "type": "string" }, "sort_key": { "type": "string" }, "event_type": { "type": "string" }, "provenance": { "$ref": "#/$defs/ProjectionProvenance" } } },
+    "LawProjection": { "type": "object", "required": ["statute_id", "label", "law_type", "provenance"], "properties": { "statute_id": { "type": "string" }, "label": { "type": "string" }, "law_type": { "enum": ["statute", "rule", "authority", "provision"] }, "jurisdiction": { "type": ["string", "null"] }, "citation_raw": { "type": ["string", "null"] }, "provenance": { "$ref": "#/$defs/ProjectionProvenance" } } },
+    "EvidenceProjection": { "type": "object", "required": ["evidence_id", "label", "kind", "provenance"], "properties": { "evidence_id": { "type": "string" }, "label": { "type": "string" }, "doc_id": { "type": ["string", "null"] }, "kind": { "type": "string" }, "provenance": { "$ref": "#/$defs/ProjectionProvenance" } } },
+    "ReliefProjection": { "type": "object", "required": ["relief_id", "text", "provenance"], "properties": { "relief_id": { "type": "string" }, "text": { "type": "string" }, "quantum": { "type": ["string", "null"] }, "provenance": { "$ref": "#/$defs/ProjectionProvenance" } } }
+  },
+  "x-caseforge": {
+    "status": "FROZEN_FOR_IMPLEMENTATION",
+    "batch": "B-S3-06",
+    "frozen_at": "2026-08-14",
+    "migration_rule": "v2 nodes/edges are authoritative; v1 projections remain readable; v1 stored graphs require deterministic re-extraction before v2-only features",
+    "invariants": [
+      "Every node and edge has source pointers, confidence, origin, pipeline version, timestamp, counsel state, and correction lineage.",
+      "INFERRED nodes are never presented as extracted document facts.",
+      "Ambiguous dates remain unresolved until source evidence or counsel resolves them.",
+      "Same-date events alone never create contradictions.",
+      "Empty concepts produce explicit gaps."
+    ]
+  }
+}

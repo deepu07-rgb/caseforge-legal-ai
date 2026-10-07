@@ -1,0 +1,5 @@
+[CASEFORGE_SYNTH_NOT_LAW pack=S-SYNTH-GRETRIEVAL-v1]
+Neutral citation: 549 U.S. DEMO 12
+Court: synthetic United States
+The Court held that equal protection rational basis review.
+This excerpt is product-owner synthetic GOLDEN material for retrieval metrics only.

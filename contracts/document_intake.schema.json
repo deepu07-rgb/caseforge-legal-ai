@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/document_intake.schema.json",
+  "title": "DocumentIntake",
+  "description": "Case document metadata for intake (PRD §5). B-S1-04. Originals stored encrypted in case vault.",
+  "schema_version": "0.1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "doc_id",
+    "original_filename",
+    "type_tag",
+    "language_tag",
+    "source_format",
+    "byte_size",
+    "ingested_at_unix_ms"
+  ],
+  "properties": {
+    "doc_id": { "type": "string", "minLength": 1 },
+    "original_filename": { "type": "string", "minLength": 1 },
+    "type_tag": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Editable type tag; extension stub suggests PDF|DOCX|JPG|PNG|OTHER until AC-5.1 ML."
+    },
+    "language_tag": { "type": "string", "default": "en" },
+    "source_format": {
+      "type": "string",
+      "enum": ["pdf", "docx", "jpg", "png", "txt"],
+      "description": "Allowed sources this batch (Phone Capture later)."
+    },
+    "byte_size": { "type": "integer", "minimum": 0 },
+    "page_count": {
+      "type": ["integer", "null"],
+      "description": "Placeholder null until docpipe."
+    },
+    "per_page_quality_grade": {
+      "type": ["string", "null"],
+      "description": "Placeholder until quality grading."
+    },
+    "ingested_at_unix_ms": { "type": "integer" }
+  },
+  "x-caseforge": {
+    "status": "FROZEN",
+    "batch": "B-S1-04",
+    "prd_refs": ["§5"],
+    "storage": "SQLCipher BLOB in case.db documents.content",
+    "out_of_scope": ["phone_capture", "ocr", "htr", "auto_type_ml"]
+  }
+}

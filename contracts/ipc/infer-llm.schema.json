@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/ipc/infer-llm.schema.json",
+  "title": "InferLlmIpc",
+  "description": "JSON-RPC methods for the infer-llm sidecar (PRD §4.1, §4.2).",
+  "$comment": "BLOCKED — needs Layer 2 authoring. Method catalogue not in PRD Layer 1. See QUESTIONS.md Q-IPC-01.",
+  "type": "object",
+  "required": ["schema_version", "sidecar"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "0.1.0-BLOCKED"
+    },
+    "sidecar": {
+      "type": "string",
+      "const": "infer-llm"
+    },
+    "methods": {
+      "type": "array",
+      "description": "Frozen method catalogue. Empty until Q-IPC-01 resolved.",
+      "const": []
+    }
+  },
+  "x-caseforge": {
+    "status": "BLOCKED",
+    "batch": "B-S0-02",
+    "prd_refs": ["§4.1", "§4.2", "§4.3"],
+    "sidecar": "infer-llm",
+    "runtime_notes_from_prd": [
+      "llama.cpp (pinned commit) or equivalent GGUF runtime.",
+      "Loads exactly one GGUF at a time.",
+      "Spawned on demand; killed when idle.",
+      "At most one large model resident system-wide (8 GB choreography)."
+    ],
+    "model_roles_served": [
+      "Primary Reasoner / Adversary / Critic",
+      "Fallback / Lite"
+    ],
+    "methods": [],
+    "open_questions": ["Q-IPC-01"]
+  }
+}

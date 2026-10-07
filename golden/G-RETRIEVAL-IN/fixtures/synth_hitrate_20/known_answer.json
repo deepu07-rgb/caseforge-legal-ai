@@ -1,0 +1,210 @@
+{
+  "schema_version": "1.0.0",
+  "authoritative": false,
+  "status": "GOLDEN",
+  "fixture_id": "G-RETRIEVAL-IN/synth_hitrate_20",
+  "jurisdiction": "India",
+  "product_owner_pack": "S-SYNTH-GRETRIEVAL-v1",
+  "authored_by": "CaseForge Product Owner",
+  "locked_at": "2026-08-06",
+  "top_k": 8,
+  "ac_7_2_threshold": 0.85,
+  "corpus_root": "corpus",
+  "queries": [
+    {
+      "query_id": "g-retrieval-in-q01",
+      "query": "contract consideration consideration neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: [2020] INSC DEMO 1",
+        "[2020] INSC DEMO 1"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-in-q02",
+      "query": "specific performance specific neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: [2019] INSC DEMO 2",
+        "[2019] INSC DEMO 2"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-in-q03",
+      "query": "arbitration agreement writing arbitration neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: [2018] INSC DEMO 3",
+        "[2018] INSC DEMO 3"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-in-q04",
+      "query": "limitation promissory note limitation neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: [2017] INSC DEMO 4",
+        "[2017] INSC DEMO 4"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-in-q05",
+      "query": "injunction negative covenant injunction neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: [2016] INSC DEMO 5",
+        "[2016] INSC DEMO 5"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-in-q06",
+      "query": "bail conditions reasonable bail neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: [2015] INSC DEMO 6",
+        "[2015] INSC DEMO 6"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-in-q07",
+      "query": "natural justice hearing natural neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: [2014] INSC DEMO 7",
+        "[2014] INSC DEMO 7"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-in-q08",
+      "query": "writ jurisdiction Article 226 writ neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: [2013] INSC DEMO 8",
+        "[2013] INSC DEMO 8"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-in-q09",
+      "query": "consumer complaint maintainability consumer neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: [2012] INSC DEMO 9",
+        "[2012] INSC DEMO 9"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-in-q10",
+      "query": "negotiable instruments cheque section neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: [2011] INSC DEMO 10",
+        "[2011] INSC DEMO 10"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-in-q11",
+      "query": "partition ancestral property partition neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: [2010] INSC DEMO 11",
+        "[2010] INSC DEMO 11"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-in-q12",
+      "query": "temporary injunction convenience temporary neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: [2009] INSC DEMO 12",
+        "[2009] INSC DEMO 12"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-in-q13",
+      "query": "locus standi public interest locus neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: [2008] INSC DEMO 13",
+        "[2008] INSC DEMO 13"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-in-q14",
+      "query": "res judicata re-litigation res neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: [2007] INSC DEMO 14",
+        "[2007] INSC DEMO 14"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-in-q15",
+      "query": "damages employment contract damages neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: [2006] INSC DEMO 15",
+        "[2006] INSC DEMO 15"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-in-q16",
+      "query": "stamp duty conveyance stamp neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: [2005] INSC DEMO 16",
+        "[2005] INSC DEMO 16"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-in-q17",
+      "query": "registration sale deed registration neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: [2004] INSC DEMO 17",
+        "[2004] INSC DEMO 17"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-in-q18",
+      "query": "quashing FIR CrPC quashing neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: [2003] INSC DEMO 18",
+        "[2003] INSC DEMO 18"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-in-q19",
+      "query": "maintenance section 125 maintenance neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: [2002] INSC DEMO 19",
+        "[2002] INSC DEMO 19"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-in-q20",
+      "query": "anticipatory bail exceptional anticipatory neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: [2001] INSC DEMO 20",
+        "[2001] INSC DEMO 20"
+      ],
+      "must_appear_in_top_k": 8
+    }
+  ],
+  "planted_fake_citations": [
+    {
+      "citation_string": "PLANTED_FAKE v. Placeholder, (2099) 1 SYNTH 1 (Neverland HC)",
+      "must_verification_status": "RED",
+      "exclude_from_downstream_unless_user_confirms": true,
+      "notes": "AC-4.3 negative \u2014 not a real authority."
+    }
+  ],
+  "outside_retrieve_rule": {
+    "description": "Authority not in RETRIEVE set must be RED (G2)",
+    "sample_authority": "COMPLETELY_UNKNOWN_AUTHORITY_ZZZ_999",
+    "must_verification_status": "RED"
+  },
+  "eval_policy": "SCORE_WHEN_STATUS_GOLDEN",
+  "index_id": "caseforge.retrieve.lexical.v1"
+}

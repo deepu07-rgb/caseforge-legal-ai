@@ -1,0 +1,19 @@
+{
+  "schema_version": "0.1.0-PLACEHOLDER",
+  "authoritative": false,
+  "status": "SYNTHETIC_PLACEHOLDER",
+  "fixture_id": "G-RETRIEVAL-IN/micro_001",
+  "jurisdiction": "India",
+  "query_id": "synth-ret-in-001",
+  "known_relevant_authorities": [],
+  "top_k": 8,
+  "planted_fake_citations": [
+    {
+      "citation_string": "PLANTED_FAKE v. Placeholder, (2099) 1 SYNTH 1 (Neverland HC)",
+      "must_verification_status": "RED",
+      "exclude_from_downstream_unless_user_confirms": true,
+      "notes": "Negative test material for AC-4.3. Not a real authority."
+    }
+  ],
+  "eval_policy": "SKIP_IF_STATUS_NOT_GOLDEN"
+}

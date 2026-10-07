@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/audit_report.schema.json",
+  "title": "CaseForge Citation & Quote Audit report",
+  "description": "Per-item audit of every citation and quotation in a draft or filing against installed packs (PRD v4.0 §7.1). Classification is host-assigned via the B-S3-14 verifier; no model output may set result.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "audit_id", "pipeline_id", "generated_at", "subject", "pack_snapshot", "items", "counts"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "audit_id": { "type": "string", "minLength": 1 },
+    "pipeline_id": { "const": "caseforge.audit.v1" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "case_id": { "type": ["string", "null"] },
+    "subject": {
+      "type": "object", "additionalProperties": false,
+      "required": ["subject_kind", "sha256", "filename", "format"],
+      "properties": {
+        "subject_kind": { "enum": ["OWN_DRAFT", "EXTERNAL_FILING", "JUDGE_TEXT"] },
+        "doc_id": { "type": ["string", "null"] },
+        "filing_party_id": { "type": ["string", "null"] },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "filename": { "type": "string", "minLength": 1 },
+        "format": { "enum": ["docx", "pdf", "drafting_surface", "txt"] }
+      },
+      "allOf": [ { "if": { "properties": { "subject_kind": { "const": "EXTERNAL_FILING" } } }, "then": { "properties": { "filing_party_id": { "type": "string", "minLength": 1 } }, "required": ["filing_party_id"] } } ]
+    },
+    "pack_snapshot": { "type": "array", "items": { "$ref": "#/$defs/PackSnapshot" } },
+    "model_fingerprint": { "type": ["string", "null"], "description": "Set only if a generative step ran (e.g. attribution assist); classification path itself is model-free." },
+    "items": { "type": "array", "items": { "$ref": "#/$defs/Item" } },
+    "counts": {
+      "type": "object", "additionalProperties": false,
+      "required": ["VERIFIED", "VERIFIED_WITH_NOTE", "MISQUOTED", "NOT_IN_CORPUS", "SUPERSEDED", "NOT_APPLICABLE", "CUSTOM_SOURCE"],
+      "properties": {
+        "VERIFIED": { "type": "integer", "minimum": 0 }, "VERIFIED_WITH_NOTE": { "type": "integer", "minimum": 0 }, "MISQUOTED": { "type": "integer", "minimum": 0 },
+        "NOT_IN_CORPUS": { "type": "integer", "minimum": 0 }, "SUPERSEDED": { "type": "integer", "minimum": 0 }, "NOT_APPLICABLE": { "type": "integer", "minimum": 0 }, "CUSTOM_SOURCE": { "type": "integer", "minimum": 0 }
+      }
+    }
+  },
+  "$defs": {
+    "PackSnapshot": {
+      "type": "object", "additionalProperties": false,
+      "required": ["pack_id", "version", "currency_date", "trust_level"],
+      "properties": { "pack_id": { "type": "string" }, "version": { "type": "string" }, "currency_date": { "type": ["string", "null"], "format": "date" }, "trust_level": { "enum": ["OFFICIAL_VERIFIED", "CUSTOM", "DEVELOPMENT_ONLY"] } }
+    },
+    "LegalLocator": {
+      "type": "object", "additionalProperties": false,
+      "required": ["pack_id", "source_id", "chunk_id", "char_start", "char_end", "excerpt"],
+      "properties": {
+        "pack_id": { "type": "string" }, "source_id": { "type": "string" }, "chunk_id": { "type": "string" },
+        "char_start": { "type": "integer", "minimum": 0 }, "char_end": { "type": "integer", "minimum": 0 },
+        "page_index": { "type": ["integer", "null"], "minimum": 0 }, "paragraph": { "type": ["string", "null"] },
+        "excerpt": { "type": "string" }
+      }
+    },
+    "Note": {
+      "type": "object", "additionalProperties": false, "required": ["note_kind", "text"],
+      "properties": { "note_kind": { "enum": ["TREATMENT", "SUPERSESSION", "CURRENCY", "CODE_BRIDGE"] }, "text": { "type": "string" }, "ref_id": { "type": ["string", "null"] } }
+    },
+    "Item": {
+      "type": "object", "additionalProperties": false,
+      "required": ["item_id", "kind", "draft_char_start", "draft_char_end", "draft_text", "result", "resolved", "pinpoint", "notes", "misquote", "proposition_ids"],
+      "properties": {
+        "item_id": { "type": "string" },
+        "kind": { "enum": ["CITATION", "QUOTATION"] },
+        "citation_kind": { "enum": ["CASE", "STATUTE", "RULE", "NEUTRAL_CITATION", "REPORTER", "OTHER", null] },
+        "extraction_rule_id": { "type": ["string", "null"], "description": "Pack-supplied pattern id for jurisdiction-specific citation formats." },
+        "draft_char_start": { "type": "integer", "minimum": 0 },
+        "draft_char_end": { "type": "integer", "minimum": 0 },
+        "draft_text": { "type": "string", "minLength": 1 },
+        "attributed_citation_item_id": { "type": ["string", "null"], "description": "For QUOTATION: the citation the quote is attributed to." },
+        "result": { "enum": ["VERIFIED", "VERIFIED_WITH_NOTE", "MISQUOTED", "NOT_IN_CORPUS", "SUPERSEDED", "NOT_APPLICABLE", "CUSTOM_SOURCE"] },
+        "resolved": { "oneOf": [{ "$ref": "#/$defs/LegalLocator" }, { "type": "null" }] },
+        "pinpoint": {
+          "type": "object", "additionalProperties": false, "required": ["claimed", "status"],
+          "properties": { "claimed": { "type": ["string", "null"] }, "status": { "enum": ["MATCH", "MISMATCH", "NOT_CHECKED", "NO_PINPOINT"] } }
+        },
+        "notes": { "type": "array", "items": { "$ref": "#/$defs/Note" } },
+        "misquote": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object", "additionalProperties": false, "required": ["nearest", "diff_ops"],
+              "properties": {
+                "nearest": { "$ref": "#/$defs/LegalLocator" },
+                "diff_ops": { "type": "array", "minItems": 1, "items": { "type": "object", "additionalProperties": false, "required": ["op", "text"], "properties": { "op": { "enum": ["EQUAL", "INSERT", "DELETE"] }, "text": { "type": "string" } } } }
+              }
+            }
+          ]
+        },
+        "proposition_ids": { "type": "array", "items": { "type": "string" }, "description": "B-S3-14 ledger entries that produced the classification." }
+      },
+      "allOf": [
+        { "if": { "properties": { "result": { "enum": ["VERIFIED", "VERIFIED_WITH_NOTE", "MISQUOTED", "SUPERSEDED", "NOT_APPLICABLE", "CUSTOM_SOURCE"] } } }, "then": { "properties": { "resolved": { "$ref": "#/$defs/LegalLocator" } } } },
+        { "if": { "properties": { "result": { "const": "NOT_IN_CORPUS" } } }, "then": { "properties": { "resolved": { "type": "null" } } } },
+        { "if": { "properties": { "result": { "const": "MISQUOTED" } } }, "then": { "properties": { "misquote": { "type": "object" } } }, "else": { "properties": { "misquote": { "type": "null" } } } },
+        { "if": { "properties": { "result": { "const": "VERIFIED_WITH_NOTE" } } }, "then": { "properties": { "notes": { "minItems": 1 } } } }
+      ]
+    }
+  },
+  "x-caseforge": {
+    "status": "FROZEN_FOR_IMPLEMENTATION",
+    "batch": "B-S4-01",
+    "implemented_by": ["B-S4-04", "B-S4-06", "B-S4-19"],
+    "prd_refs": ["PRD v4.0 §7.1", "AC-S4-01.1", "AC-S4-01.2", "AC-S4-01.3"],
+    "vocabulary_rule": "NOT_IN_CORPUS is a repository gap, never labelled 'fake' in UI copy.",
+    "green_rule": "Only VERIFIED and VERIFIED_WITH_NOTE may render GREEN, and only from a host-verified OFFICIAL_VERIFIED/APPLICABLE/CURRENT source."
+  }
+}

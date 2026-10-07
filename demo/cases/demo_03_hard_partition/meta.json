@@ -1,0 +1,22 @@
+{
+  "fixture_id": "demo/demo_03_hard_partition",
+  "status": "DEMO_SYNTHETIC",
+  "authoritative": false,
+  "difficulty": "hard",
+  "jurisdiction": "India",
+  "label": "Hard — ancestral partition + oral gift + limitation + ouster",
+  "batch_note": "Not B-S1-06. Pedagogical only. Highest VI for integrity engine stress.",
+  "primary_teaching": [
+    "Three competing limbs under one relief",
+    "Law link fails on oral gift theory",
+    "Exposure high: counterclaim for exclusive title + mesne profits",
+    "Contradiction between family settlement story and mutation records"
+  ],
+  "inputs": {
+    "case_packet": "case_packet.txt",
+    "known_answer": "known_answer.json",
+    "argument_tree": "argument_tree.json",
+    "narrative": "narrative.md"
+  },
+  "disclaimer": "SYNTHETIC_DEMO_NOT_LAW — entirely fictional property dispute for argument-stress testing."
+}

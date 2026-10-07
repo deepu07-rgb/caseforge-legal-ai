@@ -1,0 +1,2 @@
+[CASEFORGE_TRIAGE_CLASS:other]
+[SYNTHETIC] non-english placeholder 日本語 한국어 العربية

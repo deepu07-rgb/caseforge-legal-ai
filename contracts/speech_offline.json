@@ -1,0 +1,41 @@
+{
+  "$id": "caseforge.speech.offline-en.v2",
+  "batch": "B-S3-20",
+  "language": "English",
+  "network_allowed": false,
+  "real_audio_required": true,
+  "developer_stub_production_eligible": false,
+  "stt": {
+    "adapter": "faster-whisper",
+    "model": "Systran/faster-whisper-small",
+    "source_model": "OpenAI Whisper small",
+    "licence": "MIT",
+    "local_files_only": true
+  },
+  "tts": {
+    "adapter": "Windows SAPI",
+    "model_distribution": "Operating-system installed voices; no third-party voice weights bundled",
+    "roles": ["bench", "opposition", "witness"]
+  },
+  "retention": {
+    "audio": "TRANSIENT_DELETE_AFTER_STT_OR_TTS",
+    "raw_transcript": "RETAIN_WITH_COMMITTED_SESSION",
+    "staged_transcript": "RETAIN_WITH_COMMITTED_SESSION",
+    "correction_lineage": "RETAIN_WITH_COMMITTED_SESSION",
+    "audio_sha256": "RETAIN_WITH_COMMITTED_SESSION"
+  },
+  "g_audio": {
+    "source_class": "HUMAN_AUDIO_RIGHTS_CLEARED",
+    "word_error_rate_max": 0.1,
+    "critical_term_error_rate_max": 0.02,
+    "critical_term_categories": [
+      "LEGAL_NAME",
+      "CITATION",
+      "AMOUNT",
+      "PROVISION_NUMBER",
+      "COURTROOM_TERM"
+    ],
+    "minimum_clips": 20,
+    "minimum_speakers": 5
+  }
+}

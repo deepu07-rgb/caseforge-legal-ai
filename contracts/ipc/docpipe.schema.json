@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/ipc/docpipe.schema.json",
+  "title": "DocpipeIpc",
+  "description": "JSON-RPC methods for docpipe, including the PDFium page model and B-S3-04 offline OCR.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "required": ["schema_version", "sidecar", "methods"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "sidecar": {
+      "type": "string",
+      "const": "docpipe"
+    },
+    "methods": {
+      "type": "array",
+      "description": "Frozen method catalogue for B-S1-05 triage and B-S1-06 recognition.",
+      "items": {
+        "type": "object",
+        "required": ["name", "summary"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "summary": { "type": "string" },
+          "params": { "type": "object" },
+          "result": { "type": "object" }
+        }
+      }
+    }
+  },
+  "x-caseforge": {
+    "status": "FROZEN",
+    "batch": "B-S3-06",
+    "prd_refs": ["§4.1", "§4.2", "§6.1", "§6.2", "AC-6.1"],
+    "sidecar": "docpipe",
+    "frozen_methods": [
+      {
+        "name": "docpipe.ping",
+        "summary": "Healthcheck; returns pong + classifier_id."
+      },
+      {
+        "name": "docpipe.version",
+        "summary": "Sidecar version, batch, classifier_id, recognizer_id, thresholds."
+      },
+      {
+        "name": "docpipe.parse_pdf",
+        "summary": "Parse an in-memory PDF into real pages, text/layout coordinates, OCR routing, explicit failures, and resumable checkpoints."
+      },
+      {
+        "name": "docpipe.triage_pages",
+        "summary": "Classify one or more pages; returns per-page triage_class + confidence."
+      },
+      {
+        "name": "docpipe.recognize_pages",
+        "summary": "Produce word-level text layers with engine confidence and normalized geometry from rendered pages."
+      },
+      {
+        "name": "docpipe.recognize_document",
+        "summary": "Recognize PDF/JPG/PNG content fully offline, routing native and scanned pages and enforcing review gates."
+      },
+      {
+        "name": "docpipe.render_page",
+        "summary": "Return the deterministic processed OCR coordinate surface for human word-overlay inspection."
+      }
+    ],
+    "triage_classes_from_prd": [
+      "typed_english",
+      "other",
+      "mixed",
+      "clean_handwriting",
+      "messy_handwriting",
+      "non_text"
+    ],
+    "runtime_notes_from_prd": [
+      "OCR / vision / HTR pipeline + overnight batch queue.",
+      "Spawned on demand; killed when idle.",
+      "Vision / HTR model used only by docpipe; never concurrent with primary reasoner on 8 GB.",
+      "Overnight batch must be resumable after power loss (AC-6.8).",
+      "Every word has a confidence score; thresholds from constants.json (§6.2)."
+    ],
+    "open_methods": [],
+    "open_questions": ["Q-IPC-01-remainder"],
+    "classifier_note": "classifier_id=caseforge.triage.heuristic.v1 (Q-VISION-01 Stage-1 freeze).",
+    "recognizer_note": "Native PDF text uses caseforge.pdfium.native-text.v1. Scanned/mixed pages use pinned caseforge.ocr.tesseract-eng-fast.v1; warned/empty pages are blocked from automatic extraction."
+  }
+}

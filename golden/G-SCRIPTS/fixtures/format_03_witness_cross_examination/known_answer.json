@@ -1,0 +1,14 @@
+﻿{
+    "expect_stages":  6,
+    "expect_min_turns":  3,
+    "expect_pass":  true,
+    "forbid_sources":  [
+                           "raw_document"
+                       ],
+    "latency_budget_s":  15,
+    "expect_format":  "Witness_Cross_Examination",
+    "expect_sources_subset":  [
+                                  "case_graph",
+                                  "retrieval"
+                              ]
+}

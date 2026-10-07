@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "caseforge.provenance-record.v1",
+  "title": "CaseForge inspectable provenance record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["stable_id", "proposition_class", "origin", "support_state", "title", "verification"],
+  "properties": {
+    "stable_id": { "type": "string", "minLength": 1 },
+    "proposition_class": { "enum": ["FACTUAL_BASIS", "LEGAL_BASIS", "INFERENCE", "COUNSEL_INPUT", "UNSUPPORTED_OR_GAP"] },
+    "origin": { "enum": ["MATTER_EVIDENCE", "LEGAL_AUTHORITY", "COUNSEL_INPUT", "MODEL_INFERENCE", "UNSUPPORTED_GAP"] },
+    "support_state": { "enum": ["GREEN", "AMBER", "RED", "UNSUPPORTED"] },
+    "title": { "type": "string", "minLength": 1 },
+    "verification": { "type": "string", "minLength": 1 },
+    "version": { "type": ["string", "null"] },
+    "doc_id": { "type": ["string", "null"] },
+    "page_index": { "type": ["integer", "null"], "minimum": 0 },
+    "char_start": { "type": ["integer", "null"], "minimum": 0 },
+    "char_end": { "type": ["integer", "null"], "minimum": 0 },
+    "bbox": { "type": ["array", "null"], "items": { "type": "number" } },
+    "pack_id": { "type": ["string", "null"] },
+    "source_id": { "type": ["string", "null"] },
+    "chunk_id": { "type": ["string", "null"] },
+    "section": { "type": ["string", "null"] },
+    "paragraph": { "type": ["string", "null"] },
+    "excerpt": { "type": ["string", "null"] },
+    "support_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "basis_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+  }
+}

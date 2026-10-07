@@ -1,0 +1,122 @@
+{
+  "batch": "B-S3-14",
+  "passed": true,
+  "checks_passed": 21,
+  "checks_total": 21,
+  "checks": [
+    {
+      "name": "five_required_classes",
+      "passed": true,
+      "detail": "{'INFERENCE', 'LEGAL_BASIS', 'UNSUPPORTED_OR_GAP', 'FACTUAL_BASIS', 'COUNSEL_INPUT'}"
+    },
+    {
+      "name": "support_and_render_fields_required",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "exact_substring_offsets",
+      "passed": true,
+      "detail": "source.find(excerpt)"
+    },
+    {
+      "name": "official_trust_required",
+      "passed": true,
+      "detail": "Some(\"OFFICIAL_VERIFIED\")"
+    },
+    {
+      "name": "applicable_required",
+      "passed": true,
+      "detail": "Some(\"APPLICABLE\")"
+    },
+    {
+      "name": "current_required",
+      "passed": true,
+      "detail": "Some(\"CURRENT\")"
+    },
+    {
+      "name": "stable_source_id_required",
+      "passed": true,
+      "detail": "starts_with(\"cfsrc:\")"
+    },
+    {
+      "name": "stable_chunk_id_required",
+      "passed": true,
+      "detail": "starts_with(\"cfchunk:\")"
+    },
+    {
+      "name": "repository_gap_render",
+      "passed": true,
+      "detail": "[REPOSITORY GAP — NOT VERIFIED]"
+    },
+    {
+      "name": "blocked_render",
+      "passed": true,
+      "detail": "[BLOCKED UNSUPPORTED PROPOSITION]"
+    },
+    {
+      "name": "fabricated_id_test",
+      "passed": true,
+      "detail": "fabricated_id_is_gap"
+    },
+    {
+      "name": "altered_quote_test",
+      "passed": true,
+      "detail": "altered_quote_blocked"
+    },
+    {
+      "name": "unsupported_inference_test",
+      "passed": true,
+      "detail": "unsupported_inference_blocked"
+    },
+    {
+      "name": "host_requires_structured_generation",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "host_rejects_unparseable_model_output",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "host_verifies_before_render",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "host_support_source_ipc",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "model_cannot_assign_green",
+      "passed": true,
+      "detail": "[{'proposition_id': 'p1', 'class': 'LEGAL_BASIS', 'text': 'Fake law', 'support_ids': ['fabricated'], 'basis_ids': [], 'support_claims': [{'support_id': 'fabricated', 'exact_excerpt': 'Fake law'}], 'quotation': None}]"
+    },
+    {
+      "name": "unstructured_model_text_not_accepted",
+      "passed": true,
+      "detail": "[]"
+    },
+    {
+      "name": "reasoning_api_requests_ledger",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "reasoning_api_supplies_verified_sources",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "rust_adversarial_command": "cargo test --manifest-path src-tauri/Cargo.toml proposition::tests",
+  "acceptance": {
+    "legal_grounding": "host exact-excerpt + permitted authority policy",
+    "quotation_fidelity": "exact stored substring + Unicode character offsets",
+    "factual_grounding": "exact excerpt + doc_id matter pointer",
+    "inference_grounding": "earlier non-RED proposition bases",
+    "fabricated_ids": "RED and repository gap/blocked",
+    "memory_fallback": "UNSUPPORTED_OR_GAP / repository gap"
+  }
+}

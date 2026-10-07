@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.0.0",
+  "entries": [
+    {
+      "path": "docs/CASEFORGE_STAGE3_AGENTIC_PLAYBOOK.md",
+      "substrings": ["â€”", "â†’", "Â§", "â€œ", "â€", "â‰¤"],
+      "reason": "B-S3-01 documentation intentionally lists common mojibake signatures as detection examples."
+    }
+  ]
+}

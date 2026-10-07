@@ -1,0 +1,8 @@
+{
+  "schema_version":"1.0.0","fixture_id":"HUMAN-LEGAL-SPEECH-PENDING","suite_id":"G-AUDIO-S3","status":"BLOCKED","source_class":"HUMAN_AUDIO_RIGHTS_CLEARED","jurisdiction":"Jurisdiction-neutral",
+  "purposes":["voice-wer","critical-legal-terms"],
+  "source":{"title":"Consented human English legal speech clips","publisher":"TBD","source_url":null,"acquired_at":null},
+  "rights":{"status":"PENDING","basis":"Recorded-speaker consent and distribution terms have not been obtained.","confidential":false,"distribution_scope":"internal_only","may_redistribute":false},
+  "assets":[],"expected_answer":{"path":null,"authored_by":[],"status":"NOT_AUTHORED","reviewed_by":[],"adjudicator":null},
+  "characteristics":["human-speech","English","legal-terms"],"notes":"Blocked. Synthetic audio must not be substituted for this evidence class."
+}

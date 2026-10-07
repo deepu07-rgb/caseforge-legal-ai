@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/statute_mapping.schema.json",
+  "title": "CaseForge Code Bridge annotation",
+  "description": "Succession status and governing-code basis for one statutory reference (PRD v4.0 §7.4). Values come only from STATUTE_SUCCESSION rule-table rows; missing case dates yield NEEDS_COUNSEL_INPUT.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "reference_id", "context", "ref_text", "code", "provision", "equivalence", "counterpart", "rule_ids", "governing", "side_by_side"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "reference_id": { "type": "string" },
+    "context": { "enum": ["CASE_GRAPH", "DRAFT", "RETRIEVED_AUTHORITY", "AUDIT_ITEM", "EXTERNAL_FILING"] },
+    "context_ref_id": { "type": ["string", "null"] },
+    "ref_text": { "type": "string", "minLength": 1 },
+    "code": { "type": "string", "minLength": 1 },
+    "provision": { "type": "string", "minLength": 1 },
+    "equivalence": { "enum": ["IDENTICAL", "RENUMBERED", "MODIFIED", "NEW", "OMITTED", "UNKNOWN"] },
+    "counterpart": {
+      "oneOf": [
+        { "type": "null" },
+        { "type": "object", "additionalProperties": false, "required": ["direction", "code", "provision"], "properties": { "direction": { "enum": ["SUCCESSOR", "PREDECESSOR"] }, "code": { "type": "string" }, "provision": { "type": "string" } } }
+      ]
+    },
+    "rule_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "governing": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "governing_code", "basis_date_kind", "basis_date", "basis_locator", "transition_rule_id"],
+      "properties": {
+        "status": { "enum": ["DETERMINED", "NEEDS_COUNSEL_INPUT", "UNKNOWN"] },
+        "governing_code": { "type": ["string", "null"] },
+        "basis_date_kind": { "enum": ["OFFENCE_DATE", "INSTITUTION_DATE", "FILING_DATE", "CAUSE_OF_ACTION_DATE", "EVENT_DATE", null] },
+        "basis_date": { "type": ["string", "null"], "format": "date" },
+        "basis_locator": { "type": ["object", "null"], "description": "MatterLocator or counsel-input record for the basis date." },
+        "transition_rule_id": { "type": ["string", "null"] },
+        "interview_question_id": { "type": ["string", "null"] }
+      },
+      "allOf": [
+        { "if": { "properties": { "status": { "const": "DETERMINED" } } }, "then": { "properties": { "governing_code": { "type": "string" }, "basis_date": { "type": "string" }, "basis_locator": { "type": "object" }, "transition_rule_id": { "type": "string" } } } },
+        { "if": { "properties": { "status": { "const": "NEEDS_COUNSEL_INPUT" } } }, "then": { "properties": { "governing_code": { "type": "null" } } } }
+      ]
+    },
+    "side_by_side": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object", "additionalProperties": false, "required": ["old", "new"],
+          "properties": {
+            "old": { "type": "object", "required": ["pack_id", "source_id", "chunk_id", "excerpt"] },
+            "new": { "type": "object", "required": ["pack_id", "source_id", "chunk_id", "excerpt"] }
+          }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    { "if": { "properties": { "equivalence": { "const": "MODIFIED" } } }, "then": { "properties": { "side_by_side": { "type": "object" } } } },
+    { "if": { "properties": { "equivalence": { "const": "UNKNOWN" } } }, "then": { "properties": { "rule_ids": { "maxItems": 0 } } }, "else": { "properties": { "rule_ids": { "minItems": 1 } } } }
+  ],
+  "x-caseforge": {
+    "status": "FROZEN_FOR_IMPLEMENTATION",
+    "batch": "B-S4-01",
+    "implemented_by": ["B-S4-09"],
+    "prd_refs": ["PRD v4.0 §7.4", "AC-S4-04.1", "AC-S4-04.2", "AC-S4-04.3"],
+    "no_guess_rule": "If a required basis date is missing or ambiguous the status is NEEDS_COUNSEL_INPUT; the engine never picks a code."
+  }
+}

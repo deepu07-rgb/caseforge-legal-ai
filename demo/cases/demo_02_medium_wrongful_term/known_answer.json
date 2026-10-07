@@ -1,0 +1,120 @@
+{
+  "schema_version": "0.1.0-DEMO",
+  "authoritative": false,
+  "status": "DEMO_SYNTHETIC",
+  "fixture_id": "demo/demo_02_medium_wrongful_term",
+  "case_graph_contract": "contracts/case_graph.schema.json",
+  "case_graph_schema_status": "BLOCKED — concept_shell only (Q-CG-01)",
+  "jurisdiction": "United States",
+  "difficulty": "medium",
+  "concept_shell": {
+    "chronology_dated_events": [
+      {
+        "event_id": "e1",
+        "date": "2022-03-01",
+        "summary": "Hire; offer letter with at-will + discretionary bonus language",
+        "source": { "doc": "offer_letter" },
+        "confidence": 0.95
+      },
+      {
+        "event_id": "e2",
+        "date": "2023-12-15",
+        "summary": "Review email recommends full bonus if Finance confirms targets",
+        "source": { "doc": "review_email" },
+        "confidence": 0.9
+      },
+      {
+        "event_id": "e3",
+        "date": "2024-01-18",
+        "summary": "Termination for position elimination / reorganization",
+        "source": { "doc": "termination_letter" },
+        "confidence": 0.95
+      },
+      {
+        "event_id": "e4",
+        "date": "2024-02-05",
+        "summary": "HR denies bonus as discretionary; no criteria attached",
+        "source": { "doc": "hr_email" },
+        "confidence": 0.92
+      },
+      {
+        "event_id": "e5",
+        "date": "2024-03-01",
+        "summary": "EEOC charge stub (age discrimination)",
+        "source": { "doc": "eeoc_charge" },
+        "confidence": 0.88
+      },
+      {
+        "event_id": "e6",
+        "date": "2024-06-01",
+        "summary": "Civil complaint filed",
+        "source": { "doc": "complaint" },
+        "confidence": 0.9
+      }
+    ],
+    "parties_and_roles": [
+      { "party_id": "p1", "name": "Avery Cole", "role": "plaintiff_employee", "side": "plaintiff" },
+      { "party_id": "p2", "name": "Northline Analytics LLC", "role": "defendant_employer", "side": "defendant" },
+      { "party_id": "p3", "name": "Jordan Hale", "role": "witness_vp_people", "side": "neutral_witness" }
+    ],
+    "statutes_rules_invoked": [
+      {
+        "citation_label": "ADEA teaching label [SYNTHETIC_DEMO_NOT_LAW]",
+        "role": "discrimination_claim"
+      },
+      {
+        "citation_label": "State wage payment statute teaching label [SYNTHETIC_DEMO_NOT_LAW]",
+        "role": "bonus_wage_theory"
+      }
+    ],
+    "evidence_inventory": [
+      { "evidence_id": "ev1", "label": "Offer letter", "supports": ["e1"], "gap": false },
+      { "evidence_id": "ev2", "label": "Review email 2023-12-15", "supports": ["e2"], "gap": false },
+      { "evidence_id": "ev3", "label": "Termination letter", "supports": ["e3"], "gap": false },
+      { "evidence_id": "ev4", "label": "HR email denying bonus", "supports": ["e4"], "gap": false },
+      {
+        "evidence_id": "ev_gap_1",
+        "label": "MISSING: Finance confirmation company targets met",
+        "supports": ["bonus_earned"],
+        "gap": true
+      },
+      {
+        "evidence_id": "ev_gap_2",
+        "label": "MISSING: Objective bonus metrics document",
+        "supports": ["bonus_formula"],
+        "gap": true
+      },
+      {
+        "evidence_id": "ev_gap_3",
+        "label": "MISSING: Contemporaneous age-bias comments / notes",
+        "supports": ["discriminatory_animus"],
+        "gap": true
+      },
+      {
+        "evidence_id": "ev_gap_4",
+        "label": "MISSING: Org chart / backfill of role by younger hire",
+        "supports": ["pretext"],
+        "gap": true
+      }
+    ],
+    "procedural_posture": {
+      "stage": "complaint_filed_eeoc_pending",
+      "forum": "State trial court teaching stub",
+      "next_expected": "motion practice / discovery"
+    },
+    "prayer_relief": {
+      "primary": "Unpaid bonus + discrimination damages (back/front pay teaching)",
+      "amount_bonus_usd": 18000
+    },
+    "contradiction_report": [
+      {
+        "id": "c1",
+        "summary": "Review email implies bonus if Finance confirms targets; HR later asserts pure discretion with no Finance record produced",
+        "severity": "medium",
+        "items": ["e2", "e4"]
+      }
+    ],
+    "notes": "Medium demo: contradictions + evidence gaps are intentional teaching plants."
+  },
+  "eval_policy": "NEVER_SHIP_GATE — DEMO_SYNTHETIC only"
+}

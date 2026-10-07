@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.0.0", "fixture_id": "CASE-US-WRONGFUL-TERM-01", "suite_id": "G-CASE-CONTROLLED",
+  "status": "DRAFT", "source_class": "SYNTHETIC_CONTROLLED", "jurisdiction": "United States",
+  "purposes": ["timeline", "critical-fields", "graph", "contradiction", "unknown-law"],
+  "source": {"title": "Synthetic wrongful termination case packet", "publisher": "CaseForge", "source_url": null, "acquired_at": null},
+  "rights": {"status": "NOT_APPLICABLE", "basis": "CaseForge-created synthetic demonstration content.", "confidential": false, "distribution_scope": "redistributable", "may_redistribute": true},
+  "assets": [{"path":"demo/cases/demo_02_medium_wrongful_term/case_packet.txt","media_type":"text/plain","sha256":"15fb9537be8541e5ddaabe510fc19565e9280d67bc0661e1ea0f7d876c5dac2b","bytes":2528,"role":"case-packet","derived_from":null}],
+  "expected_answer": {"path":null,"authored_by":[],"status":"NOT_AUTHORED","reviewed_by":[],"adjudicator":null},
+  "characteristics": ["controlled", "dated-events", "contradiction", "United States"], "notes": "Synthetic; cannot satisfy real-world evidence gates."
+}

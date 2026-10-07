@@ -1,0 +1,210 @@
+{
+  "schema_version": "1.0.0",
+  "authoritative": false,
+  "status": "GOLDEN",
+  "fixture_id": "G-RETRIEVAL-US/synth_hitrate_20",
+  "jurisdiction": "United States",
+  "product_owner_pack": "S-SYNTH-GRETRIEVAL-v1",
+  "authored_by": "CaseForge Product Owner",
+  "locked_at": "2026-08-06",
+  "top_k": 8,
+  "ac_7_2_threshold": 0.85,
+  "corpus_root": "corpus",
+  "queries": [
+    {
+      "query_id": "g-retrieval-us-q01",
+      "query": "statutory text Congress statutory neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: 560 U.S. DEMO 1",
+        "560 U.S. DEMO 1"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-us-q02",
+      "query": "summary judgment material fact summary neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: 559 U.S. DEMO 2",
+        "559 U.S. DEMO 2"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-us-q03",
+      "query": "qualified immunity clearly established qualified neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: 558 U.S. DEMO 3",
+        "558 U.S. DEMO 3"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-us-q04",
+      "query": "commerce clause interstate commerce neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: 557 U.S. DEMO 4",
+        "557 U.S. DEMO 4"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-us-q05",
+      "query": "fourth amendment search warrants fourth neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: 556 U.S. DEMO 5",
+        "556 U.S. DEMO 5"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-us-q06",
+      "query": "due process notice opportunity due neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: 555 U.S. DEMO 6",
+        "555 U.S. DEMO 6"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-us-q07",
+      "query": "standing injury in fact standing neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: 554 U.S. DEMO 7",
+        "554 U.S. DEMO 7"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-us-q08",
+      "query": "claim preclusion res judicata res neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: 553 U.S. DEMO 8",
+        "553 U.S. DEMO 8"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-us-q09",
+      "query": "FAA arbitration enforceable arbitration neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: 552 U.S. DEMO 9",
+        "552 U.S. DEMO 9"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-us-q10",
+      "query": "class certification Rule 23 class neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: 551 U.S. DEMO 10",
+        "551 U.S. DEMO 10"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-us-q11",
+      "query": "first amendment free speech first neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: 550 U.S. DEMO 11",
+        "550 U.S. DEMO 11"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-us-q12",
+      "query": "equal protection rational basis equal neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: 549 U.S. DEMO 12",
+        "549 U.S. DEMO 12"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-us-q13",
+      "query": "habeas corpus successive habeas neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: 548 U.S. DEMO 13",
+        "548 U.S. DEMO 13"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-us-q14",
+      "query": "securities fraud material misstatement securities neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: 547 U.S. DEMO 14",
+        "547 U.S. DEMO 14"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-us-q15",
+      "query": "antitrust rule of reason antitrust neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: 546 U.S. DEMO 15",
+        "546 U.S. DEMO 15"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-us-q16",
+      "query": "patent obviousness section 103 patent neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: 545 U.S. DEMO 16",
+        "545 U.S. DEMO 16"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-us-q17",
+      "query": "copyright fair use transformative copyright neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: 544 U.S. DEMO 17",
+        "544 U.S. DEMO 17"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-us-q18",
+      "query": "ERISA fiduciary duty ERISA neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: 543 U.S. DEMO 18",
+        "543 U.S. DEMO 18"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-us-q19",
+      "query": "Title VII disparate treatment Title neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: 542 U.S. DEMO 19",
+        "542 U.S. DEMO 19"
+      ],
+      "must_appear_in_top_k": 8
+    },
+    {
+      "query_id": "g-retrieval-us-q20",
+      "query": "sovereign immunity abrogation sovereign neutral citation",
+      "known_relevant_authorities": [
+        "Neutral citation: 541 U.S. DEMO 20",
+        "541 U.S. DEMO 20"
+      ],
+      "must_appear_in_top_k": 8
+    }
+  ],
+  "planted_fake_citations": [
+    {
+      "citation_string": "PLANTED_FAKE v. Placeholder, 999 F. Fake 1 (99th Cir. 2099)",
+      "must_verification_status": "RED",
+      "exclude_from_downstream_unless_user_confirms": true,
+      "notes": "AC-4.3 negative \u2014 not a real authority."
+    }
+  ],
+  "outside_retrieve_rule": {
+    "description": "Authority not in RETRIEVE set must be RED (G2)",
+    "sample_authority": "COMPLETELY_UNKNOWN_AUTHORITY_ZZZ_999",
+    "must_verification_status": "RED"
+  },
+  "eval_policy": "SCORE_WHEN_STATUS_GOLDEN",
+  "index_id": "caseforge.retrieve.lexical.v1"
+}

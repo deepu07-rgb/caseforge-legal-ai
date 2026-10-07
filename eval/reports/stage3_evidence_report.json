@@ -1,0 +1,699 @@
+{
+  "schema_version": "1.0.0",
+  "batch": "B-S3-02",
+  "generated_at": "2026-08-13T17:01:38Z",
+  "batch_contract_state": "PASS",
+  "controlled_beta_evidence_ready": false,
+  "structural_gates": [
+    {
+      "id": "AC-S3-2.1",
+      "state": "PASS",
+      "details": [
+        "29 metrics have formula, threshold, source class, and command"
+      ]
+    },
+    {
+      "id": "AC-S3-2.2",
+      "state": "PASS",
+      "details": [
+        "Report has separate source_class groups; pooled aggregates are not emitted"
+      ]
+    },
+    {
+      "id": "AC-S3-2.3",
+      "state": "PASS",
+      "details": [
+        "Missing GOLDEN evidence is BLOCKED and missing measurements are NOT_TESTED"
+      ]
+    },
+    {
+      "id": "AC-S3-2.4",
+      "state": "PASS",
+      "details": [
+        "Environment and source fingerprint are captured below"
+      ]
+    },
+    {
+      "id": "AC-S3-2.5",
+      "state": "PASS",
+      "details": [
+        "Human metrics declare two-reviewer/adjudication policy and result validation enforces it"
+      ]
+    }
+  ],
+  "suite_evidence": [
+    {
+      "suite_id": "G-DOCS-REAL",
+      "required_source_class": "REAL_WORLD_RIGHTS_CLEARED",
+      "state": "BLOCKED",
+      "reason": "No integrity-verified, human-locked GOLDEN fixture",
+      "fixture_states": [
+        {
+          "fixture_id": "DOCS-COMPLEX-LAYOUT-PENDING",
+          "status": "BLOCKED",
+          "integrity_errors": []
+        },
+        {
+          "fixture_id": "USCOURTS-PRO-SE-1-2016",
+          "status": "READY_FOR_REVIEW",
+          "integrity_errors": []
+        }
+      ]
+    },
+    {
+      "suite_id": "G-CASE-CONTROLLED",
+      "required_source_class": "SYNTHETIC_CONTROLLED",
+      "state": "BLOCKED",
+      "reason": "No integrity-verified, human-locked GOLDEN fixture",
+      "fixture_states": [
+        {
+          "fixture_id": "CASE-IN-DISHONOUR-01",
+          "status": "DRAFT",
+          "integrity_errors": []
+        },
+        {
+          "fixture_id": "CASE-US-WRONGFUL-TERM-01",
+          "status": "DRAFT",
+          "integrity_errors": []
+        }
+      ]
+    },
+    {
+      "suite_id": "G-LEGAL-GROUNDING",
+      "required_source_class": "AUTHORITATIVE_LEGAL",
+      "state": "BLOCKED",
+      "reason": "No integrity-verified, human-locked GOLDEN fixture",
+      "fixture_states": [
+        {
+          "fixture_id": "LEGAL-GROUNDING-PENDING",
+          "status": "BLOCKED",
+          "integrity_errors": []
+        }
+      ]
+    },
+    {
+      "suite_id": "G-INJECTION",
+      "required_source_class": "ADVERSARIAL_SYNTHETIC",
+      "state": "BLOCKED",
+      "reason": "No integrity-verified, human-locked GOLDEN fixture",
+      "fixture_states": [
+        {
+          "fixture_id": "INJECTION-STAGE2-200",
+          "status": "DRAFT",
+          "integrity_errors": []
+        }
+      ]
+    },
+    {
+      "suite_id": "G-PERFORMANCE",
+      "required_source_class": "SYNTHETIC_CONTROLLED",
+      "state": "BLOCKED",
+      "reason": "No integrity-verified, human-locked GOLDEN fixture",
+      "fixture_states": [
+        {
+          "fixture_id": "PERF-40-100-300-PENDING",
+          "status": "BLOCKED",
+          "integrity_errors": []
+        }
+      ]
+    },
+    {
+      "suite_id": "G-AUDIO-S3",
+      "required_source_class": "HUMAN_AUDIO_RIGHTS_CLEARED",
+      "state": "BLOCKED",
+      "reason": "No integrity-verified, human-locked GOLDEN fixture",
+      "fixture_states": [
+        {
+          "fixture_id": "HUMAN-LEGAL-SPEECH-PENDING",
+          "status": "BLOCKED",
+          "integrity_errors": []
+        }
+      ]
+    }
+  ],
+  "fixture_validation_errors": [],
+  "results_by_source_class": {
+    "REAL_WORLD_RIGHTS_CLEARED": {
+      "fixtures": [
+        "DOCS-COMPLEX-LAYOUT-PENDING",
+        "USCOURTS-PRO-SE-1-2016"
+      ],
+      "metric_results": [
+        {
+          "metric_id": "page_count_accuracy",
+          "source_classes": [
+            "REAL_WORLD_RIGHTS_CLEARED",
+            "SYNTHETIC_CONTROLLED"
+          ],
+          "threshold": {
+            "op": ">=",
+            "value": 1.0
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\page_count_accuracy.json"
+        },
+        {
+          "metric_id": "page_order_accuracy",
+          "source_classes": [
+            "REAL_WORLD_RIGHTS_CLEARED",
+            "SYNTHETIC_CONTROLLED"
+          ],
+          "threshold": {
+            "op": ">=",
+            "value": 1.0
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\page_order_accuracy.json"
+        },
+        {
+          "metric_id": "character_error_rate",
+          "source_classes": [
+            "REAL_WORLD_RIGHTS_CLEARED"
+          ],
+          "threshold": {
+            "op": "<=",
+            "value": 0.1,
+            "by_class": {
+              "native": 0.005,
+              "clean_scan": 0.03,
+              "degraded_scan": 0.1
+            }
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\character_error_rate.json"
+        },
+        {
+          "metric_id": "word_error_rate",
+          "source_classes": [
+            "REAL_WORLD_RIGHTS_CLEARED"
+          ],
+          "threshold": {
+            "op": "<=",
+            "value": 0.15,
+            "by_class": {
+              "native": 0.01,
+              "clean_scan": 0.05,
+              "degraded_scan": 0.15
+            }
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\word_error_rate.json"
+        },
+        {
+          "metric_id": "critical_field_accuracy",
+          "source_classes": [
+            "REAL_WORLD_RIGHTS_CLEARED",
+            "SYNTHETIC_CONTROLLED"
+          ],
+          "threshold": {
+            "op": ">=",
+            "value": 0.99
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\critical_field_accuracy.json"
+        },
+        {
+          "metric_id": "dated_event_recall",
+          "source_classes": [
+            "SYNTHETIC_CONTROLLED",
+            "REAL_WORLD_RIGHTS_CLEARED"
+          ],
+          "threshold": {
+            "op": ">=",
+            "value": 0.95
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\dated_event_recall.json"
+        },
+        {
+          "metric_id": "dated_event_precision",
+          "source_classes": [
+            "SYNTHETIC_CONTROLLED",
+            "REAL_WORLD_RIGHTS_CLEARED"
+          ],
+          "threshold": {
+            "op": ">=",
+            "value": 0.95
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\dated_event_precision.json"
+        },
+        {
+          "metric_id": "performance_40_page_latency_seconds",
+          "source_classes": [
+            "SYNTHETIC_CONTROLLED",
+            "REAL_WORLD_RIGHTS_CLEARED"
+          ],
+          "threshold": {
+            "op": "<=",
+            "value": 300
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\performance_40_page_latency_seconds.json"
+        },
+        {
+          "metric_id": "performance_100_page_latency_seconds",
+          "source_classes": [
+            "SYNTHETIC_CONTROLLED",
+            "REAL_WORLD_RIGHTS_CLEARED"
+          ],
+          "threshold": {
+            "op": "<=",
+            "value": 1800
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\performance_100_page_latency_seconds.json"
+        },
+        {
+          "metric_id": "performance_300_page_latency_seconds",
+          "source_classes": [
+            "SYNTHETIC_CONTROLLED",
+            "REAL_WORLD_RIGHTS_CLEARED"
+          ],
+          "threshold": {
+            "op": "<=",
+            "value": 28800
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\performance_300_page_latency_seconds.json"
+        },
+        {
+          "metric_id": "peak_rss_gib",
+          "source_classes": [
+            "SYNTHETIC_CONTROLLED",
+            "REAL_WORLD_RIGHTS_CLEARED"
+          ],
+          "threshold": {
+            "op": "<=",
+            "value": 7.2
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\peak_rss_gib.json"
+        }
+      ]
+    },
+    "SYNTHETIC_CONTROLLED": {
+      "fixtures": [
+        "CASE-IN-DISHONOUR-01",
+        "CASE-US-WRONGFUL-TERM-01",
+        "PERF-40-100-300-PENDING"
+      ],
+      "metric_results": [
+        {
+          "metric_id": "page_count_accuracy",
+          "source_classes": [
+            "REAL_WORLD_RIGHTS_CLEARED",
+            "SYNTHETIC_CONTROLLED"
+          ],
+          "threshold": {
+            "op": ">=",
+            "value": 1.0
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\page_count_accuracy.json"
+        },
+        {
+          "metric_id": "page_order_accuracy",
+          "source_classes": [
+            "REAL_WORLD_RIGHTS_CLEARED",
+            "SYNTHETIC_CONTROLLED"
+          ],
+          "threshold": {
+            "op": ">=",
+            "value": 1.0
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\page_order_accuracy.json"
+        },
+        {
+          "metric_id": "critical_field_accuracy",
+          "source_classes": [
+            "REAL_WORLD_RIGHTS_CLEARED",
+            "SYNTHETIC_CONTROLLED"
+          ],
+          "threshold": {
+            "op": ">=",
+            "value": 0.99
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\critical_field_accuracy.json"
+        },
+        {
+          "metric_id": "dated_event_recall",
+          "source_classes": [
+            "SYNTHETIC_CONTROLLED",
+            "REAL_WORLD_RIGHTS_CLEARED"
+          ],
+          "threshold": {
+            "op": ">=",
+            "value": 0.95
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\dated_event_recall.json"
+        },
+        {
+          "metric_id": "dated_event_precision",
+          "source_classes": [
+            "SYNTHETIC_CONTROLLED",
+            "REAL_WORLD_RIGHTS_CLEARED"
+          ],
+          "threshold": {
+            "op": ">=",
+            "value": 0.95
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\dated_event_precision.json"
+        },
+        {
+          "metric_id": "graph_precision",
+          "source_classes": [
+            "SYNTHETIC_CONTROLLED"
+          ],
+          "threshold": {
+            "op": ">=",
+            "value": 0.9
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\graph_precision.json"
+        },
+        {
+          "metric_id": "graph_recall",
+          "source_classes": [
+            "SYNTHETIC_CONTROLLED"
+          ],
+          "threshold": {
+            "op": ">=",
+            "value": 0.9
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\graph_recall.json"
+        },
+        {
+          "metric_id": "correction_survival",
+          "source_classes": [
+            "SYNTHETIC_CONTROLLED"
+          ],
+          "threshold": {
+            "op": ">=",
+            "value": 1.0
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\correction_survival.json"
+        },
+        {
+          "metric_id": "unknown_law_refusal_rate",
+          "source_classes": [
+            "SYNTHETIC_CONTROLLED",
+            "AUTHORITATIVE_LEGAL"
+          ],
+          "threshold": {
+            "op": ">=",
+            "value": 1.0
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\unknown_law_refusal_rate.json"
+        },
+        {
+          "metric_id": "mock_court_novel_useful_weakness_rate",
+          "source_classes": [
+            "SYNTHETIC_CONTROLLED"
+          ],
+          "threshold": {
+            "op": ">=",
+            "value": 0.7
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\mock_court_novel_useful_weakness_rate.json"
+        },
+        {
+          "metric_id": "performance_40_page_latency_seconds",
+          "source_classes": [
+            "SYNTHETIC_CONTROLLED",
+            "REAL_WORLD_RIGHTS_CLEARED"
+          ],
+          "threshold": {
+            "op": "<=",
+            "value": 300
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\performance_40_page_latency_seconds.json"
+        },
+        {
+          "metric_id": "performance_100_page_latency_seconds",
+          "source_classes": [
+            "SYNTHETIC_CONTROLLED",
+            "REAL_WORLD_RIGHTS_CLEARED"
+          ],
+          "threshold": {
+            "op": "<=",
+            "value": 1800
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\performance_100_page_latency_seconds.json"
+        },
+        {
+          "metric_id": "performance_300_page_latency_seconds",
+          "source_classes": [
+            "SYNTHETIC_CONTROLLED",
+            "REAL_WORLD_RIGHTS_CLEARED"
+          ],
+          "threshold": {
+            "op": "<=",
+            "value": 28800
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\performance_300_page_latency_seconds.json"
+        },
+        {
+          "metric_id": "peak_rss_gib",
+          "source_classes": [
+            "SYNTHETIC_CONTROLLED",
+            "REAL_WORLD_RIGHTS_CLEARED"
+          ],
+          "threshold": {
+            "op": "<=",
+            "value": 7.2
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\peak_rss_gib.json"
+        },
+        {
+          "metric_id": "cold_start_seconds",
+          "source_classes": [
+            "SYNTHETIC_CONTROLLED"
+          ],
+          "threshold": {
+            "op": "<=",
+            "value": 6
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\cold_start_seconds.json"
+        },
+        {
+          "metric_id": "mock_court_turn_latency_seconds",
+          "source_classes": [
+            "SYNTHETIC_CONTROLLED"
+          ],
+          "threshold": {
+            "op": "<=",
+            "value": 15
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\mock_court_turn_latency_seconds.json"
+        }
+      ]
+    },
+    "AUTHORITATIVE_LEGAL": {
+      "fixtures": [
+        "LEGAL-GROUNDING-PENDING"
+      ],
+      "metric_results": [
+        {
+          "metric_id": "retrieval_recall_at_8",
+          "source_classes": [
+            "AUTHORITATIVE_LEGAL"
+          ],
+          "threshold": {
+            "op": ">=",
+            "value": 0.9
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\retrieval_recall_at_8.json"
+        },
+        {
+          "metric_id": "retrieval_mrr",
+          "source_classes": [
+            "AUTHORITATIVE_LEGAL"
+          ],
+          "threshold": {
+            "op": ">=",
+            "value": 0.75
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\retrieval_mrr.json"
+        },
+        {
+          "metric_id": "jurisdiction_leakage_rate",
+          "source_classes": [
+            "AUTHORITATIVE_LEGAL"
+          ],
+          "threshold": {
+            "op": "<=",
+            "value": 0.0
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\jurisdiction_leakage_rate.json"
+        },
+        {
+          "metric_id": "superseded_authority_leakage_rate",
+          "source_classes": [
+            "AUTHORITATIVE_LEGAL"
+          ],
+          "threshold": {
+            "op": "<=",
+            "value": 0.0
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\superseded_authority_leakage_rate.json"
+        },
+        {
+          "metric_id": "unsupported_proposition_rate",
+          "source_classes": [
+            "AUTHORITATIVE_LEGAL"
+          ],
+          "threshold": {
+            "op": "<=",
+            "value": 0.0
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\unsupported_proposition_rate.json"
+        },
+        {
+          "metric_id": "quote_fidelity_rate",
+          "source_classes": [
+            "AUTHORITATIVE_LEGAL"
+          ],
+          "threshold": {
+            "op": ">=",
+            "value": 1.0
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\quote_fidelity_rate.json"
+        },
+        {
+          "metric_id": "unknown_law_refusal_rate",
+          "source_classes": [
+            "SYNTHETIC_CONTROLLED",
+            "AUTHORITATIVE_LEGAL"
+          ],
+          "threshold": {
+            "op": ">=",
+            "value": 1.0
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\unknown_law_refusal_rate.json"
+        },
+        {
+          "metric_id": "first_retrieval_latency_seconds",
+          "source_classes": [
+            "AUTHORITATIVE_LEGAL"
+          ],
+          "threshold": {
+            "op": "<=",
+            "value": 5
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\first_retrieval_latency_seconds.json"
+        },
+        {
+          "metric_id": "repeated_retrieval_latency_seconds",
+          "source_classes": [
+            "AUTHORITATIVE_LEGAL"
+          ],
+          "threshold": {
+            "op": "<=",
+            "value": 1
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\repeated_retrieval_latency_seconds.json"
+        }
+      ]
+    },
+    "ADVERSARIAL_SYNTHETIC": {
+      "fixtures": [
+        "INJECTION-STAGE2-200"
+      ],
+      "metric_results": [
+        {
+          "metric_id": "prompt_injection_success_rate",
+          "source_classes": [
+            "ADVERSARIAL_SYNTHETIC"
+          ],
+          "threshold": {
+            "op": "<=",
+            "value": 0.0
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\prompt_injection_success_rate.json"
+        }
+      ]
+    },
+    "HUMAN_AUDIO_RIGHTS_CLEARED": {
+      "fixtures": [
+        "HUMAN-LEGAL-SPEECH-PENDING"
+      ],
+      "metric_results": [
+        {
+          "metric_id": "voice_word_error_rate",
+          "source_classes": [
+            "HUMAN_AUDIO_RIGHTS_CLEARED"
+          ],
+          "threshold": {
+            "op": "<=",
+            "value": 0.1
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\voice_word_error_rate.json"
+        },
+        {
+          "metric_id": "voice_critical_term_error_rate",
+          "source_classes": [
+            "HUMAN_AUDIO_RIGHTS_CLEARED"
+          ],
+          "threshold": {
+            "op": "<=",
+            "value": 0.02
+          },
+          "state": "NOT_TESTED",
+          "reason": "Missing measured result: eval\\results\\stage3\\voice_critical_term_error_rate.json"
+        }
+      ]
+    }
+  },
+  "environment": {
+    "os": "Windows-11-10.0.26200-SP0",
+    "cpu": "Intel64 Family 6 Model 141 Stepping 1, GenuineIntel",
+    "ram_bytes": 16889200640,
+    "python": "3.13.5",
+    "backend": "Ollama",
+    "model": "qwen2.5:7b",
+    "quantization": "Q4_K_M",
+    "model_digest": "845dbda0ea48",
+    "pack_versions": [
+      {
+        "path": "packs/fixtures/caseforge.core.india.placeholder/manifest.json",
+        "version": "0.1.0",
+        "sha256": "3eaabb181ab2cbdf6f1f83650b33cc4c446275d167ce2cb0cd2923b7488b94f0"
+      },
+      {
+        "path": "packs/fixtures/caseforge.core.us.placeholder/manifest.json",
+        "version": "0.1.0",
+        "sha256": "352a835344592dd3cb5a855acb44b93f156cf8c291705943e3c039206f66b316"
+      }
+    ],
+    "vcs": "not_git_repository",
+    "commit": "unavailable",
+    "source_fingerprint_sha256": "6ee0d962d7ce2ee28b1c5202e8fb8f57340a95d7931b7d8da63d5166263a837d"
+  },
+  "statement": "Batch contract readiness and product evidence readiness are distinct. Structural PASS does not convert BLOCKED/NOT_TESTED suites into PASS."
+}

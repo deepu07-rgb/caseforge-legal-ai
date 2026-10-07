@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/rehearsal_timeline.schema.json",
+  "title": "CaseForge timed rehearsal timeline",
+  "description": "Additive companion to mock_court_debrief_v2 for timer-mode sessions (PRD v4.0 §7.7). Debrief v2 schema is unchanged; this record references it.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "timeline_id", "session_id", "debrief_id", "slot_seconds", "interruption_rate", "ended_by", "events", "limbs"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "timeline_id": { "type": "string" },
+    "session_id": { "type": "string" },
+    "debrief_id": { "type": ["string", "null"] },
+    "slot_seconds": { "type": "integer", "minimum": 1 },
+    "interruption_rate": { "enum": ["NONE", "LOW", "MEDIUM", "HIGH"] },
+    "bench_archetype_id": { "type": ["string", "null"] },
+    "ended_by": { "enum": ["TIME_EXPIRED", "USER_ENDED", "ERROR"] },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["t_ms", "kind"],
+        "properties": {
+          "t_ms": { "type": "integer", "minimum": 0 },
+          "kind": { "enum": ["SESSION_START", "LIMB_REACHED", "INTERRUPTION", "USER_RESPONSE", "TIME_WARNING", "TIME_EXPIRED", "SESSION_END"] },
+          "limb_node_id": { "type": ["string", "null"] },
+          "turn_id": { "type": ["string", "null"] },
+          "grounding_ref": { "type": ["string", "null"], "description": "Missing Link / weakest-limb id the interruption came from (B-S3-16 grounded path)." }
+        }
+      }
+    },
+    "limbs": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["limb_node_id", "reached", "first_reached_ms", "time_spent_ms", "interruptions"],
+        "properties": {
+          "limb_node_id": { "type": "string" },
+          "reached": { "type": "boolean" },
+          "first_reached_ms": { "type": ["integer", "null"], "minimum": 0 },
+          "time_spent_ms": { "type": "integer", "minimum": 0 },
+          "interruptions": { "type": "integer", "minimum": 0 }
+        },
+        "allOf": [ { "if": { "properties": { "reached": { "const": false } } }, "then": { "properties": { "first_reached_ms": { "type": "null" }, "time_spent_ms": { "const": 0 } } } } ]
+      }
+    }
+  },
+  "x-caseforge": {
+    "status": "FROZEN_FOR_IMPLEMENTATION",
+    "batch": "B-S4-01",
+    "implemented_by": ["B-S4-12"],
+    "prd_refs": ["PRD v4.0 §7.7", "AC-S4-07.1", "AC-S4-07.2", "AC-S4-07.3"],
+    "presets": "Slot presets are threshold S4.rehearsal.slot_presets_min (PROPOSED)."
+  }
+}

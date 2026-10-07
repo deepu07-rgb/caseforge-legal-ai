@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/cause_list_brief.schema.json",
+  "title": "CaseForge Daily Cause-List Brief",
+  "description": "One record-cited brief per listed matter (PRD v4.0 §9.4). Cause lists are imported from files only; no online court portal integration.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "list_id", "court_label", "list_date", "import", "entries", "generated_at"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "list_id": { "type": "string" },
+    "court_label": { "type": "string" },
+    "list_date": { "type": "string", "format": "date" },
+    "import": {
+      "type": "object", "additionalProperties": false, "required": ["format", "sha256"],
+      "properties": { "format": { "enum": ["PDF", "CSV", "MANUAL"] }, "sha256": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" } }
+    },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["serial", "listed_title", "match", "brief"],
+        "properties": {
+          "serial": { "type": "string" },
+          "listed_title": { "type": "string" },
+          "match": {
+            "type": "object", "additionalProperties": false, "required": ["status", "case_id"],
+            "properties": { "status": { "enum": ["MATCHED", "AMBIGUOUS_CONFIRMED", "AMBIGUOUS_UNCONFIRMED", "NO_LOCAL_RECORD"] }, "case_id": { "type": ["string", "null"] } }
+          },
+          "brief": { "oneOf": [{ "$ref": "#/$defs/Brief" }, { "type": "null" }] }
+        },
+        "allOf": [
+          { "if": { "properties": { "match": { "properties": { "status": { "enum": ["MATCHED", "AMBIGUOUS_CONFIRMED"] } } } } }, "then": { "properties": { "brief": { "$ref": "#/$defs/Brief" }, "match": { "properties": { "case_id": { "type": "string" } } } } }, "else": { "properties": { "brief": { "type": "null" } } } }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "Field": {
+      "type": "object", "additionalProperties": false, "required": ["state", "value", "locator"],
+      "properties": {
+        "state": { "enum": ["FOUND", "NOT_FOUND_IN_RECORD"] },
+        "value": { "type": ["string", "null"] },
+        "locator": { "type": ["object", "null"], "required": ["doc_id", "excerpt"] }
+      },
+      "allOf": [
+        { "if": { "properties": { "state": { "const": "FOUND" } } }, "then": { "properties": { "value": { "type": "string" }, "locator": { "type": "object" } } }, "else": { "properties": { "value": { "type": "null" }, "locator": { "type": "null" } } } }
+      ]
+    },
+    "Brief": {
+      "type": "object", "additionalProperties": false,
+      "required": ["stage", "last_order", "last_order_date", "compliance", "adjournments", "pending_applications"],
+      "properties": {
+        "stage": { "$ref": "#/$defs/Field" },
+        "last_order": { "$ref": "#/$defs/Field" },
+        "last_order_date": { "$ref": "#/$defs/Field" },
+        "compliance": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["directed", "record_status"],
+            "properties": { "directed": { "$ref": "#/$defs/Field" }, "record_status": { "enum": ["DONE_ON_RECORD", "NOT_SHOWN_ON_RECORD"] }, "done_locator": { "type": ["object", "null"] } }
+          }
+        },
+        "adjournments": {
+          "type": "object", "additionalProperties": false, "required": ["count", "entries"],
+          "properties": {
+            "count": { "type": "integer", "minimum": 0 },
+            "entries": {
+              "type": "array",
+              "items": { "type": "object", "additionalProperties": false, "required": ["order_date", "sought_by_party_id", "locator"], "properties": { "order_date": { "type": "string", "format": "date" }, "sought_by_party_id": { "type": ["string", "null"] }, "locator": { "type": "object", "required": ["doc_id", "excerpt"] } } }
+            }
+          }
+        },
+        "pending_applications": { "type": "array", "items": { "$ref": "#/$defs/Field" } }
+      }
+    }
+  },
+  "x-caseforge": {
+    "status": "FROZEN_FOR_IMPLEMENTATION",
+    "batch": "B-S4-01",
+    "implemented_by": ["B-S4-20"],
+    "prd_refs": ["PRD v4.0 §9.4", "AC-S4-14.1", "AC-S4-14.2"],
+    "source_rule": "Adjournment counts and 'sought by' come only from orders on record; null sought_by means the order does not say."
+  }
+}

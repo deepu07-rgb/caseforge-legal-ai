@@ -1,0 +1,89 @@
+{
+  "manifest_version": "1.0.0",
+  "product": "CaseForge",
+  "layer": 4,
+  "batch": "B-S0-04",
+  "description": "Golden dataset inventory. Micro-fixtures are SYNTHETIC_PLACEHOLDER unless status is GOLDEN.",
+  "policy": "POLICY.md",
+  "sets": [
+    {
+      "id": "G-DOCS",
+      "path": "G-DOCS",
+      "purpose": "Document triage and intake type-suggestion golden set",
+      "primary_acs": ["AC-5.1", "AC-6.1"],
+      "micro_fixture": "G-DOCS/fixtures/micro_001",
+      "status": "SCAFFOLD"
+    },
+    {
+      "id": "G-CASE-IN",
+      "path": "G-CASE-IN",
+      "purpose": "India case skeleton / chronology known-answer",
+      "jurisdiction": "India",
+      "primary_acs": ["AC-6.2", "AC-6.3", "AC-6.4", "AC-6.5", "AC-6.6", "AC-6.8"],
+      "micro_fixture": "G-CASE-IN/fixtures/micro_001",
+      "status": "SCAFFOLD"
+    },
+    {
+      "id": "G-CASE-US",
+      "path": "G-CASE-US",
+      "purpose": "United States case skeleton / chronology known-answer",
+      "jurisdiction": "United States",
+      "primary_acs": ["AC-6.2", "AC-6.3", "AC-6.4", "AC-6.5", "AC-6.6", "AC-6.8"],
+      "micro_fixture": "G-CASE-US/fixtures/micro_001",
+      "status": "SCAFFOLD"
+    },
+    {
+      "id": "G-AUDIO",
+      "path": "G-AUDIO",
+      "purpose": "English STT, lexicon, voice rehearsal",
+      "primary_acs": ["AC-9.1", "AC-9.2", "AC-9.3", "AC-9.4"],
+      "micro_fixture": "G-AUDIO/fixtures/micro_001",
+      "status": "SCAFFOLD"
+    },
+    {
+      "id": "G-RETRIEVAL-IN",
+      "path": "G-RETRIEVAL-IN",
+      "purpose": "India retrieval top-k and citation verification",
+      "jurisdiction": "India",
+      "primary_acs": ["AC-4.3", "AC-7.2"],
+      "micro_fixture": "G-RETRIEVAL-IN/fixtures/micro_001",
+      "status": "SCAFFOLD"
+    },
+    {
+      "id": "G-RETRIEVAL-US",
+      "path": "G-RETRIEVAL-US",
+      "purpose": "United States retrieval top-k and citation verification",
+      "jurisdiction": "United States",
+      "primary_acs": ["AC-4.3", "AC-7.2"],
+      "micro_fixture": "G-RETRIEVAL-US/fixtures/micro_001",
+      "status": "SCAFFOLD"
+    },
+    {
+      "id": "G-REDTEAM",
+      "path": "G-REDTEAM",
+      "purpose": "Guardrail red-team prompts (G1–G3 minimum)",
+      "primary_acs": ["AC-15.1"],
+      "micro_fixture": "G-REDTEAM/fixtures/micro_001",
+      "status": "SCAFFOLD",
+      "notes": "Ship requires ≥200 prompts per contracts/constants.json guardrails_eval"
+    },
+    {
+      "id": "G-SCRIPTS",
+      "path": "G-SCRIPTS",
+      "purpose": "Scripted sessions: performance, IPC, Stage 2 formats, dependency audit hooks",
+      "primary_acs": ["AC-2.1", "AC-3.1", "AC-3.2", "AC-3.3", "AC-3.4", "AC-3.5", "AC-4.1", "AC-4.2"],
+      "micro_fixture": "G-SCRIPTS/fixtures/micro_001",
+      "status": "GOLDEN",
+      "notes": "B-S2-02: five format_* Mock Court scripts GOLDEN; micro_001 remains cold-start scaffold"
+    },
+    {
+      "id": "G-INTEGRITY",
+      "path": "G-INTEGRITY",
+      "purpose": "Argument Integrity Engine — planted gaps, VI formula, Missing Links",
+      "primary_acs": ["AC-8.1", "AC-8.2", "AC-8.3"],
+      "micro_fixture": "G-INTEGRITY/fixtures/planted_gap_evidence",
+      "status": "GOLDEN",
+      "notes": "B-S2-01: scorer caseforge.integrity.v1; no LLM in scoring path"
+    }
+  ]
+}

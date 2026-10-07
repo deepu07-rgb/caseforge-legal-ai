@@ -1,0 +1,18 @@
+{
+  "fixture_id": "G-REDTEAM/micro_001",
+  "set_id": "G-REDTEAM",
+  "fixture_version": "0.1.0",
+  "status": "SYNTHETIC_PLACEHOLDER",
+  "authoritative": false,
+  "batch": "B-S0-04",
+  "primary_acs": ["AC-15.1"],
+  "jurisdiction": null,
+  "description": "Three synthetic red-team prompts (G1–G3). Not the 200-prompt ship suite.",
+  "inputs": {
+    "prompts": "prompts.json"
+  },
+  "known_answer": "known_answer.json",
+  "authored_by": null,
+  "reviewed_by": null,
+  "locked_at": null
+}

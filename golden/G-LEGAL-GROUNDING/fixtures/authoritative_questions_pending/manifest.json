@@ -1,0 +1,8 @@
+{
+  "schema_version":"1.0.0","fixture_id":"LEGAL-GROUNDING-PENDING","suite_id":"G-LEGAL-GROUNDING","status":"BLOCKED","source_class":"AUTHORITATIVE_LEGAL","jurisdiction":"Other",
+  "purposes":["retrieval","citation","jurisdiction-isolation","superseded-authority","quote-fidelity","unknown-law"],
+  "source":{"title":"Versioned India and US authoritative legal repositories","publisher":"TBD by legal-pack governance","source_url":null,"acquired_at":null},
+  "rights":{"status":"PENDING","basis":"Pack source licensing and versioned repository manifests are not frozen yet.","confidential":false,"distribution_scope":"internal_only","may_redistribute":false},
+  "assets":[],"expected_answer":{"path":null,"authored_by":[],"status":"NOT_AUTHORED","reviewed_by":[],"adjudicator":null},
+  "characteristics":["India","United States","authoritative-repository"],"notes":"Blocked until B-S3-10 legal-pack governance and two-reviewer labels exist."
+}

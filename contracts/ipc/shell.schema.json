@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/ipc/shell.schema.json",
+  "title": "ShellHostIpc",
+  "description": "Host (Tauri) IPC methods for the CaseForge shell. These are Tauri invoke commands, not sidecar stdio JSON-RPC. B-S1-01 freezes health and AC-3.5 probe methods only.",
+  "schema_version": "0.1.0",
+  "x-caseforge": {
+    "status": "PARTIAL",
+    "batch": "B-S1-01",
+    "prd_refs": ["§4.1", "AC-3.1", "AC-3.5", "AC-4.1"],
+    "transport": "tauri_invoke",
+    "note": "Sidecar method catalogues remain BLOCKED under Q-IPC-01. Shell host methods below are frozen for B-S1-01."
+  },
+  "type": "object",
+  "required": ["schema_version", "methods"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "0.1.0" },
+    "methods": {
+      "type": "array",
+      "minItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["name", "tauri_command", "result"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "tauri_command": { "type": "string" },
+          "params": {},
+          "result": {}
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "schema_version": "0.1.0",
+      "methods": [
+        {
+          "name": "shell.ping",
+          "tauri_command": "shell_ping",
+          "params": null,
+          "result": {
+            "ok": true,
+            "pong": "pong",
+            "server_time_ms": 0
+          }
+        },
+        {
+          "name": "shell.version",
+          "tauri_command": "shell_version",
+          "params": null,
+          "result": {
+            "product": "CaseForge",
+            "version": "0.1.0",
+            "batch": "B-S1-01",
+            "tauri": "2.x",
+            "uptime_ms": 0,
+            "process_start_unix_ms": 0
+          }
+        },
+        {
+          "name": "shell.heavy_job_start",
+          "tauri_command": "shell_heavy_job_start",
+          "params": { "durationMs": 1500 },
+          "result": { "job_id": "uuid", "accepted": true }
+        },
+        {
+          "name": "shell.heavy_job_status",
+          "tauri_command": "shell_heavy_job_status",
+          "params": { "jobId": "uuid" },
+          "result": {
+            "job_id": "uuid",
+            "state": "running",
+            "progress_percent": 0,
+            "work_elapsed_ms": 0,
+            "message": "string"
+          }
+        },
+        {
+          "name": "shell.sidecar_status",
+          "tauri_command": "shell_sidecar_status",
+          "params": null,
+          "result": {
+            "sidecars": [
+              { "name": "infer-llm", "state": "idle", "detail": "string" },
+              { "name": "infer-speech", "state": "idle", "detail": "string" },
+              { "name": "docpipe", "state": "idle", "detail": "string" }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

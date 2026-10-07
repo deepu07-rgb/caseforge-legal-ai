@@ -1,0 +1,121 @@
+{
+  "schema_version": "1.0.0",
+  "product": "CaseForge",
+  "batch": "B-S1-21",
+  "status": "FROZEN",
+  "pipeline_id": "caseforge.guardrails.v1",
+  "prd_refs": ["§15", "AC-15.1", "G1", "G2", "G3", "G4", "G5", "G6"],
+  "description": "Stage 1 guardrails: hard filters + system prompts + export footer/provenance. Full ≥200 red-team is Stage 2; Stage 1 ships a frozen subset with zero G1–G3 violations.",
+  "rules": {
+    "G1": {
+      "id": "G1",
+      "title": "No verdicts / guilt / sentencing predictions",
+      "action": "refuse_or_rewrite",
+      "error_code": "CF_GUARDRAIL_G1_VERDICT"
+    },
+    "G2": {
+      "id": "G2",
+      "title": "No citation bypassing retrieval",
+      "action": "refuse_or_rewrite",
+      "error_code": "CF_GUARDRAIL_G2_CITATION_BYPASS"
+    },
+    "G3": {
+      "id": "G3",
+      "title": "Refuse fabrication / perjury-coaching",
+      "action": "refuse",
+      "error_code": "CF_GUARDRAIL_G3_FABRICATION"
+    },
+    "G4": {
+      "id": "G4",
+      "title": "Export footer required",
+      "footer_id": "caseforge.export_footer.v1",
+      "enforced_by": "B-S1-15 exportDraft"
+    },
+    "G5": {
+      "id": "G5",
+      "title": "Provenance log for every AI output",
+      "required_fields": ["model_hash", "prompt_hash", "retrieval_ids"],
+      "enforced_by": ["B-S1-15 export", "B-S1-21 llm_chat provenance"]
+    },
+    "G6": {
+      "id": "G6",
+      "title": "Preparation language only",
+      "language": "Preparation completeness only — never win prediction, outcome odds, or verdict language."
+    }
+  },
+  "input_patterns": {
+    "G1": [
+      "\\b(is|are)\\s+(my\\s+)?client\\s+guilty\\b",
+      "\\b(is|are)\\s+the\\s+defendant\\s+guilty\\b",
+      "\\bdefendant\\s+guilty\\b",
+      "\\bwhat\\s+sentence\\b",
+      "\\bwill\\s+(they|he|she|client)\\s+(be\\s+)?(convicted|acquitted|sentenced)\\b",
+      "\\b(win\\s+probability|chance\\s+of\\s+(winning|success)|likely\\s+to\\s+win)\\b",
+      "\\bpredict\\s+(the\\s+)?(verdict|outcome|sentence)\\b",
+      "\\bguilt\\s+determination\\b"
+    ],
+    "G2": [
+      "\\binvent\\s+(a\\s+)?(citation|case|authority|them)\\b",
+      "\\binvent\\s+them\\b",
+      "\\bfake\\s+(a\\s+)?(citation|case)\\b",
+      "\\bcite\\s+.{0,40}(even\\s+if|whether\\s+or\\s+not).{0,40}(corpus|pack|retrieved)\\b",
+      "\\bnot\\s+in\\s+(the\\s+)?(local\\s+)?corpus\\b",
+      "\\bnot\\s+in\\s+the\\s+pack\\b",
+      "\\bmake\\s+up\\s+(a\\s+)?(case\\s+name|citation|authority)\\b",
+      "\\bmade[- ]up\\s+(judgment\\s+)?citation\\b",
+      "\\bbypass\\s+retrieval\\b"
+    ],
+    "G3": [
+      "\\bfabricate\\s+(evidence|documents?|exhibits?)\\b",
+      "\\bfabricating\\s+(evidence|documents?|exhibits?)\\b",
+      "\\bcoach\\s+(a\\s+)?witness\\b",
+      "\\blie\\s+under\\s+oath\\b",
+      "\\bperjury\\b",
+      "\\bhelp\\s+me\\s+(lie|falsify|forge)\\b",
+      "\\bcreate\\s+false\\s+(evidence|testimony)\\b"
+    ]
+  },
+  "output_patterns": {
+    "G1": [
+      "\\b(client\\s+is|you\\s+are|they\\s+are)\\s+guilty\\b",
+      "\\bwill\\s+be\\s+(convicted|acquitted|sentenced)\\b",
+      "\\bsentence\\s+(of|will\\s+be)\\s+\\d+\\b",
+      "\\b(win\\s+probability|chance\\s+of\\s+winning)\\b",
+      "\\bverdict\\s+(will\\s+be|is)\\b",
+      "\\bguilt\\s+determination\\b"
+    ],
+    "G2": [
+      "\\bPLANTED_FAKE\\b",
+      "\\b\\[UNVERIFIED\\].{0,80}(held|ratio)\\b",
+      "\\binvented\\s+citation\\b",
+      "\\bas\\s+if\\s+retrieved\\b"
+    ],
+    "G3": [
+      "\\bhere\\s+is\\s+how\\s+to\\s+(lie|fabricate|forge)\\b",
+      "\\bcoach(ing)?\\s+the\\s+witness\\s+to\\b",
+      "\\bfalse\\s+testimony\\s+script\\b"
+    ],
+    "G6": [
+      "\\blikely\\s+to\\s+win\\b",
+      "\\boutcome\\s+odds\\b",
+      "\\bwin\\s+prediction\\b"
+    ]
+  },
+  "refusal_templates": {
+    "G1": "Refused (G1): CaseForge does not determine guilt, predict verdicts, or forecast sentences. Use preparation language only — structure facts, evidence, and authorities with sources.",
+    "G2": "Refused (G2): Citations must come from retrieval over installed packs + case graph. I will not invent authorities or bypass GREEN/AMBER/RED verification.",
+    "G3": "Refused (G3): CaseForge will not assist with fabricating evidence, forging documents, or coaching false testimony / perjury.",
+    "G6": "Rewritten (G6): Preparation assistance only — not a prediction of case outcome."
+  },
+  "stage1_redteam": {
+    "suite_id": "caseforge.redteam.stage1.v1",
+    "min_prompts": 24,
+    "full_suite_min_prompts": 200,
+    "full_suite_batch": "B-S2-06",
+    "zero_g1_g2_g3_violations": true,
+    "fixture": "golden/G-REDTEAM/fixtures/stage1_024"
+  },
+  "system_prompt_addendum": "Guardrails G1–G6 binding: no verdicts/guilt/sentencing; no invented citations; refuse fabrication/perjury coaching; every AI span needs provenance; preparation language only.",
+  "frozen_at": "2026-08-08",
+  "authority": "CaseForge Product Owner — B-S1-21 Stage-1 guardrails freeze"
+}

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/legal_working_set.schema.json",
+  "title": "CaseForge matter legal working set",
+  "type": "object",
+  "required": ["schema_version", "case_id", "version", "regime_status", "regime_candidates", "items", "usable_authority_ids"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "case_id": { "type": "string", "minLength": 1 },
+    "version": { "type": "integer", "minimum": 0 },
+    "regime_status": { "enum": ["PENDING_CONFIRMATION", "COUNSEL_CONFIRMED"] },
+    "confirmed_regime_id": { "type": ["string", "null"] },
+    "regime_candidates": { "type": "array", "items": { "$ref": "#/$defs/regime" } },
+    "items": { "type": "array", "items": { "$ref": "#/$defs/item" } },
+    "usable_authority_ids": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+    "updated_at_unix_ms": { "type": "integer", "minimum": 0 }
+  },
+  "$defs": {
+    "regime": {
+      "type": "object", "required": ["regime_id", "label", "reason", "confirmation_required"],
+      "properties": { "regime_id": { "type": "string" }, "label": { "type": "string" }, "reason": { "type": "string" }, "confirmation_required": { "type": "boolean" } }
+    },
+    "item": {
+      "type": "object",
+      "required": ["item_id", "authority_id", "source_id", "chunk_id", "pack_id", "title", "citation", "section_label", "jurisdiction", "authority_type", "trust_level", "temporal_status", "superseded_status", "source_path", "source_reference", "source_checksum", "chunk_checksum", "exact_text", "decision", "pinned", "controlling", "last_seen_index_checksum"],
+      "properties": {
+        "item_id": { "type": "string" }, "authority_id": { "type": "string" }, "source_id": { "type": "string" }, "chunk_id": { "type": "string" }, "pack_id": { "type": "string" },
+        "title": { "type": "string" }, "citation": { "type": "string" }, "section_label": { "type": "string" }, "jurisdiction": { "type": "string" }, "authority_type": { "type": "string" },
+        "trust_level": { "type": "string" }, "temporal_status": { "type": "string" }, "superseded_status": { "type": "string" }, "source_path": { "type": "string" }, "source_reference": { "type": "string" },
+        "source_checksum": { "type": "string", "pattern": "^sha256:" }, "chunk_checksum": { "type": "string", "pattern": "^sha256:" }, "exact_text": { "type": "string", "minLength": 1 },
+        "decision": { "enum": ["PROPOSED", "INCLUDED", "EXCLUDED", "IRRELEVANT", "REMOVED", "SUPERSEDED"] }, "pinned": { "type": "boolean" }, "controlling": { "type": "boolean" },
+        "counsel_rationale": { "type": ["string", "null"] }, "last_seen_index_checksum": { "type": "string", "pattern": "^sha256:" }
+      }
+    }
+  },
+  "x-caseforge": {
+    "batch": "B-S3-12",
+    "controlling_rule": "Only counsel INCLUDED + controlling + APPLICABLE + CURRENT enters usable_authority_ids",
+    "rerun_rule": "Suggestion refresh must preserve counsel decisions; SUPERSEDED forcibly clears controlling",
+    "traceability_rule": "Exact text must remain bound to source/chunk/pack IDs and checksums"
+  }
+}

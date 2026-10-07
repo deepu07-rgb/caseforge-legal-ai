@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0.0",
+  "calibration_id": "caseforge.tesseract-eng-fast.synthetic-isotonic.v1",
+  "status": "PROPOSED_AWAITING_OWNER_APPROVAL",
+  "engine_class": "tesseract_eng_fast_scan",
+  "method": "monotonic_piecewise_constant",
+  "dataset_path": "eval/calibration/legal_ocr_calibration_v1.json",
+  "dataset_sha256": "1649b0806ea234f2dece4d5a373aaebedbab2213dcc7068ea8e258c213298a3f",
+  "evaluation_set_overlap": false,
+  "bins": [
+    {"raw_min":0.0,"raw_max":0.25,"calibrated":0.02},
+    {"raw_min":0.25,"raw_max":0.50,"calibrated":0.24},
+    {"raw_min":0.50,"raw_max":0.70,"calibrated":0.50},
+    {"raw_min":0.70,"raw_max":0.85,"calibrated":0.82},
+    {"raw_min":0.85,"raw_max":0.95,"calibrated":0.94},
+    {"raw_min":0.95,"raw_max":1.000001,"calibrated":0.985}
+  ],
+  "held_out_metrics": {"ece": 0.08125, "brier": 0.04530625},
+  "approval": {
+    "owner": null,
+    "approved_at": null,
+    "missing": ["ece_max", "brier_max", "critical_field_error_costs_by_type"]
+  }
+}

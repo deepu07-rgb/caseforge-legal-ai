@@ -1,0 +1,73 @@
+{
+  "batch": "B-S3-11",
+  "status": "PASS",
+  "index_id": "caseforge.retrieve.hybrid.v1",
+  "semantic_engine": {
+    "id": "caseforge.legal-concept-hash-384.v1",
+    "dimensions": 384,
+    "weights_bytes": 0,
+    "offline": true,
+    "license": "CaseForge first-party deterministic algorithm; no third-party weights"
+  },
+  "thresholds": {
+    "recall_at_8_min": 0.9,
+    "mrr_min": 0.7
+  },
+  "hybrid": {
+    "recall_at_8": 1.0,
+    "mrr": 0.78125
+  },
+  "lexical_baseline": {
+    "recall_at_8": 0.75,
+    "mrr": 0.75
+  },
+  "judgments": [
+    {
+      "query": "When may the court order sale instead of physical division in a partition suit?",
+      "expected_text": "Power to court to order sale instead of division",
+      "hybrid_rank": 1,
+      "lexical_rank": 1
+    },
+    {
+      "query": "What is the route of an appeal from an original decree?",
+      "expected_text": "Appeal from original decree",
+      "hybrid_rank": 1,
+      "lexical_rank": 1
+    },
+    {
+      "query": "What must accompany a delayed appeal?",
+      "expected_text": "Application for condonation of delay",
+      "hybrid_rank": 8,
+      "lexical_rank": null
+    },
+    {
+      "query": "What limitation entry applies to an appeal to a High Court under the CPC?",
+      "expected_text": "116. Under the Code of Civil Procedure",
+      "hybrid_rank": 1,
+      "lexical_rank": 1
+    }
+  ],
+  "performance": {
+    "runs": 12,
+    "cold_ms": 67.574,
+    "warm_p50_ms": 140.651,
+    "repeated_p95_ms": 178.984,
+    "python_reference_peak_mib": 0.486
+  },
+  "corpus": {
+    "source": "signed B-S3-10 official controlled pack",
+    "chunks": 20,
+    "checksum": "sha256:9c7222a8669022817bcd11f43dbc4653d3f8e1ea045ca94e719f54b25e7eb63e"
+  },
+  "legal_editor_review": "PENDING \u2014 source-grounded judgments are not claimed as a legal-readiness pass until approved by a named legal editor",
+  "checks": {
+    "recall_at_8_threshold": true,
+    "mrr_threshold": true,
+    "pre_retrieval_filters": true,
+    "crash_safe_checksum_index": true,
+    "visible_fallback": true,
+    "explainable_scores": true,
+    "separate_result_kinds": true,
+    "offline_zero_weight_engine": true
+  }
+}

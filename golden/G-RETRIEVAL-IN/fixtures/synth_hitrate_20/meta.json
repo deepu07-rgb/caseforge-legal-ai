@@ -1,0 +1,23 @@
+{
+  "fixture_id": "G-RETRIEVAL-IN/synth_hitrate_20",
+  "set_id": "G-RETRIEVAL-IN",
+  "fixture_version": "1.0.0",
+  "status": "GOLDEN",
+  "authoritative": false,
+  "batch": "B-S1-13",
+  "primary_acs": [
+    "AC-4.3",
+    "AC-7.2"
+  ],
+  "jurisdiction": "India",
+  "description": "Product-owner synthetic GOLDEN retrieval set (India). Not law. AC-7.2 top-8 hit rate + AC-4.3 planted RED.",
+  "inputs": {
+    "corpus": "corpus/content",
+    "queries": "known_answer.json"
+  },
+  "known_answer": "known_answer.json",
+  "authored_by": "CaseForge Product Owner",
+  "reviewed_by": "CaseForge Product Owner",
+  "locked_at": "2026-08-06",
+  "product_owner_pack": "S-SYNTH-GRETRIEVAL-v1"
+}

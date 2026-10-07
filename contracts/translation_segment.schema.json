@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/translation_segment.schema.json",
+  "title": "CaseForge aligned translation segment",
+  "description": "One OCR'd source-language segment aligned to its offline English translation (PRD v4.0 §7.9, G10). Translated text is never a verified quotation; critical fields need counsel confirmation.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "segment_id", "doc_id", "page_index", "source_script", "source_language", "source_text", "source_char_start", "source_char_end", "ocr_confidence", "target_language", "target_text", "model", "provenance_origin", "quotation_verifiable", "critical_fields"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "segment_id": { "type": "string" },
+    "doc_id": { "type": "string" },
+    "page_index": { "type": "integer", "minimum": 0 },
+    "source_script": { "enum": ["DEVANAGARI", "LATIN", "MIXED"] },
+    "source_language": { "type": "string", "minLength": 2, "description": "BCP-47 tag, e.g. hi." },
+    "source_text": { "type": "string", "minLength": 1 },
+    "source_char_start": { "type": "integer", "minimum": 0 },
+    "source_char_end": { "type": "integer", "minimum": 0 },
+    "ocr_confidence": {
+      "type": "object", "additionalProperties": false, "required": ["raw", "calibrated", "calibration_id"],
+      "properties": { "raw": { "type": ["number", "null"], "minimum": 0, "maximum": 1 }, "calibrated": { "type": ["number", "null"], "minimum": 0, "maximum": 1 }, "calibration_id": { "type": ["string", "null"] } }
+    },
+    "target_language": { "const": "en" },
+    "target_text": { "type": "string" },
+    "model": {
+      "type": "object", "additionalProperties": false, "required": ["model_id", "digest"],
+      "properties": { "model_id": { "type": "string" }, "digest": { "type": "string" } }
+    },
+    "provenance_origin": { "const": "TRANSLATED" },
+    "quotation_verifiable": { "const": false },
+    "critical_fields": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["field_id", "field_kind", "source_char_start", "source_char_end", "source_value", "translated_value", "counsel_confirmed", "confirmed_value"],
+        "properties": {
+          "field_id": { "type": "string" },
+          "field_kind": { "enum": ["DATE", "AMOUNT", "NAME", "SECTION_NUMBER", "CASE_NUMBER"] },
+          "source_char_start": { "type": "integer", "minimum": 0 },
+          "source_char_end": { "type": "integer", "minimum": 0 },
+          "source_value": { "type": "string" },
+          "translated_value": { "type": "string" },
+          "counsel_confirmed": { "type": "boolean" },
+          "confirmed_value": { "type": ["string", "null"] }
+        },
+        "allOf": [
+          { "if": { "properties": { "counsel_confirmed": { "const": true } } }, "then": { "properties": { "confirmed_value": { "type": "string", "minLength": 1 } } }, "else": { "properties": { "confirmed_value": { "type": "null" } } } }
+        ]
+      }
+    }
+  },
+  "x-caseforge": {
+    "status": "FROZEN_FOR_IMPLEMENTATION",
+    "batch": "B-S4-01",
+    "implemented_by": ["B-S4-14", "B-S4-15"],
+    "prd_refs": ["PRD v4.0 §7.9", "§12 G10", "AC-S4-09.1", "AC-S4-09.2", "AC-S4-09.3"],
+    "graph_amendment": "Facts extracted from target_text carry case_graph Provenance.origin TRANSLATED - see MANIFEST planned_amendments (case_graph v2.1.0, applied in B-S4-15).",
+    "choreography": "Translation model obeys the one-large-model rule; never concurrent with the primary reasoner."
+  }
+}

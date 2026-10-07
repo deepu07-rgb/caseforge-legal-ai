@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/session_turn.schema.json",
+  "title": "SessionTurn",
+  "description": "A generative or Mock Court session turn with provenance (PRD §4.3, §15 G5, §16). Stage 2 text formats: B-S2-02.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "turn_id",
+    "session_id",
+    "case_id",
+    "format",
+    "role",
+    "stage",
+    "pipeline_stages_completed",
+    "retrieval_ids",
+    "model_hash",
+    "prompt_hash",
+    "elapsed_ms",
+    "sources",
+    "disclaimer"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "turn_id": { "type": "string", "minLength": 1 },
+    "session_id": { "type": "string", "minLength": 1 },
+    "case_id": { "type": "string", "minLength": 1 },
+    "format": {
+      "type": "string",
+      "enum": [
+        "Bail_Interim_Motion",
+        "Final_Arguments",
+        "Witness_Cross_Examination",
+        "Appellate",
+        "Motion_Generic"
+      ]
+    },
+    "role": {
+      "type": "string",
+      "enum": ["counsel", "adversary", "bench", "witness", "system"]
+    },
+    "stage": {
+      "type": "string",
+      "enum": [
+        "DECOMPOSE",
+        "RETRIEVE",
+        "GENERATE",
+        "VERIFY",
+        "SCORE",
+        "RENDER"
+      ]
+    },
+    "user_text": { "type": ["string", "null"] },
+    "assistant_text": { "type": ["string", "null"] },
+    "pipeline_stages_completed": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "DECOMPOSE",
+          "RETRIEVE",
+          "GENERATE",
+          "VERIFY",
+          "SCORE",
+          "RENDER"
+        ]
+      },
+      "minItems": 1
+    },
+    "retrieval_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "G5 provenance — pack/chunk ids used this turn"
+    },
+    "model_hash": {
+      "type": "string",
+      "description": "Model id or 'deterministic' for offline scorer path"
+    },
+    "prompt_hash": {
+      "type": "string",
+      "description": "Hash of constrained prompt material (graph + retrieval only)"
+    },
+    "elapsed_ms": { "type": "integer", "minimum": 0 },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["case_graph", "retrieval", "integrity_tree"]
+      },
+      "minItems": 1,
+      "description": "raw_document is forbidden for Stage 2 adversary path"
+    },
+    "disclaimer": { "type": "string", "minLength": 1 },
+    "format_order": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "maximum": 5
+    },
+    "script_id": { "type": ["string", "null"] },
+    "token_estimate": { "type": ["integer", "null"], "minimum": 0 }
+  },
+  "x-caseforge": {
+    "status": "FROZEN",
+    "batch": "B-S2-02",
+    "prd_refs": ["§2 Stage 2", "§4.3", "§15 G5", "§16", "AC-3.3", "AC-2.1"],
+    "worksheet": "docs/worksheets/Q-ST-01_session_turn.md",
+    "pipeline_id": "caseforge.mock_court.v1",
+    "frozen_at": "2026-08-08",
+    "sequential_format_order": [
+      "Bail_Interim_Motion",
+      "Final_Arguments",
+      "Witness_Cross_Examination",
+      "Appellate",
+      "Motion_Generic"
+    ],
+    "normative_invariants": [
+      "Every generative turn follows: DECOMPOSE → RETRIEVE → GENERATE → VERIFY → SCORE → RENDER.",
+      "Every AI output carries provenance: model_hash, prompt_hash, retrieval_ids (G5).",
+      "Stage 2 adversary consumes only case_graph + retrieved law — never raw documents.",
+      "No named-judge profiles.",
+      "Text-only formats in B-S2-02; voice is B-S2-04.",
+      "Mock Court turn latency ≤ 15 s for ~300-token adversary response when models ready (AC-3.3)."
+    ],
+    "open_questions": []
+  }
+}

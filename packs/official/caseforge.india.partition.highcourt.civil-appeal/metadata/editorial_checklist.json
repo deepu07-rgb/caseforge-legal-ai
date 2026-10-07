@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "review_status": "PRODUCT_OWNER_SCOPE_APPROVED_TECHNICALLY_VERIFIED",
+  "product_owner_scope_approved_at": "2026-08-16",
+  "automated_checks": [
+    "official-domain",
+    "pdf-sha256",
+    "page-extraction",
+    "lineage",
+    "signature"
+  ],
+  "human_legal_editor_1": "PENDING",
+  "human_legal_editor_2": "PENDING",
+  "client_release_allowed": false,
+  "note": "Controlled development pack; two named legal-editor approvals are required before client release."
+}

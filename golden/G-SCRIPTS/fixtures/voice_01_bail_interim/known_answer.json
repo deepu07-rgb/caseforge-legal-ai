@@ -1,0 +1,7 @@
+﻿{
+    "expect_debrief":  true,
+    "expect_network_used":  false,
+    "expect_lite_refuse":  true,
+    "latency_budget_s":  15,
+    "expect_min_turns":  3
+}

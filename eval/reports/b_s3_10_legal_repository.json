@@ -1,0 +1,23 @@
+{
+  "batch": "B-S3-10",
+  "status": "PASS",
+  "scope": "India / High Court / property partition / civil appeal",
+  "pack_id": "caseforge.india.partition.highcourt.civil-appeal",
+  "version": "1.0.0-beta.1",
+  "source_records": 20,
+  "chunk_records": 20,
+  "pack_bytes": 283543,
+  "content_sha256": "7883058bd004dd99832489d43b01c4dedda6b8eddb61248d32e5ba2ad4846f13",
+  "checks": {
+    "manifest_and_file_hashes": true,
+    "signature": true,
+    "source_ledger": true,
+    "exact_page_lineage": true,
+    "original_matter_and_rights_basis": true,
+    "freshness_and_supersession": true,
+    "repository_gap_goldens": true,
+    "placeholder_blocking_ui": true,
+    "repository_gap_runtime": true
+  },
+  "client_release_note": "Controlled-beta content gate passed; replace development signing key and obtain named legal-editor approval before client distribution."
+}

@@ -1,0 +1,2 @@
+[SYNTHETIC_PLACEHOLDER_NOT_LAW]
+Synthetic United States-jurisdiction retrieval probe query for harness discovery only.

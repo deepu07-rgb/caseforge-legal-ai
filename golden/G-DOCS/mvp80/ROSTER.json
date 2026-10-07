@@ -1,0 +1,27 @@
+{
+  "project": "CaseForge G-DOCS MVP-80",
+  "batch": "B-S1-05",
+  "rubric_version": "LABELING_RUBRIC.md",
+  "roles": {
+    "labeler_a": {
+      "name": "TBD_LABELER_A",
+      "email_or_handle": null,
+      "trained_at": null
+    },
+    "labeler_b": {
+      "name": "TBD_LABELER_B",
+      "email_or_handle": null,
+      "trained_at": null
+    },
+    "adjudicator": {
+      "name": "TBD_ADJUDICATOR",
+      "email_or_handle": null,
+      "trained_at": null
+    },
+    "content_owner": {
+      "name": "TBD_CONTENT_OWNER",
+      "email_or_handle": null
+    }
+  },
+  "notes": "Replace TBD_* names before dual-label. Synthetic pack S-SYNTH-MVP80 may be dual-reviewed and locked GOLDEN only after two humans + adjudicator per POLICY.md."
+}

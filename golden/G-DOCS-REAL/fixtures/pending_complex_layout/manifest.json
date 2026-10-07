@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0.0",
+  "fixture_id": "DOCS-COMPLEX-LAYOUT-PENDING",
+  "suite_id": "G-DOCS-REAL",
+  "status": "BLOCKED",
+  "source_class": "REAL_WORLD_RIGHTS_CLEARED",
+  "jurisdiction": "Jurisdiction-neutral",
+  "purposes": ["layout-retention", "ocr"],
+  "source": {"title": "Rights-cleared complex legal layout corpus", "publisher": "TBD", "source_url": null, "acquired_at": null},
+  "rights": {"status": "PENDING", "basis": "A distributable or internal-use licence has not yet been documented.", "confidential": false, "distribution_scope": "internal_only", "may_redistribute": false},
+  "assets": [],
+  "expected_answer": {"path": null, "authored_by": [], "status": "NOT_AUTHORED", "reviewed_by": [], "adjudicator": null},
+  "characteristics": ["stamped", "signed", "table-heavy", "footnote-heavy"],
+  "notes": "Deliberately blocked; synthetic substitutions must not satisfy this real-world coverage requirement."
+}

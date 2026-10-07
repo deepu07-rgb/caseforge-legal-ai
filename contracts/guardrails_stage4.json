@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0.0",
+  "product": "CaseForge",
+  "batch": "B-S4-01",
+  "status": "FROZEN_FOR_IMPLEMENTATION",
+  "pipeline_id": "caseforge.guardrails.stage4.v1",
+  "extends": "contracts/guardrails.json (G1-G6, caseforge.guardrails.v1) - unchanged and still binding",
+  "prd_refs": ["PRD v4.0 §1", "§9.1", "§9.5", "§7.6", "§7.9", "§12", "AC-S4-RT-RED"],
+  "description": "Stage 4 guardrails G7-G10. Kept in a separate file so the frozen Stage 1 guardrail contract and its gates remain byte-identical. Runtime must load both files; a rule id may not be redefined here.",
+  "rules": {
+    "G7": {
+      "id": "G7",
+      "title": "Record-only (Chambers Edition): no extra-record facts",
+      "action": "block_render",
+      "error_code": "CF_GUARDRAIL_G7_EXTRA_RECORD",
+      "applies_to_editions": ["JUDICIARY"],
+      "sentence_classes": ["RECORD", "LAW", "INFERENCE_FROM_RECORD", "EXTRA_RECORD"],
+      "renderable_classes": ["RECORD", "LAW", "INFERENCE_FROM_RECORD"],
+      "custom_pack_rule": "Custom packs may supply LAW only when the user marked them 'law, not facts'; they never supply RECORD.",
+      "lock_rule": "Record-only cannot be disabled for a matter once a judgment scaffold exists."
+    },
+    "G8": {
+      "id": "G8",
+      "title": "Decision-free zone: never generate analysis, findings, holdings, or operative orders for a judge",
+      "action": "refuse_no_model_call",
+      "error_code": "CF_GUARDRAIL_G8_DECISION_ZONE",
+      "locked_sections": ["ANALYSIS", "FINDINGS", "OPERATIVE_ORDER"],
+      "permitted_assistance_on_judge_text": ["SPELLCHECK", "FORMATTING", "CITATION_AUDIT"],
+      "enforcement_layer": "host (Rust) - UI hiding alone is insufficient"
+    },
+    "G9": {
+      "id": "G9",
+      "title": "Deadlines and limitation are computations to verify, never advice",
+      "action": "require_label",
+      "error_code": "CF_GUARDRAIL_G9_DEADLINE_UNLABELLED",
+      "required_fields": ["rule_id", "authority", "trigger.locator", "verify_label"],
+      "verify_label": "VERIFY"
+    },
+    "G10": {
+      "id": "G10",
+      "title": "Translation never becomes a verified quotation or verified critical field without counsel confirmation",
+      "action": "block_green",
+      "error_code": "CF_GUARDRAIL_G10_TRANSLATION_AS_VERIFIED",
+      "translated_quote_label": "translation - wording not verified"
+    }
+  },
+  "input_patterns": {
+    "G8": [
+      "\\b(write|draft|generate|suggest)\\s+(the\\s+)?(analysis|findings?|holding|ratio|operative\\s+(order|part)|judgment\\s+conclusion)\\b",
+      "\\b(decide|determine|answer|resolve)\\s+(the\\s+|this\\s+)?issues?\\b",
+      "\\bwhich\\s+(party|side)\\s+(should|will|deserves\\s+to)\\s+(win|succeed|prevail)\\b",
+      "\\b(should|must)\\s+(i|the\\s+court)\\s+(grant|refuse|allow|dismiss|acquit|convict)\\b",
+      "\\b(grant|refuse)\\s+bail\\s*\\?",
+      "\\brecommend\\s+(a\\s+)?(sentence|relief|order|decision)\\b"
+    ]
+  },
+  "output_patterns": {
+    "G8": [
+      "\\bthe\\s+issue\\s+is\\s+(accordingly\\s+)?answered\\b",
+      "\\b(it\\s+is\\s+)?(hereby\\s+)?(ordered|decreed|held)\\s+that\\b",
+      "\\bthe\\s+(petition|appeal|suit|application)\\s+is\\s+(allowed|dismissed|granted|rejected)\\b",
+      "\\b(plaintiff|defendant|petitioner|respondent|prosecution|accused)\\s+(has|have)\\s+(proved|established|failed\\s+to\\s+prove)\\b"
+    ],
+    "PARTY_SCORING": [
+      "\\b(stronger|weaker)\\s+(case|side|party)\\b",
+      "\\b(more|less)\\s+(likely|persuasive)\\s+to\\s+succeed\\b"
+    ]
+  },
+  "prohibited_copy": {
+    "applies_to": ["audit_certificate", "ui_copy", "export_footer", "marketing"],
+    "phrases": ["guaranteed", "court-approved", "sanction-proof", "AI judge", "predicts", "decides", "good law", "valid law"],
+    "match": "case_insensitive_whole_phrase"
+  },
+  "refusal_templates": {
+    "G7": "Blocked (G7): this statement is not supported by the record or installed law for this matter.",
+    "G8": "Refused (G8): CaseForge does not write analysis, findings, holdings, or orders. These sections are for the judge alone.",
+    "G9": "Blocked (G9): a deadline cannot be shown without its rule, authority, trigger source, and VERIFY label.",
+    "G10": "Labelled (G10): translated text is not a verified quotation; confirm critical fields against the original."
+  },
+  "stage4_redteam": {
+    "suite_id": "caseforge.redteam.stage4.v1",
+    "min_prompts_threshold_id": "S4.redteam.full_suite_min_prompts",
+    "chambers_min_prompts_threshold_id": "S4.chambers.redteam_min_prompts",
+    "zero_violation_rules": ["G1", "G2", "G3", "G7", "G8"],
+    "fixture": "golden/G-REDTEAM-S4",
+    "authored_in": "B-S4-02",
+    "run_in": "B-S4-23"
+  },
+  "frozen_at": "2026-10-07",
+  "authority": "B-S4-01 draft freeze - pending owner ratification of CaseForge_PRD_v4.0.md"
+}

@@ -1,0 +1,364 @@
+{
+  "batch": "B-S3-06",
+  "generated_at": "2026-08-13T20:17:18.771068+00:00",
+  "implementation_status": "PASS",
+  "formal_acceptance_status": "BLOCKED",
+  "formal_blockers": [
+    "Owner-approved per-concept precision/recall thresholds are absent.",
+    "Controlled synthetic fixtures are not representative held-out India/US production goldens."
+  ],
+  "schema_version": "2.0.0",
+  "controlled_metrics": {
+    "india": {
+      "ambiguous_dates": 0,
+      "contradictions": 1,
+      "edges": 13,
+      "fixture_id": "graph-india-controlled-001",
+      "nodes": 24,
+      "observed": {
+        "application": 1,
+        "authority": 1,
+        "claim": 1,
+        "counterclaim": 1,
+        "defence": 1,
+        "event": 1,
+        "evidence": 1,
+        "exhibit": 1,
+        "fact": 3,
+        "hearing": 1,
+        "interpretation": 1,
+        "issue": 1,
+        "order": 1,
+        "party": 2,
+        "procedure": 1,
+        "provision": 1,
+        "relief": 1,
+        "rule": 1,
+        "statement": 1,
+        "sub_issue": 1,
+        "witness": 1
+      },
+      "provenance_defects": 0
+    },
+    "united_states": {
+      "ambiguous_dates": 1,
+      "contradictions": 0,
+      "edges": 7,
+      "fixture_id": "graph-us-controlled-001",
+      "nodes": 18,
+      "observed": {
+        "application": 1,
+        "authority": 1,
+        "claim": 1,
+        "defence": 1,
+        "event": 1,
+        "evidence": 1,
+        "fact": 1,
+        "hearing": 1,
+        "issue": 1,
+        "order": 1,
+        "party": 2,
+        "procedure": 1,
+        "provision": 1,
+        "relief": 1,
+        "rule": 1,
+        "statement": 1,
+        "witness": 1
+      },
+      "provenance_defects": 0
+    }
+  },
+  "sidecar_parity_metrics": {
+    "graph-india-controlled-001": {
+      "nodes": 24,
+      "edges": 13,
+      "concepts": {
+        "party": 2,
+        "claim": 1,
+        "defence": 1,
+        "counterclaim": 1,
+        "issue": 1,
+        "sub_issue": 1,
+        "fact": 3,
+        "witness": 1,
+        "statement": 1,
+        "application": 1,
+        "hearing": 1,
+        "order": 1,
+        "event": 1,
+        "provision": 1,
+        "rule": 1,
+        "authority": 1,
+        "relief": 1,
+        "evidence": 1,
+        "exhibit": 1,
+        "procedure": 1,
+        "interpretation": 1
+      },
+      "provenance_defects": 0
+    },
+    "graph-us-controlled-001": {
+      "nodes": 18,
+      "edges": 7,
+      "concepts": {
+        "party": 2,
+        "claim": 1,
+        "defence": 1,
+        "issue": 1,
+        "fact": 1,
+        "witness": 1,
+        "statement": 1,
+        "application": 1,
+        "hearing": 1,
+        "order": 1,
+        "event": 1,
+        "provision": 1,
+        "rule": 1,
+        "authority": 1,
+        "relief": 1,
+        "evidence": 1,
+        "procedure": 1
+      },
+      "provenance_defects": 0
+    }
+  },
+  "controlled_per_concept_count_metrics": {
+    "india:application": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "india:authority": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "india:claim": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "india:counterclaim": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "india:defence": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "india:event": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "india:evidence": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "india:exhibit": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "india:fact": {
+      "expected": 3,
+      "observed": 3,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "india:hearing": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "india:interpretation": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "india:issue": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "india:order": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "india:party": {
+      "expected": 2,
+      "observed": 2,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "india:procedure": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "india:provision": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "india:relief": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "india:rule": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "india:statement": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "india:sub_issue": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "india:witness": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "united_states:application": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "united_states:authority": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "united_states:claim": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "united_states:defence": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "united_states:event": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "united_states:evidence": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "united_states:fact": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "united_states:hearing": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "united_states:issue": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "united_states:order": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "united_states:party": {
+      "expected": 2,
+      "observed": 2,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "united_states:procedure": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "united_states:provision": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "united_states:relief": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "united_states:rule": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "united_states:statement": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "united_states:witness": {
+      "expected": 1,
+      "observed": 1,
+      "precision": 1.0,
+      "recall": 1.0
+    }
+  },
+  "limitations": "Count metrics prove deterministic controlled coverage only; they must not be represented as real-document extraction quality.",
+  "acceptance_gates": {
+    "AC-S3-6.1": "PASS",
+    "AC-S3-6.2": "PASS",
+    "AC-S3-6.3": "BLOCKED",
+    "AC-S3-6.4": "PASS",
+    "AC-S3-6.5": "PASS",
+    "AC-S3-6.6": "PASS"
+  }
+}

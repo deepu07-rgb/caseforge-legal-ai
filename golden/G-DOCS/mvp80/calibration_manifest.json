@@ -1,0 +1,5014 @@
+{
+  "description": "Synthetic G-DOCS page plan. Intended class is adjudicator key only \u2014 not GOLDEN until product-owner lock.",
+  "count": 500,
+  "quotas": {
+    "typed_english": 200,
+    "clean_handwriting": 75,
+    "messy_handwriting": 63,
+    "mixed": 63,
+    "other": 62,
+    "non_text": 37
+  },
+  "pages": [
+    {
+      "fixture_id": "G-DOCS/page_0001",
+      "slug": "page_0001",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0001.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0002",
+      "slug": "page_0002",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0002.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0003",
+      "slug": "page_0003",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0003.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0004",
+      "slug": "page_0004",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0004.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0005",
+      "slug": "page_0005",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0005.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0006",
+      "slug": "page_0006",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0006.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0007",
+      "slug": "page_0007",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0007.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0008",
+      "slug": "page_0008",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0008.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0009",
+      "slug": "page_0009",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0009.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0010",
+      "slug": "page_0010",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0010.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0011",
+      "slug": "page_0011",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0011.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0012",
+      "slug": "page_0012",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0012.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0013",
+      "slug": "page_0013",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0013.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0014",
+      "slug": "page_0014",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0014.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0015",
+      "slug": "page_0015",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0015.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0016",
+      "slug": "page_0016",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0016.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0017",
+      "slug": "page_0017",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0017.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0018",
+      "slug": "page_0018",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0018.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0019",
+      "slug": "page_0019",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0019.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0020",
+      "slug": "page_0020",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0020.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0021",
+      "slug": "page_0021",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0021.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0022",
+      "slug": "page_0022",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0022.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0023",
+      "slug": "page_0023",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0023.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0024",
+      "slug": "page_0024",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0024.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0025",
+      "slug": "page_0025",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0025.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0026",
+      "slug": "page_0026",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0026.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0027",
+      "slug": "page_0027",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0027.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0028",
+      "slug": "page_0028",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0028.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0029",
+      "slug": "page_0029",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0029.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0030",
+      "slug": "page_0030",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0030.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0031",
+      "slug": "page_0031",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0031.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0032",
+      "slug": "page_0032",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0032.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0033",
+      "slug": "page_0033",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0033.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0034",
+      "slug": "page_0034",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0034.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0035",
+      "slug": "page_0035",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0035.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0036",
+      "slug": "page_0036",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0036.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0037",
+      "slug": "page_0037",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0037.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0038",
+      "slug": "page_0038",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0038.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0039",
+      "slug": "page_0039",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0039.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0040",
+      "slug": "page_0040",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0040.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0041",
+      "slug": "page_0041",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0041.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0042",
+      "slug": "page_0042",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0042.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0043",
+      "slug": "page_0043",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0043.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0044",
+      "slug": "page_0044",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0044.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0045",
+      "slug": "page_0045",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0045.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0046",
+      "slug": "page_0046",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0046.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0047",
+      "slug": "page_0047",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0047.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0048",
+      "slug": "page_0048",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0048.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0049",
+      "slug": "page_0049",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0049.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0050",
+      "slug": "page_0050",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0050.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0051",
+      "slug": "page_0051",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0051.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0052",
+      "slug": "page_0052",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0052.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0053",
+      "slug": "page_0053",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0053.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0054",
+      "slug": "page_0054",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0054.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0055",
+      "slug": "page_0055",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0055.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0056",
+      "slug": "page_0056",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0056.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0057",
+      "slug": "page_0057",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0057.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0058",
+      "slug": "page_0058",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0058.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0059",
+      "slug": "page_0059",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0059.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0060",
+      "slug": "page_0060",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0060.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0061",
+      "slug": "page_0061",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0061.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0062",
+      "slug": "page_0062",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0062.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0063",
+      "slug": "page_0063",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0063.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0064",
+      "slug": "page_0064",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0064.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0065",
+      "slug": "page_0065",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0065.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0066",
+      "slug": "page_0066",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0066.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0067",
+      "slug": "page_0067",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0067.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0068",
+      "slug": "page_0068",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0068.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0069",
+      "slug": "page_0069",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0069.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0070",
+      "slug": "page_0070",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0070.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0071",
+      "slug": "page_0071",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0071.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0072",
+      "slug": "page_0072",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0072.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0073",
+      "slug": "page_0073",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0073.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0074",
+      "slug": "page_0074",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0074.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0075",
+      "slug": "page_0075",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0075.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0076",
+      "slug": "page_0076",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0076.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0077",
+      "slug": "page_0077",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0077.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0078",
+      "slug": "page_0078",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0078.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0079",
+      "slug": "page_0079",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0079.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0080",
+      "slug": "page_0080",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0080.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0081",
+      "slug": "page_0081",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0081.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0082",
+      "slug": "page_0082",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0082.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0083",
+      "slug": "page_0083",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0083.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0084",
+      "slug": "page_0084",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0084.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0085",
+      "slug": "page_0085",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0085.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0086",
+      "slug": "page_0086",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0086.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0087",
+      "slug": "page_0087",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0087.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0088",
+      "slug": "page_0088",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0088.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0089",
+      "slug": "page_0089",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0089.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0090",
+      "slug": "page_0090",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0090.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0091",
+      "slug": "page_0091",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0091.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0092",
+      "slug": "page_0092",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0092.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0093",
+      "slug": "page_0093",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0093.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0094",
+      "slug": "page_0094",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0094.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0095",
+      "slug": "page_0095",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0095.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0096",
+      "slug": "page_0096",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0096.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0097",
+      "slug": "page_0097",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0097.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0098",
+      "slug": "page_0098",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0098.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0099",
+      "slug": "page_0099",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0099.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0100",
+      "slug": "page_0100",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0100.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0101",
+      "slug": "page_0101",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0101.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0102",
+      "slug": "page_0102",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0102.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0103",
+      "slug": "page_0103",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0103.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0104",
+      "slug": "page_0104",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0104.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0105",
+      "slug": "page_0105",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0105.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0106",
+      "slug": "page_0106",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0106.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0107",
+      "slug": "page_0107",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0107.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0108",
+      "slug": "page_0108",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0108.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0109",
+      "slug": "page_0109",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0109.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0110",
+      "slug": "page_0110",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0110.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0111",
+      "slug": "page_0111",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0111.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0112",
+      "slug": "page_0112",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0112.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0113",
+      "slug": "page_0113",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0113.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0114",
+      "slug": "page_0114",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0114.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0115",
+      "slug": "page_0115",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0115.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0116",
+      "slug": "page_0116",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0116.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0117",
+      "slug": "page_0117",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0117.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0118",
+      "slug": "page_0118",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0118.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0119",
+      "slug": "page_0119",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0119.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0120",
+      "slug": "page_0120",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0120.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0121",
+      "slug": "page_0121",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0121.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0122",
+      "slug": "page_0122",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0122.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0123",
+      "slug": "page_0123",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0123.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0124",
+      "slug": "page_0124",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0124.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0125",
+      "slug": "page_0125",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0125.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0126",
+      "slug": "page_0126",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0126.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0127",
+      "slug": "page_0127",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0127.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0128",
+      "slug": "page_0128",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0128.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0129",
+      "slug": "page_0129",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0129.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0130",
+      "slug": "page_0130",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0130.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0131",
+      "slug": "page_0131",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0131.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0132",
+      "slug": "page_0132",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0132.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0133",
+      "slug": "page_0133",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0133.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0134",
+      "slug": "page_0134",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0134.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0135",
+      "slug": "page_0135",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0135.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0136",
+      "slug": "page_0136",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0136.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0137",
+      "slug": "page_0137",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0137.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0138",
+      "slug": "page_0138",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0138.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0139",
+      "slug": "page_0139",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0139.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0140",
+      "slug": "page_0140",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0140.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0141",
+      "slug": "page_0141",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0141.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0142",
+      "slug": "page_0142",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0142.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0143",
+      "slug": "page_0143",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0143.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0144",
+      "slug": "page_0144",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0144.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0145",
+      "slug": "page_0145",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0145.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0146",
+      "slug": "page_0146",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0146.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0147",
+      "slug": "page_0147",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0147.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0148",
+      "slug": "page_0148",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0148.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0149",
+      "slug": "page_0149",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0149.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0150",
+      "slug": "page_0150",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0150.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0151",
+      "slug": "page_0151",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0151.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0152",
+      "slug": "page_0152",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0152.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0153",
+      "slug": "page_0153",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0153.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0154",
+      "slug": "page_0154",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0154.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0155",
+      "slug": "page_0155",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0155.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0156",
+      "slug": "page_0156",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0156.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0157",
+      "slug": "page_0157",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0157.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0158",
+      "slug": "page_0158",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0158.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0159",
+      "slug": "page_0159",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0159.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0160",
+      "slug": "page_0160",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0160.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0161",
+      "slug": "page_0161",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0161.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0162",
+      "slug": "page_0162",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0162.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0163",
+      "slug": "page_0163",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0163.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0164",
+      "slug": "page_0164",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0164.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0165",
+      "slug": "page_0165",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0165.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0166",
+      "slug": "page_0166",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0166.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0167",
+      "slug": "page_0167",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0167.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0168",
+      "slug": "page_0168",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0168.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0169",
+      "slug": "page_0169",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0169.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0170",
+      "slug": "page_0170",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0170.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0171",
+      "slug": "page_0171",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0171.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0172",
+      "slug": "page_0172",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0172.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0173",
+      "slug": "page_0173",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0173.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0174",
+      "slug": "page_0174",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0174.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0175",
+      "slug": "page_0175",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0175.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0176",
+      "slug": "page_0176",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0176.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0177",
+      "slug": "page_0177",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0177.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0178",
+      "slug": "page_0178",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0178.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0179",
+      "slug": "page_0179",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0179.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0180",
+      "slug": "page_0180",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0180.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0181",
+      "slug": "page_0181",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0181.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0182",
+      "slug": "page_0182",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0182.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0183",
+      "slug": "page_0183",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0183.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0184",
+      "slug": "page_0184",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0184.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0185",
+      "slug": "page_0185",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0185.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0186",
+      "slug": "page_0186",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0186.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0187",
+      "slug": "page_0187",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0187.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0188",
+      "slug": "page_0188",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0188.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0189",
+      "slug": "page_0189",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0189.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0190",
+      "slug": "page_0190",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0190.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0191",
+      "slug": "page_0191",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0191.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0192",
+      "slug": "page_0192",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0192.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0193",
+      "slug": "page_0193",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0193.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0194",
+      "slug": "page_0194",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0194.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0195",
+      "slug": "page_0195",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0195.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0196",
+      "slug": "page_0196",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0196.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0197",
+      "slug": "page_0197",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0197.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0198",
+      "slug": "page_0198",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0198.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0199",
+      "slug": "page_0199",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0199.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0200",
+      "slug": "page_0200",
+      "intended_class": "typed_english",
+      "staging_path": "golden/G-DOCS/mvp80/staging/typed_english/page_0200.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0201",
+      "slug": "page_0201",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0201.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0202",
+      "slug": "page_0202",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0202.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0203",
+      "slug": "page_0203",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0203.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0204",
+      "slug": "page_0204",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0204.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0205",
+      "slug": "page_0205",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0205.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0206",
+      "slug": "page_0206",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0206.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0207",
+      "slug": "page_0207",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0207.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0208",
+      "slug": "page_0208",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0208.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0209",
+      "slug": "page_0209",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0209.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0210",
+      "slug": "page_0210",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0210.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0211",
+      "slug": "page_0211",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0211.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0212",
+      "slug": "page_0212",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0212.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0213",
+      "slug": "page_0213",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0213.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0214",
+      "slug": "page_0214",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0214.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0215",
+      "slug": "page_0215",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0215.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0216",
+      "slug": "page_0216",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0216.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0217",
+      "slug": "page_0217",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0217.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0218",
+      "slug": "page_0218",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0218.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0219",
+      "slug": "page_0219",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0219.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0220",
+      "slug": "page_0220",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0220.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0221",
+      "slug": "page_0221",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0221.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0222",
+      "slug": "page_0222",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0222.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0223",
+      "slug": "page_0223",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0223.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0224",
+      "slug": "page_0224",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0224.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0225",
+      "slug": "page_0225",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0225.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0226",
+      "slug": "page_0226",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0226.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0227",
+      "slug": "page_0227",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0227.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0228",
+      "slug": "page_0228",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0228.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0229",
+      "slug": "page_0229",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0229.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0230",
+      "slug": "page_0230",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0230.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0231",
+      "slug": "page_0231",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0231.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0232",
+      "slug": "page_0232",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0232.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0233",
+      "slug": "page_0233",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0233.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0234",
+      "slug": "page_0234",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0234.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0235",
+      "slug": "page_0235",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0235.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0236",
+      "slug": "page_0236",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0236.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0237",
+      "slug": "page_0237",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0237.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0238",
+      "slug": "page_0238",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0238.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0239",
+      "slug": "page_0239",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0239.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0240",
+      "slug": "page_0240",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0240.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0241",
+      "slug": "page_0241",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0241.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0242",
+      "slug": "page_0242",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0242.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0243",
+      "slug": "page_0243",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0243.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0244",
+      "slug": "page_0244",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0244.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0245",
+      "slug": "page_0245",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0245.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0246",
+      "slug": "page_0246",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0246.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0247",
+      "slug": "page_0247",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0247.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0248",
+      "slug": "page_0248",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0248.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0249",
+      "slug": "page_0249",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0249.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0250",
+      "slug": "page_0250",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0250.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0251",
+      "slug": "page_0251",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0251.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0252",
+      "slug": "page_0252",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0252.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0253",
+      "slug": "page_0253",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0253.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0254",
+      "slug": "page_0254",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0254.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0255",
+      "slug": "page_0255",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0255.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0256",
+      "slug": "page_0256",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0256.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0257",
+      "slug": "page_0257",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0257.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0258",
+      "slug": "page_0258",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0258.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0259",
+      "slug": "page_0259",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0259.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0260",
+      "slug": "page_0260",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0260.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0261",
+      "slug": "page_0261",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0261.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0262",
+      "slug": "page_0262",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0262.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0263",
+      "slug": "page_0263",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0263.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0264",
+      "slug": "page_0264",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0264.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0265",
+      "slug": "page_0265",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0265.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0266",
+      "slug": "page_0266",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0266.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0267",
+      "slug": "page_0267",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0267.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0268",
+      "slug": "page_0268",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0268.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0269",
+      "slug": "page_0269",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0269.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0270",
+      "slug": "page_0270",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0270.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0271",
+      "slug": "page_0271",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0271.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0272",
+      "slug": "page_0272",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0272.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0273",
+      "slug": "page_0273",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0273.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0274",
+      "slug": "page_0274",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0274.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0275",
+      "slug": "page_0275",
+      "intended_class": "clean_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/clean_handwriting/page_0275.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0276",
+      "slug": "page_0276",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0276.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0277",
+      "slug": "page_0277",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0277.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0278",
+      "slug": "page_0278",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0278.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0279",
+      "slug": "page_0279",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0279.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0280",
+      "slug": "page_0280",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0280.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0281",
+      "slug": "page_0281",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0281.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0282",
+      "slug": "page_0282",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0282.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0283",
+      "slug": "page_0283",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0283.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0284",
+      "slug": "page_0284",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0284.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0285",
+      "slug": "page_0285",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0285.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0286",
+      "slug": "page_0286",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0286.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0287",
+      "slug": "page_0287",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0287.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0288",
+      "slug": "page_0288",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0288.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0289",
+      "slug": "page_0289",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0289.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0290",
+      "slug": "page_0290",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0290.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0291",
+      "slug": "page_0291",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0291.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0292",
+      "slug": "page_0292",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0292.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0293",
+      "slug": "page_0293",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0293.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0294",
+      "slug": "page_0294",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0294.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0295",
+      "slug": "page_0295",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0295.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0296",
+      "slug": "page_0296",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0296.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0297",
+      "slug": "page_0297",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0297.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0298",
+      "slug": "page_0298",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0298.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0299",
+      "slug": "page_0299",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0299.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0300",
+      "slug": "page_0300",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0300.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0301",
+      "slug": "page_0301",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0301.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0302",
+      "slug": "page_0302",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0302.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0303",
+      "slug": "page_0303",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0303.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0304",
+      "slug": "page_0304",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0304.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0305",
+      "slug": "page_0305",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0305.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0306",
+      "slug": "page_0306",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0306.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0307",
+      "slug": "page_0307",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0307.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0308",
+      "slug": "page_0308",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0308.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0309",
+      "slug": "page_0309",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0309.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0310",
+      "slug": "page_0310",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0310.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0311",
+      "slug": "page_0311",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0311.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0312",
+      "slug": "page_0312",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0312.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0313",
+      "slug": "page_0313",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0313.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0314",
+      "slug": "page_0314",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0314.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0315",
+      "slug": "page_0315",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0315.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0316",
+      "slug": "page_0316",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0316.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0317",
+      "slug": "page_0317",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0317.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0318",
+      "slug": "page_0318",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0318.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0319",
+      "slug": "page_0319",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0319.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0320",
+      "slug": "page_0320",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0320.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0321",
+      "slug": "page_0321",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0321.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0322",
+      "slug": "page_0322",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0322.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0323",
+      "slug": "page_0323",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0323.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0324",
+      "slug": "page_0324",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0324.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0325",
+      "slug": "page_0325",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0325.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0326",
+      "slug": "page_0326",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0326.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0327",
+      "slug": "page_0327",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0327.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0328",
+      "slug": "page_0328",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0328.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0329",
+      "slug": "page_0329",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0329.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0330",
+      "slug": "page_0330",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0330.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0331",
+      "slug": "page_0331",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0331.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0332",
+      "slug": "page_0332",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0332.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0333",
+      "slug": "page_0333",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0333.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0334",
+      "slug": "page_0334",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0334.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0335",
+      "slug": "page_0335",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0335.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0336",
+      "slug": "page_0336",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0336.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0337",
+      "slug": "page_0337",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0337.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0338",
+      "slug": "page_0338",
+      "intended_class": "messy_handwriting",
+      "staging_path": "golden/G-DOCS/mvp80/staging/messy_handwriting/page_0338.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0339",
+      "slug": "page_0339",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0339.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0340",
+      "slug": "page_0340",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0340.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0341",
+      "slug": "page_0341",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0341.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0342",
+      "slug": "page_0342",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0342.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0343",
+      "slug": "page_0343",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0343.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0344",
+      "slug": "page_0344",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0344.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0345",
+      "slug": "page_0345",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0345.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0346",
+      "slug": "page_0346",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0346.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0347",
+      "slug": "page_0347",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0347.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0348",
+      "slug": "page_0348",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0348.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0349",
+      "slug": "page_0349",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0349.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0350",
+      "slug": "page_0350",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0350.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0351",
+      "slug": "page_0351",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0351.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0352",
+      "slug": "page_0352",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0352.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0353",
+      "slug": "page_0353",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0353.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0354",
+      "slug": "page_0354",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0354.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0355",
+      "slug": "page_0355",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0355.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0356",
+      "slug": "page_0356",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0356.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0357",
+      "slug": "page_0357",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0357.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0358",
+      "slug": "page_0358",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0358.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0359",
+      "slug": "page_0359",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0359.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0360",
+      "slug": "page_0360",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0360.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0361",
+      "slug": "page_0361",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0361.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0362",
+      "slug": "page_0362",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0362.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0363",
+      "slug": "page_0363",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0363.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0364",
+      "slug": "page_0364",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0364.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0365",
+      "slug": "page_0365",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0365.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0366",
+      "slug": "page_0366",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0366.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0367",
+      "slug": "page_0367",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0367.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0368",
+      "slug": "page_0368",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0368.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0369",
+      "slug": "page_0369",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0369.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0370",
+      "slug": "page_0370",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0370.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0371",
+      "slug": "page_0371",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0371.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0372",
+      "slug": "page_0372",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0372.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0373",
+      "slug": "page_0373",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0373.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0374",
+      "slug": "page_0374",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0374.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0375",
+      "slug": "page_0375",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0375.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0376",
+      "slug": "page_0376",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0376.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0377",
+      "slug": "page_0377",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0377.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0378",
+      "slug": "page_0378",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0378.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0379",
+      "slug": "page_0379",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0379.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0380",
+      "slug": "page_0380",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0380.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0381",
+      "slug": "page_0381",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0381.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0382",
+      "slug": "page_0382",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0382.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0383",
+      "slug": "page_0383",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0383.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0384",
+      "slug": "page_0384",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0384.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0385",
+      "slug": "page_0385",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0385.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0386",
+      "slug": "page_0386",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0386.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0387",
+      "slug": "page_0387",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0387.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0388",
+      "slug": "page_0388",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0388.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0389",
+      "slug": "page_0389",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0389.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0390",
+      "slug": "page_0390",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0390.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0391",
+      "slug": "page_0391",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0391.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0392",
+      "slug": "page_0392",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0392.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0393",
+      "slug": "page_0393",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0393.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0394",
+      "slug": "page_0394",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0394.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0395",
+      "slug": "page_0395",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0395.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0396",
+      "slug": "page_0396",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0396.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0397",
+      "slug": "page_0397",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0397.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0398",
+      "slug": "page_0398",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0398.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0399",
+      "slug": "page_0399",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0399.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0400",
+      "slug": "page_0400",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0400.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0401",
+      "slug": "page_0401",
+      "intended_class": "mixed",
+      "staging_path": "golden/G-DOCS/mvp80/staging/mixed/page_0401.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0402",
+      "slug": "page_0402",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0402.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0403",
+      "slug": "page_0403",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0403.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0404",
+      "slug": "page_0404",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0404.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0405",
+      "slug": "page_0405",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0405.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0406",
+      "slug": "page_0406",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0406.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0407",
+      "slug": "page_0407",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0407.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0408",
+      "slug": "page_0408",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0408.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0409",
+      "slug": "page_0409",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0409.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0410",
+      "slug": "page_0410",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0410.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0411",
+      "slug": "page_0411",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0411.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0412",
+      "slug": "page_0412",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0412.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0413",
+      "slug": "page_0413",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0413.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0414",
+      "slug": "page_0414",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0414.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0415",
+      "slug": "page_0415",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0415.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0416",
+      "slug": "page_0416",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0416.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0417",
+      "slug": "page_0417",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0417.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0418",
+      "slug": "page_0418",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0418.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0419",
+      "slug": "page_0419",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0419.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0420",
+      "slug": "page_0420",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0420.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0421",
+      "slug": "page_0421",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0421.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0422",
+      "slug": "page_0422",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0422.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0423",
+      "slug": "page_0423",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0423.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0424",
+      "slug": "page_0424",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0424.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0425",
+      "slug": "page_0425",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0425.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0426",
+      "slug": "page_0426",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0426.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0427",
+      "slug": "page_0427",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0427.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0428",
+      "slug": "page_0428",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0428.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0429",
+      "slug": "page_0429",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0429.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0430",
+      "slug": "page_0430",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0430.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0431",
+      "slug": "page_0431",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0431.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0432",
+      "slug": "page_0432",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0432.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0433",
+      "slug": "page_0433",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0433.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0434",
+      "slug": "page_0434",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0434.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0435",
+      "slug": "page_0435",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0435.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0436",
+      "slug": "page_0436",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0436.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0437",
+      "slug": "page_0437",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0437.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0438",
+      "slug": "page_0438",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0438.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0439",
+      "slug": "page_0439",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0439.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0440",
+      "slug": "page_0440",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0440.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0441",
+      "slug": "page_0441",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0441.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0442",
+      "slug": "page_0442",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0442.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0443",
+      "slug": "page_0443",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0443.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0444",
+      "slug": "page_0444",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0444.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0445",
+      "slug": "page_0445",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0445.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0446",
+      "slug": "page_0446",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0446.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0447",
+      "slug": "page_0447",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0447.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0448",
+      "slug": "page_0448",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0448.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0449",
+      "slug": "page_0449",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0449.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0450",
+      "slug": "page_0450",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0450.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0451",
+      "slug": "page_0451",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0451.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0452",
+      "slug": "page_0452",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0452.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0453",
+      "slug": "page_0453",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0453.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0454",
+      "slug": "page_0454",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0454.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0455",
+      "slug": "page_0455",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0455.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0456",
+      "slug": "page_0456",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0456.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0457",
+      "slug": "page_0457",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0457.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0458",
+      "slug": "page_0458",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0458.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0459",
+      "slug": "page_0459",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0459.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0460",
+      "slug": "page_0460",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0460.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0461",
+      "slug": "page_0461",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0461.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0462",
+      "slug": "page_0462",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0462.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0463",
+      "slug": "page_0463",
+      "intended_class": "other",
+      "staging_path": "golden/G-DOCS/mvp80/staging/other/page_0463.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0464",
+      "slug": "page_0464",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0464.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0465",
+      "slug": "page_0465",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0465.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0466",
+      "slug": "page_0466",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0466.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0467",
+      "slug": "page_0467",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0467.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0468",
+      "slug": "page_0468",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0468.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0469",
+      "slug": "page_0469",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0469.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0470",
+      "slug": "page_0470",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0470.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0471",
+      "slug": "page_0471",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0471.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0472",
+      "slug": "page_0472",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0472.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0473",
+      "slug": "page_0473",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0473.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0474",
+      "slug": "page_0474",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0474.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0475",
+      "slug": "page_0475",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0475.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0476",
+      "slug": "page_0476",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0476.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0477",
+      "slug": "page_0477",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0477.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0478",
+      "slug": "page_0478",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0478.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0479",
+      "slug": "page_0479",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0479.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0480",
+      "slug": "page_0480",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0480.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0481",
+      "slug": "page_0481",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0481.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0482",
+      "slug": "page_0482",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0482.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0483",
+      "slug": "page_0483",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0483.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0484",
+      "slug": "page_0484",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0484.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0485",
+      "slug": "page_0485",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0485.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0486",
+      "slug": "page_0486",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0486.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0487",
+      "slug": "page_0487",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0487.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0488",
+      "slug": "page_0488",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0488.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0489",
+      "slug": "page_0489",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0489.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0490",
+      "slug": "page_0490",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0490.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0491",
+      "slug": "page_0491",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0491.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0492",
+      "slug": "page_0492",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0492.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0493",
+      "slug": "page_0493",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0493.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0494",
+      "slug": "page_0494",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0494.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0495",
+      "slug": "page_0495",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0495.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0496",
+      "slug": "page_0496",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0496.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0497",
+      "slug": "page_0497",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0497.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0498",
+      "slug": "page_0498",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0498.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0499",
+      "slug": "page_0499",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0499.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    },
+    {
+      "fixture_id": "G-DOCS/page_0500",
+      "slug": "page_0500",
+      "intended_class": "non_text",
+      "staging_path": "golden/G-DOCS/mvp80/staging/non_text/page_0500.txt",
+      "source_id": "S-SYNTH-GDOCS-500",
+      "rights": "synthetic_pedagogy",
+      "status_after_scaffold": "DRAFT",
+      "may_lock_golden_after": "dual_human_review_per_POLICY"
+    }
+  ]
+}

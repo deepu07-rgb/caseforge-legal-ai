@@ -1,0 +1,8 @@
+{
+  "schema_version":"1.0.0","fixture_id":"PERF-40-100-300-PENDING","suite_id":"G-PERFORMANCE","status":"BLOCKED","source_class":"SYNTHETIC_CONTROLLED","jurisdiction":"Jurisdiction-neutral",
+  "purposes":["40-page-profile","100-page-profile","300-page-profile","peak-rss","cold-start","retrieval-latency","turn-latency"],
+  "source":{"title":"Deterministic Stage 3 performance corpus","publisher":"CaseForge","source_url":null,"acquired_at":null},
+  "rights":{"status":"NOT_APPLICABLE","basis":"Planned CaseForge-generated deterministic corpus.","confidential":false,"distribution_scope":"redistributable","may_redistribute":true},
+  "assets":[],"expected_answer":{"path":null,"authored_by":[],"status":"NOT_AUTHORED","reviewed_by":[],"adjudicator":null},
+  "characteristics":["40-pages","100-pages","300-pages","reference-hardware"],"notes":"Blocked until deterministic corpora and measurement harness exist."
+}

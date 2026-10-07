@@ -1,0 +1,14 @@
+AVISO SINTÉTICO DE CALIBRACIÓN — página 18
+
+Expediente ficticio N.º 3018
+Demandante: Empresa Ejemplo S.A.
+Demandado: Comercio del Norte
+
+Se presenta la presente demanda de reclamación de cantidad por impago de facturas
+de suministro correspondientes al ejercicio 2023. El texto principal está en español
+y no es predominantemente inglés mecanografiado.
+
+Nota: material sintético CaseForge — no es un caso real.
+
+[CASEFORGE_SYNTHETIC_PAGE]
+page_index: 18

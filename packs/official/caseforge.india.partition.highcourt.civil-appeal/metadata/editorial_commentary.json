@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0.0",
+  "original_matter_owner": "CaseForge",
+  "scope": "India central-law baseline for High Court civil appeals in property partition disputes",
+  "use_notes": [
+    "This pack is an aid to source inspection, not legal advice or a substitute for the official text.",
+    "Confirm the particular High Court's rules, state amendments, forum competence, and current notifications.",
+    "Personal-law entitlement, agricultural or revenue land, and state-specific procedure are deliberately absent.",
+    "A missing authority must be reported as a repository gap; model memory must not fill it."
+  ],
+  "rights_basis": "Indian Copyright Act, 1957, section 52(1)(q)(ii), with this original commentary and pack metadata",
+  "source_attribution": "Legislative text sourced from India Code, Ministry of Law and Justice, Legislative Department"
+}

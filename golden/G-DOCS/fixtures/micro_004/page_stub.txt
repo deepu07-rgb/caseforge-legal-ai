@@ -1,0 +1,2 @@
+[CASEFORGE_TRIAGE_CLASS:clean_handwriting]
+Clean handwriting sample page (synthetic).

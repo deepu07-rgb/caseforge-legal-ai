@@ -1,0 +1,403 @@
+{
+  "schema_version": "0.1.0",
+  "product": "CaseForge",
+  "batch": "B-S0-03",
+  "status": "FROZEN_BASELINE",
+  "description": "Stable product error codes for IPC, vault, and licence surfaces. New codes require a Layer 2 contract amendment — do not invent ad-hoc strings in application code.",
+  "conventions": {
+    "code_format": "CF_<DOMAIN>_<NAME>",
+    "code_type": "string",
+    "jsonrpc_protocol_layer": "JSON-RPC 2.0 reserved codes (-32700 to -32600) apply at the envelope layer; product codes ride in error.data.caseforge_code or map via error.data",
+    "http_not_used": "Sidecars use stdio JSON-RPC; these codes are not HTTP status codes",
+    "user_message_rule": "message fields below are developer-stable English; UI may localize but must preserve code"
+  },
+
+  "jsonrpc_reserved": {
+    "parse_error": -32700,
+    "invalid_request": -32600,
+    "method_not_found": -32601,
+    "invalid_params": -32602,
+    "internal_error": -32603,
+    "note": "Application/server errors use codes ≤ -32000 per JSON-RPC 2.0 when mapping product failures on the wire"
+  },
+
+  "domains": {
+    "IPC": {
+      "description": "Sidecar process and JSON-RPC transport failures",
+      "prd_refs": ["§4.1"]
+    },
+    "VAULT": {
+      "description": "SQLCipher app DB and per-case DB failures",
+      "prd_refs": ["§16"]
+    },
+    "LICENCE": {
+      "description": "Activation, offline validation, expired/read-only states",
+      "prd_refs": ["§13"]
+    },
+    "PACK": {
+      "description": "Official and custom knowledge pack install/verify",
+      "prd_refs": ["§7"]
+    },
+    "DOCPIPE": {
+      "description": "Document pipeline / overnight batch (docpipe sidecar product errors)",
+      "prd_refs": ["§6"]
+    },
+    "RETRIEVAL": {
+      "description": "Corpus retrieval and citation verification failures",
+      "prd_refs": ["§4.3", "§7"]
+    },
+    "GUARDRAIL": {
+      "description": "Normative refusals G1–G3 (not soft LLM style)",
+      "prd_refs": ["§15"]
+    },
+    "SYSTEM": {
+      "description": "Hardware tier, air-gap, choreography, generic internal",
+      "prd_refs": ["§3", "§4.2", "§13"]
+    },
+    "AUDIT": {
+      "description": "Stage 4 citation/quote audit and Audit Certificate (B-S4-01 amendment)",
+      "prd_refs": ["PRD v4.0 §7.1", "§7.2"]
+    },
+    "BUNDLE": {
+      "description": "Stage 4 offline encrypted bundle exchange (B-S4-01 amendment)",
+      "prd_refs": ["PRD v4.0 §8"]
+    },
+    "CHAMBERS": {
+      "description": "Stage 4 Chambers Edition record-only and scaffold locks (B-S4-01 amendment)",
+      "prd_refs": ["PRD v4.0 §9"]
+    }
+  },
+
+  "codes": [
+    {
+      "code": "CF_IPC_SIDECAR_SPAWN_FAILED",
+      "domain": "IPC",
+      "message": "Failed to spawn sidecar process",
+      "retryable": true
+    },
+    {
+      "code": "CF_IPC_SIDECAR_NOT_RUNNING",
+      "domain": "IPC",
+      "message": "Sidecar is not running",
+      "retryable": true
+    },
+    {
+      "code": "CF_IPC_SIDECAR_CRASHED",
+      "domain": "IPC",
+      "message": "Sidecar process exited unexpectedly",
+      "retryable": true
+    },
+    {
+      "code": "CF_IPC_TIMEOUT",
+      "domain": "IPC",
+      "message": "Sidecar RPC timed out",
+      "retryable": true
+    },
+    {
+      "code": "CF_IPC_PROTOCOL_VIOLATION",
+      "domain": "IPC",
+      "message": "Message failed JSON-RPC envelope validation",
+      "retryable": false
+    },
+    {
+      "code": "CF_IPC_METHOD_NOT_FROZEN",
+      "domain": "IPC",
+      "message": "RPC method is not in the frozen sidecar catalogue",
+      "retryable": false,
+      "notes": "Enforces Q-IPC-01: no ad-hoc methods"
+    },
+    {
+      "code": "CF_IPC_INVALID_PARAMS",
+      "domain": "IPC",
+      "message": "RPC params failed contract validation",
+      "retryable": false
+    },
+
+    {
+      "code": "CF_VAULT_NOT_FOUND",
+      "domain": "VAULT",
+      "message": "Vault or case database not found",
+      "retryable": false
+    },
+    {
+      "code": "CF_VAULT_ALREADY_EXISTS",
+      "domain": "VAULT",
+      "message": "Vault or case database already exists",
+      "retryable": false
+    },
+    {
+      "code": "CF_VAULT_PASSPHRASE_REQUIRED",
+      "domain": "VAULT",
+      "message": "Passphrase required to open vault",
+      "retryable": false
+    },
+    {
+      "code": "CF_VAULT_PASSPHRASE_INVALID",
+      "domain": "VAULT",
+      "message": "Passphrase rejected; vault unreadable",
+      "retryable": false,
+      "prd_refs": ["AC-16.2"]
+    },
+    {
+      "code": "CF_VAULT_LOCKED",
+      "domain": "VAULT",
+      "message": "Vault is locked",
+      "retryable": false
+    },
+    {
+      "code": "CF_VAULT_READ_ONLY",
+      "domain": "VAULT",
+      "message": "Vault is read-only (e.g. licence EXPIRED)",
+      "retryable": false,
+      "prd_refs": ["§13"]
+    },
+    {
+      "code": "CF_VAULT_CORRUPT",
+      "domain": "VAULT",
+      "message": "Vault integrity check failed",
+      "retryable": false
+    },
+    {
+      "code": "CF_VAULT_MIGRATION_FAILED",
+      "domain": "VAULT",
+      "message": "Database migration failed",
+      "retryable": false
+    },
+    {
+      "code": "CF_VAULT_WRITE_FAILED",
+      "domain": "VAULT",
+      "message": "Failed to write vault data",
+      "retryable": true
+    },
+
+    {
+      "code": "CF_LICENCE_MISSING",
+      "domain": "LICENCE",
+      "message": "No licence installed",
+      "retryable": false
+    },
+    {
+      "code": "CF_LICENCE_INVALID_SIGNATURE",
+      "domain": "LICENCE",
+      "message": "Licence signature verification failed",
+      "retryable": false,
+      "prd_refs": ["§13"]
+    },
+    {
+      "code": "CF_LICENCE_FINGERPRINT_MISMATCH",
+      "domain": "LICENCE",
+      "message": "Machine fingerprint failed 3-of-4 tolerance",
+      "retryable": false,
+      "prd_refs": ["§13"]
+    },
+    {
+      "code": "CF_LICENCE_EXPIRED",
+      "domain": "LICENCE",
+      "message": "Licence expired; vault is read-only",
+      "retryable": false,
+      "prd_refs": ["§13"],
+      "notes": "Must not ransom or delete user data"
+    },
+    {
+      "code": "CF_LICENCE_FEATURE_NOT_ENTITLED",
+      "domain": "LICENCE",
+      "message": "Feature not entitled by current licence",
+      "retryable": false
+    },
+    {
+      "code": "CF_LICENCE_ACTIVATION_FAILED",
+      "domain": "LICENCE",
+      "message": "One-time activation failed",
+      "retryable": true
+    },
+
+    {
+      "code": "CF_PACK_NOT_FOUND",
+      "domain": "PACK",
+      "message": "Knowledge pack not found",
+      "retryable": false
+    },
+    {
+      "code": "CF_PACK_INVALID_SIGNATURE",
+      "domain": "PACK",
+      "message": "Pack Ed25519 signature verification failed",
+      "retryable": false,
+      "prd_refs": ["§7"]
+    },
+    {
+      "code": "CF_PACK_UNSUPPORTED_VERSION",
+      "domain": "PACK",
+      "message": "Pack version is not supported",
+      "retryable": false
+    },
+    {
+      "code": "CF_PACK_INSTALL_FAILED",
+      "domain": "PACK",
+      "message": "Pack installation failed",
+      "retryable": true
+    },
+    {
+      "code": "CF_PROTECTION_TAMPER",
+      "domain": "PROTECTION",
+      "message": "Protected asset integrity check failed; asset degraded (user data untouched)",
+      "retryable": false,
+      "prd_refs": ["§14", "AC-14.1"]
+    },
+    {
+      "code": "CF_PROTECTION_DECRYPT_FAILED",
+      "domain": "PROTECTION",
+      "message": "Could not decrypt protected pack/model (wrong machine or tamper)",
+      "retryable": false,
+      "prd_refs": ["§14", "AC-14.1"]
+    },
+    {
+      "code": "CF_PROTECTION_RANSOM_FORBIDDEN",
+      "domain": "PROTECTION",
+      "message": "Protection layer must never ransom or lock user case data",
+      "retryable": false,
+      "prd_refs": ["§14", "AC-14.2"]
+    },
+    {
+      "code": "CF_PACK_HEADNOTE_SCAN_FAILED",
+      "domain": "PACK",
+      "message": "Official pack headnote scan failed policy check",
+      "retryable": false,
+      "prd_refs": ["AC-7.1"]
+    },
+
+    {
+      "code": "CF_DOCPIPE_TRIAGE_FAILED",
+      "domain": "DOCPIPE",
+      "message": "Document triage failed",
+      "retryable": true
+    },
+    {
+      "code": "CF_DOCPIPE_RECOGNITION_FAILED",
+      "domain": "DOCPIPE",
+      "message": "Document recognition failed",
+      "retryable": true
+    },
+    {
+      "code": "CF_DOCPIPE_BATCH_CHECKPOINT_CORRUPT",
+      "domain": "DOCPIPE",
+      "message": "Overnight batch checkpoint is corrupt",
+      "retryable": false,
+      "prd_refs": ["AC-6.8"]
+    },
+    {
+      "code": "CF_DOCPIPE_UNSUPPORTED_SOURCE",
+      "domain": "DOCPIPE",
+      "message": "Document source type is not supported",
+      "retryable": false,
+      "prd_refs": ["§5"]
+    },
+
+    {
+      "code": "CF_RETRIEVAL_INDEX_UNAVAILABLE",
+      "domain": "RETRIEVAL",
+      "message": "Retrieval index unavailable",
+      "retryable": true
+    },
+    {
+      "code": "CF_RETRIEVAL_CITATION_RED",
+      "domain": "RETRIEVAL",
+      "message": "Citation verified RED and blocked from downstream reasoning",
+      "retryable": false,
+      "prd_refs": ["AC-4.3"],
+      "notes": "Not always an error surface to the user; may be a structured verification result"
+    },
+    {
+      "code": "CF_RETRIEVAL_EMPTY",
+      "domain": "RETRIEVAL",
+      "message": "No retrieved material for constrained generation",
+      "retryable": false
+    },
+
+    {
+      "code": "CF_GUARDRAIL_G1_VERDICT",
+      "domain": "GUARDRAIL",
+      "message": "Refused: no verdicts, guilt, or sentencing predictions",
+      "retryable": false,
+      "prd_refs": ["§15 G1"]
+    },
+    {
+      "code": "CF_GUARDRAIL_G2_CITATION_BYPASS",
+      "domain": "GUARDRAIL",
+      "message": "Refused: citation bypassing retrieval",
+      "retryable": false,
+      "prd_refs": ["§15 G2"]
+    },
+    {
+      "code": "CF_GUARDRAIL_G3_FABRICATION",
+      "domain": "GUARDRAIL",
+      "message": "Refused: fabrication or perjury-coaching",
+      "retryable": false,
+      "prd_refs": ["§15 G3"]
+    },
+
+    { "code": "CF_GUARDRAIL_G7_EXTRA_RECORD", "domain": "GUARDRAIL", "message": "Blocked: statement not supported by the record or installed law (record-only)", "retryable": false, "prd_refs": ["PRD v4.0 §12 G7"] },
+    { "code": "CF_GUARDRAIL_G8_DECISION_ZONE", "domain": "GUARDRAIL", "message": "Refused: analysis, findings, holdings and orders are for the judge alone", "retryable": false, "prd_refs": ["PRD v4.0 §12 G8"] },
+    { "code": "CF_GUARDRAIL_G9_DEADLINE_UNLABELLED", "domain": "GUARDRAIL", "message": "Blocked: deadline lacks rule, authority, trigger source, or VERIFY label", "retryable": false, "prd_refs": ["PRD v4.0 §12 G9"] },
+    { "code": "CF_GUARDRAIL_G10_TRANSLATION_AS_VERIFIED", "domain": "GUARDRAIL", "message": "Blocked: translated text cannot be a verified quotation or unconfirmed critical field", "retryable": false, "prd_refs": ["PRD v4.0 §12 G10"] },
+    { "code": "CF_PACK_RULE_TABLE_INVALID", "domain": "PACK", "message": "Rule table failed schema, authority resolution, or effective-window validation", "retryable": false, "prd_refs": ["PRD v4.0 §5", "AC-S4-RT.1"] },
+    { "code": "CF_PACK_RULE_TABLE_IN_CUSTOM_PACK", "domain": "PACK", "message": "Custom packs may not carry rule tables", "retryable": false, "prd_refs": ["PRD v4.0 §5"] },
+    { "code": "CF_PACK_DELTA_BASE_MISMATCH", "domain": "PACK", "message": "Delta pack base does not match the installed pack", "retryable": false, "prd_refs": ["PRD v4.0 §7.8"] },
+    { "code": "CF_AUDIT_EXTRACTION_FAILED", "domain": "AUDIT", "message": "Citation/quotation extraction failed for the document", "retryable": true, "prd_refs": ["PRD v4.0 §7.1"] },
+    { "code": "CF_AUDIT_CERT_SIGNATURE_INVALID", "domain": "AUDIT", "message": "Audit Certificate signature does not verify", "retryable": false, "prd_refs": ["PRD v4.0 §7.1", "AC-S4-01.4"] },
+    { "code": "CF_AUDIT_CERT_HASH_MISMATCH", "domain": "AUDIT", "message": "Audit Certificate does not match the supplied document or embedded report", "retryable": false, "prd_refs": ["PRD v4.0 §7.1", "AC-S4-01.4"] },
+    { "code": "CF_AUDIT_CERT_PROHIBITED_COPY", "domain": "AUDIT", "message": "Certificate text contains prohibited wording", "retryable": false, "prd_refs": ["PRD v4.0 §1", "AC-S4-01.5"] },
+    { "code": "CF_AUDIT_EXTERNAL_ASSERTION_LEAK", "domain": "AUDIT", "message": "External-filing assertion reached a matter-fact surface", "retryable": false, "prd_refs": ["PRD v4.0 §7.2", "AC-S4-02.3"] },
+    { "code": "CF_BUNDLE_DECRYPT_FAILED", "domain": "BUNDLE", "message": "Bundle cannot be decrypted with any local recipient key", "retryable": false, "prd_refs": ["PRD v4.0 §8", "AC-S4-10.1"] },
+    { "code": "CF_BUNDLE_SIGNATURE_INVALID", "domain": "BUNDLE", "message": "Bundle sender signature or item hash does not verify", "retryable": false, "prd_refs": ["PRD v4.0 §8", "AC-S4-10.1"] },
+    { "code": "CF_BUNDLE_REMOTE_TRANSPORT_REFUSED", "domain": "BUNDLE", "message": "Bundle transfer refused: only USB file or LAN transport is allowed", "retryable": false, "prd_refs": ["PRD v4.0 §8", "AC-S4-10.3"] },
+    { "code": "CF_CHAMBERS_RECORD_ONLY_LOCKED", "domain": "CHAMBERS", "message": "Record-only mode cannot be disabled once a judgment scaffold exists", "retryable": false, "prd_refs": ["PRD v4.0 §9.1"] },
+    { "code": "CF_CHAMBERS_SECTION_LOCKED", "domain": "CHAMBERS", "message": "This judgment section is locked to the judge; no machine assistance is available", "retryable": false, "prd_refs": ["PRD v4.0 §9.5"] },
+    { "code": "CF_LICENCE_EDITION_NOT_ENTITLED", "domain": "LICENCE", "message": "This feature is not included in the installed licence edition", "retryable": false, "prd_refs": ["PRD v4.0 §10", "AC-S4-16.1"] },
+    { "code": "CF_LICENCE_PACK_UPDATES_EXPIRED", "domain": "LICENCE", "message": "Pack subscription expired: installed packs remain usable at their last currency date", "retryable": false, "prd_refs": ["PRD v4.0 §10", "AC-S4-16.2"] },
+    { "code": "CF_LICENCE_SEAT_TRANSFER_LIMIT", "domain": "LICENCE", "message": "Seat transfer limit for this licence year reached", "retryable": false, "prd_refs": ["PRD v4.0 §10"] },
+
+    {
+      "code": "CF_SYSTEM_HARDWARE_UNSUPPORTED",
+      "domain": "SYSTEM",
+      "message": "Hardware or OS is not supported",
+      "retryable": false,
+      "prd_refs": ["§3"]
+    },
+    {
+      "code": "CF_SYSTEM_LITE_SIMULATION_DISABLED",
+      "domain": "SYSTEM",
+      "message": "Live simulation is not available on Lite tier",
+      "retryable": false,
+      "prd_refs": ["§3"]
+    },
+    {
+      "code": "CF_SYSTEM_AIRGAP_NETWORK_BLOCKED",
+      "domain": "SYSTEM",
+      "message": "Network access blocked by air-gap mode",
+      "retryable": false,
+      "prd_refs": ["§13"]
+    },
+    {
+      "code": "CF_SYSTEM_MODEL_CHOREOGRAPHY_VIOLATION",
+      "domain": "SYSTEM",
+      "message": "Model load rejected: choreography rule would be violated",
+      "retryable": false,
+      "prd_refs": ["§4.2"]
+    },
+    {
+      "code": "CF_SYSTEM_CONTRACT_BLOCKED",
+      "domain": "SYSTEM",
+      "message": "Operation depends on a BLOCKED Layer 2 contract field",
+      "retryable": false,
+      "notes": "Surfaces Q-* gaps instead of inventing types"
+    },
+    {
+      "code": "CF_SYSTEM_INTERNAL",
+      "domain": "SYSTEM",
+      "message": "Internal error",
+      "retryable": false
+    }
+  ],
+
+  "amendment_rule": "Adding, removing, or renumbering codes requires updating this file and any eval that asserts codes. Application code must import codes from this contract (or generated bindings), not string-literal duplicates."
+}

@@ -1,0 +1,66 @@
+{
+  "batch": "B-S2-07",
+  "release": "v2.0.0-rc1",
+  "product_surface": "Digest + Mock Court (Full tier for live voice simulation)",
+  "generated_at": "2026-08-13T16:48:11.500883+00:00",
+  "summary": {
+    "pass": 7,
+    "fail": 0,
+    "skip": 0,
+    "errors": 0
+  },
+  "results": [
+    {
+      "batch": "B-S2-01",
+      "script": "integrity_b_s2_01.py",
+      "status": "PASS",
+      "detail": "PASS  B-S2-01 Argument Integrity Engine (AC-8.1 planted PG-EV-01 in top-2; AC-8.2 recompute budget; AC-8.3 no LLM; scorer=caseforge.integrity.v1)"
+    },
+    {
+      "batch": "B-S2-02",
+      "script": "mock_court_b_s2_02.py",
+      "status": "PASS",
+      "detail": "PASS  B-S2-02 Mock Court text formats (5 sequential formats; AC-2.1 graph+retrieval only; AC-3.3 budget 15s; pipeline=caseforge.mock_court.v1)"
+    },
+    {
+      "batch": "B-S2-03",
+      "script": "adaptive_bench_b_s2_03.py",
+      "status": "PASS",
+      "detail": "PASS  B-S2-03 Adaptive Bench (AC-10.1 six archetypes + no named judges; AC-10.2 case-order signals + opposition_aggression; pipeline=caseforge.adaptive_bench.v1)"
+    },
+    {
+      "batch": "B-S2-04",
+      "script": "voice_court_b_s2_04.py",
+      "status": "PASS",
+      "detail": "PASS  B-S2-04 Voice-in-court + debrief (multi-turn offline; AC-3.3 <=15s; Lite honesty refuse; English pin; pipeline=caseforge.voice_court.v1)"
+    },
+    {
+      "batch": "B-S2-05",
+      "script": "bench_prep_b_s2_05.py",
+      "status": "PASS",
+      "detail": "PASS  B-S2-05 Bench Preparation Mode (dual counsel; non-decision-maker; G1 red-team clean; pipeline=caseforge.bench_prep.v1)"
+    },
+    {
+      "batch": "B-S2-06",
+      "script": "stage2_experience_redteam_b_s2_06.py",
+      "status": "PASS",
+      "detail": "PASS  B-S2-06 Experience S2 + AC-15.1 (limb_outcome/bench_setting writable; red-team 210 prompts; zero G1-G3 violations; suite=caseforge.redteam.stage2.v1)"
+    },
+    {
+      "batch": "AC-2.1",
+      "script": "ac_2_1_stage2_dependency.py",
+      "status": "PASS",
+      "detail": "PASS  AC-2.1 Stage-2 dependency audit (8 docpipe files; zero Stage-2 imports into document pipeline)"
+    }
+  ],
+  "errors": [],
+  "gates": {
+    "AC-2.1": "docpipe free of Stage 2 imports",
+    "AC-8.x": "via B-S2-01 integrity",
+    "AC-10.x": "via B-S2-03 adaptive bench",
+    "AC-3.3": "via B-S2-02/04 turn budgets",
+    "AC-15.1": "via B-S2-06 full red-team",
+    "full_tier_mock_court": "Lite refuse live sim; Full messaging present"
+  },
+  "ship_ok": true
+}

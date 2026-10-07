@@ -1,0 +1,21 @@
+{
+  "fixture_id": "demo/demo_02_medium_wrongful_term",
+  "status": "DEMO_SYNTHETIC",
+  "authoritative": false,
+  "difficulty": "medium",
+  "jurisdiction": "United States",
+  "label": "Medium — wrongful termination + unpaid bonus",
+  "batch_note": "Not B-S1-06. Pedagogical only.",
+  "primary_teaching": [
+    "Two limbs under one relief root",
+    "Strong law theory on Limb A, weak Evidence on Limb B",
+    "Honest VI forces focus on missing documents"
+  ],
+  "inputs": {
+    "case_packet": "case_packet.txt",
+    "known_answer": "known_answer.json",
+    "argument_tree": "argument_tree.json",
+    "narrative": "narrative.md"
+  },
+  "disclaimer": "SYNTHETIC_DEMO_NOT_LAW — fictional parties and employment facts for product testing only."
+}

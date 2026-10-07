@@ -1,0 +1,12 @@
+{
+  "schema_version": "0.1.0",
+  "authoritative": true,
+  "status": "GOLDEN",
+  "fixture_id": "G-DOCS/page_0036",
+  "triage": {
+    "page_index": 0,
+    "class": "typed_english",
+    "notes": "DRAFT \u2014 dual-review required before GOLDEN lock"
+  },
+  "eval_policy": "SHIP"
+}

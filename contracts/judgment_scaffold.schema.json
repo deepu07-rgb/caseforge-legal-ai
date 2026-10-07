@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/judgment_scaffold.schema.json",
+  "title": "CaseForge Judgment Scaffold",
+  "description": "Record-only pre-fill of non-decisional judgment sections; analysis, findings and operative order are structurally locked to the judge (PRD v4.0 §9.5, G7, G8).",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "scaffold_id", "case_id", "created_at", "record_only_locked", "issue_matrix_id", "sections", "export_footer_id"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "scaffold_id": { "type": "string" },
+    "case_id": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "record_only_locked": { "const": true },
+    "issue_matrix_id": { "type": ["string", "null"] },
+    "sections": {
+      "type": "array", "minItems": 10, "maxItems": 10,
+      "items": { "$ref": "#/$defs/Section" }
+    },
+    "export_footer_id": { "const": "caseforge.export_footer.v1" }
+  },
+  "$defs": {
+    "SectionKind": { "enum": ["CAUSE_TITLE", "APPEARANCES", "BRIEF_FACTS", "PROCEDURAL_HISTORY", "SUBMISSIONS", "ISSUES", "EVIDENCE_SUMMARY", "ANALYSIS", "FINDINGS", "OPERATIVE_ORDER"] },
+    "Sentence": {
+      "type": "object", "additionalProperties": false, "required": ["text", "origin", "classification", "locators"],
+      "properties": {
+        "text": { "type": "string", "minLength": 1 },
+        "origin": { "enum": ["MACHINE_PREFILL", "JUDGE_AUTHORED"] },
+        "classification": { "enum": ["RECORD", "LAW", "INFERENCE_FROM_RECORD", "JUDGE_TEXT"] },
+        "locators": { "type": "array", "items": { "type": "object" } }
+      },
+      "allOf": [
+        { "if": { "properties": { "origin": { "const": "MACHINE_PREFILL" } } }, "then": { "properties": { "classification": { "enum": ["RECORD", "LAW", "INFERENCE_FROM_RECORD"] }, "locators": { "minItems": 1 } } } },
+        { "if": { "properties": { "origin": { "const": "JUDGE_AUTHORED" } } }, "then": { "properties": { "classification": { "const": "JUDGE_TEXT" } } } }
+      ]
+    },
+    "Section": {
+      "type": "object", "additionalProperties": false, "required": ["section_kind", "assist_policy", "sentences"],
+      "properties": {
+        "section_kind": { "$ref": "#/$defs/SectionKind" },
+        "assist_policy": { "enum": ["PREFILL_ALLOWED", "LOCKED_JUDGE_ONLY"] },
+        "sentences": { "type": "array", "items": { "$ref": "#/$defs/Sentence" } }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "section_kind": { "enum": ["ANALYSIS", "FINDINGS", "OPERATIVE_ORDER"] } } },
+          "then": { "properties": { "assist_policy": { "const": "LOCKED_JUDGE_ONLY" }, "sentences": { "items": { "properties": { "origin": { "const": "JUDGE_AUTHORED" } } } } } },
+          "else": { "properties": { "assist_policy": { "const": "PREFILL_ALLOWED" } } }
+        }
+      ]
+    }
+  },
+  "x-caseforge": {
+    "status": "FROZEN_FOR_IMPLEMENTATION",
+    "batch": "B-S4-01",
+    "implemented_by": ["B-S4-21"],
+    "prd_refs": ["PRD v4.0 §9.5", "§12 G7", "§12 G8", "AC-S4-15.1", "AC-S4-15.2", "AC-S4-15.3"],
+    "host_lock": "No host code path may send ANALYSIS, FINDINGS or OPERATIVE_ORDER content requests to any model (static audit AC-S4-15.1). Permitted on judge text: spellcheck, formatting, citation audit only.",
+    "section_uniqueness": "Exactly one section per SectionKind; enforced by host and by contracts_b_s4_01.py fixtures."
+  }
+}

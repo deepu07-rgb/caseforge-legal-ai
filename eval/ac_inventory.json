@@ -1,0 +1,416 @@
+{
+  "inventory_version": "1.0.0",
+  "product": "CaseForge",
+  "batch": "B-S0-05",
+  "source": "CaseForge_PRD_v1.0.md",
+  "result_enum": ["PASS", "FAIL", "SKIP", "BLOCKED"],
+  "silent_pass_forbidden": true,
+  "acceptance_criteria": [
+    {
+      "id": "AC-2.1",
+      "prd_section": "§2",
+      "stage": "S2_dependency",
+      "description": "Static dependency audit shows zero imports from Stage 2 modules into the document pipeline.",
+      "golden_sets": ["G-SCRIPTS"],
+      "check_kind": "static_audit",
+      "product_required": true,
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-3.1",
+      "prd_section": "§3",
+      "stage": "S1",
+      "description": "Cold start ≤ 6 s; idle RAM ≤ 400 MB (models unloaded).",
+      "golden_sets": ["G-SCRIPTS"],
+      "check_kind": "performance",
+      "product_required": true,
+      "constants_ref": "performance_budgets.cold_start_max_s",
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-3.2",
+      "prd_section": "§3",
+      "stage": "S1",
+      "description": "Overnight batch of 300-page mixed case file ≤ 8 hours.",
+      "golden_sets": ["G-SCRIPTS", "G-CASE-IN", "G-CASE-US"],
+      "check_kind": "performance",
+      "product_required": true,
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-3.3",
+      "prd_section": "§3",
+      "stage": "S2",
+      "description": "Mock Court turn latency ≤ 15 s for ~300-token adversary response (including sequential model swap).",
+      "golden_sets": ["G-SCRIPTS"],
+      "check_kind": "performance",
+      "product_required": true,
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-3.4",
+      "prd_section": "§3",
+      "stage": "S1",
+      "description": "Digest of 40-page typed chargesheet or clean US complaint ≤ 5 minutes foreground.",
+      "golden_sets": ["G-SCRIPTS", "G-CASE-IN", "G-CASE-US"],
+      "check_kind": "performance",
+      "product_required": true,
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-3.5",
+      "prd_section": "§3",
+      "stage": "S1",
+      "description": "No UI thread freeze > 200 ms. All heavy work in Rust sidecar with progress reporting.",
+      "golden_sets": ["G-SCRIPTS"],
+      "check_kind": "performance",
+      "product_required": true,
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-4.1",
+      "prd_section": "§4.1",
+      "stage": "S1",
+      "description": "Full IPC contract round-trip test suite must pass.",
+      "golden_sets": ["G-SCRIPTS"],
+      "check_kind": "ipc_contract",
+      "product_required": true,
+      "blocked_questions": ["Q-IPC-01"],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-4.2",
+      "prd_section": "§4.2",
+      "stage": "S1",
+      "description": "Worst-case scripted session never exceeds 7.2 GB total RSS.",
+      "golden_sets": ["G-SCRIPTS"],
+      "check_kind": "performance",
+      "product_required": true,
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-4.3",
+      "prd_section": "§4.3",
+      "stage": "S1",
+      "description": "Planted fake citation always renders RED and is excluded from downstream reasoning unless user confirms.",
+      "golden_sets": ["G-RETRIEVAL-IN", "G-RETRIEVAL-US"],
+      "check_kind": "retrieval_citation",
+      "product_required": true,
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-5.1",
+      "prd_section": "§5",
+      "stage": "S1",
+      "description": "60-file intake achieves ≥ 80% correct auto-type suggestions on golden set; one-click correction.",
+      "golden_sets": ["G-DOCS"],
+      "check_kind": "golden_metric",
+      "product_required": true,
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-6.1",
+      "prd_section": "§6.1",
+      "stage": "S1",
+      "description": "≥ 92% accuracy on 500-page golden triage set.",
+      "golden_sets": ["G-DOCS"],
+      "check_kind": "golden_metric",
+      "product_required": true,
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-6.2",
+      "prd_section": "§6.3",
+      "stage": "S1",
+      "description": "≥ 95% recall of known dated events on golden 40-page document.",
+      "golden_sets": ["G-CASE-IN", "G-CASE-US"],
+      "check_kind": "golden_metric",
+      "product_required": true,
+      "blocked_questions": ["Q-CG-01"],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-6.3",
+      "prd_section": "§6.3",
+      "stage": "S1",
+      "description": "Click any fact → source page with span highlighted.",
+      "golden_sets": ["G-CASE-IN", "G-CASE-US"],
+      "check_kind": "ui_interaction",
+      "product_required": true,
+      "blocked_questions": ["Q-CG-02"],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-6.4",
+      "prd_section": "§6.4",
+      "stage": "S1",
+      "description": "≤ 2 interactions to correct a highlighted word.",
+      "golden_sets": ["G-CASE-IN", "G-CASE-US"],
+      "check_kind": "ui_interaction",
+      "product_required": true,
+      "blocked_questions": ["Q-CONST-01"],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-6.5",
+      "prd_section": "§6.5",
+      "stage": "S1",
+      "description": "≤ 12 questions complete skeleton to ≥ 90% of known-answer graph.",
+      "golden_sets": ["G-CASE-IN", "G-CASE-US"],
+      "check_kind": "golden_metric",
+      "product_required": true,
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-6.6",
+      "prd_section": "§6.5",
+      "stage": "S1",
+      "description": "Guided Intake Interview is resumable, skippable, re-openable.",
+      "golden_sets": ["G-CASE-IN", "G-CASE-US"],
+      "check_kind": "behavioural",
+      "product_required": true,
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-6.7",
+      "prd_section": "§6.6",
+      "stage": "S1",
+      "description": "Packet capture confirms zero non-LAN traffic for Phone Capture Companion.",
+      "golden_sets": ["G-SCRIPTS"],
+      "check_kind": "network_audit",
+      "product_required": true,
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-6.8",
+      "prd_section": "§6.7",
+      "stage": "S1",
+      "description": "Kill mid-batch → restart resumes correctly.",
+      "golden_sets": ["G-SCRIPTS", "G-CASE-IN", "G-CASE-US"],
+      "check_kind": "behavioural",
+      "product_required": true,
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-7.1",
+      "prd_section": "§7",
+      "stage": "S1",
+      "description": "Automated headnote scan returns zero matches on official packs.",
+      "golden_sets": [],
+      "check_kind": "pack_policy",
+      "product_required": true,
+      "blocked_questions": ["Q-PKG-02"],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-7.2",
+      "prd_section": "§7",
+      "stage": "S1",
+      "description": "Retrieval returns known-relevant authority in top-8 for ≥ 85% of golden queries (India and US sets).",
+      "golden_sets": ["G-RETRIEVAL-IN", "G-RETRIEVAL-US"],
+      "check_kind": "golden_metric",
+      "product_required": true,
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-8.1",
+      "prd_section": "§8",
+      "stage": "S2",
+      "description": "Planted gap appears in top-2 Missing Links.",
+      "golden_sets": ["G-SCRIPTS"],
+      "check_kind": "integrity_engine",
+      "product_required": true,
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-8.2",
+      "prd_section": "§8",
+      "stage": "S2",
+      "description": "VI recomputation ≤ 5 s.",
+      "golden_sets": ["G-SCRIPTS"],
+      "check_kind": "performance",
+      "product_required": true,
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-8.3",
+      "prd_section": "§8",
+      "stage": "S2",
+      "description": "Scoring is pure deterministic code; no LLM inside scoring path.",
+      "golden_sets": ["G-SCRIPTS"],
+      "check_kind": "static_audit",
+      "product_required": true,
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-9.1",
+      "prd_section": "§9",
+      "stage": "S1",
+      "description": "STT word-error-rate target on G-AUDIO (WER).",
+      "golden_sets": ["G-AUDIO"],
+      "check_kind": "voice",
+      "product_required": true,
+      "detail_status": "PARTIAL",
+      "notes": "PRD names WER but does not freeze a numeric WER threshold in Layer 1."
+    },
+    {
+      "id": "AC-9.2",
+      "prd_section": "§9",
+      "stage": "S1",
+      "description": "Lexicon STT/TTS corrections persist and apply permanently.",
+      "golden_sets": ["G-AUDIO"],
+      "check_kind": "voice",
+      "product_required": true,
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-9.3",
+      "prd_section": "§9",
+      "stage": "S1",
+      "description": "Full voice-only rehearsal path succeeds (network disabled for eval).",
+      "golden_sets": ["G-AUDIO", "G-SCRIPTS"],
+      "check_kind": "voice",
+      "product_required": true,
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-9.4",
+      "prd_section": "§9",
+      "stage": "S1",
+      "description": "Language pinning (English primary) enforced for voice path.",
+      "golden_sets": ["G-AUDIO"],
+      "check_kind": "voice",
+      "product_required": true,
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-10.1",
+      "prd_section": "§10",
+      "stage": "S2",
+      "description": "Per-Case Adaptive Bench: no named-judge profiles; behaviour from six generic archetypes + case-order signals + sliders (criterion 1).",
+      "golden_sets": ["G-SCRIPTS"],
+      "check_kind": "bench",
+      "product_required": true,
+      "detail_status": "FROZEN",
+      "notes": "B-S2-03: Q-AB-01; contracts/adaptive_bench.json; eval/checks/adaptive_bench_b_s2_03.py"
+    },
+    {
+      "id": "AC-10.2",
+      "prd_section": "§10",
+      "stage": "S2",
+      "description": "Per-Case Adaptive Bench secondary acceptance (criterion 2 per PRD §10).",
+      "golden_sets": ["G-SCRIPTS"],
+      "check_kind": "bench",
+      "product_required": true,
+      "detail_status": "FROZEN",
+      "notes": "B-S2-03: signals from this case_graph only; opposition_aggression changes behaviour brief; deterministic fingerprint"
+    },
+    {
+      "id": "AC-11.1",
+      "prd_section": "§11",
+      "stage": "S1",
+      "description": "Experience Store local encrypted accumulation and retrieval injection (criterion 1).",
+      "golden_sets": [],
+      "check_kind": "experience_store",
+      "product_required": true,
+      "detail_status": "PARTIAL",
+      "notes": "PRD states AC-11.1 must pass; full procedure not expanded in Layer 1."
+    },
+    {
+      "id": "AC-11.2",
+      "prd_section": "§11",
+      "stage": "S1",
+      "description": "Experience Store fleet contribution only after explicit user review / related criterion 2.",
+      "golden_sets": [],
+      "check_kind": "experience_store",
+      "product_required": true,
+      "detail_status": "PARTIAL",
+      "notes": "PRD states AC-11.2 must pass; full procedure not expanded in Layer 1."
+    },
+    {
+      "id": "AC-13.1",
+      "prd_section": "§13",
+      "stage": "S1",
+      "description": "Network-capture audit shows zero user-document content leaving the machine.",
+      "golden_sets": ["G-SCRIPTS"],
+      "check_kind": "network_audit",
+      "product_required": true,
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-14.1",
+      "prd_section": "§14",
+      "stage": "S1",
+      "description": "Copied-folder / protection integrity test (PRD construction guidance; data never ransomed).",
+      "golden_sets": ["G-SCRIPTS"],
+      "check_kind": "protection",
+      "product_required": true,
+      "detail_status": "PARTIAL",
+      "notes": "PRD references copied-folder test for AC-14.1 in §18; full procedure sparse in Layer 1."
+    },
+    {
+      "id": "AC-14.2",
+      "prd_section": "§14",
+      "stage": "S1",
+      "description": "Protection AC-14.2 must pass; data is never ransomed.",
+      "golden_sets": ["G-SCRIPTS"],
+      "check_kind": "protection",
+      "product_required": true,
+      "detail_status": "PARTIAL",
+      "notes": "PRD names AC-14.2 without expanded procedure beyond no-ransom rule."
+    },
+    {
+      "id": "AC-15.1",
+      "prd_section": "§15",
+      "stage": "S1_S2",
+      "description": "≥ 200-prompt red-team suite → zero G1–G3 violations.",
+      "golden_sets": ["G-REDTEAM"],
+      "check_kind": "redteam",
+      "product_required": true,
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-16.1",
+      "prd_section": "§16",
+      "stage": "S0_S1",
+      "description": "Schema validation suite loads and validates Layer 2 contracts.",
+      "golden_sets": [],
+      "check_kind": "structural_contracts",
+      "product_required": false,
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-16.2",
+      "prd_section": "§16",
+      "stage": "S1",
+      "description": "Case/app vault unreadable without passphrase.",
+      "golden_sets": [],
+      "check_kind": "vault",
+      "product_required": true,
+      "blocked_questions": ["Q-DB-01"],
+      "detail_status": "FROZEN"
+    },
+    {
+      "id": "AC-16.3",
+      "prd_section": "§16",
+      "stage": "S1",
+      "description": ".akcase round-trip succeeds.",
+      "golden_sets": [],
+      "check_kind": "package",
+      "product_required": true,
+      "blocked_questions": ["Q-PKG-01"],
+      "detail_status": "FROZEN"
+    }
+  ],
+  "expansion_notes": {
+    "AC-9.1–9.4": "Expanded to AC-9.1 WER, AC-9.2 correction persistence, AC-9.3 voice-only rehearsal, AC-9.4 language pinning per PRD §9 wording.",
+    "AC-16.1–16.3": "Expanded to schema validation, unreadable without passphrase, .akcase round-trip per PRD §16 parenthetical.",
+    "AC-10.x_AC-11.x_AC-14.x": "Inventoried as named gates; partial detail where PRD only says 'must pass'."
+  },
+  "questions": [
+    {
+      "id": "Q-EVAL-01",
+      "text": "AC-10.1, AC-10.2, AC-11.1, AC-11.2, AC-14.2 lack expanded procedures/metrics in Layer 1. Inventoried and runnable as SKIP/BLOCKED gates; owner should freeze procedures before ship."
+    }
+  ]
+}

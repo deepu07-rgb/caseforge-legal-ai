@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/experience_record.schema.json",
+  "title": "ExperienceRecord",
+  "description": "Local encrypted Experience Store record (PRD §11, §16). B-S1-17 Stage-1 freeze.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_id",
+    "record_category",
+    "stage",
+    "summary",
+    "relevance_key",
+    "fleet_status",
+    "active",
+    "source",
+    "created_at_unix_ms",
+    "updated_at_unix_ms"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "1.0.0" },
+    "record_id": { "type": "string", "minLength": 1 },
+    "record_category": {
+      "type": "string",
+      "enum": [
+        "correction",
+        "lexicon_entry",
+        "rated_exchange",
+        "draft_edit",
+        "limb_outcome",
+        "bench_setting"
+      ],
+      "description": "PRD §11 categories. Stage 1 writes: correction, lexicon_entry, draft_edit, rated_exchange. limb_outcome and bench_setting are Stage 2 only."
+    },
+    "stage": {
+      "type": "string",
+      "enum": ["S1", "S2"],
+      "description": "Product stage that produced the record."
+    },
+    "language": {
+      "type": "string",
+      "default": "English"
+    },
+    "jurisdiction": { "type": ["string", "null"] },
+    "case_id": {
+      "type": ["string", "null"],
+      "description": "Optional matter id when the experience is case-bound."
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Short human-readable pattern text used for top-K retrieval injection."
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    },
+    "relevance_key": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Frozen key for top-K: lowercase bag-of-words from summary + tags + category (space-separated unique tokens)."
+    },
+    "payload": {
+      "type": "object",
+      "description": "Category-specific structured fields (not sent off-device by default).",
+      "additionalProperties": true
+    },
+    "source": {
+      "type": "string",
+      "enum": ["user", "system", "import"]
+    },
+    "fleet_status": {
+      "type": "string",
+      "enum": ["local_only", "pending_review", "approved_anonymised", "rejected"],
+      "description": "AC-11.2: default local_only. Fleet contribution only after explicit user review."
+    },
+    "active": { "type": "boolean" },
+    "created_at_unix_ms": { "type": "integer", "minimum": 0 },
+    "updated_at_unix_ms": { "type": "integer", "minimum": 0 },
+    "notes": { "type": ["string", "null"] }
+  },
+  "x-caseforge": {
+    "status": "FROZEN",
+    "batch": "B-S2-06",
+    "prd_refs": ["§11", "§16", "AC-11.1", "AC-11.2", "B-S2-06"],
+    "resolved_question": "Q-EX-01",
+    "stage1_writable_categories": [
+      "correction",
+      "lexicon_entry",
+      "draft_edit",
+      "rated_exchange"
+    ],
+    "stage2_only_categories": ["limb_outcome", "bench_setting"],
+    "stage2_writable": true,
+    "storage": "encrypted_app_vault_sqlcipher",
+    "fleet": {
+      "default_enabled": false,
+      "default_record_status": "local_only",
+      "network_upload_default": false,
+      "requires_explicit_user_review": true
+    },
+    "top_k_injection": {
+      "top_k": 5,
+      "relevance": "token_overlap_on_relevance_key",
+      "inject_as": "retrieval_corpus_chunks",
+      "pack_id_prefix": "experience_store"
+    },
+    "normative_invariants": [
+      "All Experience Store data is local and encrypted.",
+      "Store accumulates: corrections, lexicon entries, rated exchanges, draft edits, limb outcomes, bench settings.",
+      "Retrieval injects top-K relevant past patterns.",
+      "Optional anonymised fleet contribution only after explicit user review (never default-on)."
+    ],
+    "frozen_at": "2026-08-08",
+    "authority": "CaseForge Product Owner — B-S1-17 Q-EX-01 field freeze + top-K=5 Stage-1"
+  }
+}

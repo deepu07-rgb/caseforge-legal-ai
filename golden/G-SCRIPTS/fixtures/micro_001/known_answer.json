@@ -1,0 +1,14 @@
+{
+  "schema_version": "0.1.0-PLACEHOLDER",
+  "authoritative": false,
+  "status": "SYNTHETIC_PLACEHOLDER",
+  "fixture_id": "G-SCRIPTS/micro_001",
+  "expectations": {
+    "cold_start_max_s": 6,
+    "idle_ram_max_mb_models_unloaded": 400,
+    "ui_thread_freeze_max_ms": 200,
+    "ipc_ping": "success"
+  },
+  "budgets_source": "contracts/constants.json",
+  "eval_policy": "SKIP_IF_STATUS_NOT_GOLDEN_OR_PRODUCT_MISSING"
+}

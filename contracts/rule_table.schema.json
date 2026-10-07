@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/rule_table.schema.json",
+  "title": "CaseForge signed Rule Table (akpkg v2.1 RULE_TABLE content)",
+  "description": "Deterministic jurisdiction-specific legal data (PRD v4.0 §5). Every row is grounded in an installed authoritative chunk and carries legal-editor sign-off; unsigned rows are DEVELOPMENT_ONLY and can never contribute to GREEN output.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "table_id", "table_kind", "jurisdiction", "pack_id", "rows"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "table_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$" },
+    "table_kind": { "$ref": "#/$defs/TableKind" },
+    "jurisdiction": { "type": "string", "minLength": 1 },
+    "pack_id": { "type": "string", "minLength": 3 },
+    "description": { "type": ["string", "null"] },
+    "rows": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Row" } }
+  },
+  "$defs": {
+    "TableKind": { "enum": ["STATUTE_SUCCESSION", "LIMITATION_PERIOD", "PROCEDURAL_DEADLINE", "COURT_CALENDAR", "ADMISSIBILITY_REQUIREMENT", "ISSUE_FRAMING_TEMPLATE"] },
+    "LegalLocator": {
+      "type": "object", "additionalProperties": false,
+      "required": ["pack_id", "source_id", "chunk_id"],
+      "properties": {
+        "pack_id": { "type": "string", "minLength": 1 }, "source_id": { "type": "string", "minLength": 1 }, "chunk_id": { "type": "string", "minLength": 1 },
+        "char_start": { "type": ["integer", "null"], "minimum": 0 }, "char_end": { "type": ["integer", "null"], "minimum": 0 },
+        "provision_label": { "type": ["string", "null"] }
+      }
+    },
+    "Signoff": {
+      "type": "object", "additionalProperties": false,
+      "required": ["editor_name", "editor_role", "signed_on"],
+      "properties": { "editor_name": { "type": "string", "minLength": 1 }, "editor_role": { "type": "string", "minLength": 1 }, "signed_on": { "type": "string", "format": "date" }, "notes": { "type": ["string", "null"] } }
+    },
+    "Provision": {
+      "type": "object", "additionalProperties": false, "required": ["code", "provision"],
+      "properties": { "code": { "type": "string", "minLength": 1 }, "provision": { "type": "string", "minLength": 1 } }
+    },
+    "Row": {
+      "type": "object", "additionalProperties": false,
+      "required": ["rule_id", "table_kind", "jurisdiction", "effective_from", "effective_to", "authorities", "legal_editor_signoff", "trust_state", "payload"],
+      "properties": {
+        "rule_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._:-]+$" },
+        "table_kind": { "$ref": "#/$defs/TableKind" },
+        "jurisdiction": { "type": "string", "minLength": 1 },
+        "effective_from": { "type": "string", "format": "date" },
+        "effective_to": { "type": ["string", "null"], "format": "date" },
+        "authorities": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/LegalLocator" } },
+        "legal_editor_signoff": { "oneOf": [{ "$ref": "#/$defs/Signoff" }, { "type": "null" }] },
+        "trust_state": { "enum": ["SIGNED_OFF", "DEVELOPMENT_ONLY"] },
+        "payload": { "type": "object" }
+      },
+      "allOf": [
+        { "if": { "properties": { "legal_editor_signoff": { "type": "null" } } }, "then": { "properties": { "trust_state": { "const": "DEVELOPMENT_ONLY" } } } },
+        { "if": { "properties": { "table_kind": { "const": "STATUTE_SUCCESSION" } } }, "then": { "properties": { "payload": { "$ref": "#/$defs/SuccessionPayload" } } } },
+        { "if": { "properties": { "table_kind": { "enum": ["LIMITATION_PERIOD", "PROCEDURAL_DEADLINE"] } } }, "then": { "properties": { "payload": { "$ref": "#/$defs/PeriodPayload" } } } },
+        { "if": { "properties": { "table_kind": { "const": "COURT_CALENDAR" } } }, "then": { "properties": { "payload": { "$ref": "#/$defs/CalendarPayload" } } } },
+        { "if": { "properties": { "table_kind": { "const": "ADMISSIBILITY_REQUIREMENT" } } }, "then": { "properties": { "payload": { "$ref": "#/$defs/AdmissibilityPayload" } } } },
+        { "if": { "properties": { "table_kind": { "const": "ISSUE_FRAMING_TEMPLATE" } } }, "then": { "properties": { "payload": { "$ref": "#/$defs/IssueTemplatePayload" } } } }
+      ]
+    },
+    "SuccessionPayload": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["entry_type", "predecessor", "successor", "equivalence"],
+          "properties": {
+            "entry_type": { "const": "MAPPING" },
+            "predecessor": { "oneOf": [{ "$ref": "#/$defs/Provision" }, { "type": "null" }] },
+            "successor": { "oneOf": [{ "$ref": "#/$defs/Provision" }, { "type": "null" }] },
+            "equivalence": { "enum": ["IDENTICAL", "RENUMBERED", "MODIFIED", "NEW", "OMITTED"] },
+            "transition_rule_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["entry_type", "before_code", "after_code", "switch_date", "governed_by"],
+          "properties": {
+            "entry_type": { "const": "TRANSITION" },
+            "before_code": { "type": "string", "minLength": 1 },
+            "after_code": { "type": "string", "minLength": 1 },
+            "switch_date": { "type": "string", "format": "date" },
+            "governed_by": { "enum": ["OFFENCE_DATE", "INSTITUTION_DATE", "FILING_DATE", "CAUSE_OF_ACTION_DATE", "EVENT_DATE"] },
+            "scope_note": { "type": ["string", "null"] }
+          }
+        }
+      ]
+    },
+    "PeriodPayload": {
+      "type": "object", "additionalProperties": false,
+      "required": ["deadline_label", "trigger_event_type", "period", "counting", "exclusions"],
+      "properties": {
+        "deadline_label": { "type": "string", "minLength": 1 },
+        "trigger_event_type": { "type": "string", "minLength": 1 },
+        "applies_to_matter_types": { "type": "array", "items": { "type": "string" } },
+        "period": { "type": "object", "additionalProperties": false, "required": ["value", "unit"], "properties": { "value": { "type": "integer", "minimum": 0 }, "unit": { "enum": ["DAYS", "MONTHS", "YEARS"] } } },
+        "counting": {
+          "type": "object", "additionalProperties": false,
+          "required": ["exclude_trigger_day", "roll_forward_if_court_closed"],
+          "properties": { "exclude_trigger_day": { "type": "boolean" }, "roll_forward_if_court_closed": { "type": "boolean" }, "calendar_table_id": { "type": ["string", "null"] } }
+        },
+        "exclusions": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["exclusion_id", "condition_fact_type", "description", "authority_index"],
+            "properties": { "exclusion_id": { "type": "string" }, "condition_fact_type": { "type": "string" }, "description": { "type": "string" }, "authority_index": { "type": "integer", "minimum": 0 } }
+          }
+        }
+      }
+    },
+    "CalendarPayload": {
+      "type": "object", "additionalProperties": false,
+      "required": ["court_id", "year", "closed_dates", "closed_ranges"],
+      "properties": {
+        "court_id": { "type": "string", "minLength": 1 },
+        "year": { "type": "integer", "minimum": 1950, "maximum": 2200 },
+        "closed_dates": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["date", "label"], "properties": { "date": { "type": "string", "format": "date" }, "label": { "type": "string" } } } },
+        "closed_ranges": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["from", "to", "label"], "properties": { "from": { "type": "string", "format": "date" }, "to": { "type": "string", "format": "date" }, "label": { "type": "string" } } } }
+      }
+    },
+    "AdmissibilityPayload": {
+      "type": "object", "additionalProperties": false,
+      "required": ["evidence_type", "elements"],
+      "properties": {
+        "evidence_type": { "type": "string", "minLength": 1 },
+        "elements": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["element_id", "label", "satisfied_by_node_types", "satisfied_by_type_tags"],
+            "properties": { "element_id": { "type": "string" }, "label": { "type": "string" }, "satisfied_by_node_types": { "type": "array", "items": { "type": "string" } }, "satisfied_by_type_tags": { "type": "array", "items": { "type": "string" } } }
+          }
+        }
+      }
+    },
+    "IssueTemplatePayload": {
+      "type": "object", "additionalProperties": false,
+      "required": ["matter_type", "issue_skeletons"],
+      "properties": {
+        "matter_type": { "type": "string", "minLength": 1 },
+        "issue_skeletons": { "type": "array", "minItems": 1, "items": { "type": "object", "additionalProperties": false, "required": ["template_id", "text"], "properties": { "template_id": { "type": "string" }, "text": { "type": "string", "minLength": 1 } } } }
+      }
+    }
+  },
+  "x-caseforge": {
+    "status": "FROZEN_FOR_IMPLEMENTATION",
+    "batch": "B-S4-01",
+    "implemented_by": ["B-S4-03", "B-S4-09", "B-S4-10", "B-S4-11", "B-S4-18"],
+    "prd_refs": ["PRD v4.0 §5", "AC-S4-RT.1", "AC-S4-RT.2", "AC-S4-RT.3"],
+    "install_rules": [
+      "Every authorities[] entry must resolve to an installed OFFICIAL_VERIFIED source/chunk, else the table is rejected (AC-S4-RT.1).",
+      "A row whose trust_state is DEVELOPMENT_ONLY can never contribute to a GREEN output (AC-S4-RT.2).",
+      "Rows for the same rule_id may not have overlapping effective windows."
+    ],
+    "no_legal_content_here": "This schema defines shape only. All legal values are authored from official text by a named legal editor."
+  }
+}

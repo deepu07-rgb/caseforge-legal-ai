@@ -1,0 +1,10 @@
+{
+  "fixture_id": "G-AUDIO",
+  "status": "AWAITING_RIGHTS_CLEARED_HUMAN_AUDIO",
+  "source_class": "HUMAN_AUDIO_RIGHTS_CLEARED",
+  "language": "English",
+  "rights_attestation_required": true,
+  "minimum_clips": 20,
+  "minimum_speakers": 5,
+  "clips": []
+}

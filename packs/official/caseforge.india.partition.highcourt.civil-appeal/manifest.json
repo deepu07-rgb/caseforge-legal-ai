@@ -1,0 +1,94 @@
+{
+  "schema_version": "2.0.0",
+  "metadata_version": "2.0.0",
+  "pack_id": "caseforge.india.partition.highcourt.civil-appeal",
+  "pack_kind": "official",
+  "jurisdiction": "India",
+  "jurisdiction_path": [
+    "India",
+    "Central Law",
+    "High Court",
+    "Civil Appeal"
+  ],
+  "version": "1.0.0-beta.1",
+  "display_name": "India High Court Partition Civil Appeal - Controlled Beta",
+  "description": "Narrow central-law repository for the approved controlled case; state and personal-law sources deliberately absent.",
+  "content_sha256": "7883058bd004dd99832489d43b01c4dedda6b8eddb61248d32e5ba2ad4846f13",
+  "authoritative_content_sha256": "61a08dc94caa310ad47fe36aa2cbee5df25128238e61e7c4ef36fed9abcf2732",
+  "files": [
+    {
+      "path": "content/code_of_civil_procedure_1908.txt",
+      "sha256": "c2660631d74acb5ce31a4a392000d479dd088a793e012a02015fbede40f633c3",
+      "bytes": 40689,
+      "role": "AUTHORITATIVE_CONTENT"
+    },
+    {
+      "path": "content/limitation_act_1963.txt",
+      "sha256": "015553d86cf0cff1b8d8e9f4f282acbbe9891d25831b7ec3930474728566282c",
+      "bytes": 20094,
+      "role": "AUTHORITATIVE_CONTENT"
+    },
+    {
+      "path": "content/partition_act_1893.txt",
+      "sha256": "9cd8661a5fbc39a8b3a500f782255d74373eb64ec66dcd1596e43a98a734157b",
+      "bytes": 7119,
+      "role": "AUTHORITATIVE_CONTENT"
+    },
+    {
+      "path": "metadata/editorial_checklist.json",
+      "sha256": "2893df82102dedfb4eaa3953f43bc17a05030b646f90cd88c239b84ac49c6cd9",
+      "bytes": 499,
+      "role": "DERIVED_ARTEFACT"
+    },
+    {
+      "path": "metadata/editorial_commentary.json",
+      "sha256": "408c64851ff2de49ad2e6944f2c48b37778b47640d5b7fcfe1f8ca62931efdc2",
+      "bytes": 865,
+      "role": "DERIVED_ARTEFACT"
+    },
+    {
+      "path": "metadata/legal_chunks.json",
+      "sha256": "b4ea63843db37592378a4eb5b99fd5485f99f4cabb15c156750b180be39b320e",
+      "bytes": 108484,
+      "role": "LEGAL_CHUNKS"
+    },
+    {
+      "path": "metadata/legal_sources.json",
+      "sha256": "69a3176bef0b969798492627b608c8b8b144255b52e9f6e3a294d8cd30433ed8",
+      "bytes": 102144,
+      "role": "LEGAL_SOURCES"
+    },
+    {
+      "path": "metadata/retrieval_goldens.json",
+      "sha256": "c1b80826f6ac77d0f85bb4b5ceefe845551611973229940280d0136c797655a1",
+      "bytes": 965,
+      "role": "DERIVED_ARTEFACT"
+    },
+    {
+      "path": "metadata/source_ledger.json",
+      "sha256": "13a3772dde7e505258bf783909d475d53bd2afaf994eb6c22763d718dba20f75",
+      "bytes": 2310,
+      "role": "DERIVED_ARTEFACT"
+    },
+    {
+      "path": "metadata/update_manifest.json",
+      "sha256": "0243b48e64912c3629247ec36defce56c49dc86fdfcc6a5825d9a4bd1fb66184",
+      "bytes": 374,
+      "role": "DERIVED_ARTEFACT"
+    }
+  ],
+  "headnotes_stripped": true,
+  "signature_alg": "Ed25519",
+  "signer_key_id": "caseforge-official-dev-2026",
+  "trust_level": "OFFICIAL_VERIFIED",
+  "controlled_beta_eligible": true,
+  "sources_file": "metadata/legal_sources.json",
+  "chunks_file": "metadata/legal_chunks.json",
+  "publisher": "India Code / Ministry of Law and Justice; CaseForge original matter",
+  "updated_at": "2026-08-16",
+  "source_status": "CURRENT",
+  "supersedes_version": null,
+  "superseded_by_version": null,
+  "editorial_review_status": "TWO_LEGAL_EDITORS_PENDING",
+  "rights_basis": "Copyright Act, 1957, section 52(1)(q)(ii)"
+}

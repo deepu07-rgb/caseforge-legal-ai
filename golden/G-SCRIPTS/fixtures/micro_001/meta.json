@@ -1,0 +1,18 @@
+{
+  "fixture_id": "G-SCRIPTS/micro_001",
+  "set_id": "G-SCRIPTS",
+  "fixture_version": "0.1.0",
+  "status": "SYNTHETIC_PLACEHOLDER",
+  "authoritative": false,
+  "batch": "B-S0-04",
+  "primary_acs": ["AC-3.1", "AC-3.5", "AC-4.1"],
+  "jurisdiction": null,
+  "description": "Minimal cold-start / IPC ping script shell for harness discovery.",
+  "inputs": {
+    "script": "script.json"
+  },
+  "known_answer": "known_answer.json",
+  "authored_by": null,
+  "reviewed_by": null,
+  "locked_at": null
+}

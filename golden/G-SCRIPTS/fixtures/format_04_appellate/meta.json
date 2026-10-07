@@ -1,0 +1,14 @@
+﻿{
+    "primary_acs":  [
+                        "AC-2.1",
+                        "AC-3.3"
+                    ],
+    "set_id":  "G-SCRIPTS",
+    "fixture_id":  "G-SCRIPTS/format_04_appellate",
+    "batch":  "B-S2-02",
+    "format_order":  4,
+    "format":  "Appellate",
+    "description":  "Scripted text-only Mock Court session for Appellate",
+    "status":  "GOLDEN",
+    "authoritative":  true
+}

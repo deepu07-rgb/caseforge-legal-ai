@@ -1,0 +1,243 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/argument_node.schema.json",
+  "title": "ArgumentTree",
+  "description": "Argument Tree + link scores for the Argument Integrity Engine (PRD §8, §16). Scoring path must be deterministic — no LLM inside scoring (AC-8.3).",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "case_id",
+    "generated_at",
+    "pipeline",
+    "scoring_rules",
+    "relief_root",
+    "limbs"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0",
+      "description": "Frozen Layer 2 version (Q-AN-01 2026-08-08)."
+    },
+    "case_id": { "type": "string", "minLength": 1 },
+    "generated_at": {
+      "type": "string",
+      "description": "ISO-8601 UTC or epoch-ms string of last build/score."
+    },
+    "pipeline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scorer_id"],
+      "properties": {
+        "scorer_id": {
+          "type": "string",
+          "const": "caseforge.integrity.v1",
+          "description": "Deterministic Integrity Engine id (AC-8.3)."
+        },
+        "builder_id": {
+          "type": ["string", "null"],
+          "description": "Optional tree builder id, e.g. caseforge.integrity.build_from_graph.v1"
+        },
+        "notes": { "type": ["string", "null"] }
+      }
+    },
+    "scoring_rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["formula", "missing_link_threshold", "link_scale"],
+      "properties": {
+        "formula": {
+          "type": "string",
+          "const": "VI = 100 - min(Fact, Evidence, Law, Exposure)"
+        },
+        "missing_link_threshold": {
+          "type": "integer",
+          "const": 60,
+          "description": "Link score < threshold is a Missing Link."
+        },
+        "link_scale": {
+          "type": "string",
+          "const": "0-100 integer"
+        },
+        "prd_ref": { "type": ["string", "null"] }
+      }
+    },
+    "relief_root": { "$ref": "#/$defs/ReliefRoot" },
+    "limbs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Limb" }
+    },
+    "meta": {
+      "oneOf": [{ "$ref": "#/$defs/TreeMeta" }, { "type": "null" }]
+    }
+  },
+  "$defs": {
+    "ReliefRoot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["node_id", "node_role", "label"],
+      "properties": {
+        "node_id": { "type": "string", "minLength": 1 },
+        "node_role": { "type": "string", "const": "relief_root" },
+        "label": { "type": "string", "minLength": 1 },
+        "jurisdiction": {
+          "oneOf": [
+            { "type": "string", "enum": ["India", "United States", "Other"] },
+            { "type": "null" }
+          ]
+        },
+        "relief_ref": {
+          "type": ["string", "null"],
+          "description": "Optional case_graph.prayer_relief item id"
+        }
+      }
+    },
+    "Limb": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["node_id", "node_role", "parent", "label", "links", "anchors"],
+      "properties": {
+        "node_id": { "type": "string", "minLength": 1 },
+        "node_role": { "type": "string", "const": "argument_limb" },
+        "parent": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1 },
+        "theory": { "type": ["string", "null"] },
+        "links": { "$ref": "#/$defs/Links" },
+        "anchors": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Anchor" }
+        },
+        "planted_gaps": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/PlantedGap" },
+          "description": "GOLDEN / AC-8.1 planted gaps; scorer surfaces in Missing Links"
+        },
+        "expected_VI": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Eval-only expected VI; production may omit"
+        }
+      }
+    },
+    "Links": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["Fact", "Evidence", "Law", "Exposure"],
+      "properties": {
+        "Fact": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "Evidence": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "Law": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "Exposure": { "type": "integer", "minimum": 0, "maximum": 100 }
+      }
+    },
+    "Anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["node_id", "node_role", "kind", "ref", "text"],
+      "properties": {
+        "node_id": { "type": "string", "minLength": 1 },
+        "node_role": { "type": "string", "const": "anchor_leaf" },
+        "kind": {
+          "type": "string",
+          "enum": ["fact", "evidence", "law", "exposure"]
+        },
+        "ref": {
+          "type": "string",
+          "minLength": 1,
+          "description": "case_graph item id, statute label, or synthetic ref"
+        },
+        "text": { "type": "string" },
+        "case_graph_path": {
+          "type": ["string", "null"],
+          "description": "Optional pointer e.g. evidence[2], gaps[0]"
+        }
+      }
+    },
+    "PlantedGap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gap_id", "link", "description", "severity"],
+      "properties": {
+        "gap_id": { "type": "string", "minLength": 1 },
+        "link": {
+          "type": "string",
+          "enum": ["Fact", "Evidence", "Law", "Exposure"]
+        },
+        "description": { "type": "string", "minLength": 1 },
+        "severity": {
+          "type": "string",
+          "enum": ["critical", "material", "minor"]
+        }
+      }
+    },
+    "TreeMeta": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["PRODUCTION", "GOLDEN", "DEMO_SYNTHETIC"]
+        },
+        "authoritative": { "type": "boolean" },
+        "fixture_id": { "type": ["string", "null"] },
+        "difficulty": { "type": ["string", "null"] }
+      }
+    },
+    "MissingLinkRecord": {
+      "type": "object",
+      "description": "Scorer output row — not required on persisted tree; always cites inputs (PRD §8).",
+      "additionalProperties": false,
+      "required": [
+        "limb_id",
+        "link",
+        "score",
+        "threshold",
+        "rank",
+        "inputs_cited"
+      ],
+      "properties": {
+        "limb_id": { "type": "string" },
+        "link": {
+          "type": "string",
+          "enum": ["Fact", "Evidence", "Law", "Exposure"]
+        },
+        "score": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "threshold": { "type": "integer", "const": 60 },
+        "rank": { "type": "integer", "minimum": 1 },
+        "inputs_cited": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "planted_gap_id": { "type": ["string", "null"] },
+        "description": { "type": ["string", "null"] }
+      }
+    }
+  },
+  "x-caseforge": {
+    "status": "FROZEN",
+    "batch": "B-S2-01",
+    "prd_refs": ["§8", "§16"],
+    "worksheet": "docs/worksheets/Q-AN-01_argument_node.md",
+    "frozen_at": "2026-08-08",
+    "scorer_id": "caseforge.integrity.v1",
+    "normative_invariants": [
+      "Argument Tree: root = relief, limbs = arguments, leaves = anchors.",
+      "Four links per limb: Fact, Evidence, Law, Exposure; each score is an integer 0–100 inclusive.",
+      "Vulnerability Index VI = 100 − min(Fact, Evidence, Law, Exposure).",
+      "Missing Links panel always cites its inputs.",
+      "Missing link threshold = 60 (score < 60).",
+      "Scoring is pure deterministic code; no LLM inside the scoring path (AC-8.3).",
+      "Planted gap must appear in top-2 Missing Links (AC-8.1).",
+      "VI recomputation budget ≤ 5 s (AC-8.2).",
+      "VI is preparation vulnerability — never win/outcome prediction (G6)."
+    ],
+    "formulas": {
+      "vulnerability_index": "VI = 100 - min(links.Fact, links.Evidence, links.Law, links.Exposure)"
+    },
+    "open_questions": []
+  }
+}

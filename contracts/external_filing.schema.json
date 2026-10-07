@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/external_filing.schema.json",
+  "title": "CaseForge external (opponent) filing and scan result",
+  "description": "An opponent's filing is untrusted adverse assertion, never matter fact (PRD v4.0 §7.2). The document itself is an ordinary document_intake record whose type_tag is EXTERNAL_FILING.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "doc_id", "type_tag", "filing_party_id", "filing_kind", "trust", "assertions", "scan"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "doc_id": { "type": "string", "minLength": 1 },
+    "type_tag": { "const": "EXTERNAL_FILING" },
+    "filing_party_id": { "type": "string", "minLength": 1 },
+    "filing_kind": { "enum": ["PLEADING", "BRIEF", "REPLY", "WRITTEN_SUBMISSION", "AFFIDAVIT", "OTHER"] },
+    "filed_on": { "type": ["string", "null"], "format": "date" },
+    "trust": { "const": "UNTRUSTED_ADVERSE" },
+    "assertions": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["assertion_id", "polarity", "text", "locator", "record_support_cited", "graph_edge_id"],
+        "properties": {
+          "assertion_id": { "type": "string" },
+          "polarity": { "enum": ["ASSERTS", "DENIES"] },
+          "text": { "type": "string", "minLength": 1 },
+          "locator": { "$ref": "#/$defs/MatterLocator" },
+          "record_support_cited": { "type": "boolean" },
+          "graph_edge_id": { "type": ["string", "null"], "description": "asserts/denies edge owned by filing_party_id; never a fact node origin." }
+        }
+      }
+    },
+    "scan": {
+      "type": "object", "additionalProperties": false,
+      "required": ["audit_report_id", "record_conflicts", "unsupported_assertion_ids", "new_arguments"],
+      "properties": {
+        "audit_report_id": { "type": ["string", "null"] },
+        "record_conflicts": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["conflict_id", "assertion_id", "record_fact_node_id", "filing_locator", "record_locator", "record_origin", "basis", "proposition_ids"],
+            "properties": {
+              "conflict_id": { "type": "string" },
+              "assertion_id": { "type": "string" },
+              "record_fact_node_id": { "type": "string" },
+              "filing_locator": { "$ref": "#/$defs/MatterLocator" },
+              "record_locator": { "$ref": "#/$defs/MatterLocator" },
+              "record_origin": { "enum": ["SOURCED_BY_COUNSEL", "EXTRACTED", "USER_EDIT"] },
+              "basis": { "enum": ["DATE", "TIME", "AMOUNT", "COUNT", "PLACE", "PERSON", "PRESENCE", "SEQUENCE", "SEMANTIC_VERIFIED"] },
+              "proposition_ids": { "type": "array", "items": { "type": "string" } }
+            },
+            "allOf": [ { "if": { "properties": { "basis": { "const": "SEMANTIC_VERIFIED" } } }, "then": { "properties": { "proposition_ids": { "minItems": 1 } } } } ]
+          }
+        },
+        "unsupported_assertion_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "new_arguments": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["argument_id", "summary", "locator", "matched_tree_node_id"],
+            "properties": { "argument_id": { "type": "string" }, "summary": { "type": "string" }, "locator": { "$ref": "#/$defs/MatterLocator" }, "matched_tree_node_id": { "type": ["string", "null"] } }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "MatterLocator": {
+      "type": "object", "additionalProperties": false,
+      "required": ["doc_id", "page_index", "char_start", "char_end", "excerpt"],
+      "properties": {
+        "doc_id": { "type": "string" }, "page_index": { "type": ["integer", "null"], "minimum": 0 },
+        "char_start": { "type": "integer", "minimum": 0 }, "char_end": { "type": "integer", "minimum": 0 },
+        "line_start": { "type": ["integer", "null"], "minimum": 1 }, "line_end": { "type": ["integer", "null"], "minimum": 1 },
+        "excerpt": { "type": "string" }
+      }
+    }
+  },
+  "x-caseforge": {
+    "status": "FROZEN_FOR_IMPLEMENTATION",
+    "batch": "B-S4-01",
+    "implemented_by": ["B-S4-06", "B-S4-18", "B-S4-19"],
+    "prd_refs": ["PRD v4.0 §7.2", "AC-S4-02.1", "AC-S4-02.2", "AC-S4-02.3", "AC-S4-02.4"],
+    "leak_rule": "No assertion text may become a fact node, Digest fact, Drafting source, or Mock Court factual basis (AC-S4-02.3).",
+    "graph_amendment": "Requires case_graph Provenance.origin value ADVERSE_ASSERTION and optional asserting_party_id - see MANIFEST planned_amendments (case_graph v2.1.0, applied in B-S4-06)."
+  }
+}

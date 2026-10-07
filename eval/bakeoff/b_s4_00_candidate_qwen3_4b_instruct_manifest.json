@@ -1,0 +1,55 @@
+{
+  "schema_version": "caseforge.model-manifest.v1",
+  "backend": {
+    "name": "ollama",
+    "version": "0.35.1"
+  },
+  "model": {
+    "name": "qwen3:4b-instruct",
+    "digest": "sha256:0edcdef34593eac1aa2be9c7d06c432dcf81945adca5eca2f27662c18f168ba0",
+    "family": "qwen3",
+    "parameters": "4.0B",
+    "quantization": "Q4_K_M",
+    "context_length": 262144,
+    "classification": "stock-instruct + quantized + CaseForge-prompted",
+    "license": "Apache-2.0",
+    "license_text_sha256": "c5e8307bee893d2be5cee30b0c84a301d3ff187452bd344c80a3915415975587",
+    "legally_fine_tuned": false,
+    "checkpoint_evidence": false,
+    "tier": "CANDIDATE_REJECTED",
+    "install_policy": "NOT_ALLOWLISTED",
+    "size_bytes": 2497293803,
+    "selected_by": "B-S4-00 bake-off (owner-approved downloads: qwen3:4b [rejected, thinking-only], qwen3:4b-instruct, 2026-10-08)",
+    "bakeoff_result": "HALT 2026-10-08: B-S3-13 score 0.9167 with critical prompt_injection failure; B-S3-16 live 3/5. Not allowlisted."
+  },
+  "generation": {
+    "temperature": 0.1,
+    "top_p": 0.9,
+    "seed": 42,
+    "num_ctx": 8192,
+    "num_predict_default": 384,
+    "raw_case_context_max_chars": 24000,
+    "authority_context_max_chars": 16000,
+    "think": false
+  },
+  "prompt": {
+    "version": "caseforge.legal-reasoner.v1",
+    "sha256": "37935e9845e37d5a3291016143b8142f9736478cf7492bba9129a7139feb888f",
+    "file": "contracts/prompts/legal_reasoner_v1.txt"
+  },
+  "fitness_gate": {
+    "minimum_score": 0.85,
+    "required_cases": [
+      "fact_grounding",
+      "citation_grounding",
+      "unknown_law",
+      "contradiction",
+      "opposition",
+      "prompt_injection",
+      "nonexistent_authority",
+      "quote_fidelity",
+      "source_inspection",
+      "long_context_gate"
+    ]
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "schema_version": "caseforge.model-manifest.v1",
+  "backend": {
+    "name": "ollama",
+    "version": "0.35.1"
+  },
+  "model": {
+    "name": "phi4-mini:latest",
+    "digest": "sha256:78fad5d182a7c33065e153a5f8ba210754207ba9d91973f57dffa7f487363753",
+    "family": "phi3",
+    "parameters": "3.8B",
+    "quantization": "Q4_K_M",
+    "context_length": 131072,
+    "classification": "stock-instruct + quantized + CaseForge-prompted",
+    "license": "MIT",
+    "legally_fine_tuned": false,
+    "checkpoint_evidence": false,
+    "tier": "CANDIDATE",
+    "install_policy": "BAKEOFF_ONLY",
+    "license_text_sha256": "fa8235e5b48faca34e3ca98cf4f694ef08bd216d28b58071a1f85b1d50cb814d",
+    "size_bytes": 2491876774
+  },
+  "generation": {
+    "temperature": 0.1,
+    "top_p": 0.9,
+    "seed": 42,
+    "num_ctx": 8192,
+    "num_predict_default": 384,
+    "raw_case_context_max_chars": 24000,
+    "authority_context_max_chars": 16000
+  },
+  "prompt": {
+    "version": "caseforge.legal-reasoner.v2-small",
+    "sha256": "7618c25c10ead367a2d7c0141302367fad5402fd3bd6a6c1ae51b81182e8de9f",
+    "file": "contracts/prompts/legal_reasoner_v2_small.txt"
+  },
+  "fitness_gate": {
+    "minimum_score": 0.85,
+    "required_cases": [
+      "fact_grounding",
+      "citation_grounding",
+      "unknown_law",
+      "contradiction",
+      "opposition",
+      "prompt_injection",
+      "nonexistent_authority",
+      "quote_fidelity",
+      "source_inspection",
+      "long_context_gate"
+    ]
+  }
+}

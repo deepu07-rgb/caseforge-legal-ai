@@ -1,0 +1,73 @@
+{
+  "batch": "B-S3-04",
+  "implementation_status": "PASS",
+  "formal_acceptance_status": "BLOCKED",
+  "recognizer_id": "caseforge.ocr.tesseract-eng-fast.v1",
+  "engine_version": "tesseract v5.5.3.20260724",
+  "model_sha256": "7d4322bd2a7749724879683fc3912cb542f19906c83bcc1a52132556427170b2",
+  "offline": true,
+  "samples": {
+    "page_1.png": {
+      "quality": "clean",
+      "cer": 0.005742,
+      "wer": 0.017857,
+      "words": 232,
+      "mean_confidence": 0.948836,
+      "requires_review": false,
+      "automatic_extraction_allowed": true,
+      "duration_ms": 5577,
+      "wall_ms": 7166,
+      "peak_engine_rss_bytes": 52215808,
+      "boxes_valid": true
+    },
+    "page_1.jpg": {
+      "quality": "clean",
+      "cer": 0.007383,
+      "wer": 0.03125,
+      "words": 232,
+      "mean_confidence": 0.953448,
+      "requires_review": false,
+      "automatic_extraction_allowed": true,
+      "duration_ms": 6752,
+      "wall_ms": 8146,
+      "peak_engine_rss_bytes": 52600832,
+      "boxes_valid": true
+    },
+    "page_1_rotated_degraded.jpg": {
+      "quality": "degraded",
+      "cer": 0.280558,
+      "wer": 0.611607,
+      "words": 218,
+      "mean_confidence": 0.479541,
+      "requires_review": true,
+      "automatic_extraction_allowed": false,
+      "duration_ms": 6432,
+      "wall_ms": 7680,
+      "peak_engine_rss_bytes": 50987008,
+      "boxes_valid": true
+    }
+  },
+  "scanned_pdf": {
+    "pages": 5,
+    "non_empty_pages": 5
+  },
+  "hardware_profiles": {
+    "lite": {
+      "threads": 1,
+      "observed_peak_rss_bytes": 52600832,
+      "timing_basis": "single-page sequential"
+    },
+    "full": {
+      "threads": 2,
+      "observed_peak_rss_bytes": 52600832,
+      "timing_basis": "single-page sequential; model concurrency remains disabled"
+    }
+  },
+  "critical_field_gate": {
+    "threshold": 0.99,
+    "label_count": 0,
+    "status": "BLOCKED"
+  },
+  "blocking_reason": "Rights-cleared fixture is READY_FOR_REVIEW with draft expected answers and no human-locked critical-field labels.",
+  "errors": []
+}

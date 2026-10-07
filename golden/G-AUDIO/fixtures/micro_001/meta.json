@@ -1,0 +1,20 @@
+{
+  "fixture_id": "G-AUDIO/micro_001",
+  "set_id": "G-AUDIO",
+  "fixture_version": "0.1.0",
+  "status": "SYNTHETIC_PLACEHOLDER",
+  "authoritative": false,
+  "batch": "B-S0-04",
+  "primary_acs": ["AC-9.1", "AC-9.2"],
+  "jurisdiction": null,
+  "language": "en",
+  "description": "Transcript-only stub. No audio file committed. Not valid for WER PASS.",
+  "inputs": {
+    "transcript_stub": "transcript_stub.txt",
+    "audio_file": null
+  },
+  "known_answer": "known_answer.json",
+  "authored_by": null,
+  "reviewed_by": null,
+  "locked_at": null
+}

@@ -1,0 +1,5 @@
+[CASEFORGE_SYNTH_NOT_LAW pack=S-SYNTH-GRETRIEVAL-v1]
+Neutral citation: 553 U.S. DEMO 8
+Court: synthetic United States
+The Court held that res judicata and claim preclusion bars.
+This excerpt is product-owner synthetic GOLDEN material for retrieval metrics only.

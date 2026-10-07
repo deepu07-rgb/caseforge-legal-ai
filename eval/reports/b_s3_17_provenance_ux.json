@@ -1,0 +1,27 @@
+{
+  "batch": "B-S3-17",
+  "checks": {
+    "contract_vocabulary": true,
+    "shared_inspector": true,
+    "matter_deep_locator": true,
+    "legal_deep_locator": true,
+    "counsel_and_inference_distinct": true,
+    "unsafe_states_not_green": true,
+    "keyboard_and_screen_reader": true,
+    "not_color_alone": true,
+    "all_named_surfaces": true,
+    "export_retains_provenance": true,
+    "copy_retains_provenance": true,
+    "preparation_disclaimer": true,
+    "operator_documentation": true
+  },
+  "surface_files": {
+    "Digest": "src/components/DigestView.tsx",
+    "Drafting": "src/components/DraftingView.tsx",
+    "Integrity": "src/components/ArgumentTreeView.tsx",
+    "Review": "src/components/ReviewView.tsx",
+    "Retrieval": "src/components/RetrievalView.tsx",
+    "Mock Court": "src/components/MockCourtView.tsx"
+  },
+  "passed": true
+}
