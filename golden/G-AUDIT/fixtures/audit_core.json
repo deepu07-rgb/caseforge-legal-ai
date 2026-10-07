@@ -1,0 +1,70 @@
+{
+  "fixture_id": "G-AUDIT/audit_core",
+  "status": "GOLDEN",
+  "authored": "2026-10-08, before the citation & quote audit engine was written (B-S4-04)",
+  "source_class": "SYNTHETIC_CONTROLLED",
+  "note": "Synthetic corpus (impossible years 2080+, fictitious parties) covering every audit classification, plus checks against the real signed India partition pack in packs/official. Expected results are the audit_report contract (PRD v4.0 §7.1).",
+  "corpus": [
+    { "chunk_id": "c-asha", "pack_id": "fx.official", "source_id": "src-asha", "title": "Asha Devi v. Ravi Kumar", "citation": "(2091) 4 SCC 210", "authority_type": "JUDGMENT", "trust_level": "OFFICIAL_VERIFIED", "temporal_status": "APPLICABLE", "superseded_status": "CURRENT", "page": 3, "paragraph": "paras 11-13",
+      "text": "11. The appellant relied on long possession.\n12. Joint possession of one co-sharer is in law possession of all co-sharers, unless ouster is pleaded and proved.\n13. The appeal is dismissed." },
+    { "chunk_id": "c-old", "pack_id": "fx.official", "source_id": "src-old", "title": "Old Holding v. State", "citation": "(2080) 1 SCC 5", "authority_type": "JUDGMENT", "trust_level": "OFFICIAL_VERIFIED", "temporal_status": "APPLICABLE", "superseded_status": "SUPERSEDED", "page": 1, "paragraph": "para 7",
+      "text": "7. A co-sharer may be ousted by mere silence." },
+    { "chunk_id": "c-model", "pack_id": "fx.official", "source_id": "src-model", "title": "The Model Partition Act, 2091", "citation": "Act No. 9 of 2091", "authority_type": "STATUTE", "trust_level": "OFFICIAL_VERIFIED", "temporal_status": "APPLICABLE", "superseded_status": "CURRENT", "page": 1, "paragraph": "ss. 4-5",
+      "text": "4. Valuation of shares.—The court shall value each share at market rate.\n5. Sale of shares.—The court may order sale where division is impracticable." },
+    { "chunk_id": "c-memo", "pack_id": "fx.custom", "source_id": "src-memo", "title": "Firm Memo on Partition Strategy", "citation": "CF-MEMO-7", "authority_type": "CUSTOM", "trust_level": "CUSTOM", "temporal_status": "APPLICABLE", "superseded_status": "CURRENT", "page": 1, "paragraph": "",
+      "text": "Always plead ouster in the alternative." },
+    { "chunk_id": "c-future", "pack_id": "fx.official", "source_id": "src-future", "title": "Future Bench v. Union", "citation": "(2092) 2 SCC 50", "authority_type": "JUDGMENT", "trust_level": "OFFICIAL_VERIFIED", "temporal_status": "NOT_YET_EFFECTIVE", "superseded_status": "CURRENT", "page": 1, "paragraph": "para 3",
+      "text": "3. Rule X applies prospectively." },
+    { "chunk_id": "c-smith", "pack_id": "fx.us", "source_id": "src-smith", "title": "Smith v. Jones", "citation": "990 F.3d 12", "authority_type": "JUDGMENT", "trust_level": "OFFICIAL_VERIFIED", "temporal_status": "APPLICABLE", "superseded_status": "CURRENT", "page": 14, "paragraph": "",
+      "text": "Summary judgment is improper where material facts are genuinely disputed." }
+  ],
+  "drafts": [
+    {
+      "draft_id": "IN-1", "planted_citations": 8, "planted_quotations": 2,
+      "text": "The appellant relies on Asha Devi v. Ravi Kumar, (2091) 4 SCC 210, para 12, where the Court held that “Joint possession of one co-sharer is in law possession of all co-sharers, unless ouster is pleaded and proved.” The respondent's reliance on Imaginary Lal v. Fictional Devi, (2099) 9 SCC 999 is misplaced. In Asha Devi (2091) 4 SCC 210 the Court also said that “Joint possession of one co-sharer is in law possession of every co-sharer.” The old view in Old Holding v. State, (2080) 1 SCC 5 no longer governs. Section 4 of the Model Partition Act, 2091 requires valuation, but section 99 of the Model Partition Act, 2091 is also invoked. See also the firm's note CF-MEMO-7 and Future Bench v. Union, (2092) 2 SCC 50.",
+      "expected": [
+        { "kind": "CITATION", "match": "(2091) 4 SCC 210, para 12", "result": "VERIFIED", "pinpoint": "MATCH" },
+        { "kind": "QUOTATION", "match": "all co-sharers, unless ouster", "result": "VERIFIED" },
+        { "kind": "CITATION", "match": "(2099) 9 SCC 999", "result": "NOT_IN_CORPUS" },
+        { "kind": "QUOTATION", "match": "possession of every co-sharer", "result": "MISQUOTED", "diff_delete": "all", "diff_insert": "every" },
+        { "kind": "CITATION", "match": "(2080) 1 SCC 5", "result": "SUPERSEDED" },
+        { "kind": "CITATION", "match": "Section 4 of the Model Partition Act, 2091", "result": "VERIFIED", "pinpoint": "MATCH" },
+        { "kind": "CITATION", "match": "section 99 of the Model Partition Act, 2091", "result": "VERIFIED", "pinpoint": "MISMATCH" },
+        { "kind": "CITATION", "match": "CF-MEMO-7", "result": "CUSTOM_SOURCE" },
+        { "kind": "CITATION", "match": "(2092) 2 SCC 50", "result": "NOT_APPLICABLE" }
+      ]
+    },
+    {
+      "draft_id": "US-1", "planted_citations": 2, "planted_quotations": 2,
+      "text": "Plaintiff relies on Smith v. Jones, 990 F.3d 12 (2100), which held that “Summary judgment is improper where material facts are genuinely disputed.” Defendant cites Doe v. Roe, 999 U.S. 123 (2101). As that case is said to hold, “Summary judgment is never appropriate in partition cases.”",
+      "expected": [
+        { "kind": "CITATION", "match": "990 F.3d 12", "result": "VERIFIED" },
+        { "kind": "QUOTATION", "match": "genuinely disputed", "result": "VERIFIED" },
+        { "kind": "CITATION", "match": "999 U.S. 123", "result": "NOT_IN_CORPUS" },
+        { "kind": "QUOTATION", "match": "never appropriate in partition", "result": "NOT_IN_CORPUS" }
+      ]
+    },
+    {
+      "draft_id": "QUOTES-ONLY", "planted_citations": 0, "planted_quotations": 2,
+      "text": "As the Court explained, “Joint possession of one co-sharer is in law possession of all co-sharers, unless ouster is pleaded and proved.” Counsel also notes that “Partition must always be by metes and bounds in every case.”",
+      "expected": [
+        { "kind": "QUOTATION", "match": "unless ouster is pleaded", "result": "VERIFIED" },
+        { "kind": "QUOTATION", "match": "metes and bounds", "result": "NOT_IN_CORPUS" }
+      ]
+    }
+  ],
+  "real_pack": {
+    "pack_dir": "packs/official/caseforge.india.partition.highcourt.civil-appeal",
+    "draft": "Under section 4 of the Partition Act, 1893, the court shall “make a valuation of such share in such manner as it thinks fit”. Reliance on section 99 of the Partition Act, 1893 is misconceived.",
+    "expected": [
+      { "kind": "CITATION", "match": "section 4 of the Partition Act, 1893", "result": "VERIFIED", "pinpoint": "MATCH" },
+      { "kind": "QUOTATION", "match": "make a valuation of such share", "result": "VERIFIED" },
+      { "kind": "CITATION", "match": "section 99 of the Partition Act, 1893", "result": "VERIFIED", "pinpoint": "MISMATCH" }
+    ],
+    "why": "The real section 4 text wraps across a line break ('... as it\\nthinks fit'); an exact quotation typed on one line must still verify (whitespace-normalised, wording exact)."
+  },
+  "rules": {
+    "never_verified": "A fabricated citation must never be VERIFIED (AC-S4-01.1); a one-word change must be MISQUOTED with a diff (AC-S4-01.2).",
+    "vocabulary": "NOT_IN_CORPUS means not in the installed packs - never called 'fake'."
+  }
+}
