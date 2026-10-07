@@ -1,6 +1,6 @@
 {
   "batch": "B-S4-00",
-  "generated_at": "2026-10-07T22:04:40Z",
+  "generated_at": "2026-10-07T22:19:03Z",
   "default_model": "qwen2.5:7b",
   "addon_model": null,
   "tier_contracts_valid": true,
@@ -101,7 +101,8 @@
       "src-tauri/src/retrieval/mod.rs",
       "src-tauri/src/authority/mod.rs",
       "src-tauri/src/packs/mod.rs",
-      "src-tauri/src/guardrails/mod.rs"
+      "src-tauri/src/guardrails/mod.rs",
+      "src-tauri/src/answer_feedback.rs"
     ],
     "offenders": []
   },

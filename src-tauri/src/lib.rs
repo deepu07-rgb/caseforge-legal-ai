@@ -4,6 +4,7 @@
 //! Local infer-llm: Ollama / GGUF / OpenAI-compat offline reasoner.
 
 mod adaptive_bench;
+mod answer_feedback;
 mod authority;
 mod bench_prep;
 mod choreography;
@@ -2632,6 +2633,24 @@ fn mock_court_turn_for_case(
         &request.user_text,
         &graph,
     )?;
+    // B-S4-00b: grade counsel's answer to the PREVIOUS challenge against the record and the working set
+    // (deterministic, no model) before the next challenge is generated.
+    let permitted: Vec<answer_feedback::PermittedAuthority> = bundle
+        .authorities
+        .iter()
+        .map(|a| answer_feedback::PermittedAuthority {
+            authority_id: a.authority_id.clone(),
+            citation: a.citation.clone(),
+            label: format!("{} {} {}", a.title, a.section_label, a.citation),
+        })
+        .collect();
+    let feedback = answer_feedback::evaluate(
+        &request.session_id,
+        &request.user_text,
+        answer_feedback::previous_challenge(&request.session_id).as_deref(),
+        &graph,
+        &permitted,
+    );
     let output_id = format!("{}:{}", request.session_id, Uuid::new_v4());
     mgr.working_set_select_for_output(&request.case_id, "MOCK_COURT", &output_id)
         .map_err(|e| e.to_string())?;
@@ -2681,6 +2700,9 @@ fn mock_court_turn_for_case(
         Ok(result) => result,
         Err(reason) => grounded_mock_court::degraded(baseline, reason),
     };
+    if let Some(challenge) = generation.turn.assistant_text.as_deref() {
+        answer_feedback::remember_challenge(&generation.turn.session_id, challenge);
+    }
     Ok(mock_court_retrieval::GroundedTurnResponse {
         schema_version: mock_court_retrieval::SCHEMA_VERSION.into(),
         turn: generation.turn,
@@ -2703,6 +2725,7 @@ fn mock_court_turn_for_case(
         schema_repair_used: generation.schema_repair_used,
         structured_turn: generation.structured_turn,
         proposition_ledger: generation.proposition_ledger,
+        answer_feedback: Some(feedback),
     })
 }
 

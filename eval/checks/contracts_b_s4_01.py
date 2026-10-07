@@ -256,10 +256,10 @@ def main() -> int:
     inv = load(INVENTORY)
     ids = [a["id"] for a in inv["acceptance_criteria"]]
     need(len(ids) == len(set(ids)), "duplicate AC ids in stage4 inventory")
-    doc_ids = set(re.findall(r"AC-S4-(?:RT-RED|RT\.\d+|\d{2}\.\d+)", PRD.read_text(encoding="utf-8") + PLAYBOOK.read_text(encoding="utf-8")))
+    doc_ids = set(re.findall(r"AC-S4-(?:RT-RED|RT\.\d+|\d{2}[a-z]?\.\d+)", PRD.read_text(encoding="utf-8") + PLAYBOOK.read_text(encoding="utf-8")))
     need(not (doc_ids - set(ids)), f"ACs in PRD/playbook missing from inventory: {sorted(doc_ids - set(ids))}")
     need(not (set(ids) - doc_ids), f"inventory ACs not in PRD/playbook: {sorted(set(ids) - doc_ids)}")
-    batches = set(re.findall(r"^## (B-S4-\d{2})", PLAYBOOK.read_text(encoding="utf-8"), re.M))
+    batches = set(re.findall(r"^## (B-S4-\d{2}[a-z]?)", PLAYBOOK.read_text(encoding="utf-8"), re.M))
     for a in inv["acceptance_criteria"]:
         need(a["batch"] in batches, f"{a['id']}: batch {a['batch']} not in playbook")
 

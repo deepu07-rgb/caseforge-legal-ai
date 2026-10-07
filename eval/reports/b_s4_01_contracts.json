@@ -1,6 +1,6 @@
 {
   "batch": "B-S4-01",
-  "generated_at": "2026-10-07T22:02:05Z",
+  "generated_at": "2026-10-07T22:09:17Z",
   "implementation_status": "PASS",
   "formal_acceptance_status": "BLOCKED",
   "formal_blockers": [
@@ -26,7 +26,7 @@
   "stage4_ac_counts": {
     "PASS": 0,
     "FAIL": 0,
-    "SKIP": 44,
+    "SKIP": 49,
     "BLOCKED": 17
   },
   "stage4_ac_status": {
@@ -84,6 +84,31 @@
       "status": "SKIP",
       "batch": "B-S4-00",
       "reason": "not implemented (wired by B-S4-00)"
+    },
+    "AC-S4-00b.1": {
+      "status": "SKIP",
+      "batch": "B-S4-00b",
+      "reason": "not implemented (wired by B-S4-00b)"
+    },
+    "AC-S4-00b.2": {
+      "status": "SKIP",
+      "batch": "B-S4-00b",
+      "reason": "not implemented (wired by B-S4-00b)"
+    },
+    "AC-S4-00b.3": {
+      "status": "SKIP",
+      "batch": "B-S4-00b",
+      "reason": "not implemented (wired by B-S4-00b)"
+    },
+    "AC-S4-00b.4": {
+      "status": "SKIP",
+      "batch": "B-S4-00b",
+      "reason": "not implemented (wired by B-S4-00b)"
+    },
+    "AC-S4-00b.5": {
+      "status": "SKIP",
+      "batch": "B-S4-00b",
+      "reason": "not implemented (wired by B-S4-00b)"
     },
     "AC-S4-01.1": {
       "status": "SKIP",

@@ -87,6 +87,8 @@ pub struct GroundedTurnResponse {
     pub schema_repair_used: bool,
     pub structured_turn: Option<crate::grounded_mock_court::StructuredTurnCandidate>,
     pub proposition_ledger: Option<crate::proposition::PropositionLedger>,
+    /// B-S4-00b: deterministic feedback on counsel's answer to the previous challenge.
+    pub answer_feedback: Option<crate::answer_feedback::AnswerFeedback>,
 }
 
 #[derive(Debug, Clone)]

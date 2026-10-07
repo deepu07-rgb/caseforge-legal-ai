@@ -1,0 +1,43 @@
+{
+  "batch": "B-S4-00b",
+  "acceptance": {
+    "AC-S4-00b.1": {
+      "status": "PASS",
+      "evidence": {
+        "answer_feedback::tests::golden_partition_appeal_turns_match_exactly": "ok",
+        "answer_feedback::tests::date_and_amount_parsing": "ok"
+      }
+    },
+    "AC-S4-00b.2": {
+      "status": "PASS",
+      "evidence": {
+        "answer_feedback::tests::golden_partition_appeal_turns_match_exactly": "ok",
+        "answer_feedback::tests::date_and_amount_parsing": "ok"
+      }
+    },
+    "AC-S4-00b.3": {
+      "status": "PASS",
+      "evidence": {
+        "answer_feedback::tests::golden_partition_appeal_turns_match_exactly": "ok",
+        "answer_feedback::tests::date_and_amount_parsing": "ok"
+      }
+    },
+    "AC-S4-00b.4": {
+      "status": "PASS",
+      "engine_model_free": true,
+      "contract_flags": true,
+      "language_and_refs_by_rust_test": "PASS"
+    },
+    "AC-S4-00b.5": {
+      "status": "PASS",
+      "wiring": {
+        "graded_before_next_challenge": true,
+        "challenge_remembered": true,
+        "returned_in_response": true,
+        "typed_in_ui": true,
+        "rendered_under_counsel_message": true
+      }
+    }
+  },
+  "errors": []
+}

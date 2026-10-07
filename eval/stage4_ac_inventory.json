@@ -131,6 +131,64 @@
       "questions": []
     },
     {
+      "id": "AC-S4-00b.1",
+      "batch": "B-S4-00b",
+      "prd_ref": "§7.7",
+      "description": "Golden fixture turns reproduce exactly.",
+      "golden_sets": [
+        "G-ANSWER-FEEDBACK"
+      ],
+      "threshold_ids": [],
+      "legal_editor_required": false,
+      "questions": []
+    },
+    {
+      "id": "AC-S4-00b.2",
+      "batch": "B-S4-00b",
+      "prd_ref": "§7.7",
+      "description": "Planted wrong date reported as CONFLICTS_WITH_RECORD against the right event.",
+      "golden_sets": [
+        "G-ANSWER-FEEDBACK"
+      ],
+      "threshold_ids": [],
+      "legal_editor_required": false,
+      "questions": []
+    },
+    {
+      "id": "AC-S4-00b.3",
+      "batch": "B-S4-00b",
+      "prd_ref": "§7.7",
+      "description": "Authority outside / inside the working set classified correctly.",
+      "golden_sets": [
+        "G-ANSWER-FEEDBACK"
+      ],
+      "threshold_ids": [],
+      "legal_editor_required": false,
+      "questions": []
+    },
+    {
+      "id": "AC-S4-00b.4",
+      "batch": "B-S4-00b",
+      "prd_ref": "§7.7",
+      "description": "No model, no outcome prediction, no prohibited language; record refs present.",
+      "golden_sets": [
+        "G-ANSWER-FEEDBACK"
+      ],
+      "threshold_ids": [],
+      "legal_editor_required": false,
+      "questions": []
+    },
+    {
+      "id": "AC-S4-00b.5",
+      "batch": "B-S4-00b",
+      "prd_ref": "§7.7",
+      "description": "Feedback returned with every grounded turn and rendered under counsel's message.",
+      "golden_sets": [],
+      "threshold_ids": [],
+      "legal_editor_required": false,
+      "questions": []
+    },
+    {
       "id": "AC-S4-01.1",
       "batch": "B-S4-04",
       "prd_ref": "§7.1",

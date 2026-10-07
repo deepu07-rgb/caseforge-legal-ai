@@ -4,6 +4,7 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { AnswerFeedbackPanel } from "./AnswerFeedbackPanel";
 import {
   COURT_FORMATS,
   COURT_ROLES,
@@ -36,6 +37,7 @@ import {
   speechStt,
   speechWarmup,
   type DebriefTurnInput,
+  type AnswerFeedback,
   type MockCourtDebriefV2,
   type PreparationTask,
   type PreparationTaskStatus,
@@ -111,6 +113,8 @@ export default function MockCourtView({
   const [voiceGate, setVoiceGate] = useState<VoiceGate | null>(null);
   const [debriefV2, setDebriefV2] = useState<MockCourtDebriefV2 | null>(null);
   const [sessionTurns, setSessionTurns] = useState<DebriefTurnInput[]>([]);
+  // B-S4-00b: answer check per counsel message id.
+  const [answerFeedback, setAnswerFeedback] = useState<Record<string, AnswerFeedback>>({});
   const [preparationTasks, setPreparationTasks] = useState<PreparationTask[]>([]);
   const [taskDrafts, setTaskDrafts] = useState<Record<string,string>>({});
   const [voiceRaw, setVoiceRaw] = useState("");
@@ -545,6 +549,8 @@ export default function MockCourtView({
           benchSliders: sliders,
         });
         const turn = grounded.turn;
+        const feedback = grounded.answer_feedback;
+        if (feedback) setAnswerFeedback((prev) => ({ ...prev, [userMsg.id]: feedback }));
         setSessionTurns((prev) => [...prev, { turn_id:turn.turn_id,counsel_text:text,assistant_text:turn.assistant_text||"",proposition_ledger:grounded.proposition_ledger??null,authorities:grounded.authorities }]);
         setTurnAuthorities((items) => [...items, { turnId: turn.turn_id, authorities: grounded.authorities, ledger: grounded.proposition_ledger ?? null }]);
         const speaker =
@@ -857,6 +863,7 @@ export default function MockCourtView({
                 {m.role === "user" && <span className="speaker">Counsel (you)</span>}
                 {m.role === "system" && <span className="speaker">System</span>}
                 <div className="body">{m.text}</div>
+                {m.role === "user" && answerFeedback[m.id] && <AnswerFeedbackPanel feedback={answerFeedback[m.id]} />}
                 {m.meta && (
                   <div className="muted mono" style={{ fontSize: "0.7rem", marginTop: 4 }}>
                     {m.meta}

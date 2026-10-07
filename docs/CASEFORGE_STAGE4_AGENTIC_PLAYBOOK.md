@@ -34,6 +34,7 @@ Stage 4 additions:
 |---|---|---|---|---|
 | A | B-S4-01 | Stage 4 contracts, constants, guardrails freeze | §5, §11, §12, §16 | AC-16.1 (schema load), threshold freeze |
 | A | B-S4-00 | Lean runtime: 3B/4B default model, 7B optional, ≤ 4 GiB base install | §11.1, §11.2 | AC-S4-00.1–00.8 |
+| A | B-S4-00b | Per-answer feedback in Mock Court (deterministic) | §7.7, §11.2 | AC-S4-00b.1–00b.5 |
 | A | B-S4-02 | Stage 4 golden sets and legal-editor protocol | §13 | Golden manifest validity |
 | A | B-S4-03 | Signed Rule Tables (`.akpkg` RULE_TABLE) | §5 | AC-S4-RT.1–RT.3 |
 | A | B-S4-04 | Citation & Quote Audit engine | §7.1 | AC-S4-01.1–01.3 |
@@ -139,6 +140,41 @@ Every Stage 4 artefact has a frozen contract and every gate is registered.
 
 ### Done when
 A fresh install is under 4 GiB, runs within the RAM ceiling, and every trust guarantee from Stage 3 still holds.
+
+---
+
+## B-S4-00b — Per-answer feedback in Mock Court (deterministic)
+
+| Field | Requirement |
+|---|---|
+| **Goal** | After every counsel answer in Mock Court, show what the record and the working set say about it — before the next challenge — without a model and without "right/wrong" or outcome language. |
+| **Depends on** | B-S4-00 (owner-prioritised ahead of B-S4-02, 2026-10-08) |
+| **Required reading** | `contracts/answer_feedback.schema.json`; `golden/G-ANSWER-FEEDBACK`; `src-tauri/src/grounded_mock_court.rs`; `src-tauri/src/mock_court_retrieval.rs`; `src/components/MockCourtView.tsx`; `contracts/case_graph.schema.json` (chronology, evidence, contradictions) |
+
+### Agent mission
+- Treat counsel's text in each turn as the answer to the previous rendered challenge (host memory, per session).
+- Deterministically check the answer: dates vs. chronology (supported / conflicts / not found), amounts vs. record, authorities vs. the counsel-confirmed working set, record contradictions and working-set authorities relevant to the challenge but unused, and an engagement indicator with visible counts.
+- Return it with the turn (`answer_feedback`) and render it under counsel's message.
+- Every item carries a record/working-set reference or an explicit "not found"; prohibited language list enforced in tests.
+
+### Deliverables
+- `src-tauri/src/answer_feedback.rs` (+ unit tests against the golden fixture)
+- `contracts/answer_feedback.schema.json`; `golden/G-ANSWER-FEEDBACK/fixtures/partition_appeal.json` (authored before the engine)
+- `src/components/AnswerFeedbackPanel.tsx`; Mock Court wiring
+- `eval/checks/answer_feedback_b_s4_00b.py`
+
+### Acceptance gates
+- **AC-S4-00b.1:** The golden fixture's four turns reproduce exactly (engagement + required items + forbidden kinds).
+- **AC-S4-00b.2:** A planted wrong date is reported as CONFLICTS_WITH_RECORD against the right chronology event.
+- **AC-S4-00b.3:** An authority outside the working set is NOT_IN_WORKING_SET; a working-set authority is VERIFIED_IN_WORKING_SET.
+- **AC-S4-00b.4:** No model call, no outcome prediction, no prohibited language; every supported/conflict/available item has a record reference.
+- **AC-S4-00b.5:** Feedback is returned with every grounded turn and rendered under counsel's message.
+
+### Halt if
+- Any check would need a model or legal judgement to decide — keep it out of v1 and record it as a limitation.
+
+### Done when
+A lawyer sees, under each answer, which of their dates, amounts and authorities the record supports, contradicts or cannot find, and what relevant record material they left unused.
 
 ---
 
@@ -857,6 +893,7 @@ The answer is evidence-backed **yes** to:
 | Batch | Required evidence | Status |
 |---|---|---|
 | B-S4-01 | Contracts + inventory + threshold approval | IMPLEMENTED — contracts frozen; formal PASS blocked on Q-S4-01 threshold approval (2026-10-08) |
+| B-S4-00b | Answer-feedback golden + Rust tests + UI | IMPLEMENTED — 5/5 gates PASS; Rust 85/85 (2026-10-08) |
 | B-S4-00 | Base install ≤ 4 GiB + default-model fitness | PARTIAL — tier infra, honest size gate, 7B requalified on Ollama 0.35.1; qwen3:4b rejected, qwen3:4b-instruct HALT (critical prompt-injection fail); base install 5.08 GiB still over cap (2026-10-08) |
 | B-S4-02 | Twelve golden sets + editor protocol | NOT STARTED |
 | B-S4-03 | Rule-table install/query + exploit suite | NOT STARTED |

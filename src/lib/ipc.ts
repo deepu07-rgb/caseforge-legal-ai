@@ -2131,9 +2131,39 @@ export interface MockCourtReadiness {
   warnings: string[];
 }
 
+/** B-S4-00b: deterministic feedback on counsel's answer to the previous challenge (contracts/answer_feedback.schema.json). */
+export interface AnswerFeedbackItem {
+  kind: "DATE" | "AMOUNT" | "AUTHORITY" | "OPEN_CONTRADICTION" | "UNUSED_AUTHORITY";
+  status:
+    | "SUPPORTED_BY_RECORD"
+    | "CONFLICTS_WITH_RECORD"
+    | "NOT_FOUND_IN_RECORD"
+    | "VERIFIED_IN_WORKING_SET"
+    | "NOT_IN_WORKING_SET"
+    | "AVAILABLE_NOT_USED";
+  value: string | null;
+  message: string;
+  record_ref: string | null;
+  locator: { doc_id?: string; page?: number } | null;
+}
+
+export interface AnswerFeedback {
+  schema_version: "1.0.0";
+  engine_version: string;
+  session_id: string;
+  engagement: "ADDRESSED" | "PARTIAL" | "NOT_ADDRESSED" | "NO_PRIOR_CHALLENGE";
+  engagement_terms_matched: number;
+  engagement_terms_total: number;
+  items: AnswerFeedbackItem[];
+  generated_by: "deterministic";
+  model_used: false;
+  outcome_prediction: false;
+}
+
 export interface GroundedMockCourtTurn {
   schema_version: string;
   turn: SessionTurn;
+  answer_feedback?: AnswerFeedback | null;
   graph_version: string;
   working_set_version: number;
   retrieval_query: string;
