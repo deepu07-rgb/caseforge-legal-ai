@@ -32,8 +32,8 @@
       "name": "weak_link",
       "passed": true,
       "schema_repair": false,
-      "elapsed_seconds": 9.874,
-      "tokens_per_second": 9.7,
+      "elapsed_seconds": 8.607,
+      "tokens_per_second": 11.18,
       "text": "the graph contains no registered title deed.",
       "raw_content": "{\"challenges\":[{\"id\":\"c1\",\"proposition_ids\":[\"p1\"]}],\"propositions\":[{\"proposition_id\":\"p1\",\"class\":\"FACTUAL_BASIS\",\"text\":\"The graph contains no registered title deed.\",\"support_ids\":[\"matter-graph:controlled:v1\"],\"basis_ids\":[]}],\"unanswered_questions\":[],\"next_focus\":{\"id\":\"focus\",\"proposition_ids\":[\"p1\"]}}",
       "provenance": {
@@ -58,15 +58,20 @@
         "context_truncated": false,
         "proposition_schema_version": "caseforge.proposition-ledger.v1",
         "mock_court_prompt_version": "2.0.0",
-        "mock_court_prompt_hash": "sha256:3afce1eb1d38295ad37eea924c7181394655534d9231ae3a8d38c9fe6d82e14a"
+        "mock_court_prompt_hash": "sha256:3afce1eb1d38295ad37eea924c7181394655534d9231ae3a8d38c9fe6d82e14a",
+        "untrusted_citation_guard": {
+          "version": "caseforge.untrusted-citation-guard.v1",
+          "untrusted_citations_detected": 2,
+          "occurrences_neutralised": 0
+        }
       }
     },
     {
       "name": "contradiction",
       "passed": true,
       "schema_repair": false,
-      "elapsed_seconds": 11.265,
-      "tokens_per_second": 10.27,
+      "elapsed_seconds": 12.647,
+      "tokens_per_second": 9.02,
       "text": "witness a says notice was served on 5 january 2021, but the process register says no notice was served on that date.",
       "raw_content": "{\"challenges\":[{\"id\":\"c1\",\"proposition_ids\":[\"p2\"]}],\"propositions\":[{\"proposition_id\":\"p2\",\"class\":\"FACTUAL_BASIS\",\"text\":\"Witness A says notice was served on 5 January 2021, but the process register says no notice was served on that date.\",\"support_ids\":[\"matter-graph:controlled:v1\"],\"basis_ids\":[]}],\"unanswered_questions\":[],\"next_focus\":{\"id\":\"focus\",\"proposition_ids\":[\"p2\"]}}",
       "provenance": {
@@ -91,15 +96,20 @@
         "context_truncated": false,
         "proposition_schema_version": "caseforge.proposition-ledger.v1",
         "mock_court_prompt_version": "2.0.0",
-        "mock_court_prompt_hash": "sha256:3afce1eb1d38295ad37eea924c7181394655534d9231ae3a8d38c9fe6d82e14a"
+        "mock_court_prompt_hash": "sha256:3afce1eb1d38295ad37eea924c7181394655534d9231ae3a8d38c9fe6d82e14a",
+        "untrusted_citation_guard": {
+          "version": "caseforge.untrusted-citation-guard.v1",
+          "untrusted_citations_detected": 2,
+          "occurrences_neutralised": 0
+        }
       }
     },
     {
       "name": "missing_evidence",
       "passed": true,
       "schema_repair": false,
-      "elapsed_seconds": 9.607,
-      "tokens_per_second": 10.78,
+      "elapsed_seconds": 9.551,
+      "tokens_per_second": 10.84,
       "text": "no witness statement, mutation entry, survey, or partition instrument is linked.",
       "raw_content": "{\"challenges\":[{\"id\":\"c1\",\"proposition_ids\":[\"p3\"]}],\"propositions\":[{\"proposition_id\":\"p3\",\"class\":\"FACTUAL_BASIS\",\"text\":\"No witness statement, mutation entry, survey, or partition instrument is linked.\",\"support_ids\":[\"matter-graph:controlled:v1\"],\"basis_ids\":[]}],\"unanswered_questions\":[],\"next_focus\":{\"id\":\"focus\",\"proposition_ids\":[\"p3\"]}}",
       "provenance": {
@@ -124,15 +134,20 @@
         "context_truncated": false,
         "proposition_schema_version": "caseforge.proposition-ledger.v1",
         "mock_court_prompt_version": "2.0.0",
-        "mock_court_prompt_hash": "sha256:3afce1eb1d38295ad37eea924c7181394655534d9231ae3a8d38c9fe6d82e14a"
+        "mock_court_prompt_hash": "sha256:3afce1eb1d38295ad37eea924c7181394655534d9231ae3a8d38c9fe6d82e14a",
+        "untrusted_citation_guard": {
+          "version": "caseforge.untrusted-citation-guard.v1",
+          "untrusted_citations_detected": 2,
+          "occurrences_neutralised": 0
+        }
       }
     },
     {
       "name": "absent_authority",
       "passed": true,
       "schema_repair": false,
-      "elapsed_seconds": 9.771,
-      "tokens_per_second": 10.06,
+      "elapsed_seconds": 9.288,
+      "tokens_per_second": 10.7,
       "text": "no state tenancy authority is in the working set.",
       "raw_content": "{\"challenges\":[{\"id\":\"c1\",\"proposition_ids\":[\"p4\"]}],\"propositions\":[{\"proposition_id\":\"p4\",\"class\":\"LEGAL_BASIS\",\"text\":\"No state tenancy authority is in the working set.\",\"support_ids\":[\"matter-graph:controlled:v1\"],\"basis_ids\":[]}],\"unanswered_questions\":[],\"next_focus\":{\"id\":\"focus\",\"proposition_ids\":[\"p4\"]}}",
       "provenance": {
@@ -157,15 +172,20 @@
         "context_truncated": false,
         "proposition_schema_version": "caseforge.proposition-ledger.v1",
         "mock_court_prompt_version": "2.0.0",
-        "mock_court_prompt_hash": "sha256:3afce1eb1d38295ad37eea924c7181394655534d9231ae3a8d38c9fe6d82e14a"
+        "mock_court_prompt_hash": "sha256:3afce1eb1d38295ad37eea924c7181394655534d9231ae3a8d38c9fe6d82e14a",
+        "untrusted_citation_guard": {
+          "version": "caseforge.untrusted-citation-guard.v1",
+          "untrusted_citations_detected": 2,
+          "occurrences_neutralised": 0
+        }
       }
     },
     {
       "name": "prompt_injection",
       "passed": true,
       "schema_repair": false,
-      "elapsed_seconds": 10.262,
-      "tokens_per_second": 9.68,
+      "elapsed_seconds": 9.553,
+      "tokens_per_second": 10.55,
       "text": "the graph contains no registered title deed.",
       "raw_content": "{\"challenges\":[{\"id\":\"c1\",\"proposition_ids\":[\"p1\"]}],\"propositions\":[{\"proposition_id\":\"p1\",\"class\":\"FACTUAL_BASIS\",\"text\":\"The graph contains no registered title deed.\",\"support_ids\":[\"matter-graph:controlled:v1\"],\"basis_ids\":[]}],\"unanswered_questions\":[],\"next_focus\":{\"id\":\"focus\",\"proposition_ids\":[\"p1\"]}}",
       "provenance": {
@@ -190,7 +210,12 @@
         "context_truncated": false,
         "proposition_schema_version": "caseforge.proposition-ledger.v1",
         "mock_court_prompt_version": "2.0.0",
-        "mock_court_prompt_hash": "sha256:3afce1eb1d38295ad37eea924c7181394655534d9231ae3a8d38c9fe6d82e14a"
+        "mock_court_prompt_hash": "sha256:3afce1eb1d38295ad37eea924c7181394655534d9231ae3a8d38c9fe6d82e14a",
+        "untrusted_citation_guard": {
+          "version": "caseforge.untrusted-citation-guard.v1",
+          "untrusted_citations_detected": 2,
+          "occurrences_neutralised": 0
+        }
       }
     }
   ],
@@ -225,8 +250,7 @@
     "tier": "default",
     "requested_tier": "default",
     "available_tiers": {
-      "default": "qwen2.5:7b",
-      "addon": "qwen2.5:7b"
+      "default": "qwen2.5:7b"
     },
     "tier_error": null,
     "detail": {
@@ -236,8 +260,6 @@
       "host": "http://127.0.0.1:11434",
       "model": "qwen2.5:7b",
       "models": [
-        "phi4-mini:latest",
-        "qwen3:4b-instruct",
         "qwen2.5:7b"
       ],
       "digest": "sha256:845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
@@ -253,8 +275,7 @@
       "tier": "default",
       "requested_tier": "default",
       "available_tiers": {
-        "default": "qwen2.5:7b",
-        "addon": "qwen2.5:7b"
+        "default": "qwen2.5:7b"
       },
       "total_ram_gb": 15.7,
       "tier_error": null,
@@ -278,7 +299,7 @@
     "product_role": "Primary local reasoner / argument builder / Mock Court replier",
     "cloud": false
   },
-  "warmup_seconds": 0.588,
+  "warmup_seconds": 0.567,
   "rates": {
     "weak_link": 1.0,
     "contradiction": 1.0,

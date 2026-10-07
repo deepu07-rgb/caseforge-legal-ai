@@ -5,7 +5,7 @@
 - Critical checks: **PASS**
 - Exact configuration: `ollama 0.35.1 / qwen2.5:7b / Q4_K_M`
 - Model classification: `stock-instruct + quantized + CaseForge-prompted`; legal fine-tune = `False`
-- Performance: `{"cold_start_ms": 10970, "cold_start_budget_ms": 120000, "max_warm_latency_ms": 7820, "mean_warm_latency_ms": 4705.4, "mean_tokens_per_second": 11.64, "warm_latency_budget_ms": 60000, "warm_latency_budget_pass": true, "resident_model_size_gb": 5.4, "resident_model_budget_gb": 6.5, "resident_budget_pass": true}`
+- Performance: `{"cold_start_ms": 462, "cold_start_budget_ms": 120000, "max_warm_latency_ms": 7444, "mean_warm_latency_ms": 4613.4, "mean_tokens_per_second": 12.06, "warm_latency_budget_ms": 60000, "warm_latency_budget_pass": true, "resident_model_size_gb": 5.4, "resident_model_budget_gb": 6.5, "resident_budget_pass": true}`
 
 | Check | Result | Critical |
 |---|---:|---:|

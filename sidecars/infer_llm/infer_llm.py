@@ -302,6 +302,75 @@ def chat_llama_cpp(messages: list[dict[str, str]], max_tokens: int) -> dict[str,
     return {"content": str(((choices[0].get("message") or {}).get("content")) if choices else "").strip(), "model": GGUF_PATH, "backend": "llama_cpp", "elapsed_ms": int((time.time() - started) * 1000)}
 
 
+# --- B-S4-00 untrusted-citation guard (deterministic; no model involved) -------------------------------------------
+# A citation that appears ONLY in untrusted matter material (case text, matter sources) and NOT in a permitted legal
+# authority must never come out of the model as a citation: injected or planted authorities are neutralised in the raw
+# output before anything is parsed. This enforces G2 ("no citation bypassing retrieval") at the model boundary; the host
+# proposition verifier (B-S3-14) remains the trust authority for everything that is rendered.
+GUARD_VERSION = "caseforge.untrusted-citation-guard.v1"
+GUARD_LABEL = "[unverified citation from case material removed]"
+PERMITTED_SOURCE_KINDS = {"LEGAL_AUTHORITY"}
+TRUSTED_NON_AUTHORITY_KINDS = {"COUNSEL_INPUT"}  # counsel's own words are not scanned (and are never authority either)
+_REPORTER_CITATION = re.compile(r"""(?ix)
+      \(\d{4}\)\s*\d{1,3}\s*SCC\s+(?:OnLine\s+[A-Za-z.]+\s+)?\d{1,5}             # (2101) 3 SCC 77
+    | \d{4}\s+SCC\s+OnLine\s+[A-Za-z.]+\s+\d{1,6}                                  # 2023 SCC OnLine Del 12
+    | AIR\s+\d{4}\s+[A-Za-z.]{2,12}\s+\d{1,5}                                      # AIR 2105 SC 77
+    | \d{4}\s+INSC\s+\d{1,5}                                                       # 2101 INSC 42
+    | \[\d{4}\]\s*\d{0,3}\s*[A-Z][A-Za-z.]{1,10}\s+\d{1,5}                         # [2024] 1 SCR 5, [2024] UKSC 12
+    | \d{4}\s+\(\d{1,3}\)\s+[A-Z][A-Za-z.]{1,12}\s+\d{1,5}                         # 2102 (4) Mh.L.J. 9
+    | \d{1,4}\s+(?:U\.\s?S\.|S\.\s?Ct\.|L\.\s?Ed\.(?:\s?2d)?|F\.\s?(?:2d|3d|4th)|F\.\s?Supp\.(?:\s?(?:2d|3d))?)\s+\d{1,5}(?:\s*\(\d{4}\))?
+""")
+# Case name immediately before a reporter citation ("Doe v. Roe, 999 U.S. 123"); bare "X v Y" (e.g. the cause title) is NOT
+# treated as a citation, so the matter's own parties are never touched.
+_CASE_NAME_BEFORE = re.compile(r"([A-Z][\w'&-]*)\s+(?:v\.?|vs\.?|versus)\s+([A-Z][\w'&-]*(?:\s+(?:of|and|&)\s+[A-Z][\w'&-]*)*)[\s,]*$")
+_SEP = r"[\s.,()\[\]]*"
+
+
+def _norm(text: str) -> str:
+    return re.sub(r"[^0-9a-z]+", "", text.lower())
+
+
+def _flexible(tokens: list[str]) -> str:
+    return _SEP.join(re.escape(t) for t in tokens if t)
+
+
+def untrusted_citation_patterns(untrusted: list[str], permitted: list[str]) -> list[tuple[str, re.Pattern[str]]]:
+    """Citations found in untrusted text that are absent from permitted authority text, as tolerant output matchers."""
+    permitted_norm = _norm(" ".join(permitted))
+    found: dict[str, re.Pattern[str]] = {}
+    for text in untrusted:
+        for m in _REPORTER_CITATION.finditer(text):
+            cite = re.sub(r"\s*\(\d{4}\)\s*$", "", m.group(0)) if re.search(r"U\.\s?S\.|S\.\s?Ct\.|F\.|L\.\s?Ed", m.group(0)) else m.group(0)
+            if _norm(cite) and _norm(cite) in permitted_norm:
+                continue  # the same authority is in the counsel-confirmed working set: keep it
+            found.setdefault(cite, re.compile(r"(?<![0-9A-Za-z])\(?" + _flexible(re.findall(r"[0-9A-Za-z]+", cite)) + r"\)?", re.I))
+            name = _CASE_NAME_BEFORE.search(text[max(0, m.start() - 120):m.start()])
+            if name:
+                left, right = name.group(1), name.group(2)
+                label = f"{left} v {right}"
+                if _norm(label) in permitted_norm:
+                    continue
+                right_tokens = re.findall(r"[0-9A-Za-z'&-]+", right)
+                found.setdefault(label, re.compile(
+                    r"\b" + re.escape(left) + r"[\s.,]*(?:v\.?|vs\.?|versus)[\s.,]*" + re.escape(right_tokens[0])
+                    + "".join(r"(?:\s+" + re.escape(t) + ")?" for t in right_tokens[1:]), re.I))
+    return sorted(found.items(), key=lambda item: -len(item[0]))
+
+
+def guard_untrusted_citations(content: str, params: dict[str, Any]) -> tuple[str, dict[str, Any]]:
+    sources = [s for s in (params.get("support_sources") or []) if isinstance(s, dict)]
+    untrusted = [str(params.get("case_context") or "")] + [str(s.get("exact_text") or "") for s in sources
+                                                          if str(s.get("kind") or "") not in PERMITTED_SOURCE_KINDS | TRUSTED_NON_AUTHORITY_KINDS]
+    permitted = [str(params.get("authority_context") or "")] + [str(s.get("exact_text") or "") for s in sources
+                                                                if str(s.get("kind") or "") in PERMITTED_SOURCE_KINDS]
+    patterns = untrusted_citation_patterns(untrusted, permitted)
+    neutralised = 0
+    for _, pattern in patterns:
+        content, count = pattern.subn(GUARD_LABEL, content)
+        neutralised += count
+    return content, {"version": GUARD_VERSION, "untrusted_citations_detected": len(patterns), "occurrences_neutralised": neutralised}
+
+
 def _provenance(info: dict[str, Any], messages: list[dict[str, str]], context: dict[str, Any], max_tokens: int) -> dict[str, Any]:
     prompt_hash = hashlib.sha256(json.dumps(messages, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
     return {"model_digest": info.get("digest") or "unverified", "prompt_version": CONTRACT["prompt"]["version"], "system_prompt_hash": f"sha256:{SYSTEM_PROMPT_HASH}", "prompt_hash": f"sha256:{prompt_hash}", "generation": _options(max_tokens), **context}
@@ -389,6 +458,9 @@ def handle(req: dict[str, Any]) -> dict[str, Any]:
             else: return err(rid, -32000, f"Unsupported backend: {backend}")
         except Exception as exc: return err(rid, -32001, f"LLM generation failed: {exc}", {"code": "CF_LLM_GENERATE_FAILED"})
         if not result.get("content"): return err(rid, -32001, "Empty model response", {"code": "CF_LLM_EMPTY"})
+        # Guard runs on the raw output BEFORE parsing, so raw text, propositions and Mock Court turns are all covered.
+        result["content"], guard = guard_untrusted_citations(result["content"], params)
+        context["untrusted_citation_guard"] = guard
         propositions = _parse_propositions(result["content"]) if params.get("structured_propositions") else []
         structured_turn = _parse_mock_court_turn(result["content"]) if params.get("mock_court_schema_v2") else None
         return ok(rid, {**result, "propositions": propositions, "mock_court_turn": structured_turn, "role": params.get("role") or "counsel", "format": params.get("format") or "oral_argument", "controlled_beta_ready": bool(info.get("controlled_beta_ready")), "provenance": _provenance(info, messages, context, max_tokens), "disclaimer": "Local preparation output only. Not legal advice. Inspect every cited source before use."})

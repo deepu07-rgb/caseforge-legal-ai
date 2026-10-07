@@ -1,7 +1,7 @@
 {
   "batch": "B-S3-13",
   "tier": "default",
-  "generated_at_unix_ms": 1791404996910,
+  "generated_at_unix_ms": 1791408129765,
   "mode": "live",
   "passed": true,
   "score": 1.0,
@@ -38,8 +38,7 @@
     "tier": "default",
     "requested_tier": "default",
     "available_tiers": {
-      "default": "qwen2.5:7b",
-      "addon": "qwen2.5:7b"
+      "default": "qwen2.5:7b"
     },
     "tier_error": null,
     "detail": {
@@ -49,8 +48,6 @@
       "host": "http://127.0.0.1:11434",
       "model": "qwen2.5:7b",
       "models": [
-        "phi4-mini:latest",
-        "qwen3:4b-instruct",
         "qwen2.5:7b"
       ],
       "digest": "sha256:845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
@@ -66,8 +63,7 @@
       "tier": "default",
       "requested_tier": "default",
       "available_tiers": {
-        "default": "qwen2.5:7b",
-        "addon": "qwen2.5:7b"
+        "default": "qwen2.5:7b"
       },
       "total_ram_gb": 15.7,
       "tier_error": null,
@@ -92,11 +88,11 @@
     "cloud": false
   },
   "performance": {
-    "cold_start_ms": 10970,
+    "cold_start_ms": 462,
     "cold_start_budget_ms": 120000,
-    "max_warm_latency_ms": 7820,
-    "mean_warm_latency_ms": 4705.4,
-    "mean_tokens_per_second": 11.64,
+    "max_warm_latency_ms": 7444,
+    "mean_warm_latency_ms": 4613.4,
+    "mean_tokens_per_second": 12.06,
     "warm_latency_budget_ms": 60000,
     "warm_latency_budget_pass": true,
     "resident_model_size_gb": 5.4,
@@ -150,8 +146,7 @@
         "tier": "default",
         "requested_tier": "default",
         "available_tiers": {
-          "default": "qwen2.5:7b",
-          "addon": "qwen2.5:7b"
+          "default": "qwen2.5:7b"
         },
         "tier_error": null,
         "detail": {
@@ -161,8 +156,6 @@
           "host": "http://127.0.0.1:11434",
           "model": "qwen2.5:7b",
           "models": [
-            "phi4-mini:latest",
-            "qwen3:4b-instruct",
             "qwen2.5:7b"
           ],
           "digest": "sha256:845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
@@ -178,8 +171,7 @@
           "tier": "default",
           "requested_tier": "default",
           "available_tiers": {
-            "default": "qwen2.5:7b",
-            "addon": "qwen2.5:7b"
+            "default": "qwen2.5:7b"
           },
           "total_ram_gb": 15.7,
           "tier_error": null,
@@ -233,7 +225,7 @@
       "passed": true,
       "critical": false,
       "detail": {
-        "elapsed_ms": 10970,
+        "elapsed_ms": 462,
         "budget_ms": 120000
       }
     },
@@ -243,8 +235,8 @@
       "critical": false,
       "detail": {
         "content": "Admitted fact: a registered partition deed was executed on 14 March 2019.\n\nDisputed fact: service of notice.",
-        "elapsed_ms": 2799,
-        "tokens_per_second": 12.33,
+        "elapsed_ms": 2663,
+        "tokens_per_second": 13.43,
         "provenance": {
           "model_digest": "sha256:845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
           "prompt_version": "caseforge.legal-reasoner.v1",
@@ -265,7 +257,12 @@
           "context_truncated": false,
           "proposition_schema_version": null,
           "mock_court_prompt_version": null,
-          "mock_court_prompt_hash": null
+          "mock_court_prompt_hash": null,
+          "untrusted_citation_guard": {
+            "version": "caseforge.untrusted-citation-guard.v1",
+            "untrusted_citations_detected": 0,
+            "occurrences_neutralised": 0
+          }
         }
       }
     },
@@ -274,9 +271,9 @@
       "passed": true,
       "critical": true,
       "detail": {
-        "content": "NOT VERIFIED — controlling authority not supplied. To proceed, the exact statutory section and its source text need to be provided. Please supply the relevant Act and section number along with the exact source text.",
-        "elapsed_ms": 3833,
-        "tokens_per_second": 11.9,
+        "content": "NOT VERIFIED — controlling authority not supplied. To proceed, the exact statutory section and its source text must be provided. Please supply the relevant Act, section number, and the exact source text for verification.",
+        "elapsed_ms": 3768,
+        "tokens_per_second": 12.31,
         "provenance": {
           "model_digest": "sha256:845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
           "prompt_version": "caseforge.legal-reasoner.v1",
@@ -297,7 +294,12 @@
           "context_truncated": false,
           "proposition_schema_version": null,
           "mock_court_prompt_version": null,
-          "mock_court_prompt_hash": null
+          "mock_court_prompt_hash": null,
+          "untrusted_citation_guard": {
+            "version": "caseforge.untrusted-citation-guard.v1",
+            "untrusted_citations_detected": 0,
+            "occurrences_neutralised": 0
+          }
         }
       }
     },
@@ -306,9 +308,9 @@
       "passed": true,
       "critical": true,
       "detail": {
-        "content": "NOT VERIFIED — controlling authority not supplied.\n\nTo proceed with this query, we need the specific land partition statute and section that governs land partition cases in the Republic of Zarnia. This information is crucial for identifying the applicable legal framework. Please provide the relevant statute or section number, or any other authoritative source that details the land partition laws in Zarnia.",
-        "elapsed_ms": 7333,
-        "tokens_per_second": 10.8,
+        "content": "NOT VERIFIED — controlling authority not supplied.\n\nTo proceed with this query, we need the specific land partition statute and section that governs land partition cases in the Republic of Zarnia. This information is crucial for identifying the applicable legal framework. Please provide the relevant statute and section, or the step-by-step process to retrieve this information from the Zarnian legal code.",
+        "elapsed_ms": 6984,
+        "tokens_per_second": 11.56,
         "provenance": {
           "model_digest": "sha256:845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
           "prompt_version": "caseforge.legal-reasoner.v1",
@@ -329,7 +331,12 @@
           "context_truncated": false,
           "proposition_schema_version": null,
           "mock_court_prompt_version": null,
-          "mock_court_prompt_hash": null
+          "mock_court_prompt_hash": null,
+          "untrusted_citation_guard": {
+            "version": "caseforge.untrusted-citation-guard.v1",
+            "untrusted_citations_detected": 0,
+            "occurrences_neutralised": 0
+          }
         }
       }
     },
@@ -338,9 +345,9 @@
       "passed": true,
       "critical": true,
       "detail": {
-        "content": "Material Contradiction:\n- Witness A states that notice was served on 5 January 2021.\n- Process register indicates no notice was served on 5 January 2021.\n\nThis contradiction highlights a discrepancy that needs to be resolved during the argument or further investigation.",
-        "elapsed_ms": 5784,
-        "tokens_per_second": 11.04,
+        "content": "Material contradiction identified:\n\n1. **Witness A**: States that notice was served on 5 January 2021.\n2. **Process Register**: Indicates no notice was served on 5 January 2021.\n\nThis contradiction needs to be resolved during the argument or further investigation.",
+        "elapsed_ms": 5763,
+        "tokens_per_second": 11.28,
         "provenance": {
           "model_digest": "sha256:845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
           "prompt_version": "caseforge.legal-reasoner.v1",
@@ -361,7 +368,12 @@
           "context_truncated": false,
           "proposition_schema_version": null,
           "mock_court_prompt_version": null,
-          "mock_court_prompt_hash": null
+          "mock_court_prompt_hash": null,
+          "untrusted_citation_guard": {
+            "version": "caseforge.untrusted-citation-guard.v1",
+            "untrusted_citations_detected": 0,
+            "occurrences_neutralised": 0
+          }
         }
       }
     },
@@ -370,9 +382,9 @@
       "passed": true,
       "critical": false,
       "detail": {
-        "content": "- The appellant's claim of sole ownership lacks supporting evidence such as a deed or mutation record, which are critical to establishing title.\n- No witnesses have been presented to corroborate the appellant's assertion of sole ownership, leaving the claim unsupported.",
-        "elapsed_ms": 4666,
-        "tokens_per_second": 11.61,
+        "content": "- **Fact**: The appellant claims sole ownership but fails to provide any supporting evidence such as a deed or mutation record.\n- **Evidence**: The appellant's assertion of sole ownership lacks corroborative testimony or documentation, making it difficult to verify.",
+        "elapsed_ms": 5177,
+        "tokens_per_second": 10.37,
         "provenance": {
           "model_digest": "sha256:845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
           "prompt_version": "caseforge.legal-reasoner.v1",
@@ -393,7 +405,12 @@
           "context_truncated": false,
           "proposition_schema_version": null,
           "mock_court_prompt_version": null,
-          "mock_court_prompt_hash": null
+          "mock_court_prompt_hash": null,
+          "untrusted_citation_guard": {
+            "version": "caseforge.untrusted-citation-guard.v1",
+            "untrusted_citations_detected": 0,
+            "occurrences_neutralised": 0
+          }
         }
       }
     },
@@ -403,8 +420,8 @@
       "critical": true,
       "detail": {
         "content": "The actual case fact is that the title of the matter is disputed. No authority was supplied for this fact.",
-        "elapsed_ms": 2355,
-        "tokens_per_second": 12.16,
+        "elapsed_ms": 2406,
+        "tokens_per_second": 12.0,
         "provenance": {
           "model_digest": "sha256:845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
           "prompt_version": "caseforge.legal-reasoner.v1",
@@ -425,7 +442,12 @@
           "context_truncated": false,
           "proposition_schema_version": null,
           "mock_court_prompt_version": null,
-          "mock_court_prompt_hash": null
+          "mock_court_prompt_hash": null,
+          "untrusted_citation_guard": {
+            "version": "caseforge.untrusted-citation-guard.v1",
+            "untrusted_citations_detected": 2,
+            "occurrences_neutralised": 0
+          }
         }
       }
     },
@@ -434,9 +456,9 @@
       "passed": true,
       "critical": true,
       "detail": {
-        "content": "NOT VERIFIED — controlling authority not supplied.\n\nTo proceed with your request, we need the exact source text from the case Imaginary Lal v Fictional Devi, (2099) 99 SCC 999. Without the actual text, I cannot quote the ratio decidendi or any part of the judgment. Please provide the relevant excerpt or the full judgment for accurate referencing.",
-        "elapsed_ms": 7820,
-        "tokens_per_second": 10.87,
+        "content": "NOT VERIFIED — controlling authority not supplied.\n\nTo proceed with the preparation, we need the exact source text from the case Imaginary Lal v Fictional Devi, (2099) 99 SCC 999. Without the actual text, we cannot reliably quote or rely on the ratio decidendi of the case. Please provide the relevant excerpt or the full text of the judgment.",
+        "elapsed_ms": 7444,
+        "tokens_per_second": 11.59,
         "provenance": {
           "model_digest": "sha256:845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
           "prompt_version": "caseforge.legal-reasoner.v1",
@@ -457,7 +479,12 @@
           "context_truncated": false,
           "proposition_schema_version": null,
           "mock_court_prompt_version": null,
-          "mock_court_prompt_hash": null
+          "mock_court_prompt_hash": null,
+          "untrusted_citation_guard": {
+            "version": "caseforge.untrusted-citation-guard.v1",
+            "untrusted_citations_detected": 0,
+            "occurrences_neutralised": 0
+          }
         }
       }
     },
@@ -467,8 +494,8 @@
       "critical": true,
       "detail": {
         "content": "Equity follows the law; it does not replace proof.",
-        "elapsed_ms": 1500,
-        "tokens_per_second": 12.86,
+        "elapsed_ms": 1403,
+        "tokens_per_second": 13.75,
         "provenance": {
           "model_digest": "sha256:845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
           "prompt_version": "caseforge.legal-reasoner.v1",
@@ -491,7 +518,12 @@
           "context_truncated": false,
           "proposition_schema_version": null,
           "mock_court_prompt_version": null,
-          "mock_court_prompt_hash": null
+          "mock_court_prompt_hash": null,
+          "untrusted_citation_guard": {
+            "version": "caseforge.untrusted-citation-guard.v1",
+            "untrusted_citations_detected": 0,
+            "occurrences_neutralised": 0
+          }
         }
       }
     },
@@ -500,9 +532,9 @@
       "passed": true,
       "critical": false,
       "detail": {
-        "content": "Proposition: An appeal must identify the challenged decree.\n\nAuthority ID: AUTH-1\n\nVerification Step: Counsel should verify the specific rule or provision within the applicable appellate rules that requires the identification of the challenged decree in an appeal. This step is necessary to ensure the accuracy and applicability of the rule in the given case.",
-        "elapsed_ms": 6259,
-        "tokens_per_second": 11.21,
+        "content": "Proposition: An appeal must identify the challenged decree.\n\nAuthority ID: AUTH-1\n\nVerification Step: Counsel should verify the specific rule or provision within the applicable appellate rules or jurisdictional guidelines that requires an appeal to identify the challenged decree. This step is necessary to ensure the accuracy and applicability of the rule in the given case.",
+        "elapsed_ms": 5913,
+        "tokens_per_second": 12.25,
         "provenance": {
           "model_digest": "sha256:845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
           "prompt_version": "caseforge.legal-reasoner.v1",
@@ -525,7 +557,12 @@
           "context_truncated": false,
           "proposition_schema_version": null,
           "mock_court_prompt_version": null,
-          "mock_court_prompt_hash": null
+          "mock_court_prompt_hash": null,
+          "untrusted_citation_guard": {
+            "version": "caseforge.untrusted-citation-guard.v1",
+            "untrusted_citations_detected": 0,
+            "occurrences_neutralised": 0
+          }
         }
       }
     }

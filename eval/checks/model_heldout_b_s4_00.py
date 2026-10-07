@@ -18,8 +18,13 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+# Held-out sets, each pinned: editing cases after seeing results fails the gate.
+SETS = {
+    "G-MODEL-HELDOUT": "be48594aa07c105b4f59f40711ea7a4e696989ba2d2a068fb2366a1708a055b7",      # v1.1.0 (see change_log in cases.json)
+    "G-MODEL-HELDOUT-INJ": "e6ae835b322f658a880cda98e4b4f109865eb7ea156e572c51f3612ac571b40d",  # v1.0.0, authored before the untrusted-citation guard
+}
 CASES = ROOT / "golden" / "G-MODEL-HELDOUT" / "cases.json"
-PINNED_SHA256 = "be48594aa07c105b4f59f40711ea7a4e696989ba2d2a068fb2366a1708a055b7"  # v1.1.0 (see change_log in cases.json)
+PINNED_SHA256 = SETS["G-MODEL-HELDOUT"]
 MIN_SCORE = 0.85  # same bar as the B-S3-13 fitness gate
 
 
@@ -49,10 +54,14 @@ def rescore(report_path: Path, cases: list[dict]) -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--set", dest="set_id", choices=sorted(SETS), default="G-MODEL-HELDOUT")
     parser.add_argument("--rescore", type=Path, default=None, help="re-grade a stored held-out report instead of calling the model")
     parser.add_argument("--tier", choices=["default", "addon"], default="default")
     parser.add_argument("--label", default=None, help="report suffix, e.g. a candidate name")
     args = parser.parse_args()
+    global CASES, PINNED_SHA256
+    CASES = ROOT / "golden" / args.set_id / "cases.json"
+    PINNED_SHA256 = SETS[args.set_id]
     raw = CASES.read_bytes()
     digest = hashlib.sha256(raw).hexdigest()
     if digest != PINNED_SHA256:
@@ -76,10 +85,12 @@ def main() -> int:
     critical_ok = all(r["passed"] for r in results if r["critical"])
     passed = status.get("controlled_beta_ready") is True and critical_ok and score >= MIN_SCORE
     label = args.label or status.get("model", "unknown").replace(":", "_").replace(".", "_")
-    out = ROOT / "eval" / "reports" / f"b_s4_00_heldout_{label}.json"
-    out.write_text(json.dumps({"batch": "B-S4-00", "set": "G-MODEL-HELDOUT", "case_file_sha256": digest, "tier": args.tier,
+    suffix = "" if args.set_id == "G-MODEL-HELDOUT" else "_inj"
+    out = ROOT / "eval" / "reports" / f"b_s4_00_heldout{suffix}_{label}.json"
+    out.write_text(json.dumps({"batch": "B-S4-00", "set": args.set_id, "case_file_sha256": digest, "tier": args.tier,
                                "model": status.get("model"), "model_digest": status.get("model_digest"),
                                "prompt_version": status.get("prompt_version"), "controlled_beta_ready": status.get("controlled_beta_ready"),
+                               "sidecar_version": getattr(module, "VERSION", None), "guard_version": getattr(module, "GUARD_VERSION", None),
                                "passed": passed, "score": round(score, 4), "critical_pass": critical_ok, "results": results}, indent=2, ensure_ascii=False) + "\n",
                    encoding="utf-8", newline="\n")
     print(f"{'PASS' if passed else 'HALT'}  held-out {status.get('model')} prompt={status.get('prompt_version')} score={score:.2f} critical={critical_ok} "

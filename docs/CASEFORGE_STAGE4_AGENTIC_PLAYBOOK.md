@@ -33,7 +33,7 @@ Stage 4 additions:
 | Wave | Batch | Title | PRD | ACs |
 |---|---|---|---|---|
 | A | B-S4-01 | Stage 4 contracts, constants, guardrails freeze | §5, §11, §12, §16 | AC-16.1 (schema load), threshold freeze |
-| A | B-S4-00 | Lean runtime: 3B/4B default model, 7B optional, ≤ 4 GiB base install | §11.1, §11.2 | AC-S4-00.1–00.6 |
+| A | B-S4-00 | Lean runtime: 3B/4B default model, 7B optional, ≤ 4 GiB base install | §11.1, §11.2 | AC-S4-00.1–00.8 |
 | A | B-S4-02 | Stage 4 golden sets and legal-editor protocol | §13 | Golden manifest validity |
 | A | B-S4-03 | Signed Rule Tables (`.akpkg` RULE_TABLE) | §5 | AC-S4-RT.1–RT.3 |
 | A | B-S4-04 | Citation & Quote Audit engine | §7.1 | AC-S4-01.1–01.3 |
@@ -131,6 +131,8 @@ Every Stage 4 artefact has a frozen contract and every gate is registered.
 - **AC-S4-00.4:** Peak RSS with default model ≤ owner-approved ceiling (Q-S4-12); AC-4.2 still holds with the add-on.
 - **AC-S4-00.5:** Stage 3 grounding/Mock Court gates remain green on the default model, or regressions are reported and owner-accepted.
 - **AC-S4-00.6:** Default model passes the held-out set `golden/G-MODEL-HELDOUT` (pinned hash; ≥ 0.85 and every critical case), authored before any prompt work so prompts cannot be tuned to it.
+- **AC-S4-00.7:** Default model passes the injection held-out set `golden/G-MODEL-HELDOUT-INJ` (authored before the untrusted-citation guard; ≥ 0.85 and every critical case).
+- **AC-S4-00.8:** Untrusted-citation guard (`caseforge.untrusted-citation-guard.v1`) passes its deterministic suite: planted citations removed in every supported format; permitted authorities, cause titles, counsel input and clean text untouched.
 
 ### Halt if
 - No candidate passes licence + size + fitness — report and emit QUESTION; never ship a model that failed fitness to meet the size cap.

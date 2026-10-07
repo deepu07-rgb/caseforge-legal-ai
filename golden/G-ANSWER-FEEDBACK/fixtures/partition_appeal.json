@@ -1,0 +1,72 @@
+{
+  "fixture_id": "G-ANSWER-FEEDBACK/partition_appeal",
+  "status": "GOLDEN",
+  "authored": "2026-10-08, before the answer-feedback engine was written (B-S4-00b)",
+  "source_class": "SYNTHETIC_CONTROLLED",
+  "note": "Synthetic India partition appeal. Expected statuses are the deterministic answer-feedback contract; the engine must reproduce them exactly.",
+  "graph": {
+    "case_id": "case-fixture-1",
+    "chronology": [
+      { "event_id": "ev-1", "date": "2019-03-14", "date_precision": "day", "summary": "Registered partition deed executed between the brothers", "sort_key": "2019-03-14", "provenance": { "sources": [ { "doc_id": "doc-deed", "page": 2 } ] } },
+      { "event_id": "ev-2", "date": "2021-01-05", "date_precision": "day", "summary": "Notice of the suit allegedly served on the respondent", "sort_key": "2021-01-05", "provenance": { "sources": [ { "doc_id": "doc-witness-a", "page": 1 } ] } },
+      { "event_id": "ev-3", "date": "2022-08-30", "date_precision": "day", "summary": "Trial court decree dismissing the partition suit", "sort_key": "2022-08-30", "provenance": { "sources": [ { "doc_id": "doc-decree", "page": 1 } ] } }
+    ],
+    "evidence": [
+      { "evidence_id": "ex-1", "label": "Mutation entry showing payment of Rs 2,50,000 as owelty", "provenance": { "sources": [ { "doc_id": "doc-mutation", "page": 3 } ] } }
+    ],
+    "contradictions": [
+      { "contradiction_id": "c-1", "summary": "Witness A says notice was served on 5 January 2021; the process register says no notice was served", "left_source": { "doc_id": "doc-witness-a", "page": 1 }, "right_source": { "doc_id": "doc-register", "page": 4 }, "basis": "explicit_negation", "status": "confirmed" }
+    ],
+    "gaps": [],
+    "counsel_facts": []
+  },
+  "permitted_authorities": [
+    { "authority_id": "AUTH-PART-4", "citation": "Partition Act, 1893, s. 4", "label": "Partition Act, 1893 section 4 - sale of undivided dwelling house; owelty and share valuation" }
+  ],
+  "previous_challenge": "The register shows no service of notice on 5 January 2021. How do you answer the contradiction about service of notice?",
+  "turns": [
+    {
+      "id": "T1-addresses-with-record",
+      "reply": "The registered partition deed of 14 March 2019 settles the shares, and the owelty of Rs 2,50,000 recorded in the mutation entry was paid. On notice, Witness A deposes to service on 5 January 2021; we accept the register is silent and will call the process server.",
+      "expect": {
+        "engagement": "ADDRESSED",
+        "items": [
+          { "kind": "DATE", "value": "2019-03-14", "status": "SUPPORTED_BY_RECORD", "record_ref": "ev-1" },
+          { "kind": "DATE", "value": "2021-01-05", "status": "SUPPORTED_BY_RECORD", "record_ref": "ev-2" },
+          { "kind": "AMOUNT", "value": "250000", "status": "SUPPORTED_BY_RECORD", "record_ref": "ex-1" }
+        ],
+        "must_not_contain_kinds": ["OPEN_CONTRADICTION"]
+      }
+    },
+    {
+      "id": "T2-date-conflict-and-unverified-authority",
+      "reply": "The partition deed was executed on 15 March 2019, and Sharma v Union, (2101) 3 SCC 77 says a registered deed cannot be questioned.",
+      "expect": {
+        "engagement": "NOT_ADDRESSED",
+        "items": [
+          { "kind": "DATE", "value": "2019-03-15", "status": "CONFLICTS_WITH_RECORD", "record_ref": "ev-1" },
+          { "kind": "AUTHORITY", "value": "(2101) 3 SCC 77", "status": "NOT_IN_WORKING_SET" },
+          { "kind": "OPEN_CONTRADICTION", "status": "AVAILABLE_NOT_USED", "record_ref": "c-1" }
+        ]
+      }
+    },
+    {
+      "id": "T3-permitted-authority-and-unknown-amount",
+      "reply": "Under the Partition Act, 1893, s. 4 the court values the shares; the appellant also paid Rs 75,000 towards the house, and notice service is a matter for evidence.",
+      "expect": {
+        "engagement": "PARTIAL",
+        "items": [
+          { "kind": "AUTHORITY", "value": "Partition Act, 1893, s. 4", "status": "VERIFIED_IN_WORKING_SET", "record_ref": "AUTH-PART-4" },
+          { "kind": "AMOUNT", "value": "75000", "status": "NOT_FOUND_IN_RECORD" }
+        ]
+      }
+    },
+    {
+      "id": "T4-no-prior-challenge",
+      "previous_challenge": null,
+      "reply": "My client is the co-owner.",
+      "expect": { "engagement": "NO_PRIOR_CHALLENGE", "items": [] }
+    }
+  ],
+  "prohibited_language": ["correct", "incorrect", "you will win", "you will lose", "likely to succeed", "chance", "verdict"]
+}

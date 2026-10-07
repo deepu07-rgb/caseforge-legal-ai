@@ -70,6 +70,7 @@ jobs:
         run: |
           python -m pip install --disable-pip-version-check --quiet jsonschema
           python eval/checks/contracts_b_s4_01.py
+          python eval/checks/injection_guard_b_s4_00.py
 
       - name: Rust unit tests
         run: cargo test --manifest-path src-tauri/Cargo.toml --lib

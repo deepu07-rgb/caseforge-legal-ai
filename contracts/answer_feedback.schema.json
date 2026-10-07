@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://caseforge.local/contracts/answer_feedback.schema.json",
+  "title": "CaseForge Mock Court per-answer feedback",
+  "description": "Deterministic feedback on counsel's answer to the previous Mock Court challenge (B-S4-00b). Every item is tied to the matter record or the counsel-confirmed working set, or says explicitly that nothing was found. It never says an answer is right or wrong and never predicts an outcome.",
+  "schema_version": "1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "engine_version", "session_id", "engagement", "engagement_terms_matched", "engagement_terms_total", "items", "generated_by", "model_used", "outcome_prediction"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "engine_version": { "const": "caseforge.answer-feedback.v1" },
+    "session_id": { "type": "string" },
+    "engagement": { "enum": ["ADDRESSED", "PARTIAL", "NOT_ADDRESSED", "NO_PRIOR_CHALLENGE"], "description": "Heuristic indicator of whether the answer engages the previous challenge's specific terms; shown with its counts." },
+    "engagement_terms_matched": { "type": "integer", "minimum": 0 },
+    "engagement_terms_total": { "type": "integer", "minimum": 0 },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["kind", "status", "value", "message", "record_ref", "locator"],
+        "properties": {
+          "kind": { "enum": ["DATE", "AMOUNT", "AUTHORITY", "OPEN_CONTRADICTION", "UNUSED_AUTHORITY"] },
+          "status": { "enum": ["SUPPORTED_BY_RECORD", "CONFLICTS_WITH_RECORD", "NOT_FOUND_IN_RECORD", "VERIFIED_IN_WORKING_SET", "NOT_IN_WORKING_SET", "AVAILABLE_NOT_USED"] },
+          "value": { "type": ["string", "null"], "description": "Normalised value from the answer: ISO date, digits-only amount, or citation text." },
+          "message": { "type": "string", "minLength": 1 },
+          "record_ref": { "type": ["string", "null"], "description": "chronology event_id, evidence_id, contradiction_id, or authority_id." },
+          "locator": { "type": ["object", "null"], "description": "Source pointer (doc_id/page) from the record, when one exists." }
+        },
+        "allOf": [
+          { "if": { "properties": { "status": { "enum": ["SUPPORTED_BY_RECORD", "CONFLICTS_WITH_RECORD", "VERIFIED_IN_WORKING_SET", "AVAILABLE_NOT_USED"] } } },
+            "then": { "properties": { "record_ref": { "type": "string", "minLength": 1 } } } }
+        ]
+      }
+    },
+    "generated_by": { "const": "deterministic" },
+    "model_used": { "const": false },
+    "outcome_prediction": { "const": false }
+  },
+  "x-caseforge": {
+    "status": "FROZEN_FOR_IMPLEMENTATION",
+    "batch": "B-S4-00b",
+    "implemented_by": ["B-S4-00b"],
+    "prd_refs": ["PRD v4.0 §7.7 (rehearsal)", "§11.2 deterministic-first", "G1", "G6"],
+    "engagement_rule": "Content words (>= 4 letters, minus stop/generic words) and normalised dates of the previous challenge; ADDRESSED when >= 40% appear in the answer, PARTIAL when at least one does, NOT_ADDRESSED otherwise. A display heuristic, not a gate or a score.",
+    "language_rule": "Messages describe record support only. Prohibited: correct/incorrect, win/lose, chance, likely to succeed, verdict.",
+    "golden": "golden/G-ANSWER-FEEDBACK/fixtures/partition_appeal.json"
+  }
+}

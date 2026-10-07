@@ -1,6 +1,6 @@
 {
   "batch": "B-S4-01",
-  "generated_at": "2026-10-07T21:13:54Z",
+  "generated_at": "2026-10-07T22:02:05Z",
   "implementation_status": "PASS",
   "formal_acceptance_status": "BLOCKED",
   "formal_blockers": [
@@ -26,7 +26,7 @@
   "stage4_ac_counts": {
     "PASS": 0,
     "FAIL": 0,
-    "SKIP": 42,
+    "SKIP": 44,
     "BLOCKED": 17
   },
   "stage4_ac_status": {
@@ -71,6 +71,16 @@
       "reason": "not implemented (wired by B-S4-00)"
     },
     "AC-S4-00.6": {
+      "status": "SKIP",
+      "batch": "B-S4-00",
+      "reason": "not implemented (wired by B-S4-00)"
+    },
+    "AC-S4-00.7": {
+      "status": "SKIP",
+      "batch": "B-S4-00",
+      "reason": "not implemented (wired by B-S4-00)"
+    },
+    "AC-S4-00.8": {
       "status": "SKIP",
       "batch": "B-S4-00",
       "reason": "not implemented (wired by B-S4-00)"

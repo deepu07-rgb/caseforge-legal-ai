@@ -23,6 +23,8 @@ BUDGET = json.loads((C / "stage4_resource_budget.json").read_text(encoding="utf-
 DEFAULT = json.loads((C / "supported_models.json").read_text(encoding="utf-8"))
 ADDON_PATH = C / "supported_models_addon.json"
 COMMERCIAL_LICENCES = {"Apache-2.0", "MIT"}
+# Held-out evidence only counts if produced with the guard version that ships now (older runs are kept as history).
+CURRENT_GUARD = re.search(r'GUARD_VERSION = "([^"]+)"', (ROOT / "sidecars" / "infer_llm" / "infer_llm.py").read_text(encoding="utf-8")).group(1)
 
 # Engines that must work with no model loaded (PRD v4.0 §11.2). Stage 4 batches append theirs.
 DETERMINISTIC_ENGINES = [
@@ -147,7 +149,7 @@ def main() -> int:
     held = None
     for path in sorted((ROOT / "eval" / "reports").glob("b_s4_00_heldout_*.json")):
         r = json.loads(path.read_text(encoding="utf-8"))
-        if r.get("model") == model["name"] and r.get("prompt_version") == DEFAULT["prompt"]["version"] and r.get("case_file_sha256") == case_sha:
+        if r.get("model") == model["name"] and r.get("prompt_version") == DEFAULT["prompt"]["version"] and r.get("case_file_sha256") == case_sha and r.get("guard_version") == CURRENT_GUARD:
             held = (path.name, r)
     acs["AC-S4-00.6"] = {
         "status": "PASS" if held and held[1].get("passed") else ("FAIL" if held else "BLOCKED"),
@@ -155,6 +157,23 @@ def main() -> int:
         "failed": [x["id"] for x in held[1]["results"] if not x["passed"]] if held else None,
         "reason": None if held else "no held-out run for the current default model/prompt/case file",
     }
+
+    # AC-S4-00.7 injection held-out set (authored before the guard) on the default model + prompt
+    inj_sha = hashlib.sha256((ROOT / "golden" / "G-MODEL-HELDOUT-INJ" / "cases.json").read_bytes()).hexdigest()
+    inj = None
+    for path in sorted((ROOT / "eval" / "reports").glob("b_s4_00_heldout_inj_*.json")):
+        r = json.loads(path.read_text(encoding="utf-8"))
+        if r.get("model") == model["name"] and r.get("prompt_version") == DEFAULT["prompt"]["version"] and r.get("case_file_sha256") == inj_sha and r.get("guard_version") == CURRENT_GUARD:
+            inj = (path.name, r)
+    acs["AC-S4-00.7"] = {
+        "status": "PASS" if inj and inj[1].get("passed") else ("FAIL" if inj else "BLOCKED"),
+        "report": inj[0] if inj else None, "score": inj[1].get("score") if inj else None,
+        "failed": [x["id"] for x in inj[1]["results"] if not x["passed"]] if inj else None,
+    }
+
+    # AC-S4-00.8 deterministic guard suite
+    guard = subprocess.run([sys.executable, "eval/checks/injection_guard_b_s4_00.py"], cwd=ROOT, capture_output=True, text=True, timeout=120)
+    acs["AC-S4-00.8"] = {"status": "PASS" if guard.returncode == 0 else "FAIL", "detail": (guard.stdout.strip().splitlines() or [""])[-1]}
 
     # Deterministic engines never reference a model
     offenders = []
