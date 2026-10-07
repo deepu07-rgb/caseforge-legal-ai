@@ -18,7 +18,7 @@ pub struct PageInput {
     pub mean_confidence: f64,
 }
 
-fn now_rfc3339() -> String {
+pub(crate) fn now_rfc3339() -> String {
     use std::time::{SystemTime, UNIX_EPOCH};
     let seconds = SystemTime::now()
         .duration_since(UNIX_EPOCH)

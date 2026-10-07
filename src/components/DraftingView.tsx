@@ -18,6 +18,7 @@ import {
 } from "../lib/exportDraft";
 import type { CaseGraph, CaseSummary } from "../lib/ipc";
 import ProvenanceInspector from "./ProvenanceInspector";
+import { AuditPanel } from "./AuditPanel";
 
 export default function DraftingView({
   activeCase,
@@ -216,6 +217,14 @@ export default function DraftingView({
           </pre>
         </details>
       </div>
+
+      {hasMatter && (
+        <AuditPanel
+          text={editedBody ?? draft.body_lines.join("\n")}
+          caseId={activeCase?.case_id ?? null}
+          filename={`${templateId}.txt`}
+        />
+      )}
     </div>
   );
 }

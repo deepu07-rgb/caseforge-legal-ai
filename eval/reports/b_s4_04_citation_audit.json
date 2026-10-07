@@ -1,0 +1,40 @@
+{
+  "batch": "B-S4-04",
+  "acceptance": {
+    "AC-S4-01.1": {
+      "status": "PASS",
+      "evidence": {
+        "synthetic": "ok",
+        "real_pack": "ok",
+        "contract": "ok"
+      },
+      "detail": "fabricated citations/quotations never VERIFIED; NOT_IN_CORPUS carries no resolved source"
+    },
+    "AC-S4-01.2": {
+      "status": "PASS",
+      "evidence": {
+        "synthetic": "ok",
+        "real_pack": "ok",
+        "contract": "ok"
+      },
+      "detail": "single-word misquotation -> MISQUOTED with DELETE/INSERT word diff"
+    },
+    "AC-S4-01.3": {
+      "status": "BLOCKED",
+      "measured_recall": 1.0,
+      "planted_citations": 10,
+      "proposed_threshold": 0.98,
+      "reason": "threshold awaiting owner approval (Q-S4-01); measured on the small synthetic G-AUDIT fixture only"
+    },
+    "STRUCTURE": {
+      "status": "PASS",
+      "checks": {
+        "engine_model_free": true,
+        "command_registered": true,
+        "ui_wired": true,
+        "ui_vocabulary_honest": true
+      }
+    }
+  },
+  "errors": []
+}

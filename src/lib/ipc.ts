@@ -2576,3 +2576,59 @@ export async function benchPrepRedteam(opts?: {
     caseGraph: opts?.caseGraph ?? null,
   });
 }
+
+// --- B-S4-04 Citation & Quote Audit (contracts/audit_report.schema.json) ---
+
+export type AuditResult =
+  | "VERIFIED"
+  | "VERIFIED_WITH_NOTE"
+  | "MISQUOTED"
+  | "NOT_IN_CORPUS"
+  | "SUPERSEDED"
+  | "NOT_APPLICABLE"
+  | "CUSTOM_SOURCE";
+
+export interface AuditLegalLocator {
+  pack_id: string;
+  source_id: string;
+  chunk_id: string;
+  char_start: number;
+  char_end: number;
+  page_index?: number | null;
+  paragraph?: string | null;
+  excerpt: string;
+}
+
+export interface AuditItem {
+  item_id: string;
+  kind: "CITATION" | "QUOTATION";
+  citation_kind?: string | null;
+  extraction_rule_id?: string | null;
+  draft_char_start: number;
+  draft_char_end: number;
+  draft_text: string;
+  attributed_citation_item_id?: string | null;
+  result: AuditResult;
+  resolved: AuditLegalLocator | null;
+  pinpoint: { claimed: string | null; status: "MATCH" | "MISMATCH" | "NOT_CHECKED" | "NO_PINPOINT" };
+  notes: { note_kind: string; text: string; ref_id?: string | null }[];
+  misquote: { nearest: AuditLegalLocator; diff_ops: { op: "EQUAL" | "INSERT" | "DELETE"; text: string }[] } | null;
+  proposition_ids: string[];
+}
+
+export interface AuditReport {
+  schema_version: "1.0.0";
+  audit_id: string;
+  pipeline_id: "caseforge.audit.v1";
+  generated_at: string;
+  case_id?: string | null;
+  subject: { subject_kind: string; sha256: string; filename: string; format: string };
+  pack_snapshot: { pack_id: string; version: string; currency_date: string | null; trust_level: string }[];
+  model_fingerprint: string | null;
+  items: AuditItem[];
+  counts: Record<AuditResult, number>;
+}
+
+export async function auditDraft(text: string, filename?: string | null, caseId?: string | null): Promise<AuditReport> {
+  return invoke<AuditReport>("audit_draft", { text, filename: filename ?? null, caseId: caseId ?? null });
+}

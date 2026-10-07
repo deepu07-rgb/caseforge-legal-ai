@@ -4,6 +4,7 @@
 pub(crate) mod pdf_adapter;
 mod recognize;
 mod skeleton;
+pub(crate) use skeleton::now_rfc3339;
 mod triage;
 
 pub use recognize::{recognize_document_bytes, RECOGNIZER_ID};

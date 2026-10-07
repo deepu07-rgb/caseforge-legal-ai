@@ -5,6 +5,7 @@
 
 mod adaptive_bench;
 mod answer_feedback;
+mod audit;
 mod authority;
 mod bench_prep;
 mod choreography;
@@ -272,6 +273,23 @@ fn shell_sidecar_status() -> SidecarStatusResult {
             },
         ],
     }
+}
+
+/// B-S4-04: audit every citation and quotation in a draft against the installed legal packs (deterministic).
+#[tauri::command]
+fn audit_draft(
+    app: AppHandle,
+    vault: State<'_, VaultState>,
+    text: String,
+    filename: Option<String>,
+    case_id: Option<String>,
+) -> Result<audit::AuditReport, String> {
+    if text.trim().is_empty() {
+        return Err("CF_AUDIT_EXTRACTION_FAILED: the draft is empty".into());
+    }
+    let mgr = vault.get_or_init(&app)?;
+    let corpus = retrieval::build_corpus(&mgr.vault_paths().map_err(|e| e.to_string())?, &[])?;
+    Ok(audit::audit(&text, &corpus, filename.as_deref().unwrap_or("draft.txt"), "drafting_surface", case_id))
 }
 
 #[tauri::command]
@@ -3006,6 +3024,7 @@ pub fn run() {
             working_set_confirm_regime,
             working_set_select_for_output,
             llm_status,
+            audit_draft,
             llm_tiers,
             llm_set_tier,
             llm_chat,

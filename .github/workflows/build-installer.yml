@@ -77,6 +77,7 @@ jobs:
           cargo test --manifest-path src-tauri/Cargo.toml --lib 2>&1 | Tee-Object -FilePath cargo-test.log
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python eval/checks/answer_feedback_b_s4_00b.py --cargo-log cargo-test.log
+          python eval/checks/citation_audit_b_s4_04.py --cargo-log cargo-test.log
 
       - name: Stage bundled portable Python
         run: ./scripts/stage_runtime_python.ps1
