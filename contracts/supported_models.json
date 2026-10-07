@@ -19,9 +19,9 @@
     "tier": "DEFAULT",
     "install_policy": "BASE_INSTALL",
     "counts_toward_base_install_cap": true,
-    "qualification": "B-S3-13 on Ollama 0.32.14 (2026-08-18); requalified by B-S4-00 on Ollama 0.35.1 (2026-10-08): live score 1.0, all critical checks pass, resident 5.4 GB, mean warm 4.9 s. Evidence: eval/reports/b_s3_13_model_eval_addon.json.",
-    "interim_default": "B-S4-00: no small model has passed the fitness gate yet; the qualified 7B stays the default, so the base install is OVER the owner's 4 GiB cap until a small default qualifies.",
-    "license_text_sha256": "fcd318ea28bf544aac8de0ac80fd648f74b05ac01f5bc95fdb8f426319edaf40"
+    "qualification": "B-S4-00 on Ollama 0.35.1 (2026-10-08): B-S3-13 live 1.0 all critical; B-S3-16 live 5/5; G-MODEL-HELDOUT v1.1 0.90 (fails HO-INJ-1 -> addressed by the deterministic untrusted-citation guard, batch B-S4-00a).",
+    "license_text_sha256": "fcd318ea28bf544aac8de0ac80fd648f74b05ac01f5bc95fdb8f426319edaf40",
+    "selected_by": "Owner decision OD-S4-MODEL-03 (2026-10-08): use a more powerful model than the 4B class. B-S4-00 bake-off: only qwen2.5:7b passed both B-S3-13 (1.0) and B-S3-16 Mock Court (5/5)."
   },
   "generation": {
     "temperature": 0.1,

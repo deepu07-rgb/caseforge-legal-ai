@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0.0",
+  "batch": "B-S4-00",
+  "product": "CaseForge",
+  "description": "Owner-approved Stage 4 waivers. A waived gate is reported as WAIVED (never PASS) with its measured value.",
+  "waivers": [
+    {
+      "id": "W-AC-S4-00.1",
+      "ac": "AC-S4-00.1",
+      "result": "WAIVED",
+      "measured": "base install 5.08 GiB with qwen2.5:7b default (cap 4.0 GiB)",
+      "reason": "Owner decision OD-S4-MODEL-03: a more powerful model than 4B is required for useful Mock Court sparring; no small model passed both main gates in the B-S4-00 bake-off.",
+      "authority": "product_owner",
+      "approved_on": "2026-10-08",
+      "expires": "when a model that passes B-S3-13, B-S3-16 and G-MODEL-HELDOUT fits the 4 GiB cap, or the owner revokes"
+    }
+  ]
+}

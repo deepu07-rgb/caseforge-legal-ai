@@ -1,12 +1,13 @@
 {
   "batch": "B-S4-00",
-  "generated_at": "2026-10-07T20:32:03Z",
+  "generated_at": "2026-10-07T21:14:12Z",
   "default_model": "qwen2.5:7b",
-  "addon_model": "qwen2.5:7b",
-  "tier_contracts_valid": false,
+  "addon_model": null,
+  "tier_contracts_valid": true,
   "acceptance": {
     "AC-S4-00.1": {
-      "status": "FAIL",
+      "status": "WAIVED",
+      "waiver": "W-AC-S4-00.1",
       "measured_gib": 5.082,
       "cap_gib": 4.0,
       "target_gib": 3.0,

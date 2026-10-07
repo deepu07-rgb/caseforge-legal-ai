@@ -26,6 +26,9 @@ DEV_WARN_GIB = 8.0
 BUDGET = json.loads((ROOT / "contracts" / "stage4_resource_budget.json").read_text(encoding="utf-8"))
 BASE_HARD_GIB = float(BUDGET["base_install"]["hard_cap_gib"])
 BASE_TARGET_GIB = float(BUDGET["base_install"]["target_gib"])
+WAIVERS_PATH = ROOT / "eval" / "waivers" / "stage4_waivers.json"
+BASE_CAP_WAIVER = next((w for w in (json.loads(WAIVERS_PATH.read_text(encoding="utf-8"))["waivers"] if WAIVERS_PATH.is_file() else [])
+                        if w.get("ac") == "AC-S4-00.1" and w.get("authority") == "product_owner"), None)
 # Ollama backend folders that are optional GPU accelerators (not shipped in the base install).
 OPTIONAL_GPU_DIRS = re.compile(r"^(cuda|rocm)", re.I)
 
@@ -137,7 +140,9 @@ def main() -> int:
         warnings.append(f"development total {development_total / GIB:.3f} GiB is above warning level {DEV_WARN_GIB:.1f} GiB")
     if not llm_bytes:
         warnings.append(f"default model not measured ({llm_basis}); base install is incomplete")
-    if base_install > BASE_HARD_GIB * GIB:
+    if base_install > BASE_HARD_GIB * GIB and BASE_CAP_WAIVER:
+        warnings.append(f"base install {base_install / GIB:.3f} GiB exceeds the {BASE_HARD_GIB:.1f} GiB cap - WAIVED by owner ({BASE_CAP_WAIVER['id']}: {BASE_CAP_WAIVER['reason'][:90]}...)")
+    elif base_install > BASE_HARD_GIB * GIB:
         failures.append(f"base install {base_install / GIB:.3f} GiB exceeds owner hard cap {BASE_HARD_GIB:.1f} GiB")
     elif base_install > BASE_TARGET_GIB * GIB:
         warnings.append(f"base install {base_install / GIB:.3f} GiB is above the {BASE_TARGET_GIB:.1f} GiB target (under the {BASE_HARD_GIB:.1f} GiB cap)")
@@ -153,6 +158,7 @@ def main() -> int:
         "development_total_bytes": development_total, "development_total_gib": round(development_total / GIB, 3),
         "generated_cache_bytes": generated, "generated_cache_gib": round(generated / GIB, 3),
         "client_bytes": client, "client_gib": round(client / GIB, 3), "client_basis": client_basis,
+        "base_install_cap_waiver": BASE_CAP_WAIVER["id"] if BASE_CAP_WAIVER and base_install > BASE_HARD_GIB * GIB else None,
         "base_install_bytes": base_install, "base_install_gib": round(base_install / GIB, 3),
         "with_optional_addons_gib": round(with_optional / GIB, 3),
         "client_installed_total_bytes": base_install,

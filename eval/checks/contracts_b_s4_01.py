@@ -54,9 +54,9 @@ PINNED = {
     "mock_court_debrief_v2.schema.json": "ec98d625e559690be0226d8ae2d4e56742281ab02fa51dad54510c900c646bd8",
     "proposition_ledger.schema.json": "1a8ed0429288649d0e10ba7ebc74b361a487238f7eab61a0d5a831319c375520",
     "case_graph.schema.json": "5783da2511e44b8ab9e2c8aea2d31fe7978c826402d2d870a43892ef4f09b79c",
-    "supported_models.json": "97b077ee983d56647a9ad28300f9ea3cd8d5e40c785fd0a966f786fd1768b424",
+    "supported_models.json": "3fc8c6a13e4427f06ad403f33aee0e2c003d7786987df29a24b91c32854bb16a",
 }
-REPIN_BATCH = {"case_graph.schema.json": "B-S4-06", "supported_models.json": "B-S4-00 (re-pinned 2026-10-08; next change = small default model qualifies)"}
+REPIN_BATCH = {"case_graph.schema.json": "B-S4-06", "supported_models.json": "B-S4-00 (re-pinned 2026-10-08 after OD-S4-MODEL-03: 7B default)"}
 
 H64 = "a" * 64
 SIG = "b" * 128

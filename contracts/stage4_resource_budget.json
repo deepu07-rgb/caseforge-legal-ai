@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "product": "CaseForge",
   "batch": "B-S4-01",
-  "status": "OWNER_APPROVED_CAP__PROPOSED_ALLOCATIONS",
+  "status": "OWNER_APPROVED_CAP__MODEL_CAP_WAIVED__PROPOSED_ALLOCATIONS",
   "description": "Disk and RAM budget for the shipped app from Stage 4 onward. The cap and the tiered-model policy are owner decisions; the per-component allocations and RAM ceiling are proposals awaiting owner approval (Q-S4-12).",
   "owner_decisions": [
     {
@@ -42,20 +42,44 @@
       "approved_by": "CaseForge owner (chat answer)",
       "approved_on": "2026-10-08",
       "executed": "Strawberry Perl 5.42.3.1 installed via winget (installer hash verified); msvc-env.ps1 now discovers the newest MSVC toolset containing cl.exe and the newest complete Windows SDK."
+    },
+    {
+      "id": "OD-S4-MODEL-03",
+      "decision": "Use a more powerful local model than the 4B class: qwen2.5:7b (7.6B, Q4_K_M) is the DEFAULT model in the base install. Power is preferred over the 4 GiB cap for the model; the cap breach is recorded as waiver W-AC-S4-00.1, not hidden by raising the number. No separate add-on tier for now (a larger optional model can be added later through the same tier mechanism).",
+      "approved_by": "CaseForge owner (chat instruction)",
+      "approved_on": "2026-10-08",
+      "supersedes": "OD-S4-MODEL-01 (small default) and OD-S4-MODEL-02 (small-default search)"
     }
   ],
   "base_install": {
     "hard_cap_gib": 4.0,
     "target_gib": 3.0,
-    "counts": ["app binaries + UI", "docpipe sidecar + OCR runtime + traineddata", "default LLM weights", "speech STT/TTS models", "embedding model", "translation model (Stage 4)", "installed official packs + indexes at first install"],
-    "excludes": ["optional 7B add-on", "user case vaults", "later pack deltas"],
+    "counts": [
+      "app binaries + UI",
+      "docpipe sidecar + OCR runtime + traineddata",
+      "default LLM weights",
+      "speech STT/TTS models",
+      "embedding model",
+      "translation model (Stage 4)",
+      "installed official packs + indexes at first install"
+    ],
+    "excludes": [
+      "optional 7B add-on",
+      "user case vaults",
+      "later pack deltas"
+    ],
     "measured_baseline": {
       "measured_on": "2026-10-08",
       "tool": "python scripts/check_size_budget.py",
       "estimated_installed_gib": 4.964,
-      "breakdown_gib": { "llm_qwen2.5_7b_q4_k_m": 4.377, "faster_whisper_small": 0.453, "app_payload_pre_bundle": 0.109 },
+      "breakdown_gib": {
+        "llm_qwen2.5_7b_q4_k_m": 4.377,
+        "faster_whisper_small": 0.453,
+        "app_payload_pre_bundle": 0.109
+      },
       "verdict": "OVER CAP - the 7B default model alone exceeds the remaining budget; resolved by OD-S4-MODEL-01 in B-S4-00."
-    }
+    },
+    "model_cap_waiver": "eval/waivers/stage4_waivers.json#W-AC-S4-00.1"
   },
   "proposed_allocations_gib": {
     "status": "PROPOSED_AWAITING_OWNER_APPROVAL",
@@ -95,13 +119,32 @@
       "Stage 3 grounding verifier remains the only trust path; a smaller model changes proposal quality, never trust rules."
     ],
     "candidates": [
-      { "family": "qwen3:4b-instruct (Qwen3-4B-Instruct-2507, non-thinking)", "reported_licence": "Apache-2.0", "approx_q4_gib": 2.5, "download_approved": "2026-10-08" },
-      { "family": "Phi-3.5-mini / Phi-4-mini instruct", "reported_licence": "MIT", "approx_q4_gib": 2.3 },
-      { "family": "Llama-3.2-3B-Instruct", "reported_licence": "Llama 3.2 Community Licence (commercial with conditions)", "approx_q4_gib": 2.0 }
+      {
+        "family": "qwen3:4b-instruct (Qwen3-4B-Instruct-2507, non-thinking)",
+        "reported_licence": "Apache-2.0",
+        "approx_q4_gib": 2.5,
+        "download_approved": "2026-10-08"
+      },
+      {
+        "family": "Phi-3.5-mini / Phi-4-mini instruct",
+        "reported_licence": "MIT",
+        "approx_q4_gib": 2.3
+      },
+      {
+        "family": "Llama-3.2-3B-Instruct",
+        "reported_licence": "Llama 3.2 Community Licence (commercial with conditions)",
+        "approx_q4_gib": 2.0
+      }
     ],
     "excluded": [
-      { "family": "Qwen2.5-3B-Instruct", "reason": "Reported as Qwen Research Licence (non-commercial); unusable for a paid product unless the licence is confirmed otherwise." },
-      { "family": "qwen3:4b (Ollama tag = Qwen3-4B thinking-2507 build)", "reason": "B-S4-00 bake-off 2026-10-08: thinking-only model; with think=false it narrates reasoning in the answer and failed 4 critical fitness cases (score 0.667); with think=true it answered correctly but needed ~600 tokens / 27 s per turn, breaking AC-3.3. Evidence: eval/bakeoff/b_s4_00_qwen3_4b_thinking_fitness.json." }
+      {
+        "family": "Qwen2.5-3B-Instruct",
+        "reason": "Reported as Qwen Research Licence (non-commercial); unusable for a paid product unless the licence is confirmed otherwise."
+      },
+      {
+        "family": "qwen3:4b (Ollama tag = Qwen3-4B thinking-2507 build)",
+        "reason": "B-S4-00 bake-off 2026-10-08: thinking-only model; with think=false it narrates reasoning in the answer and failed 4 critical fitness cases (score 0.667); with think=true it answered correctly but needed ~600 tokens / 27 s per turn, breaking AC-3.3. Evidence: eval/bakeoff/b_s4_00_qwen3_4b_thinking_fitness.json."
+      }
     ],
     "note": "Reported licences and sizes are leads for the bake-off, not verified facts; B-S4-00 must record the verified licence text hash and measured file size."
   },

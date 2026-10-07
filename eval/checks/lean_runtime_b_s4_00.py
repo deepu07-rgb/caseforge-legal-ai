@@ -68,7 +68,10 @@ def sidecar_tier_logic() -> dict:
     try:
         bogus = load("bogus")
         results["unknown_tier_fails_closed"] = bool(bogus.TIER_ERROR) and bool(bogus.tier_info()["tier_error"])
-        addon = load("addon")
+        addon = load("default")
+        # No add-on manifest ships now (OD-S4-MODEL-03); exercise the same rules with a synthetic add-on tier.
+        addon.CONTRACTS["addon"] = addon.CONTRACTS["default"]
+        addon.TIER, addon.REQUESTED_TIER, addon.TIER_ERROR = "addon", "addon", None
         addon.total_ram_gb = lambda: 6.0
         results["addon_refused_under_8gb"] = "requires >=" in (addon.tier_info()["tier_error"] or "")
         addon.total_ram_gb = lambda: 16.0
@@ -90,8 +93,10 @@ def main() -> int:
     size = run_json([sys.executable, "scripts/check_size_budget.py", "--json"])
     base, cap = size["base_install_gib"], BUDGET["base_install"]["hard_cap_gib"]
     measured = size["external_llm_bytes"] > 0
+    waiver = size.get("base_install_cap_waiver")
     acs["AC-S4-00.1"] = {
-        "status": "PASS" if measured and base <= cap else ("FAIL" if measured else "BLOCKED"),
+        "status": "BLOCKED" if not measured else ("PASS" if base <= cap else ("WAIVED" if waiver else "FAIL")),
+        "waiver": waiver,
         "measured_gib": base, "cap_gib": cap, "target_gib": BUDGET["base_install"]["target_gib"],
         "breakdown_gib": {"default_model": size["external_llm_gib"], "speech": size["external_speech_gib"],
                           "runtime_core": size["ollama_runtime_core_gib"], "app": size["client_gib"]},
@@ -162,8 +167,10 @@ def main() -> int:
 
     # Tier contract sanity
     addon = json.loads(ADDON_PATH.read_text(encoding="utf-8")) if ADDON_PATH.is_file() else None
-    tiers_ok = bool(addon) and addon["model"].get("install_policy") == "OPTIONAL_ADDON" and addon["model"].get("counts_toward_base_install_cap") is False \
-        and model.get("install_policy") == "BASE_INSTALL" and addon["model"]["name"] != model["name"]
+    # An add-on tier is optional; when present it must be a different model, opt-in, and outside the base cap.
+    tiers_ok = model.get("install_policy") == "BASE_INSTALL" and (addon is None or (
+        addon["model"].get("install_policy") == "OPTIONAL_ADDON" and addon["model"].get("counts_toward_base_install_cap") is False
+        and addon["model"]["name"] != model["name"]))
 
     report = {
         "batch": "B-S4-00", "generated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
@@ -176,7 +183,7 @@ def main() -> int:
     for ac, r in acs.items():
         print(f"{r['status']:8} {ac}")
     print(f"{deterministic['status']:8} deterministic engines model-free ({len(DETERMINISTIC_ENGINES)} engines)")
-    print(f"{'PASS' if tiers_ok else 'FAIL':8} tier contracts (default BASE_INSTALL, add-on OPTIONAL_ADDON)")
+    print(f"{'PASS' if tiers_ok else 'FAIL':8} tier contracts (default BASE_INSTALL; add-on {'absent' if addon is None else 'OPTIONAL_ADDON'})")
     print(f"{logic['status']:8} sidecar tier logic {logic['checks']}")
     hard_fail = any(r["status"] == "FAIL" for r in acs.values()) or deterministic["status"] == "FAIL" or not tiers_ok or logic["status"] == "FAIL"
     return 1 if hard_fail else 0
