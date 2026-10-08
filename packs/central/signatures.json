@@ -1,1 +1,257 @@
-{}
+{
+  "caseforge.india.central.department-of-atomic-energy": {
+    "content_sha256": "205900900dd1580aeec30b2a76ad3f8f0eb1bdb694caf192b3b3d9ae6ae20678",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "lwRWimNSIKobfkHt1RDkRL8nihXfByM6A6xxkn7ATn8wlb+h+Y+hsRgRXw6xkGub5HdMJd1qaqVcHJ9fxaVrAg=="
+  },
+  "caseforge.india.central.ministry-of-agriculture-and-farmers-welfare": {
+    "content_sha256": "b33c8692e66c575f3ffa4c07d7b4d37e8bd95baebf2c9827aeb71f09fb17ae10",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "gz/w93B+2oMr4raS/L+1FL7kMNm2BYx33JMpU/aEN5WiwzU6kY2bPbdVTQqdn9KQ7u6GUt/DnvdefIDY4aE8Aw=="
+  },
+  "caseforge.india.central.ministry-of-ayush": {
+    "content_sha256": "43a891e3f8a5819472d8fdf7f83d09f7ea3a1e9cec86c64129625cd8323c659a",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "KcgtnY2i0O7mFAI/qBEMrJfDpHaVC7JTIGuzBul6JevboRIO6rXspn4eVlGVnyxxlRvL4AkG2kEBRrIRXFUuBA=="
+  },
+  "caseforge.india.central.ministry-of-chemicals-and-fertilizers": {
+    "content_sha256": "d52001ef923ad0d7d54019ed4f91f6fa1f2964b3e3c4c1d4e5364d3e9604b753",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "vti8ovPxbE4J7/1Lcj1KTn2pmpEsWvm31xFz0wcpi2C4lAdl96omwUFOdwdfJA36yZDtPPZzNiGwjKrLFcgOBg=="
+  },
+  "caseforge.india.central.ministry-of-civil-aviation": {
+    "content_sha256": "ab45a86b66959342348b39b0f8df7172bc732a943730af8f8f0d3c9a16e58429",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "8OYDAsOG4F4dFd5TAsaQDmmAKj40vWEhJUPPvTnmyh1g3tqwrInImwyCBpq78BO5ChG7SzpSutmnDiXDPJLjAA=="
+  },
+  "caseforge.india.central.ministry-of-coal": {
+    "content_sha256": "1942d31907fb84141e29a1d37ecd8282f2164d260a64cd618c0cf16389d17bb0",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "lKkSDMZvz82Qvp/3u84fM4OySBz+/Ml+Uz5E5wwqiBWifzT6azL8RamhVNaYNTqLt83TTYEC+j9bCaImxZ4kBg=="
+  },
+  "caseforge.india.central.ministry-of-commerce-and-industry": {
+    "content_sha256": "8f34b800435f574e9cb579accbd501bb41e295970625a0efc8306cd07c0f9e22",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "RcdZOKanBGuMtXZFt2Hv8CoAtDVFLyYl+G6sv67jElcuxhTs959EZsji0mSLacQL0wlRNs/22WcVi83E3BAzCQ=="
+  },
+  "caseforge.india.central.ministry-of-communications": {
+    "content_sha256": "7a8efaa7096b45b258d9b80f454bcfa5fd61012f8a1cb8a2f2c4e28a6b1501a9",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "leNFhcJcE2Mo1ZRMdBu3uSk3ZcloiJbYqso/KjCL7URTaHeOchWttfU7iClTFeMUuxPAU6LHz8sxKQrk6g/XCg=="
+  },
+  "caseforge.india.central.ministry-of-consumer-affairs-food-and-public-distribution": {
+    "content_sha256": "9fe70c9bba63163394b0500df4acfb019fa81a348811512b668e4ad98f076f74",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "8SdoHpBFaoUhb5d7YmOhlhJPrskWYfePBO79yYdipBRVNXBqLxCYxycYoq+QFyB1wE521pV8TLki6v0yajA1CQ=="
+  },
+  "caseforge.india.central.ministry-of-cooperation": {
+    "content_sha256": "7c1422116de9d63ae4f6eb6cd3f2f2ea34e93e75a3dff4aa48be2df1bbee2162",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "lgN0bnsEBLyWz3rfrgfWIF4w3EbZWY0BY8o6uqvgq0++aGi7geYfCZhSZ/NUhgA+5F+jZyGGW74XFxy3Fec/CQ=="
+  },
+  "caseforge.india.central.ministry-of-corporate-affairs": {
+    "content_sha256": "f18c31612d4c89391009efeaa211fc019c734c1c39bd044cb8774154b393ee95",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "0KFvH46xrH68btzNhrlltQTovs+8EK1S559OE1ziPk7AGhQZRh71Y8WQkX2c5sRKR48aMfE31Otc/7PXIocSAw=="
+  },
+  "caseforge.india.central.ministry-of-culture": {
+    "content_sha256": "1b92b6b03a13f562775cc5615d17bb5fe7deee95f58d084f8bc758224f1b4b68",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "Sj/40aVkmOoSOWPww5aTzLTU+EjpWMnU0HCc0x9KlF1wrIpscw58nsJ+ZEzgd4avQA4YO1P25sMgMrH8kUJVDA=="
+  },
+  "caseforge.india.central.ministry-of-defence": {
+    "content_sha256": "74d9706d5856950fe7845424a1dd85b60855f3fe2841a803410c6c667b277aab",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "cLa58ANjl6ovnxOBbfVbmykBdghyd1pOROEhSBrGmIQhzYUYyQ/hPBa16SbYqxawiaf55+nT0OV3tb1LR06qAQ=="
+  },
+  "caseforge.india.central.ministry-of-development-of-north-eastern-region": {
+    "content_sha256": "de2079c12ec50bf2938d12fcf806ab33da86e42b9320e54681c50351e918556a",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "zmVR+AbX339pLKqh6t4JDccKSN9HVDzCc25V0x+GcjFwbFDe/D6R1it9LfgQgEaSgJNRrCm9x3uIJRpfjGuwBA=="
+  },
+  "caseforge.india.central.ministry-of-earth-sciences": {
+    "content_sha256": "7107a46b6cb8afb4f7355b104da1772be0274f7b0c7ed4021f0676e7befdaba7",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "cYjPQL5lBssLmPsB0DfLCRh3K8bJfMBi0kKO7mmMkWJeBaa2n2QGzCjQKrM/wLuhvlqpo2KN3RV0ulM2u3w/DA=="
+  },
+  "caseforge.india.central.ministry-of-education": {
+    "content_sha256": "7de190b1b47174929026bc302e9c45e8adbda7d253612efa5176012adacffbdf",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "qMj6Sno/e3d5ptHXfHrmPArV48KOENecm+J+zyysHj0bhU0HjL9h83EcfkEf7dgXn/VRcQDkTkN4LRtzwL0GCg=="
+  },
+  "caseforge.india.central.ministry-of-electronics-and-information-technology": {
+    "content_sha256": "92bf13fe3333d2ff9c1bc3bc521e85d6d6d1b6aa08c3b5391adfff121345eea0",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "aSPPN1IHG+DvdgArqIv60RM+6y5f9hwadbIcEQ5vnmU1dBm1039F0KgcH71OiJ6fmeOQIILhM9CSoQqxJDEWBw=="
+  },
+  "caseforge.india.central.ministry-of-environment-forest-and-climate-change": {
+    "content_sha256": "15f8c330f8ae478ba13021a7b7b31643cd8e9e81606a6597e6a49a473a55e0b4",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "xiXurnq9pVysk51SzQzXTFOPLlIuyxwMmC4ImAVNseTqCElfPACBQOoPazGjjDUf7uyiTFT6pmomfcDlANttBw=="
+  },
+  "caseforge.india.central.ministry-of-external-affairs": {
+    "content_sha256": "4bfdd708165a64c1e85464c307fbe34b5f0de51b69404d6e646bf6f3b0241688",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "ZfDnmRdsVXyIhNBdW9r9TWKF1hr62QzlBBy9Cr3nXVV4gLFLzRw4qwZc/gMscOs60xDY4Qm6CZppioX2Y9R+CQ=="
+  },
+  "caseforge.india.central.ministry-of-finance": {
+    "content_sha256": "1eb81f1217273676155b1ec9125d72a9f4b6aa3c1da60f5f172d9bc8fd903e79",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "4y3+5NTPLyHCDC+LrB8cv1EHYvWZ4cdLFxxhe3l2PwAnlszDgk1Izhf7QHDaSkCiuJfXkA02p4ZwPRBCi14lDA=="
+  },
+  "caseforge.india.central.ministry-of-food-processing-industries": {
+    "content_sha256": "6db5a38c7930cfd6687473e0a94ab7d2ada8b93b28b60611a9bce7c2ad1b85e8",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "HbkIwmtvaH1khkI3OdAM0FUgsXgEQXoLqL9bga/NBk0vBXErRPbfOjxGgttkWiEkGsgrOee5pumpcI4BuqQ6Cw=="
+  },
+  "caseforge.india.central.ministry-of-health-and-family-welfare": {
+    "content_sha256": "a5a934963816fc300cc362d0649e94caa659f15f4fa2c0bcffc7ed32fa85205d",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "YBDhgX2Rz1C2trY5OS64yU16xUoGuEd9zHiY35BWJPD1ingK7h4Q6iav0iqJ6dCsWZtMK6NCSPlxS30iW4koBA=="
+  },
+  "caseforge.india.central.ministry-of-heavy-industries-and-public-enterprises": {
+    "content_sha256": "9666cdd619b0c071c46562d6c83b2e4da5ee0a34009c2c7b44523e800c440dec",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "/azTWmwlloIuIhWY2YmPzLWWfeGmbIyP1vPA+lIah4verPm65NTsuWd/d/rEgq801yQ1jRLDnda2lgHBPHbJAg=="
+  },
+  "caseforge.india.central.ministry-of-home-affairs": {
+    "content_sha256": "00d6a074c566bdc6fac0d11cf89b8c0a0dc74cf03daf18680a61f8e8e11bc3a2",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "EQsQrbYsq/itZzTtPZj9dPdtPm4esIKU2TklCpOamgfMAcWupV1NbcVDZht7A0fxZlWSPKqJkXJIf5WPxqklDg=="
+  },
+  "caseforge.india.central.ministry-of-housing-and-urban-affairs": {
+    "content_sha256": "4e4d5f371f56b808e4777fc6fb623956832284aef0404f33592ba3be9a2900cc",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "sUTrxdFBRUAmiXQjD90wVTQl7w2r95qJwjnEoZNc5jachM7Ty7ROiZtxd2cZamNF3LWPEu6zINpDkyQHwB76Ag=="
+  },
+  "caseforge.india.central.ministry-of-information-and-broadcasting": {
+    "content_sha256": "8e6a759bf787c09a1b0c4e68470f4fe221d15403dd7b6fb57b8b01bf9869e1b4",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "hr4qYDz9/H4na5m4dGp95tGPIAGbF3/rMk7s0eSfUuAflAiBPtcKJHRp7jNVrWUm+lN+lP6bYyipbqbfu87CAQ=="
+  },
+  "caseforge.india.central.ministry-of-jal-shaktri": {
+    "content_sha256": "ea06f779fd3c7f013bd264fc31e17c827a270a64b1dc9ae18840e4c674a61501",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "TUZbmuXPzsE+GzpaDG6+2cNdvv/tMseqMnAmS8Xq7GmZUheE9Q1YOpLO8NIfnAnmSOIu+E002zJ7jtKXKeMCAQ=="
+  },
+  "caseforge.india.central.ministry-of-labour-and-employment": {
+    "content_sha256": "fe514bba012641fdccf9acd0730c39269d1b25f31b6d534669c5ad3fd5bcd256",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "vykAKxRROffE6t1+nDELhtnvTMAxVcGd2M1GwDp7dSBbsDlHt6ofIgklaXJIJC6xuIEYUX1qe7e+y9EL1D2vDg=="
+  },
+  "caseforge.india.central.ministry-of-law-and-justice": {
+    "content_sha256": "5938b5d18658109c01850ee4f90a93c8a6b5a5cae708ea59a62ceea127a81be1",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "Z9xstZxaNNij4A2zhOJrWbPXM4Ch7J3/sSQvLguIZJSLWRYiXkuPWme28J4LhhmhVXRQfTJb6TRUF61h+ciHCQ=="
+  },
+  "caseforge.india.central.ministry-of-micro-small-and-medium-enterprises": {
+    "content_sha256": "3170f106f65158a20ad8c19b9d47a07a525a268d28c124e2af85bd02a939a5dc",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "9eI7XCwTM8LDlOTxfOBQGdJt0iSpxNc837ruAhvHYlIaE9V5/9WTJ+uaBx4xJpJOm+rqPO0jw113WXwNumNzDw=="
+  },
+  "caseforge.india.central.ministry-of-mines": {
+    "content_sha256": "8dbe1e3ea9055d490084cb27950181b687bc7164ae245f6d057870f84615b461",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "a2d2hk/mZYVqMyi20qJARt4vQ5RDXBH/Og//Z4fJHYZYSpZqL4MMRF9SpzRhzqbVC7VliCDGAvXqfIkSTbGECw=="
+  },
+  "caseforge.india.central.ministry-of-minority-affairs": {
+    "content_sha256": "b4383a210f40a995254dbdd099381638f03d158f3dae6e7328d55db76d79add3",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "xFuzyaYirE3wobGjJgrFCnOKu5ZO8FBxBiUlMDsk84q9tR6WjhewI6reWNJC59QPCVZPveHTAbCJvlzChnT6Ag=="
+  },
+  "caseforge.india.central.ministry-of-panchayati-raj": {
+    "content_sha256": "40e729e6c0fcd41e1699ff90b484c73a206a2492e9258b26c343df4b213caa05",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "PCdITjvnNvT1vlv9XgqKEgra3RgRGnSHMCCmuc+N8H8ieIiBM2uF8Kl6QKx/54LXmp5ecS4VYLnFj3j+M+g2Bw=="
+  },
+  "caseforge.india.central.ministry-of-parliamentary-affairs": {
+    "content_sha256": "4ecf644c8f2e81dcbfb5589c418788e95d79b09e6c9ef9f8b40d45e7beae05dd",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "bKNPUqvuyrZXVc+xPhxCOVZTaoJ8jySOjJHcUryGQvYTLR+KJgcYmCeB9vF/beIJa0G5HMNBDE/zdS++OQnvBg=="
+  },
+  "caseforge.india.central.ministry-of-personnel-public-grievances-and-pensions": {
+    "content_sha256": "fa24cd68e01e42008948fa5056b240d6799cfbead06ce062239773ee38cf8ae7",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "34HLRe2wDj6dPzyos22QRGsLYlGgNuvXbnnL38kqZmBy/fRmDKSwMdtWP4aVuBJ5VNYDJppYZORggH/K4aQ5AQ=="
+  },
+  "caseforge.india.central.ministry-of-petroleum-and-natural-gas": {
+    "content_sha256": "33cc23ab94a3c61a03de26956a168cfdd975ea1384442ad406041d2a958b0e13",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "s5nA+B3X5pw1QZqrYFx5K9TyZ8f4b2m5b6/oM7aF5ReE6z0E0h/r1TBNfvj6gxThNkznqwFr7jQlbV+ScQBvBw=="
+  },
+  "caseforge.india.central.ministry-of-ports-shipping-and-waterways": {
+    "content_sha256": "7716010f5a29f24d969bec49176090cffde7d4705bcb290812d9497aeb33152a",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "elMqDk7/Trx1rBww6DWvW2C/vfVyhaHbJbLk3yZfzEvZAI68EsBNgUBEdUGQPnqT7DQWta7PJACtVbjZ8wyNDQ=="
+  },
+  "caseforge.india.central.ministry-of-power": {
+    "content_sha256": "ebce53eca315702279399638b14cf16ffecc91d732c8f441c9a8b0dc1da742c3",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "z2zSXdcE4a2+BMQjPbjRRiCtghe+nhO9flMHHz2VHDib2BYCmkDm1uAYEVQzfZ2tujrPC4JWQAQJ4KHxTsSwDw=="
+  },
+  "caseforge.india.central.ministry-of-railways": {
+    "content_sha256": "7cee168da6447761c2fbaffabb6bbb96f16e86a23d99d44cfa6579005970dced",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "itO/14nGWuYFnQ9x8C042dkvejHGZdfftDSiGylHNj0bww5t4lo3K5r5ricOGAWdJqlh8FB6vYfLNpbcHxbGAg=="
+  },
+  "caseforge.india.central.ministry-of-road-transport-and-highways": {
+    "content_sha256": "6eed420d6330debb88f8f9efa46f5bf355297e694eba95a2835a4c38c63074c7",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "RWxCoSX2nLQpBprpvZR0w8Depd7q5OpAp7i3r/WDjQeRPnG4yvqp625KEKSuKqqzZqFFvKiEe5xX4ipoidFlAQ=="
+  },
+  "caseforge.india.central.ministry-of-rural-development": {
+    "content_sha256": "99ce9c151512e9b3185cf91b8897e860a3636bc70e6ba5bbc55d518f2451c5eb",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "lg2LBEHu5PT0v5J4knVZYxC07O+KIEiJh4x5wdGc/g/k9xhNITToHplrlunAy19verL3SJSByWwSH1sxF4JJBQ=="
+  },
+  "caseforge.india.central.ministry-of-science-and-technology": {
+    "content_sha256": "0fe0ed39513a014e7749ec3c208d8d6b70a389bbef813741a68667d70a1c7f08",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "M29rsPy5ej8vvI5QCABXZFr2SYnF3kqG2BfgOl+FIv8qogZgjtkdtN0+JS21lWeuwCK0YOdF4N9leFLmXGoaBw=="
+  },
+  "caseforge.india.central.ministry-of-shipping": {
+    "content_sha256": "b817b6e0811bc04fb0c29313bbf4d62a452de17088f4c7a66d09d08fe29afd4d",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "MKkSWqOsaQImI8ynStxCqIz/Vr4RlYKrUW6HoDZ0vowvNgXCzjJr7Mz8MVoqV94wEwLbJjcHLUcTPrqA+pLnDw=="
+  },
+  "caseforge.india.central.ministry-of-skill-development-and-entrepreneurship": {
+    "content_sha256": "6cd753849a4689191fe64a397e233690787921a92aa2b23a73c2d40939b1f55b",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "HHaWcHDyFk5snfasxMz6D3Wy4awITrjIYH0jMBfLkZyjo8VqS4gZ3l7e7mjoumNGqMLJRkhr7UY973I+605ICg=="
+  },
+  "caseforge.india.central.ministry-of-social-justice-and-empowerment": {
+    "content_sha256": "12aa504cc729eccabb756ab5652c4e24d42dec6a58fde132cdf7c39e5f586e2c",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "iR/ZuLPIR2hPRz2fMbvMwO9Lwq4OzZye9v2TYX9LrOELYUYX2Ovf2Zud1FQ4MaGvohVbFek3SN0Q+xAEyQX/DQ=="
+  },
+  "caseforge.india.central.ministry-of-statistics-and-programme-implementation": {
+    "content_sha256": "f9298e71718ada66e63193c99f2053ae0b004f46d4cd7df34017862d75f740d4",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "rhm+FBUK5/EBWk2MkrpVRn2Gz5g4NlDRqOmMG3it6qr99K1inTQWp64AhagJx1rTUvlJWL5uXL+pQUD3ozzeAQ=="
+  },
+  "caseforge.india.central.ministry-of-steel": {
+    "content_sha256": "91e43eeb4f13354ceac5e1cf9c09d0ddc3ed1a022870ccad72578f1087e48b96",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "mk8QuDNphfjLN8wgu0lZ4Am6CCzLr7HmOi2MmMfHDGrIdf4xg5nc5uG7HaZInK8PrDoUoNz09GMakkkRuQAFBg=="
+  },
+  "caseforge.india.central.ministry-of-textiles": {
+    "content_sha256": "6e9d329d28d57a7611d0122d439670dc94c92912ec81366a959e3942c7fd636c",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "5wkwTf2O3uC0uQ/CXhPT0apGRFFVfD4Yrap6/3gCEkJjr4g/QYnqQxpAcHDVfzyB+aKJd8FuZyARJl0OURY/Cg=="
+  },
+  "caseforge.india.central.ministry-of-tribal-affairs": {
+    "content_sha256": "e8d02677012bda4b0685959bf2939b11ff2f104356ca0b8b2aa744f17ec500b0",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "5+ai2BnxNRMeib+jWTaGt1QA89dMFKYOrusNtH6MLdedmFKbwMZfxIIeESY40bPNz1ZrPs8zDmTwPFTPDYv2CA=="
+  },
+  "caseforge.india.central.ministry-of-women-and-child-development": {
+    "content_sha256": "62856ca9659d2933e3cb8bae84d76a6d2d972440f75fbc148157aed7438d3d34",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "VwLuScKW490dDwAIxaddiWuxjR7zXatblHjJDH2+aCSDjhtuJ0aQ96stLj3wbGF9T/+OhC5pMHUTotbAmmJICQ=="
+  },
+  "caseforge.india.central.ministry-of-youth-affairs-and-sports": {
+    "content_sha256": "4f96a5974ef0cad8177bc53e1fde158cbcc58a1187a44022f742c70c115d3ae6",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "RuzU6SNZpE3/Mm/bGzwGgORplRPQC+gqqzANvORABshGJ7kESJaeHmG7qr+c8IE16ZQIq5vpnKaJZY3tJvCzBg=="
+  }
+}
