@@ -29,6 +29,10 @@
     { "kind": "TRIAL_TESTIMONY", "label": "Trial testimony", "jurisdiction": "*", "procedural_rank": 80, "prior_statement": false, "testimony": true,
       "header_patterns": ["trial transcript", "direct examination", "testimony of"] }
   ],
+  "jurisdictions": [
+    { "names": ["India"], "numeric_date_order": "DMY" },
+    { "names": ["United States", "US", "USA", "U.S."], "numeric_date_order": "MDY" }
+  ],
   "metadata_markers": [
     "recorded on", "recorded at", "date and time of report", "date of report", "executed on", "taken on", "sworn on", "affirmed on",
     "under penalty of perjury", "under section", "u/s", "civil action no", "case no", "fir no", "s.t. no", "examination-in-chief recorded",

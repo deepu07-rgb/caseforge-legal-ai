@@ -1,0 +1,39 @@
+{
+  "batch": "B-S4-03",
+  "scope": "core: rule-table install validation, query API, exploit suite; pack-tool authoring support deferred",
+  "acceptance": {
+    "AC-S4-RT.1": {
+      "status": "BLOCKED",
+      "reason": "pass --cargo-log with `cargo test --lib` output"
+    },
+    "AC-S4-RT.2": {
+      "status": "BLOCKED",
+      "reason": "pass --cargo-log with `cargo test --lib` output"
+    },
+    "B-S3-09_MALICIOUS_PACK_SUITE": {
+      "status": "BLOCKED",
+      "reason": "pass --cargo-log with `cargo test --lib` output"
+    },
+    "AC-S4-RT.3": {
+      "status": "PASS",
+      "scanned": [
+        "audit.rs",
+        "answer_feedback.rs",
+        "certificate.rs",
+        "opposition.rs",
+        "witness.rs",
+        "impeach.rs",
+        "rule_tables.rs",
+        "code_bridge.rs",
+        "components/AuditPanel.tsx",
+        "components/CertificatePanel.tsx",
+        "components/AnswerFeedbackPanel.tsx",
+        "components/OppositionView.tsx",
+        "components/WitnessView.tsx",
+        "components/CodeBridgePanel.tsx",
+        "lib/impeachKit.ts"
+      ],
+      "jurisdiction_branches": []
+    }
+  }
+}

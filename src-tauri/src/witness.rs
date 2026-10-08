@@ -32,11 +32,19 @@ pub struct KindDef {
     header_patterns: Vec<String>,
 }
 
+#[derive(Debug, Clone, Deserialize)]
+pub struct JurisdictionDef {
+    pub names: Vec<String>,
+    /// DMY or MDY: how a numeric date like 03.04.2023 is read.
+    pub numeric_date_order: String,
+}
+
 #[derive(Deserialize)]
 struct VocabFile {
     pack_id: String,
     table_id: String,
     kinds: Vec<KindDef>,
+    jurisdictions: Vec<JurisdictionDef>,
     metadata_markers: Vec<String>,
 }
 
@@ -44,6 +52,7 @@ pub struct Vocabulary {
     pub pack_id: String,
     pub table_id: String,
     kinds: Vec<(KindDef, Vec<Regex>)>,
+    jurisdictions: Vec<JurisdictionDef>,
     markers: Vec<String>,
 }
 
@@ -60,6 +69,17 @@ impl Vocabulary {
     pub fn kinds(&self) -> Vec<&KindDef> {
         self.kinds.iter().map(|(k, _)| k).collect()
     }
+    fn profile(&self, jurisdiction: &str) -> Option<&JurisdictionDef> {
+        self.jurisdictions.iter().find(|p| p.names.iter().any(|n| n.eq_ignore_ascii_case(jurisdiction.trim())))
+    }
+    /// Two jurisdiction labels name the same jurisdiction (by data, not by code).
+    pub fn same_jurisdiction(&self, a: &str, b: &str) -> bool {
+        a.eq_ignore_ascii_case(b) || matches!((self.profile(a), self.profile(b)), (Some(x), Some(y)) if std::ptr::eq(x, y))
+    }
+    /// Whether a statement kind applies to the case jurisdiction ("*" = everywhere).
+    pub fn kind_applies(&self, kind: &KindDef, jurisdiction: &str) -> bool {
+        kind.jurisdiction == "*" || self.same_jurisdiction(&kind.jurisdiction, jurisdiction)
+    }
 }
 
 pub static VOCAB: Lazy<Vocabulary> = Lazy::new(|| {
@@ -75,17 +95,14 @@ pub static VOCAB: Lazy<Vocabulary> = Lazy::new(|| {
                 (k, res)
             })
             .collect(),
+        jurisdictions: file.jurisdictions,
         markers: file.metadata_markers.into_iter().map(|m| m.to_lowercase()).collect(),
     }
 });
 
-pub fn is_us(jurisdiction: &str) -> bool {
-    let j = jurisdiction.to_ascii_lowercase();
-    j.contains("united states") || j == "us" || j == "usa" || j.starts_with("us-") || j.starts_with("u.s")
-}
-
-fn jurisdiction_ok(kind: &KindDef, jurisdiction: &str) -> bool {
-    kind.jurisdiction == "*" || (is_us(jurisdiction) == is_us(&kind.jurisdiction))
+/// Numeric dates are read month-first in this jurisdiction (from the vocabulary data; unknown = day-first).
+pub fn month_first(jurisdiction: &str) -> bool {
+    VOCAB.profile(jurisdiction).map(|p| p.numeric_date_order == "MDY").unwrap_or(false)
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -191,11 +208,11 @@ pub fn is_transcript_page(page: &str) -> bool {
 pub fn propose(doc: &StatementDoc, jurisdiction: &str) -> Option<RegisterEntry> {
     let first = doc.pages.iter().find(|p| !p.trim().is_empty())?;
     let header = head(first, 900);
-    let us = is_us(jurisdiction);
+    let us = month_first(jurisdiction);
     let kind = VOCAB
         .kinds
         .iter()
-        .filter(|(k, _)| jurisdiction_ok(k, jurisdiction))
+        .filter(|(k, _)| VOCAB.kind_applies(k, jurisdiction))
         .filter_map(|(k, res)| res.iter().filter_map(|r| r.find(header).map(|m| m.start())).min().map(|pos| (pos, k.kind.clone())))
         .min()
         .map(|(_, k)| k);
@@ -905,7 +922,7 @@ pub(crate) mod tests {
             let j = case["jurisdiction"].as_str().unwrap();
             for d in docs_of(case) {
                 entries.push(propose(&d, j).unwrap_or_else(|| panic!("no proposal for {}", d.doc_id)));
-                us.insert(d.doc_id.clone(), is_us(j));
+                us.insert(d.doc_id.clone(), month_first(j));
                 docs.insert(d.doc_id.clone(), d);
             }
         }

@@ -99,7 +99,7 @@ export default function WitnessView({
 
   const register = state?.register ?? [];
   const unregistered = documents.filter((d) => !register.some((r) => r.doc_id === d.doc_id));
-  const kinds = state?.statement_kinds.filter((k) => k.jurisdiction === "*" || (activeCase.jurisdiction.toLowerCase().includes("united states") === k.jurisdiction.toLowerCase().includes("united states"))) ?? [];
+  const kinds = state?.statement_kinds.filter((k) => k.applies) ?? [];
   const witness: MatrixWitness | undefined = built?.matrix.witnesses.find((w) => w.witness_id === selected);
   const kit = built?.kits.find((k) => k.witness_id === selected);
   const others = built?.matrix.witnesses.filter((w) => w.witness_id !== selected) ?? [];

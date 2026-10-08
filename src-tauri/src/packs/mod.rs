@@ -119,6 +119,14 @@ pub struct PackManifest {
     pub editorial_review_status: Option<String>,
     #[serde(default)]
     pub rights_basis: Option<String>,
+    /// akpkg v2.1 (B-S4-03): signed rule tables under metadata/rule_tables/.
+    #[serde(default)]
+    pub rule_tables_files: Vec<String>,
+}
+
+/// Manifest v2 metadata (v2.1 adds rule tables).
+pub(crate) fn is_v2(schema_version: &str) -> bool {
+    matches!(schema_version, "2.0.0" | "2.1.0")
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -439,7 +447,7 @@ fn validate_pack_tree(
     if !PACK_ID_RE.is_match(&man.pack_id) || !VERSION_RE.is_match(&man.version) {
         return Err("CF_PACK_SECURITY_REJECTED: invalid pack_id or semantic version".into());
     }
-    if man.schema_version == "2.0.0" {
+    if is_v2(&man.schema_version) {
         if man.metadata_version.as_deref() != Some("2.0.0")
             || man.jurisdiction.as_deref().is_none_or(str::is_empty)
             || man.jurisdiction_path.is_empty()
@@ -478,11 +486,11 @@ fn validate_pack_tree(
                 && (man.schema_version == "1.0.0"
                     || file.role.as_deref() == Some("AUTHORITATIVE_CONTENT"))
         } else if file.path.starts_with("metadata/") {
-            man.schema_version == "2.0.0"
+            is_v2(&man.schema_version)
                 && rel.extension().and_then(|v| v.to_str()) == Some("json")
                 && matches!(
                     file.role.as_deref(),
-                    Some("LEGAL_SOURCES" | "LEGAL_CHUNKS" | "DERIVED_ARTEFACT")
+                    Some("LEGAL_SOURCES" | "LEGAL_CHUNKS" | "DERIVED_ARTEFACT" | "RULE_TABLE")
                 )
         } else {
             false
@@ -711,7 +719,7 @@ fn verify_ed25519(pubkey: &[u8; 32], message: &[u8], sig_b64: &str) -> Result<()
         .map_err(|_| "CF_PACK_INVALID_SIGNATURE: verification failed".to_string())
 }
 
-fn read_manifest(pack_dir: &Path) -> Result<PackManifest, String> {
+pub(crate) fn read_manifest(pack_dir: &Path) -> Result<PackManifest, String> {
     let p = pack_dir.join("manifest.json");
     let raw = fs::read_to_string(&p).map_err(|e| format!("CF_PACK_NOT_FOUND: {e}"))?;
     serde_json::from_str(&raw).map_err(|e| format!("CF_PACK_INSTALL_FAILED: manifest {e}"))
@@ -741,7 +749,7 @@ fn verify_content_files(pack_dir: &Path, man: &PackManifest) -> Result<(), Strin
     if canon != man.content_sha256 {
         return Err("CF_PACK_INSTALL_FAILED: content_sha256 mismatch".into());
     }
-    if man.schema_version == "2.0.0"
+    if is_v2(&man.schema_version)
         && man.authoritative_content_sha256.as_deref()
             != Some(authoritative_hash(&man.files).as_str())
     {
@@ -781,7 +789,7 @@ fn read_legal_chunks(pack_dir: &Path) -> Result<Vec<LegalChunkRecord>, String> {
 /// authenticated reader; the signed manifest binds these metadata file hashes to that content hash.
 pub fn load_legal_chunks(pack_dir: &Path) -> Result<Vec<LegalChunkRecord>, String> {
     let man = read_manifest(pack_dir)?;
-    if man.schema_version != "2.0.0" {
+    if !is_v2(&man.schema_version) {
         return Err("CF_PACK_METADATA_INVALID: legal chunks require manifest v2".into());
     }
     if canonical_hash(&man.files) != man.content_sha256 {
@@ -1051,14 +1059,14 @@ fn reject_trust_and_source_collisions(
             "CF_PACK_SECURITY_REJECTED: pack_id crosses official/custom trust domain".into(),
         );
     }
-    if man.schema_version != "2.0.0" {
+    if !is_v2(&man.schema_version) {
         return Ok(());
     }
     let incoming = source_ids_from_dir(source_dir)?;
     for installed in registry
         .packs
         .iter()
-        .filter(|p| p.pack_id != man.pack_id && p.schema_version == "2.0.0")
+        .filter(|p| p.pack_id != man.pack_id && is_v2(&p.schema_version))
     {
         let existing = source_ids_from_dir(Path::new(&installed.install_path))?;
         if let Some(collision) = incoming.intersection(&existing).next() {
@@ -1112,15 +1120,20 @@ pub fn install_pack_from_dir(
 ) -> Result<PackInstallResult, String> {
     let canonical_root = preflight_source_root(source_dir)?;
     let man = read_manifest(source_dir)?;
-    if man.schema_version != "1.0.0" && man.schema_version != "2.0.0" {
+    if man.schema_version != "1.0.0" && !is_v2(&man.schema_version) {
         return Err("CF_PACK_UNSUPPORTED_VERSION".into());
     }
+    crate::rule_tables::precheck_manifest(&man)?;
     let mut security_report = validate_pack_tree(source_dir, &canonical_root, &man)?;
     verify_content_files(source_dir, &man)?;
-    if man.schema_version == "2.0.0" {
+    if is_v2(&man.schema_version) {
         validate_legal_metadata(source_dir, &man)?;
     }
     reject_trust_and_source_collisions(paths, &man, source_dir)?;
+    // B-S4-03: every rule table must validate (authorities resolve to installed official chunks, windows, sign-off).
+    if !man.rule_tables_files.is_empty() {
+        crate::rule_tables::validate_pack(paths, source_dir, &man)?;
+    }
 
     let content_root = source_dir.join("content");
     let hits = headnote_scan_dir(&content_root);
@@ -1172,7 +1185,7 @@ pub fn install_pack_from_dir(
         let staged_root = preflight_source_root(&staging)?;
         validate_pack_tree(&staging, &staged_root, &man)?;
         verify_content_files(&staging, &man)?;
-        if man.schema_version == "2.0.0" {
+        if is_v2(&man.schema_version) {
             validate_legal_metadata(&staging, &man)?;
         }
         Ok(())
@@ -1238,14 +1251,14 @@ pub fn install_pack_from_dir(
         installed_at_unix_ms: now_ms(),
         isolated: man.pack_kind == "custom",
         schema_version: man.schema_version.clone(),
-        trust_level: if man.schema_version == "2.0.0" {
+        trust_level: if is_v2(&man.schema_version) {
             man.trust_level
                 .clone()
                 .unwrap_or_else(development_only_trust)
         } else {
             development_only_trust()
         },
-        controlled_beta_eligible: man.schema_version == "2.0.0"
+        controlled_beta_eligible: is_v2(&man.schema_version)
             && man.controlled_beta_eligible
             && man.pack_kind == "official",
         publisher: man.publisher.clone(),
@@ -1540,6 +1553,7 @@ mod tests {
             superseded_by_version: None,
             editorial_review_status: None,
             rights_basis: None,
+            rule_tables_files: vec![],
         };
         assert!(validate_legal_metadata(dir.path(), &manifest).is_ok());
         let sources_path = dir.path().join("metadata/legal_sources.json");

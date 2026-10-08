@@ -2714,7 +2714,7 @@ export type WitnessDecision =
 export interface WitnessRegisterState {
   register: WitnessRegisterEntry[];
   decisions: { key: string; decision: WitnessDecision; active: boolean }[];
-  statement_kinds: { kind: string; label: string; jurisdiction: string }[];
+  statement_kinds: { kind: string; label: string; jurisdiction: string; applies: boolean }[];
   vocabulary: { pack_id: string; table_id: string };
 }
 export interface MatterLocator {
@@ -2804,4 +2804,47 @@ export async function impeachFindingStatus(caseId: string, findingId: string, st
 }
 export async function impeachModelScan(caseId: string, witnessId: string): Promise<{ rendered: number; discarded: { candidate: string; reason: string }[]; model_fingerprint: string }> {
   return invoke("impeach_model_scan", { caseId, witnessId });
+}
+
+// --- B-S4-03 rule tables / B-S4-09 Code Bridge ---
+export type DateKind = "OFFENCE_DATE" | "INSTITUTION_DATE" | "FILING_DATE" | "CAUSE_OF_ACTION_DATE" | "EVENT_DATE";
+export interface KeyDate { kind: DateKind; date: string; locator: Record<string, unknown> }
+export interface StatuteMapping {
+  schema_version: "1.0.0";
+  reference_id: string;
+  context: "CASE_GRAPH" | "DRAFT" | "RETRIEVED_AUTHORITY" | "AUDIT_ITEM" | "EXTERNAL_FILING";
+  context_ref_id: string | null;
+  ref_text: string;
+  code: string;
+  provision: string;
+  equivalence: "IDENTICAL" | "RENUMBERED" | "MODIFIED" | "NEW" | "OMITTED" | "UNKNOWN";
+  counterpart: { direction: "SUCCESSOR" | "PREDECESSOR"; code: string; provision: string } | null;
+  rule_ids: string[];
+  governing: {
+    status: "DETERMINED" | "NEEDS_COUNSEL_INPUT" | "UNKNOWN";
+    governing_code: string | null;
+    basis_date_kind: DateKind | null;
+    basis_date: string | null;
+    basis_locator: Record<string, unknown> | null;
+    transition_rule_id: string | null;
+    interview_question_id?: string | null;
+  };
+  side_by_side: { old: { pack_id: string; source_id: string; chunk_id: string; excerpt: string }; new: { pack_id: string; source_id: string; chunk_id: string; excerpt: string } } | null;
+}
+export interface CodeBridgeResult {
+  pipeline_id: string;
+  annotations: { annotation: StatuteMapping; trust: "SIGNED_OFF" | "DEVELOPMENT_ONLY" | "NONE"; char_start: number }[];
+  succession_rows: number;
+  signed_rows: number;
+  rejected_tables: string[];
+  key_dates: KeyDate[];
+}
+export async function codeBridgeAnnotate(caseId: string, text?: string | null, context?: "DRAFT" | "EXTERNAL_FILING"): Promise<CodeBridgeResult> {
+  return invoke<CodeBridgeResult>("code_bridge_annotate", { caseId, text: text ?? null, context: context ?? null });
+}
+export async function codeBridgeSetKeyDate(caseId: string, kind: DateKind, date: string | null, note?: string | null): Promise<void> {
+  return invoke<void>("code_bridge_set_key_date", { caseId, kind, date, note: note ?? null });
+}
+export async function ruleTablesStatus(): Promise<{ tables: { table_id: string; table_kind: string; jurisdiction: string; pack_id: string; rows: number; signed_rows: number }[]; rejected: string[] }> {
+  return invoke("rule_tables_status");
 }

@@ -1,0 +1,30 @@
+{
+  "batch": "B-S4-09",
+  "acceptance": {
+    "AC-S4-04.2": {
+      "status": "BLOCKED",
+      "reason": "pass --cargo-log with `cargo test --lib` output"
+    },
+    "AC-S4-04.3": {
+      "status": "BLOCKED",
+      "reason": "pass --cargo-log with `cargo test --lib` output"
+    },
+    "AC-S4-04.1": {
+      "status": "BLOCKED",
+      "reason": "needs legal-editor-signed STATUTE_SUCCESSION rows for real codes in an official pack (Q-S4-02); none are installed",
+      "engine_matches_synthetic_signed_fixture": null
+    },
+    "STRUCTURE": {
+      "status": "PASS",
+      "checks": {
+        "engine_model_free": true,
+        "no_legal_values_in_code": true,
+        "commands_registered": true,
+        "audit_integration": true,
+        "ui_wired": true,
+        "ui_vocabulary_honest": true
+      }
+    }
+  },
+  "errors": []
+}

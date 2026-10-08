@@ -68,12 +68,14 @@ jobs:
 
       - name: Contract gates (no model needed)
         run: |
+          $PSNativeCommandUseErrorActionPreference = $true # any failing gate fails the step, not only the last one
           python -m pip install --disable-pip-version-check --quiet jsonschema
           python eval/checks/contracts_b_s4_01.py
           python eval/checks/injection_guard_b_s4_00.py
 
       - name: Rust unit tests (+ Stage 4 gates from their log)
         run: |
+          $PSNativeCommandUseErrorActionPreference = $true # any failing gate fails the step, not only the last one
           $env:CASEFORGE_EVIDENCE_DIR = (New-Item -ItemType Directory -Force evidence).FullName
           cargo test --manifest-path src-tauri/Cargo.toml --lib 2>&1 | Tee-Object -FilePath cargo-test.log
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
@@ -83,6 +85,8 @@ jobs:
           python eval/checks/opposing_scan_b_s4_06.py --cargo-log cargo-test.log --record evidence/opposing_scan_record.json
           python eval/checks/witness_matrix_b_s4_07.py --cargo-log cargo-test.log --matrix evidence/witness_matrix.json
           python eval/checks/impeachment_b_s4_08.py --cargo-log cargo-test.log --kits evidence/impeachment_kits.json
+          python eval/checks/rule_tables_b_s4_03.py --cargo-log cargo-test.log
+          python eval/checks/code_bridge_b_s4_09.py --cargo-log cargo-test.log --annotations evidence/code_bridge_annotations.json
 
       - name: Stage bundled portable Python
         run: ./scripts/stage_runtime_python.ps1

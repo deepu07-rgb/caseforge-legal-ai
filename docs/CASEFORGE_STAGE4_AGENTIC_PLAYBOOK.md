@@ -896,13 +896,13 @@ The answer is evidence-backed **yes** to:
 | B-S4-00b | Answer-feedback golden + Rust tests + UI | IMPLEMENTED — 5/5 gates PASS; Rust 85/85 (2026-10-08) |
 | B-S4-00 | Base install ≤ 4 GiB + default-model fitness | PARTIAL — tier infra, honest size gate, 7B requalified on Ollama 0.35.1; qwen3:4b rejected, qwen3:4b-instruct HALT (critical prompt-injection fail); base install 5.08 GiB still over cap (2026-10-08) |
 | B-S4-02 | Twelve golden sets + editor protocol | NOT STARTED |
-| B-S4-03 | Rule-table install/query + exploit suite | NOT STARTED |
+| B-S4-03 | Rule-table install/query + exploit suite | PARTIAL (core) — install-time validation, query API, 8 table exploits rejected; AC-S4-RT.1/RT.2/RT.3 PASS; pack-tool authoring deferred (2026-10-08) |
 | B-S4-04 | G-AUDIT report (IN/US) | IMPLEMENTED — AC-S4-01.1/01.2 PASS (Rust 88/88); AC-S4-01.3 BLOCKED on Q-S4-01 threshold (measured 10/10 on G-AUDIT) (2026-10-08) |
 | B-S4-05 | Certificate verify/tamper report | IMPLEMENTED — AC-S4-01.4/01.5 PASS; Rust 93/93; independent stdlib verifier (2026-10-08) |
 | B-S4-06 | G-OPPOSING report + leak audit | IMPLEMENTED — AC-S4-02.1/02.3/02.4 PASS; AC-S4-02.2 BLOCKED on Q-S4-01 threshold (measured 3/3 on G-OPPOSING); Rust 98/98; leak barrier fail-closed (2026-10-08) |
 | B-S4-07 | Matrix locator report | IMPLEMENTED — matrix cells exact (AC-S4-03.2) PASS; merge/split survive rerun PASS; schema-valid; vocabulary as built-in data until B-S4-03 (2026-10-08) |
 | B-S4-08 | G-IMPEACH precision/recall + G3 red-team | IMPLEMENTED — AC-S4-03.2/03.3/03.4 PASS; AC-S4-03.1 BLOCKED on Q-S4-01 thresholds (measured 12/12, 0 false positives on G-IMPEACH); Rust 108/108 (2026-10-08) |
-| B-S4-09 | G-CODEBRIDGE (signed) | NOT STARTED |
+| B-S4-09 | G-CODEBRIDGE (signed) | IMPLEMENTED (engine) — AC-S4-04.2/04.3 PASS on synthetic G-CODEBRIDGE; AC-S4-04.1 BLOCKED: no legal-editor-signed real succession rows (Q-S4-02); app shows "Not mapped" until a signed pack is installed (2026-10-08) |
 | B-S4-10 | G-ADMISS + integrity v1/v2 parity | NOT STARTED |
 | B-S4-11 | G-DEADLINE (signed) + property tests | NOT STARTED |
 | B-S4-12 | Timer/debrief timeline + latency | NOT STARTED |

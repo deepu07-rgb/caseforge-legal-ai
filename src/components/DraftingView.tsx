@@ -19,6 +19,7 @@ import {
 import type { CaseGraph, CaseSummary } from "../lib/ipc";
 import ProvenanceInspector from "./ProvenanceInspector";
 import { AuditPanel } from "./AuditPanel";
+import { CodeBridgePanel } from "./CodeBridgePanel";
 
 export default function DraftingView({
   activeCase,
@@ -225,6 +226,7 @@ export default function DraftingView({
           filename={`${templateId}.txt`}
         />
       )}
+      {hasMatter && activeCase && <CodeBridgePanel caseId={activeCase.case_id} text={editedBody ?? draft.body_lines.join("\n")} />}
     </div>
   );
 }

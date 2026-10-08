@@ -25,6 +25,8 @@ mod mock_court_retrieval;
 mod opposition;
 mod witness;
 mod impeach;
+mod rule_tables;
+mod code_bridge;
 mod packs;
 mod proposition;
 mod protection;
@@ -292,8 +294,108 @@ fn audit_draft(
         return Err("CF_AUDIT_EXTRACTION_FAILED: the draft is empty".into());
     }
     let mgr = vault.get_or_init(&app)?;
-    let corpus = retrieval::build_corpus(&mgr.vault_paths().map_err(|e| e.to_string())?, &[])?;
-    Ok(audit::audit(&text, &corpus, filename.as_deref().unwrap_or("draft.txt"), "drafting_surface", case_id))
+    let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
+    let corpus = retrieval::build_corpus(&paths, &[])?;
+    let mut report = audit::audit(&text, &corpus, filename.as_deref().unwrap_or("draft.txt"), "drafting_surface", case_id.clone());
+    // B-S4-09: signed succession rows add CODE_BRIDGE notes (VERIFIED_WITH_NOTE); unsigned rows change nothing.
+    let (tables, _) = rule_tables::load_installed(&paths);
+    if !tables.is_empty() {
+        let jurisdiction = case_id.as_deref().and_then(|c| case_jurisdiction(&mgr, c).ok());
+        let rows = rule_tables::query(&tables, "STATUTE_SUCCESSION", jurisdiction.as_deref(), &crate::docpipe::now_rfc3339()[..10]);
+        let dates = case_id.as_deref().map(|c| key_dates(&mgr, c)).transpose()?.unwrap_or_default();
+        code_bridge::add_audit_notes(&mut report.items, &mut report.counts, &rows, &rule_tables::index_corpus(&corpus), &dates);
+    }
+    Ok(report)
+}
+
+// --- B-S4-03 rule tables / B-S4-09 Code Bridge ---
+
+fn key_dates(mgr: &VaultManager, case_id: &str) -> Result<HashMap<String, code_bridge::KeyDate>, String> {
+    Ok(mgr
+        .witness_kv_list(case_id, "keydate:")
+        .map_err(|e| e.to_string())?
+        .into_iter()
+        .filter_map(|(_, v)| serde_json::from_value::<code_bridge::KeyDate>(v).ok())
+        .map(|d| (d.kind.clone(), d))
+        .collect())
+}
+
+#[tauri::command]
+fn rule_tables_status(app: AppHandle, vault: State<'_, VaultState>) -> Result<serde_json::Value, String> {
+    let paths = vault.get_or_init(&app)?.vault_paths().map_err(|e| e.to_string())?;
+    let (tables, rejected) = rule_tables::load_installed(&paths);
+    let list: Vec<serde_json::Value> = tables
+        .iter()
+        .map(|t| serde_json::json!({"table_id": t.table_id, "table_kind": t.table_kind, "jurisdiction": t.jurisdiction, "pack_id": t.pack_id,
+                                    "rows": t.rows.len(), "signed_rows": t.rows.iter().filter(|r| r.signed()).count()}))
+        .collect();
+    Ok(serde_json::json!({"tables": list, "rejected": rejected}))
+}
+
+#[tauri::command]
+fn code_bridge_key_dates(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<Vec<code_bridge::KeyDate>, String> {
+    let mgr = vault.get_or_init(&app)?;
+    Ok(key_dates(&mgr, &case_id)?.into_values().collect())
+}
+
+/// Counsel enters (or clears) a key date. Stored as a counsel-input record, the basis locator of every routing.
+#[tauri::command]
+fn code_bridge_set_key_date(app: AppHandle, vault: State<'_, VaultState>, case_id: String, kind: String, date: Option<String>, note: Option<String>) -> Result<(), String> {
+    let mgr = vault.get_or_init(&app)?;
+    if !code_bridge::DATE_KINDS.contains(&kind.as_str()) {
+        return Err(format!("CF_CODE_BRIDGE_DATE_KIND: {kind}"));
+    }
+    let key = format!("keydate:{kind}");
+    match date.filter(|d| !d.trim().is_empty()) {
+        None => mgr.witness_kv_delete(&case_id, &key).map_err(|e| e.to_string()),
+        Some(d) if rule_tables::is_date(&d) => {
+            let record = code_bridge::KeyDate {
+                kind: kind.clone(),
+                locator: serde_json::json!({"kind": "COUNSEL_INPUT", "entered_at": crate::docpipe::now_rfc3339(), "note": note}),
+                date: d,
+            };
+            mgr.witness_kv_put(&case_id, &key, &serde_json::to_value(&record).map_err(|e| e.to_string())?).map_err(|e| e.to_string())
+        }
+        Some(_) => Err("CF_CODE_BRIDGE_DATE: use YYYY-MM-DD".into()),
+    }
+}
+
+/// Annotates statutory references in `text` (Drafting / an opposing filing) or, without text, in the case graph's
+/// statutes. Values come only from installed STATUTE_SUCCESSION rows; with none installed every reference is UNKNOWN.
+#[tauri::command]
+fn code_bridge_annotate(app: AppHandle, vault: State<'_, VaultState>, case_id: String, text: Option<String>, context: Option<String>) -> Result<serde_json::Value, String> {
+    let mgr = vault.get_or_init(&app)?;
+    let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
+    let corpus = retrieval::build_corpus(&paths, &[])?;
+    let chunks = rule_tables::index_corpus(&corpus);
+    let (tables, rejected) = rule_tables::load_installed(&paths);
+    let jurisdiction = case_jurisdiction(&mgr, &case_id)?;
+    let rows = rule_tables::query(&tables, "STATUTE_SUCCESSION", Some(&jurisdiction), &crate::docpipe::now_rfc3339()[..10]);
+    let dates = key_dates(&mgr, &case_id)?;
+    let annotated: Vec<code_bridge::Annotated> = match text {
+        Some(t) => {
+            let ctx = match context.as_deref() {
+                Some("EXTERNAL_FILING") => "EXTERNAL_FILING",
+                _ => "DRAFT",
+            };
+            code_bridge::annotate(&t, ctx, None, &rows, &chunks, &dates)
+        }
+        None => {
+            let graph = mgr.case_graph_get(&case_id).map_err(|e| e.to_string())?.unwrap_or_else(|| serde_json::json!({}));
+            graph["statutes"]
+                .as_array()
+                .into_iter()
+                .flatten()
+                .flat_map(|s| {
+                    let label = s.get("citation_raw").and_then(|v| v.as_str()).or_else(|| s.get("label").and_then(|v| v.as_str())).unwrap_or("");
+                    code_bridge::annotate(label, "CASE_GRAPH", s.get("statute_id").and_then(|v| v.as_str()), &rows, &chunks, &dates)
+                })
+                .collect()
+        }
+    };
+    let signed_rows = rows.iter().filter(|r| r.signed()).count();
+    Ok(serde_json::json!({"pipeline_id": code_bridge::PIPELINE_ID, "annotations": annotated, "succession_rows": rows.len(), "signed_rows": signed_rows,
+                          "rejected_tables": rejected, "key_dates": dates.into_values().collect::<Vec<_>>()}))
 }
 
 /// B-S4-05: sign an Audit Certificate for an audit report and the exact draft text it was run on.
@@ -429,7 +531,12 @@ fn witness_propose(app: AppHandle, vault: State<'_, VaultState>, case_id: String
 #[tauri::command]
 fn witness_register_list(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<serde_json::Value, String> {
     let mgr = vault.get_or_init(&app)?;
-    let kinds: Vec<serde_json::Value> = witness::VOCAB.kinds().iter().map(|k| serde_json::json!({"kind": k.kind, "label": k.label, "jurisdiction": k.jurisdiction})).collect();
+    let jurisdiction = case_jurisdiction(&mgr, &case_id)?;
+    let kinds: Vec<serde_json::Value> = witness::VOCAB
+        .kinds()
+        .iter()
+        .map(|k| serde_json::json!({"kind": k.kind, "label": k.label, "jurisdiction": k.jurisdiction, "applies": witness::VOCAB.kind_applies(k, &jurisdiction)}))
+        .collect();
     let decisions: Vec<serde_json::Value> = witness_decisions(&mgr, &case_id)?.into_iter().map(|(key, d, active)| serde_json::json!({"key": key, "decision": d, "active": active})).collect();
     Ok(serde_json::json!({"register": witness_register(&mgr, &case_id)?, "decisions": decisions, "statement_kinds": kinds,
                           "vocabulary": {"pack_id": witness::VOCAB.pack_id, "table_id": witness::VOCAB.table_id}}))
@@ -487,7 +594,7 @@ fn witness_decision_revoke(app: AppHandle, vault: State<'_, VaultState>, case_id
 #[tauri::command]
 fn witness_matrix_build(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<serde_json::Value, String> {
     let mgr = vault.get_or_init(&app)?;
-    let us = witness::is_us(&case_jurisdiction(&mgr, &case_id)?);
+    let us = witness::month_first(&case_jurisdiction(&mgr, &case_id)?);
     let register = witness_register(&mgr, &case_id)?;
     let decisions: Vec<witness::Decision> = witness_decisions(&mgr, &case_id)?.into_iter().filter(|d| d.2).map(|d| d.1).collect();
     let (witnesses, stale) = witness::resolve(&register, &decisions);
@@ -553,7 +660,7 @@ fn impeach_finding_status(app: AppHandle, vault: State<'_, VaultState>, case_id:
 #[tauri::command]
 fn impeach_model_scan(app: AppHandle, vault: State<'_, VaultState>, case_id: String, witness_id: String) -> Result<serde_json::Value, String> {
     let mgr = vault.get_or_init(&app)?;
-    let us = witness::is_us(&case_jurisdiction(&mgr, &case_id)?);
+    let us = witness::month_first(&case_jurisdiction(&mgr, &case_id)?);
     let register = witness_register(&mgr, &case_id)?;
     let decisions: Vec<witness::Decision> = witness_decisions(&mgr, &case_id)?.into_iter().filter(|d| d.2).map(|d| d.1).collect();
     let (witnesses, _) = witness::resolve(&register, &decisions);
@@ -3331,6 +3438,10 @@ pub fn run() {
             witness_matrix_build,
             impeach_finding_status,
             impeach_model_scan,
+            rule_tables_status,
+            code_bridge_key_dates,
+            code_bridge_set_key_date,
+            code_bridge_annotate,
             llm_tiers,
             llm_set_tier,
             llm_chat,
