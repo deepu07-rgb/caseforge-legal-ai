@@ -32,20 +32,27 @@ differs, and every passage read back is verified against its own SHA-256 before 
 removed. Index files in the user's vault are as trustworthy as the vault itself (a local attacker with vault write
 access could alter filter codes); passage text cannot be altered undetected.
 
-## Measured (GitHub Actions Linux runner, `store-bench.yml`, 51 signed Central Acts packs, 34,217 passages)
+## Measured (GitHub Actions Linux runner, `store-bench.yml`, real signed packs installed through the real installer)
 
-| | On-disk store | Previous path |
-|---|---|---|
-| First use (build all indexes) | 6.8 s, once per pack version | – |
-| Open on later runs | 0.09 s | 0.8 s to load all passages |
-| One question | median 87 ms, max 113 ms | 4.8 s |
-| Process memory (RSS, whole benchmark) | 101 MB | 223 MB after loading all passages |
+| | Central Acts only (51 packs, 34,217 passages) | Everything (55 packs, 71,714 passages) | Previous path, everything |
+|---|---|---|---|
+| Install all packs | 9.5 s | 16.2 s | – |
+| First use (build indexes), once per pack version | 6.8 s | 19.6 s | – |
+| Open on later runs | 0.09 s | 0.13 s | 6.7 s (load all passages) |
+| One question | median 87 ms, max 113 ms | median 70 ms, max 93 ms | 12.9 s |
+| Process memory (RSS, whole benchmark) | 101 MB | 165 MB (peak 201 MB, includes installing) | 427 MB (peak 441 MB) |
 
-The previous path grows linearly with installed material; the store's per-question cost grows with the number of
-candidates, not with the corpus.
+"Everything" = 51 Central Acts packs + 3 landmark judgment parts (600 most-cited) + the 400 newest born-digital
+judgments. The previous path grows linearly with installed material (12.9 s per question at this size); the store's
+per-question cost grows with the number of candidates, not with the corpus.
+
+Installing the real packs found three defects in the pack pipeline that the Python validators had missed, all fixed:
+a headnote scan that rejected a statute proviso ("shall be held:"), duplicate judgments in the corpus, and reporter
+headnote sign-offs left in judgment text (see `packs::headnote_scan_pack`, `eval/tools/pack_dedupe.py`,
+`eval/tools/build_judgment_packs.py`).
 
 ## Not yet covered
 
 `build_corpus` (whole-corpus load) is still used by the citation audit, opposition scan, rule-table validation and the
 Code Bridge, which run on occasional actions rather than on every search. They work, but load every installed
-passage each time they run (about 0.8 s and 120 MB per 34k passages). Phase 2 moves them to store lookups.
+passage each time they run (about 7 s and 250 MB at 72k passages). Phase 2 moves them to store lookups.
