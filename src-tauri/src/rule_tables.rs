@@ -33,7 +33,6 @@ pub struct ChunkRef {
     pub source_id: String,
     pub trust_level: String,
     pub text: String,
-    pub title: String,
 }
 
 pub type ChunkIndex = HashMap<String, ChunkRef>;
@@ -42,7 +41,7 @@ pub fn index_corpus(corpus: &[CorpusChunk]) -> ChunkIndex {
     corpus
         .iter()
         .map(|c| {
-            (c.chunk_id.clone(), ChunkRef { pack_id: c.pack_id.clone(), source_id: c.metadata.source_id.clone(), trust_level: c.metadata.trust_level.clone(), text: c.text.clone(), title: c.metadata.title.clone() })
+            (c.chunk_id.clone(), ChunkRef { pack_id: c.pack_id.clone(), source_id: c.metadata.source_id.clone(), trust_level: c.metadata.trust_level.clone(), text: c.text.clone() })
         })
         .collect()
 }
@@ -264,7 +263,7 @@ pub fn validate_pack(paths: &VaultPaths, pack_dir: &Path, man: &PackManifest) ->
     precheck_manifest(man)?;
     let mut index = crate::retrieval::build_corpus(paths, &[]).map(|c| index_corpus(&c)).unwrap_or_default();
     for c in packs::load_legal_chunks(pack_dir)? {
-        index.insert(c.chunk_id.clone(), ChunkRef { pack_id: c.pack_id, source_id: c.source_id, trust_level: c.trust_level, text: c.exact_text, title: c.title });
+        index.insert(c.chunk_id.clone(), ChunkRef { pack_id: c.pack_id, source_id: c.source_id, trust_level: c.trust_level, text: c.exact_text });
     }
     for file in &man.rule_tables_files {
         validate_file(pack_dir, man, file, &index)?;
@@ -328,7 +327,7 @@ pub(crate) mod tests {
             .iter()
             .map(|c| {
                 let s = |k: &str| c[k].as_str().unwrap().to_string();
-                (s("chunk_id"), ChunkRef { pack_id: s("pack_id"), source_id: s("source_id"), trust_level: s("trust_level"), text: s("text"), title: s("title") })
+                (s("chunk_id"), ChunkRef { pack_id: s("pack_id"), source_id: s("source_id"), trust_level: s("trust_level"), text: s("text") })
             })
             .collect()
     }
@@ -363,7 +362,7 @@ pub(crate) mod tests {
         let idx = index(&fx);
         for x in fx["rule_table_exploits"].as_array().unwrap() {
             let mut t = fx["rule_table"].clone();
-            for p in x["patch"].as_array().unwrap() {
+            for p in x.get("patch").and_then(Value::as_array).into_iter().flatten() {
                 *t.pointer_mut(p["path"].as_str().unwrap()).unwrap_or_else(|| panic!("{x}")) = p["value"].clone();
             }
             if let Some(copy) = x.get("append_row_copy") {
