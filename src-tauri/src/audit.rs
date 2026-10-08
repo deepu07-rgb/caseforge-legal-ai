@@ -142,6 +142,10 @@ static ACT_SECTION: Lazy<Regex> = Lazy::new(|| {
 });
 static BARE_ACT: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"\b([A-Z][A-Za-z]*(?:\s+[A-Z][A-Za-z]*)*\s+Act,?\s+\d{4})").unwrap());
+/// "Section 34 of the " immediately before an installed title; ", s. 302" immediately after one.
+static TITLE_BEFORE: Lazy<Regex> =
+    Lazy::new(|| Regex::new(r"(?:[Ss]ection|[Ss]ec\.|s\.)\s*(\d{1,4}[A-Z]?)(?:\s*\(\d+\))?\s+of\s+(?:the\s+)?$").unwrap());
+static TITLE_AFTER: Lazy<Regex> = Lazy::new(|| Regex::new(r"^,?\s*(?:ss?\.|[Ss]ection|[Ss]ec\.)\s*(\d{1,4}[A-Z]?)").unwrap());
 static CURLY_QUOTE: Lazy<Regex> = Lazy::new(|| Regex::new(r"\u{201C}([^\u{201D}]+)\u{201D}").unwrap());
 static STRAIGHT_QUOTE: Lazy<Regex> = Lazy::new(|| Regex::new(r#""([^"]+)""#).unwrap());
 static WORD: Lazy<Regex> = Lazy::new(|| Regex::new(r"\S+").unwrap());
@@ -379,19 +383,66 @@ fn extract_citations(text: &str, sources: &[Source]) -> Vec<Candidate> {
         out.push(Candidate { start: m.start(), end, rule: "reporter", citation_kind: kind, name: m.as_str().to_string(), pinpoint });
     }
     // Corpus-driven: literal citation strings of installed sources ("Act No. 4 of 1893", "CF-MEMO-7", ...).
+    // ASCII case-folding keeps byte offsets; no pattern is compiled per source (hundreds of Acts may be installed).
+    let lower = text.to_ascii_lowercase();
     for s in sources {
-        let needle = s.citation.trim();
+        let needle = s.citation.trim().to_ascii_lowercase();
         if needle.chars().count() < 5 {
             continue;
         }
-        let Ok(re) = Regex::new(&format!("(?i){}", regex::escape(needle))) else { continue };
-        for m in re.find_iter(text) {
-            if !overlaps(&out, m.start(), m.end()) {
+        for (i, _) in lower.match_indices(&needle) {
+            if !overlaps(&out, i, i + needle.len()) {
                 let kind = if s.authority_type == "STATUTE" { "STATUTE" } else { "OTHER" };
-                out.push(Candidate { start: m.start(), end: m.end(), rule: "corpus.literal_citation", citation_kind: kind, name: m.as_str().to_string(), pinpoint: None });
+                out.push(Candidate { start: i, end: i + needle.len(), rule: "corpus.literal_citation", citation_kind: kind, name: text[i..i + needle.len()].to_string(), pinpoint: None });
             }
         }
     }
+    // Corpus-driven: the installed Act or Code's own title, whatever its wording ("Arbitration and Conciliation Act, 1996",
+    // "Indian Penal Code, 1860"), with the section named just before or after it. The generic patterns above need every
+    // word capitalised and the name to end in "Act", so they cut such names short or miss them. A title match replaces
+    // overlapping candidates that do not resolve to an installed source; a candidate that resolves is kept as it is.
+    let mut titled: Vec<Candidate> = Vec::new();
+    for s in sources.iter().filter(|s| s.authority_type == "STATUTE") {
+        let title = s.title.trim();
+        let title = title.strip_prefix("The ").or_else(|| title.strip_prefix("the ")).unwrap_or(title);
+        let needle = title.to_ascii_lowercase();
+        if needle.chars().count() < 10 {
+            continue;
+        }
+        for (i, _) in lower.match_indices(&needle) {
+            let (mut start, mut end) = (i, i + needle.len());
+            let alnum = |b: Option<&u8>| b.map(|b| b.is_ascii_alphanumeric()).unwrap_or(false);
+            if (start > 0 && alnum(text.as_bytes().get(start - 1))) || alnum(text.as_bytes().get(end)) {
+                continue;
+            }
+            let mut pinpoint = None;
+            let mut lo = start.saturating_sub(60);
+            while !text.is_char_boundary(lo) {
+                lo += 1;
+            }
+            if let Some(c) = TITLE_BEFORE.captures(&text[lo..start]) {
+                pinpoint = Some(c[1].to_string());
+                start = lo + c.get(0).unwrap().start();
+            } else if let Some(c) = TITLE_AFTER.captures(&text[end..]) {
+                pinpoint = Some(c[1].to_string());
+                end += c.get(0).unwrap().end();
+            }
+            titled.push(Candidate { start, end, rule: "corpus.title", citation_kind: "STATUTE", name: text[i..i + needle.len()].to_string(), pinpoint });
+        }
+    }
+    titled.sort_by_key(|c| std::cmp::Reverse(c.end - c.start)); // the longest title wins over a shorter one inside it
+    let mut accepted: Vec<Candidate> = Vec::new();
+    for t in titled {
+        if overlaps(&accepted, t.start, t.end) {
+            continue;
+        }
+        let blocked = out.iter().any(|c| c.start < t.end && t.start < c.end && resolve(c, sources).is_some());
+        if !blocked {
+            out.retain(|c| !(c.start < t.end && t.start < c.end));
+            accepted.push(t);
+        }
+    }
+    out.extend(accepted);
     out.sort_by_key(|c| c.start);
     out
 }
@@ -783,6 +834,38 @@ mod tests {
             };
             assert_eq!(strip(whole), strip(stored), "draft: {text}");
         }
+    }
+
+    #[test]
+    fn installed_titles_are_recognised_with_their_sections() {
+        let cp = |id: &str, title: &str, citation: &str, text: &str| {
+            chunk(&serde_json::json!({
+                "chunk_id": id, "pack_id": "p", "source_id": id, "title": title, "citation": citation, "authority_type": "STATUTE", "text": text,
+                "trust_level": "OFFICIAL_VERIFIED", "superseded_status": "CURRENT", "temporal_status": "APPLICABLE", "page": 1, "paragraph": "1"
+            }))
+        };
+        let corpus = vec![
+            cp("a", "The Arbitration and Conciliation Act, 1996", "Act No. 26 of 1996", "34. Application for setting aside arbitral award.\u{2014} Recourse to a Court may be made only by an application."),
+            cp("b", "The Indian Penal Code, 1860", "Act No. 45 of 1860", "302. Punishment for murder.\u{2014} Whoever commits murder shall be punished with death or imprisonment for life."),
+            cp("c", "The Code of Criminal Procedure, 1973", "Act No. 2 of 1974", "438. Direction for grant of bail to person apprehending arrest."),
+        ];
+        let text = "Section 34 of the Arbitration and Conciliation Act, 1996 permits setting aside; see the Indian Penal Code, 1860, s. 302 and Code of Criminal Procedure, 1973 s. 438; but the Imaginary Code Act, 2099 is unknown.";
+        let report = audit(text, &corpus, "t.txt", "txt", None);
+        check(
+            "TITLES",
+            text,
+            &report,
+            &[
+                serde_json::json!({"match": "Section 34 of the Arbitration and Conciliation Act, 1996", "kind": "CITATION", "result": "VERIFIED", "pinpoint": "MATCH"}),
+                serde_json::json!({"match": "Indian Penal Code, 1860, s. 302", "kind": "CITATION", "result": "VERIFIED", "pinpoint": "MATCH"}),
+                serde_json::json!({"match": "Code of Criminal Procedure, 1973 s. 438", "kind": "CITATION", "result": "VERIFIED", "pinpoint": "MATCH"}),
+                serde_json::json!({"match": "Imaginary Code Act, 2099", "kind": "CITATION", "result": "NOT_IN_CORPUS"}),
+            ],
+        );
+        // A citation of a section the Act does not have is reported, not accepted.
+        let text = "See Section 999 of the Indian Penal Code, 1860.";
+        let report = audit(text, &corpus, "t.txt", "txt", None);
+        check("TITLES2", text, &report, &[serde_json::json!({"match": "Section 999 of the Indian Penal Code, 1860", "kind": "CITATION", "result": "VERIFIED", "pinpoint": "MISMATCH"})]);
     }
 
     #[test]
