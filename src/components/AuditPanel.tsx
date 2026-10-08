@@ -6,7 +6,7 @@ import { CertificatePanel, VerifyCertificatePanel } from "./CertificatePanel";
  * B-S4-04: audit every citation and quotation in the draft against the installed legal packs.
  * "Not in installed packs" is a repository gap, never a claim that the authority does not exist.
  */
-const RESULT_LABEL: Record<AuditResult, { text: string; tone: "ok" | "warn" | "bad" | "info" }> = {
+export const RESULT_LABEL: Record<AuditResult, { text: string; tone: "ok" | "warn" | "bad" | "info" }> = {
   VERIFIED: { text: "Verified", tone: "ok" },
   VERIFIED_WITH_NOTE: { text: "Verified (see note)", tone: "ok" },
   MISQUOTED: { text: "Misquoted", tone: "bad" },
@@ -15,14 +15,14 @@ const RESULT_LABEL: Record<AuditResult, { text: string; tone: "ok" | "warn" | "b
   NOT_APPLICABLE: { text: "Not applicable / status unknown", tone: "warn" },
   CUSTOM_SOURCE: { text: "Custom source only", tone: "info" },
 };
-const TONE = { ok: "var(--ok, #2f7d4f)", warn: "var(--warn, #9a6a00)", bad: "var(--danger, #a33a2b)", info: "var(--muted, #5b6470)" };
-const ORDER: AuditResult[] = ["MISQUOTED", "NOT_IN_CORPUS", "SUPERSEDED", "NOT_APPLICABLE", "CUSTOM_SOURCE", "VERIFIED_WITH_NOTE", "VERIFIED"];
+export const TONE = { ok: "var(--ok, #2f7d4f)", warn: "var(--warn, #9a6a00)", bad: "var(--danger, #a33a2b)", info: "var(--muted, #5b6470)" };
+export const AUDIT_ORDER: AuditResult[] = ["MISQUOTED", "NOT_IN_CORPUS", "SUPERSEDED", "NOT_APPLICABLE", "CUSTOM_SOURCE", "VERIFIED_WITH_NOTE", "VERIFIED"];
 
-function Diff({ item }: { item: AuditItem }) {
+function Diff({ item, whose }: { item: AuditItem; whose: string }) {
   if (!item.misquote) return null;
   return (
     <div style={{ marginTop: 4, fontSize: "0.8rem" }}>
-      <span className="muted">Source wording vs. your quotation: </span>
+      <span className="muted">Source wording vs. {whose} quotation: </span>
       {item.misquote.diff_ops.map((op, i) => (
         <span
           key={i}
@@ -33,7 +33,7 @@ function Diff({ item }: { item: AuditItem }) {
                 ? { background: "rgba(163,58,43,0.15)", textDecoration: "line-through" }
                 : undefined
           }
-          title={op.op === "DELETE" ? "in the source, missing from your quotation" : op.op === "INSERT" ? "in your quotation, not in the source" : undefined}
+          title={op.op === "DELETE" ? `in the source, missing from ${whose} quotation` : op.op === "INSERT" ? `in ${whose} quotation, not in the source` : undefined}
         >
           {op.text}{" "}
         </span>
@@ -42,7 +42,7 @@ function Diff({ item }: { item: AuditItem }) {
   );
 }
 
-function Row({ item }: { item: AuditItem }) {
+export function AuditRow({ item, whose = "your" }: { item: AuditItem; whose?: string }) {
   const label = RESULT_LABEL[item.result];
   const loc = item.resolved;
   return (
@@ -61,7 +61,7 @@ function Row({ item }: { item: AuditItem }) {
           {item.result !== "MISQUOTED" && <div style={{ whiteSpace: "pre-wrap" }}>"{loc.excerpt.slice(0, 220)}{loc.excerpt.length > 220 ? "…" : ""}"</div>}
         </div>
       )}
-      <Diff item={item} />
+      <Diff item={item} whose={whose} />
     </li>
   );
 }
@@ -83,7 +83,7 @@ export function AuditPanel({ text, caseId, filename }: { text: string; caseId?: 
     }
   }
 
-  const items = report ? [...report.items].sort((a, b) => ORDER.indexOf(a.result) - ORDER.indexOf(b.result) || a.draft_char_start - b.draft_char_start) : [];
+  const items = report ? [...report.items].sort((a, b) => AUDIT_ORDER.indexOf(a.result) - AUDIT_ORDER.indexOf(b.result) || a.draft_char_start - b.draft_char_start) : [];
   return (
     <div className="card" style={{ gridColumn: "1 / -1" }}>
       <div className="row" style={{ justifyContent: "space-between", alignItems: "baseline" }}>
@@ -99,7 +99,7 @@ export function AuditPanel({ text, caseId, filename }: { text: string; caseId?: 
       {report && (
         <>
           <div style={{ fontSize: "0.85rem", marginBottom: 6 }}>
-            {ORDER.filter((r) => report.counts[r] > 0).map((r) => (
+            {AUDIT_ORDER.filter((r) => report.counts[r] > 0).map((r) => (
               <span key={r} style={{ marginRight: 12, color: TONE[RESULT_LABEL[r].tone] }}>
                 {RESULT_LABEL[r].text}: {report.counts[r]}
               </span>
@@ -109,7 +109,7 @@ export function AuditPanel({ text, caseId, filename }: { text: string; caseId?: 
           {report.pack_snapshot.length === 0 && <div className="notice warn">No legal packs are installed, so nothing can be verified yet.</div>}
           <ul style={{ paddingLeft: "1.1rem", margin: 0 }}>
             {items.map((item) => (
-              <Row key={item.item_id} item={item} />
+              <AuditRow key={item.item_id} item={item} />
             ))}
           </ul>
           <div className="muted mono" style={{ fontSize: "0.7rem", marginTop: 6 }}>

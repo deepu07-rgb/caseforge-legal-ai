@@ -72,13 +72,15 @@ jobs:
           python eval/checks/contracts_b_s4_01.py
           python eval/checks/injection_guard_b_s4_00.py
 
-      - name: Rust unit tests (+ answer-feedback gate from their log)
+      - name: Rust unit tests (+ Stage 4 gates from their log)
         run: |
+          $env:CASEFORGE_EVIDENCE_DIR = (New-Item -ItemType Directory -Force evidence).FullName
           cargo test --manifest-path src-tauri/Cargo.toml --lib 2>&1 | Tee-Object -FilePath cargo-test.log
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python eval/checks/answer_feedback_b_s4_00b.py --cargo-log cargo-test.log
           python eval/checks/citation_audit_b_s4_04.py --cargo-log cargo-test.log
           python eval/checks/certificate_b_s4_05.py --cargo-log cargo-test.log
+          python eval/checks/opposing_scan_b_s4_06.py --cargo-log cargo-test.log --record evidence/opposing_scan_record.json
 
       - name: Stage bundled portable Python
         run: ./scripts/stage_runtime_python.ps1

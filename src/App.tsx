@@ -17,6 +17,7 @@ import LicenceView from "./components/LicenceView";
 import ProtectionView from "./components/ProtectionView";
 import GuardrailsView from "./components/GuardrailsView";
 import WorkflowJourney from "./components/WorkflowJourney";
+import OppositionView from "./components/OppositionView";
 import { ModelTierSelector } from "./components/ModelTierSelector";
 import {
   deriveLawyerWorkflow,
@@ -150,6 +151,7 @@ type NavId =
   | "protection"
   | "guardrails"
   | "court"
+  | "opposition"
   | "library"
   | "practice"
   | "settings";
@@ -176,6 +178,7 @@ const NAV: { id: NavId; label: string; section?: string; badge?: string }[] = [
   { id: "voice", label: "Voice" },
   { id: "experience", label: "Experience" },
   { id: "court", label: "Mock Court" },
+  { id: "opposition", label: "Opponent's Filing" },
   { id: "practice", label: "Integrity lab" },
   { id: "library", label: "Legal Authorities", section: "Library" },
   { id: "licence", label: "Licence", section: "App" },
@@ -183,7 +186,7 @@ const NAV: { id: NavId; label: string; section?: string; badge?: string }[] = [
   { id: "guardrails", label: "Guardrails" },
   { id: "settings", label: "System" },
 ];
-const PRIMARY_NAV_IDS:NavId[]=["home","cases","workspace","digest","library","integrity","court"];
+const PRIMARY_NAV_IDS:NavId[]=["home","cases","workspace","digest","library","integrity","court","opposition"];
 const ADVANCED_NAV_IDS:NavId[]=["builder","voice","experience","practice","licence","protection","guardrails","settings"];
 const PRIMARY_NAV=NAV.filter(item=>PRIMARY_NAV_IDS.includes(item.id));
 const ADVANCED_NAV=NAV.filter(item=>ADVANCED_NAV_IDS.includes(item.id));
@@ -250,6 +253,8 @@ function titleFor(nav: NavId): { title: string; sub: string } {
       };
     case "court":
       return { title: "Mock Court", sub: "Argue · bench prep · adversary drill" };
+    case "opposition":
+      return { title: "Opponent's Filing", sub: "Check their citations, record conflicts and new arguments · never added to your facts" };
     case "library":
       return { title: "Legal Authorities", sub: "Confirm the applicable law and source-backed working set" };
     case "practice":
@@ -1925,6 +1930,15 @@ export default function App() {
               onOpenCase={(id) => void openCase(id)}
               onRefreshLlm={() => void refreshLlm()}
               initialInsightTab={courtInitialPanel}
+            />
+          )}
+
+          {nav === "opposition" && (
+            <OppositionView
+              activeCase={activeCase}
+              documents={documents}
+              onDocumentsChanged={() => { if (activeCase) void refreshDocs(activeCase.case_id); }}
+              onNavigate={(target) => setNav(target)}
             />
           )}
 

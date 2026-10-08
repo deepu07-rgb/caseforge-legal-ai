@@ -10,7 +10,7 @@ use std::path::Path;
 pub const ALLOWED_EXTENSIONS: &[&str] = &["pdf", "docx", "jpg", "jpeg", "png", "txt"];
 
 /// Suggested type tags from extension (stub only — not AC-5.1 ML).
-pub const TYPE_TAG_SUGGESTIONS: &[&str] = &["PDF", "DOCX", "JPG", "PNG", "TXT", "OTHER"];
+pub const TYPE_TAG_SUGGESTIONS: &[&str] = &["PDF", "DOCX", "JPG", "PNG", "TXT", "OTHER", "EXTERNAL_FILING"];
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DocumentMeta {

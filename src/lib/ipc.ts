@@ -2633,6 +2633,43 @@ export async function auditDraft(text: string, filename?: string | null, caseId?
   return invoke<AuditReport>("audit_draft", { text, filename: filename ?? null, caseId: caseId ?? null });
 }
 
+// --- B-S4-06 Opposing Filing Scan ---
+export type FilingKind = "PLEADING" | "BRIEF" | "REPLY" | "WRITTEN_SUBMISSION" | "AFFIDAVIT" | "OTHER";
+export interface FilingLocator { doc_id: string; page_index: number | null; char_start: number; char_end: number; excerpt: string }
+export interface RecordConflict {
+  conflict_id: string;
+  assertion_id: string;
+  record_fact_node_id: string;
+  filing_locator: FilingLocator;
+  record_locator: FilingLocator;
+  record_origin: "SOURCED_BY_COUNSEL" | "EXTRACTED" | "USER_EDIT";
+  basis: "DATE" | "AMOUNT" | "NAME" | "PRESENCE" | "OTHER";
+  proposition_ids: string[];
+}
+export interface ExternalFiling {
+  schema_version: "1.0.0";
+  doc_id: string;
+  type_tag: "EXTERNAL_FILING";
+  filing_party_id: string;
+  filing_kind: FilingKind;
+  filed_on: string | null;
+  trust: "UNTRUSTED_ADVERSE";
+  assertions: { assertion_id: string; polarity: "ASSERTS" | "DENIES"; text: string; locator: FilingLocator; record_support_cited: boolean; graph_edge_id: string | null }[];
+  scan: {
+    audit_report_id: string;
+    record_conflicts: RecordConflict[];
+    unsupported_assertion_ids: string[];
+    new_arguments: { argument_id: string; summary: string; locator: FilingLocator; matched_tree_node_id: string | null }[];
+  };
+}
+export interface OppositionScanResult { pipeline_id: string; stale_graph: boolean; filing: ExternalFiling; audit: AuditReport }
+
+export async function oppositionScan(args: { caseId: string; filingPartyId: string; filingKind: FilingKind; docId?: string | null; text?: string | null }): Promise<OppositionScanResult> {
+  return invoke<OppositionScanResult>("opposition_scan", {
+    caseId: args.caseId, filingPartyId: args.filingPartyId, filingKind: args.filingKind, docId: args.docId ?? null, text: args.text ?? null,
+  });
+}
+
 // --- B-S4-05 Audit Certificate ---
 export interface CertificateVerifyOutcome {
   valid: boolean;

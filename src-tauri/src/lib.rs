@@ -22,6 +22,7 @@ mod integrity;
 mod licence;
 mod mock_court;
 mod mock_court_retrieval;
+mod opposition;
 mod packs;
 mod proposition;
 mod protection;
@@ -314,6 +315,45 @@ fn audit_certificate_issue(
 fn audit_certificate_verify(certificate_json: String, draft_text: Option<String>) -> Result<certificate::VerifyOutcome, String> {
     let cert: serde_json::Value = serde_json::from_str(&certificate_json).map_err(|e| format!("CF_AUDIT_CERT_SIGNATURE_INVALID: not a certificate JSON ({e})"))?;
     Ok(certificate::verify(&cert, draft_text.as_deref()))
+}
+
+/// B-S4-06: Opposing Filing Scan. Scans pasted text, or a document tagged EXTERNAL_FILING, against the case record.
+/// Read-only: nothing from the filing is written to the case graph.
+#[tauri::command]
+fn opposition_scan(
+    app: AppHandle,
+    vault: State<'_, VaultState>,
+    case_id: String,
+    filing_party_id: String,
+    filing_kind: String,
+    doc_id: Option<String>,
+    text: Option<String>,
+) -> Result<serde_json::Value, String> {
+    let mgr = vault.get_or_init(&app)?;
+    let (doc_id, filename, pages) = match (doc_id, text) {
+        (Some(id), _) => {
+            let (name, pages) = crate::docpipe::external_filing_pages(&mgr, &case_id, &id)?;
+            (id, name, pages)
+        }
+        (None, Some(t)) if !t.trim().is_empty() => ("pasted-filing".to_string(), "pasted_filing.txt".to_string(), vec![t]),
+        _ => return Err("CF_AUDIT_EXTRACTION_FAILED: paste the opponent's filing or pick a document tagged EXTERNAL_FILING".into()),
+    };
+    let graph = mgr.case_graph_get(&case_id).map_err(|e| e.to_string())?.unwrap_or_else(|| serde_json::json!({}));
+    let stale_graph = opposition::graph_cites_doc(&graph, &doc_id);
+    let tree = mgr.argument_tree_get(&case_id).map_err(|e| e.to_string())?;
+    let corpus = retrieval::build_corpus(&mgr.vault_paths().map_err(|e| e.to_string())?, &[])?;
+    let (record, report) = opposition::scan(opposition::ScanInput {
+        doc_id: &doc_id,
+        filing_party_id: &filing_party_id,
+        filing_kind: &filing_kind,
+        filename: &filename,
+        pages: &pages,
+        graph: &graph,
+        argument_tree: tree.as_ref(),
+        corpus: &corpus,
+        case_id: Some(case_id),
+    });
+    Ok(serde_json::json!({"pipeline_id": opposition::PIPELINE_ID, "stale_graph": stale_graph, "filing": record, "audit": report}))
 }
 
 #[tauri::command]
@@ -2107,7 +2147,13 @@ fn case_llm_support_sources(
     max_chars: Option<u64>,
 ) -> Result<Vec<proposition::SupportSource>, String> {
     let manager = vault.get_or_init(&app)?;
-    let docs = manager.doc_list(&case_id).map_err(|e| e.to_string())?;
+    // B-S4-06: an opponent's filing (EXTERNAL_FILING) is never support for counsel's own propositions.
+    let docs: Vec<DocumentMeta> = manager
+        .doc_list(&case_id)
+        .map_err(|e| e.to_string())?
+        .into_iter()
+        .filter(|d| d.type_tag != crate::docpipe::EXTERNAL_FILING_TAG)
+        .collect();
     let limit = max_chars.unwrap_or(24_000).clamp(500, 24_000) as usize;
     let per = if docs.is_empty() {
         limit
@@ -3051,6 +3097,7 @@ pub fn run() {
             audit_draft,
             audit_certificate_issue,
             audit_certificate_verify,
+            opposition_scan,
             llm_tiers,
             llm_set_tier,
             llm_chat,

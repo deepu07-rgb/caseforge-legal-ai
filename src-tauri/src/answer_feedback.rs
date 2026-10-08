@@ -149,7 +149,7 @@ pub fn extract_amounts(text: &str) -> Vec<String> {
     AMOUNT.captures_iter(text).map(|c| c[1].replace(',', "")).collect()
 }
 
-fn keywords(text: &str) -> HashSet<String> {
+pub(crate) fn keywords(text: &str) -> HashSet<String> {
     let lower = text.to_lowercase();
     WORD.find_iter(&lower)
         .map(|m| m.as_str())

@@ -992,8 +992,13 @@ impl VaultManager {
     }
 
     /// Concatenate text previews for all docs in a case (for local reasoner context).
+    /// B-S4-06: documents tagged EXTERNAL_FILING (the opponent's filings) are excluded — they are adverse assertions, not matter context.
     pub fn case_llm_context(&self, case_id: &str, max_chars_total: usize) -> VaultResult<String> {
-        let list = self.doc_list(case_id)?;
+        let list: Vec<DocumentMeta> = self
+            .doc_list(case_id)?
+            .into_iter()
+            .filter(|d| d.type_tag != crate::docpipe::EXTERNAL_FILING_TAG)
+            .collect();
         let max_chars_total = max_chars_total.clamp(500, 60_000);
         let mut out = String::new();
         let mut bounded = false;

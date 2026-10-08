@@ -12,7 +12,7 @@ pub use skeleton::{assert_extracted_sources, extract_case_graph};
 pub use triage::{classify_document_bytes, CLASSIFIER_ID, TRIAGE_CLASSES};
 
 use serde::Serialize;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
@@ -923,6 +923,16 @@ pub fn start_skeleton_job(
             &format!("extracting skeleton from {} page(s)", pages.len()),
         );
         thread::sleep(Duration::from_millis(20));
+        // B-S4-06 leak barrier: an opponent's filing is adverse assertion, never matter fact.
+        let external = match external_doc_ids(&vault_t, &case_t) {
+            Ok(ids) => ids,
+            Err(e) => {
+                fail_job(&state_t, &job_id_t, &e);
+                emit(100, "failed");
+                return;
+            }
+        };
+        let pages = exclude_external_pages(pages, &external);
         let graph =
             extract_case_graph(&case_t, &jurisdiction, &pages, CLASSIFIER_ID, RECOGNIZER_ID);
         let defects = assert_extracted_sources(&graph);
@@ -1108,6 +1118,8 @@ fn run_unit(
                     });
                 }
             }
+            // B-S4-06 leak barrier: an opponent's filing is adverse assertion, never matter fact.
+            let pages = exclude_external_pages(pages, &external_doc_ids(vault, case_id)?);
             let graph = extract_case_graph(
                 case_id,
                 &profile.jurisdiction,
@@ -1439,5 +1451,63 @@ pub fn docpipe_meta() -> DocpipeMeta {
             "cloud_queue",
             "graph_model_inference",
         ],
+    }
+}
+
+
+/// Document type tag for an opponent's filing (B-S4-06). Its text is adverse assertion, never matter fact.
+pub const EXTERNAL_FILING_TAG: &str = "EXTERNAL_FILING";
+
+/// Doc ids tagged as external filings in this case. Fails closed: if the document list cannot be read, the graph
+/// build stops rather than risk an opponent's filing being extracted as matter fact.
+pub(crate) fn external_doc_ids(vault: &crate::vault::VaultManager, case_id: &str) -> Result<HashSet<String>, String> {
+    vault
+        .doc_list(case_id)
+        .map(|docs| docs.into_iter().filter(|d| d.type_tag == EXTERNAL_FILING_TAG).map(|d| d.doc_id).collect())
+        .map_err(|e| format!("CF_AUDIT_EXTERNAL_ASSERTION_LEAK: cannot confirm which documents are external filings ({e}); case graph not rebuilt"))
+}
+
+/// B-S4-06 leak barrier (AC-S4-02.3): pages of external filings never reach case-graph extraction, so an opponent's
+/// assertions can never become Digest facts, Drafting sources or Mock Court factual bases.
+pub(crate) fn exclude_external_pages(pages: Vec<skeleton::PageInput>, external: &HashSet<String>) -> Vec<skeleton::PageInput> {
+    pages.into_iter().filter(|p| !external.contains(&p.doc_id)).collect()
+}
+
+/// B-S4-06: the page texts of ONE document tagged EXTERNAL_FILING, for the Opposing Filing Scan only.
+/// Refuses any other document so a matter document can never be scanned as "the opponent's assertion".
+pub(crate) fn external_filing_pages(
+    vault: &crate::vault::VaultManager,
+    case_id: &str,
+    doc_id: &str,
+) -> Result<(String, Vec<String>), String> {
+    let meta = vault
+        .doc_list(case_id)
+        .map_err(|e| e.to_string())?
+        .into_iter()
+        .find(|d| d.doc_id == doc_id)
+        .ok_or_else(|| format!("CF_DOC_NOT_FOUND: no document {doc_id} in this case"))?;
+    if meta.type_tag != EXTERNAL_FILING_TAG {
+        return Err(format!("CF_AUDIT_EXTRACTION_FAILED: {} is not tagged EXTERNAL_FILING", meta.original_filename));
+    }
+    let bytes = vault.doc_content_bytes(case_id, doc_id).map_err(|e| e.to_string())?;
+    let pages = triage::document_page_texts(&bytes, &meta.source_format, &meta.original_filename)?
+        .into_iter()
+        .map(|(_, text, _)| text)
+        .collect();
+    Ok((meta.original_filename, pages))
+}
+
+#[cfg(test)]
+mod external_filing_barrier_tests {
+    use super::*;
+
+    #[test]
+    fn external_filing_pages_never_reach_graph_extraction() {
+        let page = |doc: &str| skeleton::PageInput { doc_id: doc.into(), page_index: 0, text: "The deed was executed on 14 April 2019.".into(), mean_confidence: 0.9 };
+        let external: HashSet<String> = ["doc-reply".to_string()].into_iter().collect();
+        let kept = exclude_external_pages(vec![page("doc-deed"), page("doc-reply"), page("doc-decree")], &external);
+        assert_eq!(kept.iter().map(|p| p.doc_id.as_str()).collect::<Vec<_>>(), vec!["doc-deed", "doc-decree"]);
+        let graph = extract_case_graph("case-x", "India", &kept, CLASSIFIER_ID, RECOGNIZER_ID);
+        assert!(!graph.to_string().contains("doc-reply"), "an external filing leaked into the case graph");
     }
 }

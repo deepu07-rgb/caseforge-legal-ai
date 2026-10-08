@@ -1,0 +1,53 @@
+{
+  "batch": "B-S4-06",
+  "acceptance": {
+    "AC-S4-02.1": {
+      "status": "PASS",
+      "evidence": {
+        "golden": "ok"
+      },
+      "detail": "planted fabricated citation -> NOT_IN_CORPUS, one-word misquotation -> MISQUOTED, real citation VERIFIED"
+    },
+    "AC-S4-02.3": {
+      "status": "PASS",
+      "evidence": {
+        "barrier": "ok",
+        "stale_graph": "ok",
+        "contract": "ok"
+      },
+      "checks": {
+        "graph_extraction_sites_found": true,
+        "every_extraction_site_filtered": true,
+        "barrier_fails_closed": true,
+        "llm_context_excludes_external": true,
+        "proposition_support_excludes_external": true,
+        "scan_writes_nothing": true
+      }
+    },
+    "AC-S4-02.4": {
+      "status": "PASS",
+      "evidence": {
+        "injection": "ok",
+        "engine_model_free": true
+      },
+      "detail": "findings identical with and without the embedded instruction; the scan never calls a model"
+    },
+    "AC-S4-02.2": {
+      "status": "BLOCKED",
+      "measured_recall": 1.0,
+      "planted_conflicts": 3,
+      "proposed_threshold": 0.9,
+      "reason": "threshold awaiting owner approval (Q-S4-01); measured on the small synthetic G-OPPOSING fixture only"
+    },
+    "STRUCTURE": {
+      "status": "PASS",
+      "checks": {
+        "command_registered": true,
+        "ui_wired": true,
+        "ui_vocabulary_honest": true,
+        "full_schema_validation": true
+      }
+    }
+  },
+  "errors": []
+}
