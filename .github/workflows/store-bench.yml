@@ -42,6 +42,7 @@ jobs:
           mkdir -p zips packs
           for t in ${{ inputs.tags }}; do gh release download "$t" -p 'caseforge.*.zip' -D zips --clobber; done
           for z in zips/*.zip; do unzip -q -o "$z" -d packs; done
+          cp -r packs/official/caseforge.india.criminal-codes packs/   # real succession rule tables
           ls packs | wc -l
           du -sm packs
       - name: Benchmark

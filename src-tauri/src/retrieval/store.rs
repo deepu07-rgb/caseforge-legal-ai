@@ -675,12 +675,38 @@ mod tests {
         ms.sort_by(|a, b| a.partial_cmp(b).unwrap());
         println!("BENCH queries={} hits_returned={} median_ms={:.0} max_ms={:.0} rss_mb={:?}", ms.len(), returned, ms[ms.len() / 2], ms[ms.len() - 1], rss_mb());
         assert!(returned > 0);
+
+        // Citation audit of a draft that cites an Act and quotes a judgment passage, plus an unattributed quotation.
+        let probe = store.get_by_chunk_id(&store.packs.last().unwrap().ids[10]).unwrap();
+        let quote: String = probe.text.chars().skip(40).take(160).collect::<String>().split_whitespace().collect::<Vec<_>>().join(" ");
+        let draft = format!("Under Section 34 of the Arbitration and Conciliation Act, 1996 the award may be set aside. The Court said \u{201c}{quote}\u{201d} in terms. Counsel also relies on Section 302 of the Indian Penal Code, 1860.");
+        let t = Instant::now();
+        let report = crate::audit::audit_with_store(&store, &[], &draft, "bench.txt", "txt", None).unwrap();
+        println!("BENCH audit_store_ms={:.0} items={} counts={:?} rss_mb={:?}", t.elapsed().as_secs_f64() * 1000.0, report.items.len(), report.counts, rss_mb());
+
+        // Rule tables (the criminal-codes pack's succession tables, if installed) and a Code Bridge annotation.
+        let t = Instant::now();
+        let (tables, rejected) = crate::rule_tables::load_installed(&paths);
+        println!("BENCH rule_tables_load_ms={:.0} tables={} rejected={}", t.elapsed().as_secs_f64() * 1000.0, tables.len(), rejected.len());
+        let rows = crate::rule_tables::query(&tables, "STATUTE_SUCCESSION", Some("India"), "2026-10-08");
+        let t = Instant::now();
+        let idx = crate::rule_tables::index_for_rows(&paths, &rows);
+        println!("BENCH rows={} cited_chunks_loaded={} index_ms={:.0} rss_mb={:?}", rows.len(), idx.len(), t.elapsed().as_secs_f64() * 1000.0, rss_mb());
+
         let t = Instant::now();
         let corpus = crate::retrieval::build_corpus(&paths, &[]).unwrap();
         println!("BENCH old_full_load_s={:.1} passages={} rss_mb={:?}", t.elapsed().as_secs_f64(), corpus.len(), rss_mb());
         let t = Instant::now();
         let hits = crate::retrieval::retrieve_filtered(&corpus, &tokenize(queries[0]), 8, &india_verified());
         println!("BENCH old_query_s={:.1} hits={}", t.elapsed().as_secs_f64(), hits.len());
+        let t = Instant::now();
+        let old_report = crate::audit::audit(&draft, &corpus, "bench.txt", "txt", None);
+        println!("BENCH old_audit_ms={:.0} items={} counts={:?}", t.elapsed().as_secs_f64() * 1000.0, old_report.items.len(), old_report.counts);
+        let strip = |mut v: serde_json::Value| {
+            v["generated_at"] = serde_json::Value::Null;
+            v
+        };
+        println!("BENCH audit_reports_identical={}", strip(serde_json::to_value(&report).unwrap()) == strip(serde_json::to_value(&old_report).unwrap()));
     }
 
     #[test]
