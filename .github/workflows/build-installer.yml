@@ -4,7 +4,8 @@
 # Get it:  the run's "CaseForge-windows-installer" artifact, or the pre-release when publishing is enabled.
 #
 # The installer bundles: the app, the Python sidecars + a portable Python 3.12 (no system Python needed),
-# the Tesseract OCR runtime, the contracts, and the signed India partition pack.
+# the Tesseract OCR runtime, the offline embedding model for meaning-based search (multilingual-e5-small int8, ~135 MB,
+# hash-pinned in sidecars/docpipe/embed.py), the contracts, and the signed official packs.
 # NOT bundled (installed separately on the user's machine): Ollama and the local model (`ollama pull qwen2.5:7b`),
 # and the optional speech stack. The installer is NOT code-signed yet, so Windows SmartScreen will warn.
 name: Build Windows installer
@@ -87,6 +88,11 @@ jobs:
           python eval/checks/impeachment_b_s4_08.py --cargo-log cargo-test.log --kits evidence/impeachment_kits.json
           python eval/checks/rule_tables_b_s4_03.py --cargo-log cargo-test.log
           python eval/checks/code_bridge_b_s4_09.py --cargo-log cargo-test.log --annotations evidence/code_bridge_annotations.json
+
+      - name: Stage offline embedding model (B-S4-27)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release download models-v1 -D sidecars/models/e5-small --clobber
 
       - name: Stage bundled portable Python
         run: ./scripts/stage_runtime_python.ps1

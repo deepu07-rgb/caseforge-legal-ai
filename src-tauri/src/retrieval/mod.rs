@@ -3,6 +3,8 @@
 //! Offline BM25 + deterministic legal-concept embeddings with reciprocal-rank reranking.
 //! AC-4.3: PLANTED_FAKE / unknown → RED. AC-7.2: top-k hit rate on golden queries.
 
+pub mod dense;
+
 use crate::packs::{list_installed, load_legal_chunks, InstalledPack, LegalChunkRecord};
 use crate::vault::VaultPaths;
 use serde::{Deserialize, Serialize};
@@ -579,7 +581,10 @@ pub fn build_corpus(
 fn load_pack_chunks(pack: &InstalledPack, chunks: &mut Vec<CorpusChunk>) -> Result<(), String> {
     let pack_dir = PathBuf::from(&pack.install_path);
     if crate::packs::is_v2(&pack.schema_version) {
-        for record in load_legal_chunks(&pack_dir)? {
+        let records = load_legal_chunks(&pack_dir)?;
+        let ids: Vec<String> = records.iter().map(|r| r.chunk_id.clone()).collect();
+        dense::register_pack(&pack_dir, &pack.content_sha256, &ids);
+        for record in records {
             let hint = if record.citation == "UNKNOWN" {
                 authority_hint_from_text(&record.exact_text)
             } else {
@@ -837,7 +842,34 @@ pub fn retrieve_filtered_with_mode(
     filters: &MetadataFilters,
     semantic_available: bool,
 ) -> Vec<RetrievedHit> {
-    if query_terms.is_empty() || chunks.is_empty() {
+    retrieve_filtered_with_text(chunks, &query_terms.join(" "), query_terms, top_k, filters, semantic_available)
+}
+
+/// As `retrieve_filtered_with_mode`, with the user's own wording for meaning-based ranking (B-S4-27): the embedding
+/// model reads the whole question, including words the keyword index drops and non-English text.
+pub fn retrieve_filtered_with_text(
+    chunks: &[CorpusChunk],
+    query_text: &str,
+    query_terms: &[String],
+    top_k: usize,
+    filters: &MetadataFilters,
+    semantic_available: bool,
+) -> Vec<RetrievedHit> {
+    // Meaning-based ranking only when packs carry vectors and the local model answers. Unit tests stay deterministic
+    // (they exercise retrieve_core with an explicit query vector instead).
+    let dense_query = if !cfg!(test) && dense::has_vectors() && !query_text.trim().is_empty() { dense::embed_query(query_text.trim()) } else { None };
+    retrieve_core(chunks, query_terms, top_k, filters, semantic_available, dense_query.as_deref())
+}
+
+fn retrieve_core(
+    chunks: &[CorpusChunk],
+    query_terms: &[String],
+    top_k: usize,
+    filters: &MetadataFilters,
+    semantic_available: bool,
+    dense_query: Option<&[f32]>,
+) -> Vec<RetrievedHit> {
+    if (query_terms.is_empty() && dense_query.is_none()) || chunks.is_empty() {
         return Vec::new();
     }
     let candidate_indexes: Vec<usize> = chunks
@@ -864,7 +896,7 @@ pub fn retrieve_filtered_with_mode(
     let avg_len = (total_len as f64 / n).max(1.0);
     let query_vector = semantic_available.then(|| semantic_vector(&query_terms.join(" ")));
     let mut scored: Vec<(usize, f64, f64, f64, Vec<String>)> = Vec::new();
-    for index in candidate_indexes {
+    for &index in candidate_indexes.iter().filter(|_| !query_terms.is_empty()) {
         let c = &chunks[index];
         let toks = &docs_tokens[&index];
         let mut counts: HashMap<&str, usize> = HashMap::new();
@@ -924,6 +956,7 @@ pub fn retrieve_filtered_with_mode(
             scored.push((index, lexical, semantic, rerank, reasons));
         }
     }
+    let dense_used = dense_query.map(|q| fuse_dense(chunks, &candidate_indexes, &mut scored, q)).unwrap_or(false);
     scored.sort_by(|a, b| {
         b.3.partial_cmp(&a.3)
             .unwrap_or(std::cmp::Ordering::Equal)
@@ -959,7 +992,9 @@ pub fn retrieve_filtered_with_mode(
                 semantic_score: semantic,
                 rerank_score: (rerank / max_rerank).clamp(0.0, 1.0),
                 match_reasons: reasons,
-                retrieval_mode: if semantic_available {
+                retrieval_mode: if dense_used {
+                    "HYBRID_DENSE"
+                } else if semantic_available {
                     "HYBRID"
                 } else {
                     "LEXICAL_ONLY"
@@ -980,6 +1015,44 @@ pub fn retrieve_filtered_with_mode(
             }
         })
         .collect()
+}
+
+/// Reciprocal-rank fusion of the existing ranking with the meaning-based ranking (top 100 by embedding similarity).
+/// Passages found only by meaning join the candidate list; the result is re-scored in place. Returns whether any
+/// candidate had a vector.
+fn fuse_dense(chunks: &[CorpusChunk], candidates: &[usize], scored: &mut Vec<(usize, f64, f64, f64, Vec<String>)>, query: &[f32]) -> bool {
+    let mut ranked: Vec<(usize, f32)> = candidates.iter().filter_map(|&i| dense::similarity(query, &chunks[i].chunk_id).map(|s| (i, s))).collect();
+    if ranked.is_empty() {
+        return false;
+    }
+    ranked.retain(|r| r.1 > 0.0); // orthogonal or opposite meaning is no match
+    ranked.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal).then(a.0.cmp(&b.0)));
+    ranked.truncate(100);
+    scored.sort_by(|a, b| b.3.partial_cmp(&a.3).unwrap_or(std::cmp::Ordering::Equal).then(a.0.cmp(&b.0)));
+    // Only passages with real evidence (terms, concepts or metadata, not the authority boost alone) hold a lexical rank.
+    let lexical_rank: HashMap<usize, usize> = scored
+        .iter()
+        .filter(|s| s.4.iter().any(|r| r != "official verified authority"))
+        .enumerate()
+        .map(|(r, s)| (s.0, r))
+        .collect();
+    let dense_rank: HashMap<usize, usize> = ranked.iter().enumerate().map(|(r, s)| (s.0, r)).collect();
+    let present: HashSet<usize> = scored.iter().map(|s| s.0).collect();
+    for (index, _) in &ranked {
+        if !present.contains(index) {
+            scored.push((*index, 0.0, 0.0, 0.0, Vec::new()));
+        }
+    }
+    for s in scored.iter_mut() {
+        let l = lexical_rank.get(&s.0).map(|r| 1.0 / (61.0 + *r as f64)).unwrap_or(0.0);
+        let d = dense_rank.get(&s.0).map(|r| 1.0 / (61.0 + *r as f64)).unwrap_or(0.0);
+        if d > 0.0 {
+            s.4.push("meaning match (offline multilingual embedding)".into());
+        }
+        s.3 = l + d;
+    }
+    scored.retain(|s| s.3 > 0.0);
+    true
 }
 
 /// GENERATE constrained to retrieved material only (G2).
@@ -1219,8 +1292,7 @@ pub fn run_pipeline(
     extra.extend(force_authorities.iter().cloned());
     let semantic_available =
         std::env::var("CASEFORGE_DISABLE_SEMANTIC").ok().as_deref() != Some("1");
-    let hits =
-        retrieve_filtered_with_mode(&chunks, &terms, top_k, metadata_filters, semantic_available);
+    let hits = retrieve_filtered_with_text(&chunks, query, &terms, top_k, metadata_filters, semantic_available);
     let authorities = generate_constrained(&hits, &extra);
     let qid = format!("q_{}", Uuid::new_v4().to_string().replace('-', ""));
     let mut citations = Vec::new();
@@ -1241,6 +1313,14 @@ pub fn run_pipeline(
         }
     }
 
+    let retrieval_mode = if hits.iter().any(|h| h.retrieval_mode == "HYBRID_DENSE") {
+        "HYBRID_DENSE"
+    } else if semantic_available {
+        "HYBRID"
+    } else {
+        "LEXICAL_ONLY"
+    }
+    .to_string();
     let (repository_gap, repository_gap_reason, repository_gap_required_sources) =
         controlled_repository_gap(query, hits.is_empty());
     Ok(RetrievalResult {
@@ -1253,7 +1333,7 @@ pub fn run_pipeline(
         index_id: INDEX_ID.into(),
         index_checksum: index_metadata.corpus_checksum,
         index_state,
-        retrieval_mode: if semantic_available { "HYBRID" } else { "LEXICAL_ONLY" }.into(),
+        retrieval_mode,
         semantic_engine_id: SEMANTIC_ENGINE_ID.into(),
         semantic_available,
         lexical_fallback_notice: (!semantic_available).then(|| "Semantic retrieval is unavailable. Results use BM25 lexical matching only and do not claim semantic coverage.".into()),
@@ -1484,6 +1564,48 @@ mod tests {
                 "expected {expected_path} in top eight for {query}"
             );
         }
+    }
+
+    #[test]
+    fn b_s4_27_dense_fusion_adds_meaning_matches_and_is_off_without_vectors() {
+        let chunk = |id: &str, text: &str| CorpusChunk {
+            chunk_id: id.into(),
+            pack_id: "p".into(),
+            path: "content/a.txt".into(),
+            jurisdiction: Some("India".into()),
+            text: text.into(),
+            authority_hint: String::new(),
+            metadata: legacy_metadata("p", "0", text),
+        };
+        let chunks = vec![
+            chunk("dense-test-bail", "An application for bail may be made to the Court of Session."),
+            chunk("dense-test-fine", "The court may impose a fine in addition to imprisonment."),
+            chunk("dense-test-arrest", "Where a person has reason to believe he may be arrested, he may apply for a direction."),
+        ];
+        // Unit vectors along different axes, in the shipped 384-dim format.
+        let axis = |i: usize| (0..384).map(|j| if j == i { 127_i8 } else { 0 }).collect::<Vec<i8>>();
+        dense::register_for_test("dense-test-bail", axis(1));
+        dense::register_for_test("dense-test-fine", axis(2));
+        dense::register_for_test("dense-test-arrest", axis(0));
+        let query: Vec<f32> = (0..384).map(|j| if j == 0 { 1.0 } else { 0.0 }).collect();
+        let terms = tokenize("anticipatory bail");
+        let filters = MetadataFilters::default();
+        let lexical = retrieve_core(&chunks, &terms, 8, &filters, false, None);
+        assert!(lexical.iter().all(|h| h.retrieval_mode == "LEXICAL_ONLY"));
+        assert!(!lexical.iter().any(|h| h.chunk_id == "dense-test-arrest"));
+        let fused = retrieve_core(&chunks, &terms, 8, &filters, false, Some(&query));
+        let arrest = fused.iter().find(|h| h.chunk_id == "dense-test-arrest").expect("meaning-only match is retrieved");
+        assert!(arrest.match_reasons.iter().any(|r| r.starts_with("meaning match")));
+        assert!(fused.iter().any(|h| h.chunk_id == "dense-test-bail"), "lexical match is kept");
+        assert!(fused.iter().all(|h| h.retrieval_mode == "HYBRID_DENSE"));
+        // A query vector of the wrong size matches nothing: ranking falls back to the lexical result unchanged.
+        let mismatched = retrieve_core(&chunks, &terms, 8, &filters, false, Some(&[1.0, 0.0]));
+        assert_eq!(mismatched.iter().map(|h| h.chunk_id.clone()).collect::<Vec<_>>(), lexical.iter().map(|h| h.chunk_id.clone()).collect::<Vec<_>>());
+        assert!(mismatched.iter().all(|h| h.retrieval_mode == "LEXICAL_ONLY"));
+        // A question with no keyword terms (e.g. Hindi, which the keyword index does not read) is answered by meaning.
+        let by_meaning = retrieve_core(&chunks, &[], 8, &filters, false, Some(&query));
+        assert_eq!(by_meaning.first().map(|h| h.chunk_id.as_str()), Some("dense-test-arrest"));
+        assert!(retrieve_core(&chunks, &[], 8, &filters, false, None).is_empty());
     }
 
     fn controlled_chunks() -> Vec<CorpusChunk> {

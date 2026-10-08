@@ -1,0 +1,406 @@
+{
+  "schema_version": "1.0.0",
+  "golden": "G-DENSE",
+  "batch": "B-S4-27",
+  "description": "Plain-language and Hindi questions a client or junior might ask, each mapped to the criminal-code sections a senior lawyer would open (old and new code). Wording deliberately avoids the statutory heading where possible, so the set measures retrieval by meaning, not by shared words.",
+  "corpus": "packs/official/caseforge.india.criminal-codes",
+  "hit_rule": "a query is answered at k when any expected section label appears in the top k passages",
+  "queries": [
+    {
+      "id": "DQ-01",
+      "query": "punishment for intentionally killing a person",
+      "lang": "en",
+      "expected": [
+        "BNS s.103",
+        "IPC s.302"
+      ]
+    },
+    {
+      "id": "DQ-02",
+      "query": "protection from being arrested before the police come for me",
+      "lang": "en",
+      "expected": [
+        "BNSS s.482",
+        "CrPC s.438"
+      ]
+    },
+    {
+      "id": "DQ-03",
+      "query": "husband and in-laws torturing the wife",
+      "lang": "en",
+      "expected": [
+        "BNS s.85",
+        "BNS s.86",
+        "IPC s.498A"
+      ]
+    },
+    {
+      "id": "DQ-04",
+      "query": "woman died within seven years of marriage after harassment for gifts",
+      "lang": "en",
+      "expected": [
+        "BNS s.80",
+        "IPC s.304B"
+      ]
+    },
+    {
+      "id": "DQ-05",
+      "query": "taking movable property out of someone's possession without consent",
+      "lang": "en",
+      "expected": [
+        "BNS s.303",
+        "IPC s.378",
+        "IPC s.379"
+      ]
+    },
+    {
+      "id": "DQ-06",
+      "query": "deceiving a person to make him hand over money",
+      "lang": "en",
+      "expected": [
+        "BNS s.318",
+        "IPC s.415",
+        "IPC s.420"
+      ]
+    },
+    {
+      "id": "DQ-07",
+      "query": "lying under oath in court",
+      "lang": "en",
+      "expected": [
+        "BNS s.227",
+        "BNS s.229",
+        "IPC s.191",
+        "IPC s.193"
+      ]
+    },
+    {
+      "id": "DQ-08",
+      "query": "right to defend my body against an attacker",
+      "lang": "en",
+      "expected": [
+        "BNS s.34",
+        "BNS s.35",
+        "IPC s.96",
+        "IPC s.97"
+      ]
+    },
+    {
+      "id": "DQ-09",
+      "query": "arrested person must be told the reason for the arrest",
+      "lang": "en",
+      "expected": [
+        "BNSS s.47",
+        "CrPC s.50"
+      ]
+    },
+    {
+      "id": "DQ-10",
+      "query": "police custody remand when the investigation is not finished within a day",
+      "lang": "en",
+      "expected": [
+        "BNSS s.187",
+        "CrPC s.167"
+      ]
+    },
+    {
+      "id": "DQ-11",
+      "query": "is a computer printout admissible as evidence",
+      "lang": "en",
+      "expected": [
+        "BSA s.63",
+        "IEA s.65B"
+      ]
+    },
+    {
+      "id": "DQ-12",
+      "query": "admission of guilt made before a police officer",
+      "lang": "en",
+      "expected": [
+        "BSA s.23",
+        "IEA s.25"
+      ]
+    },
+    {
+      "id": "DQ-13",
+      "query": "statement made by a person before death about the cause of death",
+      "lang": "en",
+      "expected": [
+        "BSA s.26",
+        "IEA s.32"
+      ]
+    },
+    {
+      "id": "DQ-14",
+      "query": "who has to prove a fact in court",
+      "lang": "en",
+      "expected": [
+        "BSA s.104",
+        "IEA s.101"
+      ]
+    },
+    {
+      "id": "DQ-15",
+      "query": "several people acting together with a shared plan",
+      "lang": "en",
+      "expected": [
+        "BNS s.3",
+        "IPC s.34"
+      ]
+    },
+    {
+      "id": "DQ-16",
+      "query": "trying to kill someone but the victim survives",
+      "lang": "en",
+      "expected": [
+        "BNS s.109",
+        "IPC s.307"
+      ]
+    },
+    {
+      "id": "DQ-17",
+      "query": "death caused by careless driving",
+      "lang": "en",
+      "expected": [
+        "BNS s.106",
+        "IPC s.304A"
+      ]
+    },
+    {
+      "id": "DQ-18",
+      "query": "sexual assault on a woman without her consent",
+      "lang": "en",
+      "expected": [
+        "BNS s.63",
+        "BNS s.64",
+        "IPC s.375",
+        "IPC s.376"
+      ]
+    },
+    {
+      "id": "DQ-19",
+      "query": "taking away a minor child from the parents",
+      "lang": "en",
+      "expected": [
+        "BNS s.137",
+        "IPC s.361",
+        "IPC s.363"
+      ]
+    },
+    {
+      "id": "DQ-20",
+      "query": "damaging someone's reputation by false statements",
+      "lang": "en",
+      "expected": [
+        "BNS s.356",
+        "IPC s.499",
+        "IPC s.500"
+      ]
+    },
+    {
+      "id": "DQ-21",
+      "query": "threatening to harm someone to frighten him",
+      "lang": "en",
+      "expected": [
+        "BNS s.351",
+        "IPC s.503",
+        "IPC s.506"
+      ]
+    },
+    {
+      "id": "DQ-22",
+      "query": "wife and children unable to support themselves claiming a monthly allowance",
+      "lang": "en",
+      "expected": [
+        "BNSS s.144",
+        "CrPC s.125"
+      ]
+    },
+    {
+      "id": "DQ-23",
+      "query": "how the police must record a complaint about a serious crime",
+      "lang": "en",
+      "expected": [
+        "BNSS s.173",
+        "CrPC s.154"
+      ]
+    },
+    {
+      "id": "DQ-24",
+      "query": "magistrate questioning the person who filed a private complaint on oath",
+      "lang": "en",
+      "expected": [
+        "BNSS s.223",
+        "CrPC s.200"
+      ]
+    },
+    {
+      "id": "DQ-25",
+      "query": "keeping goods knowing they were stolen",
+      "lang": "en",
+      "expected": [
+        "BNS s.317",
+        "IPC s.411"
+      ]
+    },
+    {
+      "id": "DQ-26",
+      "query": "misusing money entrusted to him",
+      "lang": "en",
+      "expected": [
+        "BNS s.316",
+        "IPC s.405",
+        "IPC s.406"
+      ]
+    },
+    {
+      "id": "DQ-27",
+      "query": "making a fake document",
+      "lang": "en",
+      "expected": [
+        "BNS s.336",
+        "IPC s.463",
+        "IPC s.465"
+      ]
+    },
+    {
+      "id": "DQ-28",
+      "query": "insulting a woman with obscene words or gestures",
+      "lang": "en",
+      "expected": [
+        "BNS s.79",
+        "IPC s.509"
+      ]
+    },
+    {
+      "id": "DQ-29",
+      "query": "repeatedly following and contacting a woman despite her disinterest",
+      "lang": "en",
+      "expected": [
+        "BNS s.78",
+        "IPC s.354D"
+      ]
+    },
+    {
+      "id": "DQ-30",
+      "query": "throwing acid on a person",
+      "lang": "en",
+      "expected": [
+        "BNS s.124",
+        "IPC s.326A"
+      ]
+    },
+    {
+      "id": "DQ-31",
+      "query": "locking someone in a room so he cannot leave",
+      "lang": "en",
+      "expected": [
+        "BNS s.127",
+        "IPC s.340",
+        "IPC s.342"
+      ]
+    },
+    {
+      "id": "DQ-32",
+      "query": "court order allowing police to search a house",
+      "lang": "en",
+      "expected": [
+        "BNSS s.96",
+        "BNSS s.97",
+        "CrPC s.93",
+        "CrPC s.94"
+      ]
+    },
+    {
+      "id": "DQ-33",
+      "query": "questions that suggest the answer the questioner wants",
+      "lang": "en",
+      "expected": [
+        "BSA s.146",
+        "IEA s.141"
+      ]
+    },
+    {
+      "id": "DQ-34",
+      "query": "handwriting expert opinion",
+      "lang": "en",
+      "expected": [
+        "BSA s.39",
+        "IEA s.45"
+      ]
+    },
+    {
+      "id": "DQ-35",
+      "query": "conviction on the testimony of a co-accused who took part in the crime",
+      "lang": "en",
+      "expected": [
+        "BSA s.138",
+        "IEA s.133"
+      ]
+    },
+    {
+      "id": "DQ-36",
+      "query": "a young child cannot be guilty of a crime",
+      "lang": "en",
+      "expected": [
+        "BNS s.20",
+        "IPC s.82"
+      ]
+    },
+    {
+      "id": "DQ-37",
+      "query": "insanity as a defence",
+      "lang": "en",
+      "expected": [
+        "BNS s.22",
+        "IPC s.84"
+      ]
+    },
+    {
+      "id": "DQ-38",
+      "query": "crime committed while drunk",
+      "lang": "en",
+      "expected": [
+        "BNS s.23",
+        "IPC s.85"
+      ]
+    },
+    {
+      "id": "DQ-39",
+      "query": "bail for a serious offence that is not bailable",
+      "lang": "en",
+      "expected": [
+        "BNSS s.480",
+        "CrPC s.437"
+      ]
+    },
+    {
+      "id": "DQ-40",
+      "query": "हत्या के लिए सज़ा",
+      "lang": "hi",
+      "expected": [
+        "BNS s.103",
+        "IPC s.302"
+      ]
+    },
+    {
+      "id": "DQ-41",
+      "query": "गिरफ्तारी से पहले अग्रिम जमानत",
+      "lang": "hi",
+      "expected": [
+        "BNSS s.482",
+        "CrPC s.438"
+      ]
+    },
+    {
+      "id": "DQ-42",
+      "query": "किसी की संपत्ति की चोरी",
+      "lang": "hi",
+      "expected": [
+        "BNS s.303",
+        "IPC s.378",
+        "IPC s.379"
+      ]
+    }
+  ]
+}

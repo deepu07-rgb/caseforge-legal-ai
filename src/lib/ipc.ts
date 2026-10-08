@@ -1245,7 +1245,7 @@ export interface RetrievedHit {
   semantic_score: number;
   rerank_score: number;
   match_reasons: string[];
-  retrieval_mode: "HYBRID" | "LEXICAL_ONLY";
+  retrieval_mode: "HYBRID" | "HYBRID_DENSE" | "LEXICAL_ONLY";
   corpus_kind: "LEGAL" | "MATTER" | "EXPERIENCE";
   temporal_warning: string | null;
   snippet: string;
@@ -1270,7 +1270,7 @@ export interface RetrievalResult {
   index_id: string;
   index_checksum: string;
   index_state: "REUSED" | "REBUILT";
-  retrieval_mode: "HYBRID" | "LEXICAL_ONLY";
+  retrieval_mode: "HYBRID" | "HYBRID_DENSE" | "LEXICAL_ONLY";
   semantic_engine_id: string;
   semantic_available: boolean;
   lexical_fallback_notice: string | null;

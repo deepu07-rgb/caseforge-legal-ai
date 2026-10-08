@@ -39,6 +39,7 @@ Check 'python is 3.12 and isolated'  { $v = & $py -c "import sys;print(sys.versi
 Check 'stdlib + wheels import'       { & $py -c "import json,hashlib,ctypes,zipfile,urllib.request,pypdfium2,PIL;print('pypdfium2',pypdfium2.version.PYPDFIUM_INFO.version if hasattr(pypdfium2,'version') else '?','Pillow',PIL.__version__)" }
 Check 'contracts present'            { foreach ($f in 'contracts/constants.json','contracts/ocr_config.json','contracts/supported_models.json','contracts/prompts/legal_reasoner_v1.txt') { if (-not (Test-Path (Join-Path $Root $f))) { throw "missing $f" } }; '4 files' }
 Check 'docpipe.ping'                 { $r = Rpc 'sidecars/docpipe/docpipe.py' 'docpipe.ping'; ($r | ConvertTo-Json -Compress) }
+Check 'embed.status (offline search model)' { $r = Rpc 'sidecars/docpipe/embed.py' 'embed.status'; if (-not $r.ready -or $r.dims -ne 384) { throw ($r | ConvertTo-Json -Compress) }; "$($r.model) dims=$($r.dims)" }
 Check 'infer_llm.ping'               { $r = Rpc 'sidecars/infer_llm/infer_llm.py' 'llm.ping'; ($r | ConvertTo-Json -Compress) }
 Check 'infer_llm.tiers'              { $r = Rpc 'sidecars/infer_llm/infer_llm.py' 'llm.tiers'; if ($r.auto_download -ne $false) { throw 'auto_download must be false' }; ($r.tiers | ForEach-Object { $_.tier + '=' + $_.model }) -join ', ' }
 Check 'tesseract runs'               { $t = Join-Path $Root 'sidecars/docpipe/runtime/tesseract/tesseract.exe'; $v = (& $t --version 2>&1 | Select-Object -First 1); if ($LASTEXITCODE -ne 0) { throw "exit $LASTEXITCODE" }; "$v" }

@@ -1,0 +1,58 @@
+# B-S4-27: adds offline passage vectors (multilingual-e5-small, int8) to the unsigned packs on a release, before signing.
+# Run after sc-packs.yml (sc-judgments-v1, judgment-manifests.zip) or central-acts.yml crawl-and-build
+# (central-acts-v1, manifests.zip). Replaces each <pack_id>.zip and the manifests zip; then sign the new manifests locally:
+#   python eval/tools/sign_pack_manifests.py --manifests <manifests zip> --key <official_dev.sk.pem>
+name: Embed packs
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        type: string
+        required: true
+      manifests_asset:
+        description: "manifests.zip (Central Acts) or judgment-manifests.zip (Supreme Court)"
+        type: string
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  embed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: ${{ inputs.release_tag }}
+      MANIFESTS: ${{ inputs.manifests_asset }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --disable-pip-version-check --quiet onnxruntime==1.20.1 tokenizers==0.21.0 numpy==2.1.3 jsonschema==4.23.0
+      - name: Offline embedding model
+        run: |
+          gh release download models-v1 -D models/e5-small --clobber
+          echo "CASEFORGE_EMBED_MODEL=$PWD/models/e5-small" >> "$GITHUB_ENV"
+      - name: Download unsigned packs
+        run: |
+          mkdir -p zips packs-out
+          gh release download "$TAG" -p 'caseforge.*.zip' -D zips
+          gh release download "$TAG" -p "$MANIFESTS" -D .
+          for z in zips/*.zip; do unzip -q -o "$z" -d packs-out; done
+          unzip -q -o "$MANIFESTS" '*_index.json' -d packs-out
+          ls packs-out
+      - name: Embed
+        run: |
+          index=$(ls packs-out/*_index.json | head -1)
+          python eval/tools/embed_pack.py --index "$index" packs-out/caseforge.* | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Validate and publish
+        run: |
+          for d in packs-out/caseforge.*; do python scripts/legal_pack_tool.py validate "$d"; done
+          rm -f zips/*.zip "$MANIFESTS"
+          (cd packs-out && zip -q -r "../$MANIFESTS" ./*_index.json caseforge.*/manifest.json)
+          for d in packs-out/caseforge.*; do (cd packs-out && zip -q -r "../zips/$(basename "$d").zip" "$(basename "$d")"); done
+          ls -la zips
+          gh release upload "$TAG" "$MANIFESTS" zips/*.zip --clobber

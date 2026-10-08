@@ -1,2 +1,6 @@
 pypdfium2==5.3.0
 Pillow==11.0.0
+# B-S4-27 offline meaning-based search (embed.py): CPU inference, binary wheels
+onnxruntime==1.20.1
+tokenizers==0.21.0
+numpy==2.1.3

@@ -26,7 +26,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build_criminal_codes_pack import canonical, digest, write_json  # noqa: E402
+from sign_pack_manifests import canonical, digest  # noqa: E402  (no PDF or crypto dependency)
+
+
+def write_json(path: Path, value) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8", newline="\n") as f:
+        f.write(json.dumps(value, indent=2, ensure_ascii=False) + "\n")
+
 
 KEY_ID = "caseforge-official-dev-2026"
 VERSION = "1.0.0-beta.1"

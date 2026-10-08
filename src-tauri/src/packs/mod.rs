@@ -494,6 +494,9 @@ fn validate_pack_tree(
             rel.extension().and_then(|v| v.to_str()) == Some("txt")
                 && (man.schema_version == "1.0.0"
                     || file.role.as_deref() == Some("AUTHORITATIVE_CONTENT"))
+        } else if file.path == "metadata/embeddings.e5s.i8" {
+            // B-S4-27: the only binary a pack may carry, raw int8 passage vectors (never executed or parsed as code).
+            is_v2(&man.schema_version) && file.role.as_deref() == Some("DERIVED_ARTEFACT")
         } else if file.path.starts_with("metadata/") {
             is_v2(&man.schema_version)
                 && rel.extension().and_then(|v| v.to_str()) == Some("json")
@@ -1607,6 +1610,61 @@ mod tests {
             Some("Copyright Act, 1957, section 52(1)(q)(ii)")
         );
         assert!(manifest.controlled_beta_eligible);
+    }
+
+    #[test]
+    fn b_s4_27_pack_vectors_pass_install_checks_and_register() {
+        let src = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("../packs/official/caseforge.india.partition.highcourt.civil-appeal");
+        let dir = tempfile::tempdir().unwrap();
+        let pack = dir.path().join("pack");
+        copy_dir(&src, &pack).unwrap();
+        let ids: Vec<String> = load_legal_chunks(&pack).unwrap().into_iter().map(|c| c.chunk_id).collect();
+        let dims = 384;
+        let mut blob = vec![0u8; dims * ids.len()];
+        for i in 0..ids.len() {
+            blob[i * dims + i] = 127; // passage i points along axis i
+        }
+        fs::write(pack.join("metadata/embeddings.e5s.i8"), &blob).unwrap();
+        let meta = serde_json::json!({
+            "schema_version": "1.0.0", "model": crate::retrieval::dense::MODEL_ID, "dims": dims, "rows": ids.len(),
+            "dtype": "int8", "scale": 127, "row_order": "metadata/legal_chunks.json",
+            "chunk_ids_sha256": hex::encode(Sha256::digest(ids.join("\n").as_bytes())),
+        });
+        fs::write(pack.join("metadata/embeddings.json"), serde_json::to_vec_pretty(&meta).unwrap()).unwrap();
+        let mut man = read_manifest(&pack).unwrap();
+        let entry = |path: &str| PackFileEntry {
+            path: path.into(),
+            sha256: sha256_file(&pack.join(path)).unwrap(),
+            bytes: Some(fs::metadata(pack.join(path)).unwrap().len()),
+            role: Some("DERIVED_ARTEFACT".into()),
+        };
+        man.files.push(entry("metadata/embeddings.e5s.i8"));
+        man.files.push(entry("metadata/embeddings.json"));
+        man.content_sha256 = canonical_hash(&man.files);
+        let root = preflight_source_root(&pack).unwrap();
+        validate_pack_tree(&pack, &root, &man).unwrap();
+        verify_content_files(&pack, &man).unwrap();
+
+        crate::retrieval::dense::register_pack(&pack, &man.content_sha256, &ids);
+        let mut q = vec![0f32; dims];
+        q[1] = 1.0;
+        assert!((crate::retrieval::dense::similarity(&q, &ids[1]).unwrap() - 1.0).abs() < 1e-6);
+        assert_eq!(crate::retrieval::dense::similarity(&q, &ids[0]), Some(0.0));
+        // Vectors for a different chunk order are ignored rather than misattributed.
+        let mut reordered = ids.clone();
+        reordered.swap(0, 1);
+        let other = tempfile::tempdir().unwrap();
+        copy_dir(&pack, other.path()).unwrap();
+        crate::retrieval::dense::register_pack(other.path(), "another-pack-hash", &reordered);
+        assert!((crate::retrieval::dense::similarity(&q, &ids[1]).unwrap() - 1.0).abs() < 1e-6);
+
+        // No other binary is accepted under metadata/.
+        fs::write(pack.join("metadata/payload.bin"), b"MZ").unwrap();
+        let mut evil = man.clone();
+        evil.files.push(PackFileEntry { role: Some("DERIVED_ARTEFACT".into()), ..entry("metadata/payload.bin") });
+        let err = validate_pack_tree(&pack, &root, &evil).unwrap_err();
+        assert!(err.contains("unsupported content metadata/payload.bin"), "{err}");
     }
 
     fn write_v1_custom(root: &Path, pack_id: &str, version: &str, text: &str) {

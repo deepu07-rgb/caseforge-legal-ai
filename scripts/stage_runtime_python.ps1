@@ -8,7 +8,8 @@
 
   Output layout (repo root):  runtime-python/   <- becomes <install>/_up_/runtime-python/ via tauri.conf.json
     python.exe, python312.zip, ... (official embeddable package, SHA-256 pinned below)
-    Lib/site-packages/            (pypdfium2, Pillow from sidecars/docpipe/requirements.txt, binary wheels only)
+    Lib/site-packages/            (sidecars/docpipe/requirements.txt: pypdfium2, Pillow, and onnxruntime/tokenizers/numpy for the
+                                   offline search model; binary wheels only)
     python312._pth                (sys.path: stdlib zip, site-packages, and the three sidecar folders)
 
   infer_speech's heavy dependencies (faster-whisper, pywin32) are intentionally NOT bundled: the speech sidecar reports
