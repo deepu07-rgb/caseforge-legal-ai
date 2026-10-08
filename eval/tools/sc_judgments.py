@@ -75,19 +75,69 @@ def clean_page(text: str) -> str:
     return fix_ligatures("\n".join(out)).strip()
 
 
-def judgment_start(full: str) -> tuple[int, str]:
+# Byline that opens the judgment on the same line, tolerant of OCR damage: "KAPt'R, J.-This is an appeal",
+# "GAJENDRAGADKAR, J. The three appellants", "B. P. SINHA C.J.—". A bare running head ("Kapur J.") does not match.
+BYLINE = re.compile(r"(?m)^(?P<name>[A-Za-z0-9][A-Za-z0-9.'`\- ]{1,34}?)(?:,\s*|\s+)(?:C\.\s?J\.(?:I\.)?|J[.,\]])\s*(?:[—–\-:.··]+\s*)?(?P<rest>.*)$")
+
+
+def byline_at(full: str, floor: int):
+    """First judge's byline after `floor`. The name must be mostly capitals (running heads like "Wanchoo J." are not);
+    the judgment either continues on the same line or starts on the next."""
+    for m in BYLINE.finditer(full, floor):
+        letters = [c for c in m.group("name") if c.isalpha()]
+        if len(letters) < 4 or sum(c.isupper() for c in letters) < 0.5 * len(letters):
+            continue
+        rest = m.group("rest").strip()
+        nxt = full[m.end() + 1: m.end() + 80].lstrip()
+        if re.match(r"(?i)supreme\s+court|.{0,12}reports", rest):  # running head: "Shah J. SUPREME COURT REPORTS"
+            continue
+        if (len(rest) >= 15 and re.match(r"[A-Z\"“'(]", rest)) or (not rest and re.match(r"[A-Z][a-z]", nxt)):
+            return m.start()
+    return None
+DISPOSAL = re.compile(r"(?im)^\s*(?:(?:civil|criminal)\s+)?(?:appeals?|petitions?|writ\s+petitions?|special\s+leave\s+petitions?|references?|suits?)\s+"
+                      r"(?:is\s+|are\s+)?(?:allowed|dismissed|partly\s+allowed|disposed\s+of|answered|accepted|rejected)\b[^\n]{0,60}$")
+CAPTION_STOP = {"THE", "AND", "OTHERS", "ORS", "ANR", "ANOTHER", "STATE", "SHRI", "SRI", "SMT", "M/S", "LTD", "UNION", "INDIA"}
+
+
+def caption_floor(full: str, meta: dict) -> int:
+    """Start of THIS case's caption: printed volumes begin a judgment mid-page, after the previous case's tail."""
+    toks = [t for t in re.findall(r"[A-Z]{3,}", (meta.get("petitioner") or "").upper()) if t not in CAPTION_STOP][:2]
+    if not toks:
+        return 0
+    pos, lines = 0, full.split("\n")
+    for i, line in enumerate(lines):
+        letters = [c for c in line if c.isalpha()]
+        if letters and toks[0] in line.upper() and sum(c.isupper() for c in letters) >= 0.6 * len(letters):
+            if re.search(r"(?m)^\s*(?:v\.?|V\.?|vs\.?|versus)\s*$", "\n".join(lines[i + 1: i + 5])) or re.search(r"\sv\.\s*$", line):
+                return pos
+        pos += len(line) + 1
+    return 0
+
+
+def trim_tail(text: str) -> str:
+    """Cut the next case's caption that follows the final disposal line on a shared last page."""
+    ms = list(DISPOSAL.finditer(text))
+    if ms and re.search(r"(?m)^\s*v\.\s*$", text[ms[-1].end():]):
+        return text[: ms[-1].end()]
+    return text
+
+
+def judgment_start(full: str, meta: dict | None = None) -> tuple[int, str]:
     m = DIGITAL_MARK.search(full)
     if m:
         return m.end(), "digital-marker"
-    held = re.search(r"(?m)\bHELD\b|\bHeld\b", full)
-    floor = held.end() if held else min(300, len(full) // 10)
+    floor = caption_floor(full, meta or {})
+    held = re.search(r"\bHELD\b|\bHeld\b", full[floor:])
+    floor = floor + held.end() if held else max(floor, min(300, len(full) // 10))
     best = None
     for r in JUDGMENT_START:
-        for mm in r.finditer(full, floor):
-            if best is None or mm.start() < best[0]:
-                best = (mm.start(), r.pattern[:30])
-            break
-    return (best[0], "scanned-marker") if best else (-1, "unsplit")
+        mm = r.search(full, floor)
+        if mm and (best is None or mm.start() < best):
+            best = mm.start()
+    by = byline_at(full, floor)
+    if by is not None and (best is None or by < best):
+        best = by
+    return (best, "scanned-marker") if best is not None else (-1, "unsplit")
 
 
 def ocr_quality(text: str) -> float | None:
@@ -155,16 +205,19 @@ def citations_in(text: str) -> list[dict]:
             cm = CASE_NAME.search(before)
             left = re.sub(r"^(?:(?:See|see|Also|also|In|in|Cf\.?|cf\.?|Vide|vide|and|And)\s+)+", "", cm.group(1).strip()) if cm else ""
             name = f"{left} v. {cm.group(2).strip()}" if cm and left else None
-            out.append({"kind": kind, "cite": re.sub(r"\s+", " ", m.group(0)), "case_name": name, "offset": m.start()})
+            after = re.sub(r"\s+", " ", text[m.end(): m.end() + 60])
+            label = re.match(r"\s*[;,.]?\s*[–—-]\s*(relied on|referred to|distinguished|followed|overruled|approved|doubted|explained|held per incuriam|not followed)", after, re.I)
+            out.append({"kind": kind, "cite": re.sub(r"\s+", " ", m.group(0)), "case_name": name, "offset": m.start(), "end": m.end(),
+                        "reporter_label": label.group(1).lower() if label else None})
     return out
 
 
 def process_pdf(pdf_bytes: bytes, meta: dict) -> dict:
     pages = [clean_page(t) for t in page_texts(pdf_bytes)]
     full = "\n".join(pages)
-    start, how = judgment_start(full)
+    start, how = judgment_start(full, meta)
     reporter = full[:start] if start > 0 else ""
-    court = full[start:].strip() if start >= 0 else ""
+    court = trim_tail(full[start:]).strip() if start >= 0 else ""
     subject = None
     m = re.search(r"(?m)^(?:HEADNOTES\s*\n)?(?:Issue for consideration:.*?\n)?([A-Z][A-Za-z ,.'()&-]{3,60}?)\s+[–—-]\s", reporter)
     if m:

@@ -15,6 +15,10 @@ on:
       last_year:
         type: number
         default: 2025
+      reprocess:
+        description: "Re-process years already on the release"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -56,7 +60,7 @@ jobs:
           have=$(gh release view "$TAG" --json assets -q '.assets[].name' || true)
           for y in $(seq ${{ inputs.first_year }} ${{ inputs.last_year }}); do
             if [ $(( (y - 1950) % 10 )) -ne ${{ matrix.shard }} ]; then continue; fi
-            if echo "$have" | grep -qx "year=$y.jsonl.gz"; then echo "skip $y (done)"; continue; fi
+            if echo "$have" | grep -qxE "year[=.]$y\.jsonl\.gz" && [ "${{ inputs.reprocess }}" != "true" ]; then echo "skip $y (done)"; continue; fi
             python -I eval/tools/sc_judgments.py year "$y" out || { echo "year $y failed"; continue; }
             gh release upload "$TAG" "out/year=$y.jsonl.gz" "out/year=$y.stats.json" --clobber
             rm -f "out/year=$y.jsonl.gz"
