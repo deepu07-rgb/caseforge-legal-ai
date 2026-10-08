@@ -1,0 +1,89 @@
+# Builds one official pack per ministry for all Central Acts on India Code (indiacode.gov.in, official REST API).
+#
+# Stage 1 "crawl-and-build": crawls (resumable across runs), builds UNSIGNED packs, and publishes to the release:
+#   crawl-state.tar.gz (metadata + section records), official-pdfs.tar.gz, manifests.zip, <pack_id>.zip (unsigned).
+# Then, on the owner's machine (the private key never leaves it):
+#   python eval/tools/sign_pack_manifests.py --manifests manifests.zip --key <official_dev.sk.pem>
+#   -> commits packs/central/signatures.json
+# Stage 2 "publish-signed": re-verifies every pack's file hashes against its signed content hash, inserts the
+#   signature, and replaces <pack_id>.zip on the release with the signed pack.
+name: Central Acts packs
+
+on:
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: "crawl-and-build or publish-signed"
+        type: choice
+        options: [crawl-and-build, publish-signed]
+        default: crawl-and-build
+      release_tag:
+        description: "Release that holds the packs"
+        type: string
+        default: central-acts-v1
+
+permissions:
+  contents: write
+
+concurrency:
+  group: central-acts
+  cancel-in-progress: false
+
+jobs:
+  central-acts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    env:
+      TAG: ${{ inputs.release_tag }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Python dependencies (pinned)
+        run: python -m pip install --disable-pip-version-check --quiet pdfplumber==0.11.4 cryptography==46.0.3 jsonschema==4.23.0
+
+      - name: Release exists
+        run: gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --prerelease --title "Central Acts packs ($TAG)" --notes "Official India Code text of all Central Acts, one pack per ministry. Development-signed; legal-editor review pending. Unzip a pack and install it from Legal Authorities > Install pack."
+
+      - name: Resume crawl state
+        if: inputs.stage == 'crawl-and-build'
+        run: |
+          mkdir -p crawl
+          if gh release download "$TAG" -p crawl-state.tar.gz -D . 2>/dev/null; then tar xzf crawl-state.tar.gz; fi
+          if gh release download "$TAG" -p official-pdfs.tar.gz -D . 2>/dev/null; then tar xzf official-pdfs.tar.gz; fi
+          echo "resuming with $(ls crawl/acts 2>/dev/null | wc -l) Acts already crawled"
+
+      - name: Crawl India Code (resumable; stops before the job limit)
+        if: inputs.stage == 'crawl-and-build'
+        run: timeout 270m python -I eval/tools/indiacode_crawl.py crawl || echo "crawl incomplete (exit $?) - state is saved; run again to resume"
+
+      - name: Save crawl state to the release
+        if: inputs.stage == 'crawl-and-build' && always()
+        run: |
+          tar czf crawl-state.tar.gz crawl/acts crawl/index.json 2>/dev/null || tar czf crawl-state.tar.gz crawl/acts
+          tar czf official-pdfs.tar.gz crawl/pdfs
+          ls -la crawl-state.tar.gz official-pdfs.tar.gz
+          gh release upload "$TAG" crawl-state.tar.gz official-pdfs.tar.gz --clobber
+
+      - name: Build unsigned packs
+        if: inputs.stage == 'crawl-and-build'
+        run: |
+          python eval/tools/build_central_packs.py --crawl crawl --out packs-out
+          for d in packs-out/caseforge.*; do python scripts/legal_pack_tool.py validate "$d"; done
+          (cd packs-out && zip -q -r ../manifests.zip packs_index.json caseforge.*/manifest.json)
+          mkdir -p zips && for d in packs-out/caseforge.*; do (cd packs-out && zip -q -r "../zips/$(basename "$d").zip" "$(basename "$d")"); done
+          python -c "import json;i=json.load(open('packs-out/packs_index.json'));print(len(i['packs']),'packs',i['total_acts'],'Acts',i['total_units'],'units',round(i['total_bytes']/1e6),'MB')" | tee -a "$GITHUB_STEP_SUMMARY"
+          gh release upload "$TAG" manifests.zip zips/*.zip --clobber
+
+      - name: Insert verified signatures and publish signed packs
+        if: inputs.stage == 'publish-signed'
+        run: |
+          mkdir -p zips packs-out
+          gh release download "$TAG" -p 'caseforge.*.zip' -D zips --clobber
+          for z in zips/*.zip; do unzip -q -o "$z" -d packs-out; done
+          python eval/tools/sign_pack_manifests.py --insert packs-out --signatures packs/central/signatures.json --trust contracts/pack_trust.json
+          rm -f zips/*.zip
+          for d in packs-out/caseforge.*; do python scripts/legal_pack_tool.py validate "$d"; (cd packs-out && zip -q -r "../zips/$(basename "$d").zip" "$(basename "$d")"); done
+          gh release upload "$TAG" zips/*.zip --clobber
