@@ -578,7 +578,7 @@ pub fn build_corpus(
 
 fn load_pack_chunks(pack: &InstalledPack, chunks: &mut Vec<CorpusChunk>) -> Result<(), String> {
     let pack_dir = PathBuf::from(&pack.install_path);
-    if pack.schema_version == "2.0.0" {
+    if crate::packs::is_v2(&pack.schema_version) {
         for record in load_legal_chunks(&pack_dir)? {
             let hint = if record.citation == "UNKNOWN" {
                 authority_hint_from_text(&record.exact_text)
