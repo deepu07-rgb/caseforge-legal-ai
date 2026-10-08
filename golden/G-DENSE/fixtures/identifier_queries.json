@@ -1,0 +1,187 @@
+{
+  "schema_version": "1.0.0",
+  "golden": "G-DENSE",
+  "set": "identifier",
+  "batch": "B-S4-27",
+  "description": "Questions written the way lawyers cite: section number plus code name or abbreviation. Exact keyword matching must keep finding the named section once meaning-based ranking is fused in.",
+  "corpus": "packs/official/caseforge.india.criminal-codes",
+  "hit_rule": "a query is answered at k when the named section label appears in the top k passages",
+  "queries": [
+    {
+      "id": "DI-01",
+      "query": "s. 438 CrPC",
+      "lang": "en",
+      "expected": [
+        "CrPC s.438"
+      ]
+    },
+    {
+      "id": "DI-02",
+      "query": "Section 65B Evidence Act certificate",
+      "lang": "en",
+      "expected": [
+        "IEA s.65B"
+      ]
+    },
+    {
+      "id": "DI-03",
+      "query": "498A IPC",
+      "lang": "en",
+      "expected": [
+        "IPC s.498A"
+      ]
+    },
+    {
+      "id": "DI-04",
+      "query": "u/s 302 IPC",
+      "lang": "en",
+      "expected": [
+        "IPC s.302"
+      ]
+    },
+    {
+      "id": "DI-05",
+      "query": "BNSS 482",
+      "lang": "en",
+      "expected": [
+        "BNSS s.482"
+      ]
+    },
+    {
+      "id": "DI-06",
+      "query": "Section 167 CrPC default bail",
+      "lang": "en",
+      "expected": [
+        "CrPC s.167"
+      ]
+    },
+    {
+      "id": "DI-07",
+      "query": "IPC 420",
+      "lang": "en",
+      "expected": [
+        "IPC s.420"
+      ]
+    },
+    {
+      "id": "DI-08",
+      "query": "313 CrPC statement of accused",
+      "lang": "en",
+      "expected": [
+        "CrPC s.313"
+      ]
+    },
+    {
+      "id": "DI-09",
+      "query": "41A CrPC notice",
+      "lang": "en",
+      "expected": [
+        "CrPC s.41A"
+      ]
+    },
+    {
+      "id": "DI-10",
+      "query": "S. 27 Evidence Act recovery",
+      "lang": "en",
+      "expected": [
+        "IEA s.27"
+      ]
+    },
+    {
+      "id": "DI-11",
+      "query": "Section 482 CrPC quashing",
+      "lang": "en",
+      "expected": [
+        "CrPC s.482"
+      ]
+    },
+    {
+      "id": "DI-12",
+      "query": "120B IPC",
+      "lang": "en",
+      "expected": [
+        "IPC s.120B"
+      ]
+    },
+    {
+      "id": "DI-13",
+      "query": "164 CrPC statement before magistrate",
+      "lang": "en",
+      "expected": [
+        "CrPC s.164"
+      ]
+    },
+    {
+      "id": "DI-14",
+      "query": "306 IPC",
+      "lang": "en",
+      "expected": [
+        "IPC s.306"
+      ]
+    },
+    {
+      "id": "DI-15",
+      "query": "197 CrPC sanction",
+      "lang": "en",
+      "expected": [
+        "CrPC s.197"
+      ]
+    },
+    {
+      "id": "DI-16",
+      "query": "BNS 103",
+      "lang": "en",
+      "expected": [
+        "BNS s.103"
+      ]
+    },
+    {
+      "id": "DI-17",
+      "query": "BSA section 63",
+      "lang": "en",
+      "expected": [
+        "BSA s.63"
+      ]
+    },
+    {
+      "id": "DI-18",
+      "query": "BNSS 173 FIR",
+      "lang": "en",
+      "expected": [
+        "BNSS s.173"
+      ]
+    },
+    {
+      "id": "DI-19",
+      "query": "Section 35 BNSS arrest without warrant",
+      "lang": "en",
+      "expected": [
+        "BNSS s.35"
+      ]
+    },
+    {
+      "id": "DI-20",
+      "query": "BNS 61 criminal conspiracy",
+      "lang": "en",
+      "expected": [
+        "BNS s.61"
+      ]
+    },
+    {
+      "id": "DI-21",
+      "query": "Section 528 BNSS inherent powers",
+      "lang": "en",
+      "expected": [
+        "BNSS s.528"
+      ]
+    },
+    {
+      "id": "DI-22",
+      "query": "BNS 108",
+      "lang": "en",
+      "expected": [
+        "BNS s.108"
+      ]
+    }
+  ]
+}
