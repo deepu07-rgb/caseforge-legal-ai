@@ -293,6 +293,19 @@ pub fn load_installed(paths: &VaultPaths) -> (Vec<RuleTable>, Vec<String>) {
     for p in packs::list_installed(paths).into_iter().filter(|p| p.pack_kind == "official") {
         let dir = Path::new(&p.install_path);
         let Ok(man) = packs::read_manifest(dir) else { continue };
+        // Code-name aliases ("CrPC" = "Code of Criminal Procedure"), only if bound to the signed manifest.
+        let alias_file = "metadata/code_aliases.json";
+        if man.files.iter().any(|f| f.path == alias_file) {
+            if let Ok(v) = std::fs::read_to_string(dir.join(alias_file)).map(|raw| serde_json::from_str::<Value>(&raw).unwrap_or(Value::Null)) {
+                let groups: Vec<Vec<String>> = v["codes"]
+                    .as_array()
+                    .into_iter()
+                    .flatten()
+                    .map(|c| std::iter::once(str_of(c, "code").to_string()).chain(c["aliases"].as_array().into_iter().flatten().filter_map(|a| a.as_str().map(str::to_string))).collect())
+                    .collect();
+                crate::code_bridge::add_code_aliases(&groups);
+            }
+        }
         for file in &man.rule_tables_files {
             match validate_file(dir, &man, file, &index) {
                 Ok(t) => tables.push(t),

@@ -48,22 +48,44 @@ fn norm(s: &str) -> String {
     s.chars().filter(|c| c.is_alphanumeric()).collect::<String>().to_lowercase()
 }
 
-/// Name variants used to match a code written in text to a code named in a rule row ("I.P.C." ~ "IPC",
-/// "Indian Penal Code, 1860" ~ "IPC" by acronym). Purely lexical; the codes themselves come from the rows.
-pub fn code_variants(code: &str) -> Vec<String> {
+/// (full normalised name without year, acronym of a multi-word name). "Indian Penal Code, 1860" ->
+/// ("indianpenalcode", Some("ipc")); "I.P.C." -> ("ipc", None). Purely lexical; the codes come from the rows.
+fn code_forms(code: &str) -> (String, Option<String>) {
     let base = TRAILING_YEAR.replace(code.trim(), "").to_string();
-    let mut v = vec![norm(&base)];
     let words: Vec<&str> = base.split_whitespace().filter(|w| !matches!(w.to_lowercase().as_str(), "of" | "the" | "and")).collect();
-    if words.len() >= 2 {
-        v.push(words.iter().filter_map(|w| w.chars().next()).collect::<String>().to_lowercase());
-    }
-    v.retain(|x| !x.is_empty());
-    v
+    let acronym = (words.len() >= 2).then(|| words.iter().filter_map(|w| w.chars().next()).collect::<String>().to_lowercase());
+    (norm(&base), acronym)
 }
 
+/// Code-name aliases shipped by installed official packs (`metadata/code_aliases.json`), e.g. "CrPC" =
+/// "Code of Criminal Procedure". Each group holds full normalised names only (acronyms of long names collide:
+/// "Code of Civil Procedure" and "Code of Criminal Procedure" are both "ccp").
+static ALIASES: Lazy<std::sync::RwLock<Vec<Vec<String>>>> = Lazy::new(|| std::sync::RwLock::new(Vec::new()));
+
+pub fn add_code_aliases(groups: &[Vec<String>]) {
+    if let Ok(mut all) = ALIASES.write() {
+        for names in groups {
+            let mut g: Vec<String> = names.iter().map(|n| code_forms(n).0).filter(|n| !n.is_empty()).collect();
+            g.sort();
+            g.dedup();
+            if g.len() > 1 && !all.contains(&g) {
+                all.push(g);
+            }
+        }
+    }
+}
+
+/// Same code? Full names must match exactly; an acronym only matches a one-word code ("Indian Penal Code" ~ "IPC"),
+/// never another long name. Pack aliases join names a lawyer writes differently ("Code of Criminal Procedure" ~ "CrPC").
 pub fn same_code(a: &str, b: &str) -> bool {
-    let (va, vb) = (code_variants(a), code_variants(b));
-    va.iter().any(|x| vb.contains(x))
+    let ((fa, aa), (fb, ab)) = (code_forms(a), code_forms(b));
+    if fa.is_empty() || fb.is_empty() {
+        return false;
+    }
+    if fa == fb || aa.as_deref() == Some(fb.as_str()) && ab.is_none() || ab.as_deref() == Some(fa.as_str()) && aa.is_none() {
+        return true;
+    }
+    ALIASES.read().map(|all| all.iter().any(|g| g.contains(&fa) && g.contains(&fb))).unwrap_or(false)
 }
 
 fn provision_base(p: &str) -> String {
@@ -461,5 +483,15 @@ mod tests {
         assert!(got.contains(&("Federal Rules of Evidence".into(), "801".into())), "{got:?}");
         assert!(got.contains(&("IPC".into(), "420".into())), "{got:?}");
         assert!(same_code("I.P.C", "IPC") && same_code("Indian Penal Code, 1860", "IPC") && !same_code("IPC", "CrPC"));
+    }
+
+    #[test]
+    fn pack_aliases_join_long_and_short_code_names() {
+        assert!(!same_code("Code of Criminal Procedure, 1973", "TstCrPC"));
+        add_code_aliases(&[vec!["TstCrPC".into(), "Code of Criminal Procedure".into(), "Criminal Procedure Code".into()]]);
+        assert!(same_code("Code of Criminal Procedure, 1973", "TstCrPC"));
+        assert!(same_code("Criminal Procedure Code", "TstCrPC"));
+        assert!(!same_code("Code of Civil Procedure", "TstCrPC"));
+        assert!(!same_code("Code of Civil Procedure, 1908", "Code of Criminal Procedure, 1973"), "long-name acronyms never match each other");
     }
 }
