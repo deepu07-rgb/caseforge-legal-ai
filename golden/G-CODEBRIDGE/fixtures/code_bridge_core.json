@@ -1,0 +1,755 @@
+{
+  "fixture_id": "G-CODEBRIDGE/code_bridge_core",
+  "status": "GOLDEN",
+  "authored": "2026-10-08, before the rule-table loader (B-S4-03 core) and Code Bridge (B-S4-09) were written",
+  "source_class": "SYNTHETIC_CONTROLLED",
+  "note": "Synthetic codes only (Demo Penal Code -> Demo Nyaya Sanhita; Demo CrPC -> Demo Nagarik Suraksha Sanhita) so that no real succession answer is asserted without a legal editor. The sign-off here is a fixture sign-off: it proves the engine follows signed rows, not that any mapping is legally correct. Real mappings (e.g. IPC -> BNS) need an official pack carrying both texts and a named legal editor (AC-S4-04.1 stays BLOCKED until then).",
+  "conventions": {
+    "switch_rule": "a basis date on or after switch_date selects after_code; before it selects before_code",
+    "counterpart": "a reference to the predecessor code points to its SUCCESSOR; a reference to the successor code points to its PREDECESSOR",
+    "rule_ids": "the MAPPING rule first, then the TRANSITION rule used for governing-code routing (none for UNKNOWN)",
+    "interview_question_id": "keydate:<basis_date_kind>"
+  },
+  "chunks": [
+    {
+      "chunk_id": "cfchunk:fx.demo-official:dpc-34",
+      "pack_id": "fx.demo-official",
+      "source_id": "cfsrc:fx.demo-official:dpc-34",
+      "title": "Demo Penal Code, 1860",
+      "citation": "DPC s.34",
+      "section": "34",
+      "trust_level": "OFFICIAL_VERIFIED",
+      "text": "34. Acts done by several persons in furtherance of common intention. When a criminal act is done by several persons in furtherance of the common intention of all, each of such persons is liable for that act in the same manner as if it were done by him alone."
+    },
+    {
+      "chunk_id": "cfchunk:fx.demo-official:dns-34",
+      "pack_id": "fx.demo-official",
+      "source_id": "cfsrc:fx.demo-official:dns-34",
+      "title": "Demo Nyaya Sanhita, 2023",
+      "citation": "DNS s.34",
+      "section": "34",
+      "trust_level": "OFFICIAL_VERIFIED",
+      "text": "34. Acts done by several persons in furtherance of common intention. When a criminal act is done by several persons in furtherance of the common intention of all, each of such persons is liable for that act in the same manner as if it were done by him alone."
+    },
+    {
+      "chunk_id": "cfchunk:fx.demo-official:dpc-302",
+      "pack_id": "fx.demo-official",
+      "source_id": "cfsrc:fx.demo-official:dpc-302",
+      "title": "Demo Penal Code, 1860",
+      "citation": "DPC s.302",
+      "section": "302",
+      "trust_level": "OFFICIAL_VERIFIED",
+      "text": "302. Punishment for murder. Whoever commits murder shall be punished with death or imprisonment for life, and shall also be liable to fine."
+    },
+    {
+      "chunk_id": "cfchunk:fx.demo-official:dns-103",
+      "pack_id": "fx.demo-official",
+      "source_id": "cfsrc:fx.demo-official:dns-103",
+      "title": "Demo Nyaya Sanhita, 2023",
+      "citation": "DNS s.103",
+      "section": "103",
+      "trust_level": "OFFICIAL_VERIFIED",
+      "text": "103. Punishment for murder. (1) Whoever commits murder shall be punished with death or imprisonment for life, and shall also be liable to fine."
+    },
+    {
+      "chunk_id": "cfchunk:fx.demo-official:dpc-420",
+      "pack_id": "fx.demo-official",
+      "source_id": "cfsrc:fx.demo-official:dpc-420",
+      "title": "Demo Penal Code, 1860",
+      "citation": "DPC s.420",
+      "section": "420",
+      "trust_level": "OFFICIAL_VERIFIED",
+      "text": "420. Cheating and dishonestly inducing delivery of property. Whoever cheats and thereby dishonestly induces the person deceived to deliver any property shall be punished with imprisonment of either description for a term which may extend to seven years, and shall also be liable to fine."
+    },
+    {
+      "chunk_id": "cfchunk:fx.demo-official:dns-318",
+      "pack_id": "fx.demo-official",
+      "source_id": "cfsrc:fx.demo-official:dns-318",
+      "title": "Demo Nyaya Sanhita, 2023",
+      "citation": "DNS s.318",
+      "section": "318",
+      "trust_level": "OFFICIAL_VERIFIED",
+      "text": "318. Cheating. (4) Whoever cheats and thereby dishonestly induces the person deceived to deliver any property, or to make, alter or destroy the whole or any part of a valuable security, shall be punished with imprisonment of either description for a term which may extend to seven years, and shall also be liable to fine."
+    },
+    {
+      "chunk_id": "cfchunk:fx.demo-official:dns-111",
+      "pack_id": "fx.demo-official",
+      "source_id": "cfsrc:fx.demo-official:dns-111",
+      "title": "Demo Nyaya Sanhita, 2023",
+      "citation": "DNS s.111",
+      "section": "111",
+      "trust_level": "OFFICIAL_VERIFIED",
+      "text": "111. Organised crime. (1) Any continuing unlawful activity by an individual, singly or jointly, as a member of an organised crime syndicate shall constitute organised crime."
+    },
+    {
+      "chunk_id": "cfchunk:fx.demo-official:dpc-124a",
+      "pack_id": "fx.demo-official",
+      "source_id": "cfsrc:fx.demo-official:dpc-124a",
+      "title": "Demo Penal Code, 1860",
+      "citation": "DPC s.124A",
+      "section": "124A",
+      "trust_level": "OFFICIAL_VERIFIED",
+      "text": "124A. Sedition. Whoever by words brings or attempts to bring into hatred or contempt the Government established by law shall be punished."
+    },
+    {
+      "chunk_id": "cfchunk:fx.demo-official:dcrpc-161",
+      "pack_id": "fx.demo-official",
+      "source_id": "cfsrc:fx.demo-official:dcrpc-161",
+      "title": "Demo Code of Criminal Procedure, 1973",
+      "citation": "DCrPC s.161",
+      "section": "161",
+      "trust_level": "OFFICIAL_VERIFIED",
+      "text": "161. Examination of witnesses by police. Any police officer making an investigation may examine orally any person supposed to be acquainted with the facts and circumstances of the case."
+    },
+    {
+      "chunk_id": "cfchunk:fx.demo-official:dnss-180",
+      "pack_id": "fx.demo-official",
+      "source_id": "cfsrc:fx.demo-official:dnss-180",
+      "title": "Demo Nagarik Suraksha Sanhita, 2023",
+      "citation": "DNSS s.180",
+      "section": "180",
+      "trust_level": "OFFICIAL_VERIFIED",
+      "text": "180. Examination of witnesses by police. Any police officer making an investigation may examine orally any person supposed to be acquainted with the facts and circumstances of the case."
+    },
+    {
+      "chunk_id": "cfchunk:fx.demo-official:dns-358",
+      "pack_id": "fx.demo-official",
+      "source_id": "cfsrc:fx.demo-official:dns-358",
+      "title": "Demo Nyaya Sanhita, 2023",
+      "citation": "DNS s.358",
+      "section": "358",
+      "trust_level": "OFFICIAL_VERIFIED",
+      "text": "358. Repeal and savings. (1) The Demo Penal Code is hereby repealed. (2) Notwithstanding such repeal, any offence committed before the commencement of this Sanhita shall be dealt with under the repealed Code."
+    },
+    {
+      "chunk_id": "cfchunk:fx.demo-official:dnss-531",
+      "pack_id": "fx.demo-official",
+      "source_id": "cfsrc:fx.demo-official:dnss-531",
+      "title": "Demo Nagarik Suraksha Sanhita, 2023",
+      "citation": "DNSS s.531",
+      "section": "531",
+      "trust_level": "OFFICIAL_VERIFIED",
+      "text": "531. Repeal and savings. (2) Any proceeding pending immediately before the commencement of this Sanhita shall be disposed of in accordance with the repealed Code; proceedings instituted on or after the commencement shall be governed by this Sanhita."
+    },
+    {
+      "chunk_id": "cfchunk:fx.demo-official:custom-memo",
+      "pack_id": "fx.demo-official",
+      "source_id": "cfsrc:fx.demo-official:custom-memo",
+      "title": "Firm research memo",
+      "citation": "DNS s.1",
+      "section": "1",
+      "trust_level": "CUSTOM",
+      "text": "Internal note: section 103 replaces section 302."
+    }
+  ],
+  "rule_table": {
+    "schema_version": "1.0.0",
+    "table_id": "fx.demo-succession.v1",
+    "table_kind": "STATUTE_SUCCESSION",
+    "jurisdiction": "Demoland",
+    "pack_id": "fx.demo-official",
+    "description": "Synthetic succession table: Demo Penal Code -> Demo Nyaya Sanhita, Demo CrPC -> Demo Nagarik Suraksha Sanhita.",
+    "rows": [
+      {
+        "rule_id": "fx.succ.t-penal",
+        "table_kind": "STATUTE_SUCCESSION",
+        "jurisdiction": "Demoland",
+        "effective_from": "2024-07-01",
+        "effective_to": null,
+        "authorities": [
+          {
+            "pack_id": "fx.demo-official",
+            "source_id": "cfsrc:fx.demo-official:dns-358",
+            "chunk_id": "cfchunk:fx.demo-official:dns-358",
+            "char_start": null,
+            "char_end": null,
+            "provision_label": "DNS 358"
+          }
+        ],
+        "legal_editor_signoff": {
+          "editor_name": "Fixture Editor (synthetic, not a legal opinion)",
+          "editor_role": "Legal editor",
+          "signed_on": "2026-10-01",
+          "notes": "Synthetic fixture for engine verification only."
+        },
+        "trust_state": "SIGNED_OFF",
+        "payload": {
+          "entry_type": "TRANSITION",
+          "before_code": "DPC",
+          "after_code": "DNS",
+          "switch_date": "2024-07-01",
+          "governed_by": "OFFENCE_DATE",
+          "scope_note": "Offences committed before commencement stay under the repealed Code."
+        }
+      },
+      {
+        "rule_id": "fx.succ.t-procedure",
+        "table_kind": "STATUTE_SUCCESSION",
+        "jurisdiction": "Demoland",
+        "effective_from": "2024-07-01",
+        "effective_to": null,
+        "authorities": [
+          {
+            "pack_id": "fx.demo-official",
+            "source_id": "cfsrc:fx.demo-official:dnss-531",
+            "chunk_id": "cfchunk:fx.demo-official:dnss-531",
+            "char_start": null,
+            "char_end": null,
+            "provision_label": "DNSS 531"
+          }
+        ],
+        "legal_editor_signoff": {
+          "editor_name": "Fixture Editor (synthetic, not a legal opinion)",
+          "editor_role": "Legal editor",
+          "signed_on": "2026-10-01",
+          "notes": "Synthetic fixture for engine verification only."
+        },
+        "trust_state": "SIGNED_OFF",
+        "payload": {
+          "entry_type": "TRANSITION",
+          "before_code": "DCrPC",
+          "after_code": "DNSS",
+          "switch_date": "2024-07-01",
+          "governed_by": "INSTITUTION_DATE",
+          "scope_note": "Pending proceedings continue under the repealed Code."
+        }
+      },
+      {
+        "rule_id": "fx.succ.dpc-34",
+        "table_kind": "STATUTE_SUCCESSION",
+        "jurisdiction": "Demoland",
+        "effective_from": "2024-07-01",
+        "effective_to": null,
+        "authorities": [
+          {
+            "pack_id": "fx.demo-official",
+            "source_id": "cfsrc:fx.demo-official:dpc-34",
+            "chunk_id": "cfchunk:fx.demo-official:dpc-34",
+            "char_start": null,
+            "char_end": null,
+            "provision_label": "DPC 34"
+          },
+          {
+            "pack_id": "fx.demo-official",
+            "source_id": "cfsrc:fx.demo-official:dns-34",
+            "chunk_id": "cfchunk:fx.demo-official:dns-34",
+            "char_start": null,
+            "char_end": null,
+            "provision_label": "DNS 34"
+          }
+        ],
+        "legal_editor_signoff": {
+          "editor_name": "Fixture Editor (synthetic, not a legal opinion)",
+          "editor_role": "Legal editor",
+          "signed_on": "2026-10-01",
+          "notes": "Synthetic fixture for engine verification only."
+        },
+        "trust_state": "SIGNED_OFF",
+        "payload": {
+          "entry_type": "MAPPING",
+          "predecessor": {
+            "code": "DPC",
+            "provision": "34"
+          },
+          "successor": {
+            "code": "DNS",
+            "provision": "34"
+          },
+          "equivalence": "IDENTICAL",
+          "transition_rule_ids": [
+            "fx.succ.t-penal"
+          ]
+        }
+      },
+      {
+        "rule_id": "fx.succ.dpc-302",
+        "table_kind": "STATUTE_SUCCESSION",
+        "jurisdiction": "Demoland",
+        "effective_from": "2024-07-01",
+        "effective_to": null,
+        "authorities": [
+          {
+            "pack_id": "fx.demo-official",
+            "source_id": "cfsrc:fx.demo-official:dpc-302",
+            "chunk_id": "cfchunk:fx.demo-official:dpc-302",
+            "char_start": null,
+            "char_end": null,
+            "provision_label": "DPC 302"
+          },
+          {
+            "pack_id": "fx.demo-official",
+            "source_id": "cfsrc:fx.demo-official:dns-103",
+            "chunk_id": "cfchunk:fx.demo-official:dns-103",
+            "char_start": null,
+            "char_end": null,
+            "provision_label": "DNS 103"
+          }
+        ],
+        "legal_editor_signoff": {
+          "editor_name": "Fixture Editor (synthetic, not a legal opinion)",
+          "editor_role": "Legal editor",
+          "signed_on": "2026-10-01",
+          "notes": "Synthetic fixture for engine verification only."
+        },
+        "trust_state": "SIGNED_OFF",
+        "payload": {
+          "entry_type": "MAPPING",
+          "predecessor": {
+            "code": "DPC",
+            "provision": "302"
+          },
+          "successor": {
+            "code": "DNS",
+            "provision": "103"
+          },
+          "equivalence": "RENUMBERED",
+          "transition_rule_ids": [
+            "fx.succ.t-penal"
+          ]
+        }
+      },
+      {
+        "rule_id": "fx.succ.dpc-420",
+        "table_kind": "STATUTE_SUCCESSION",
+        "jurisdiction": "Demoland",
+        "effective_from": "2024-07-01",
+        "effective_to": null,
+        "authorities": [
+          {
+            "pack_id": "fx.demo-official",
+            "source_id": "cfsrc:fx.demo-official:dpc-420",
+            "chunk_id": "cfchunk:fx.demo-official:dpc-420",
+            "char_start": null,
+            "char_end": null,
+            "provision_label": "DPC 420"
+          },
+          {
+            "pack_id": "fx.demo-official",
+            "source_id": "cfsrc:fx.demo-official:dns-318",
+            "chunk_id": "cfchunk:fx.demo-official:dns-318",
+            "char_start": null,
+            "char_end": null,
+            "provision_label": "DNS 318"
+          }
+        ],
+        "legal_editor_signoff": {
+          "editor_name": "Fixture Editor (synthetic, not a legal opinion)",
+          "editor_role": "Legal editor",
+          "signed_on": "2026-10-01",
+          "notes": "Synthetic fixture for engine verification only."
+        },
+        "trust_state": "SIGNED_OFF",
+        "payload": {
+          "entry_type": "MAPPING",
+          "predecessor": {
+            "code": "DPC",
+            "provision": "420"
+          },
+          "successor": {
+            "code": "DNS",
+            "provision": "318(4)"
+          },
+          "equivalence": "MODIFIED",
+          "transition_rule_ids": [
+            "fx.succ.t-penal"
+          ]
+        }
+      },
+      {
+        "rule_id": "fx.succ.dns-111",
+        "table_kind": "STATUTE_SUCCESSION",
+        "jurisdiction": "Demoland",
+        "effective_from": "2024-07-01",
+        "effective_to": null,
+        "authorities": [
+          {
+            "pack_id": "fx.demo-official",
+            "source_id": "cfsrc:fx.demo-official:dns-111",
+            "chunk_id": "cfchunk:fx.demo-official:dns-111",
+            "char_start": null,
+            "char_end": null,
+            "provision_label": "DNS 111"
+          }
+        ],
+        "legal_editor_signoff": {
+          "editor_name": "Fixture Editor (synthetic, not a legal opinion)",
+          "editor_role": "Legal editor",
+          "signed_on": "2026-10-01",
+          "notes": "Synthetic fixture for engine verification only."
+        },
+        "trust_state": "SIGNED_OFF",
+        "payload": {
+          "entry_type": "MAPPING",
+          "predecessor": null,
+          "successor": {
+            "code": "DNS",
+            "provision": "111"
+          },
+          "equivalence": "NEW",
+          "transition_rule_ids": [
+            "fx.succ.t-penal"
+          ]
+        }
+      },
+      {
+        "rule_id": "fx.succ.dpc-124a",
+        "table_kind": "STATUTE_SUCCESSION",
+        "jurisdiction": "Demoland",
+        "effective_from": "2024-07-01",
+        "effective_to": null,
+        "authorities": [
+          {
+            "pack_id": "fx.demo-official",
+            "source_id": "cfsrc:fx.demo-official:dpc-124a",
+            "chunk_id": "cfchunk:fx.demo-official:dpc-124a",
+            "char_start": null,
+            "char_end": null,
+            "provision_label": "DPC 124A"
+          }
+        ],
+        "legal_editor_signoff": {
+          "editor_name": "Fixture Editor (synthetic, not a legal opinion)",
+          "editor_role": "Legal editor",
+          "signed_on": "2026-10-01",
+          "notes": "Synthetic fixture for engine verification only."
+        },
+        "trust_state": "SIGNED_OFF",
+        "payload": {
+          "entry_type": "MAPPING",
+          "predecessor": {
+            "code": "DPC",
+            "provision": "124A"
+          },
+          "successor": null,
+          "equivalence": "OMITTED",
+          "transition_rule_ids": [
+            "fx.succ.t-penal"
+          ]
+        }
+      },
+      {
+        "rule_id": "fx.succ.dcrpc-161",
+        "table_kind": "STATUTE_SUCCESSION",
+        "jurisdiction": "Demoland",
+        "effective_from": "2024-07-01",
+        "effective_to": null,
+        "authorities": [
+          {
+            "pack_id": "fx.demo-official",
+            "source_id": "cfsrc:fx.demo-official:dcrpc-161",
+            "chunk_id": "cfchunk:fx.demo-official:dcrpc-161",
+            "char_start": null,
+            "char_end": null,
+            "provision_label": "DCrPC 161"
+          },
+          {
+            "pack_id": "fx.demo-official",
+            "source_id": "cfsrc:fx.demo-official:dnss-180",
+            "chunk_id": "cfchunk:fx.demo-official:dnss-180",
+            "char_start": null,
+            "char_end": null,
+            "provision_label": "DNSS 180"
+          }
+        ],
+        "legal_editor_signoff": {
+          "editor_name": "Fixture Editor (synthetic, not a legal opinion)",
+          "editor_role": "Legal editor",
+          "signed_on": "2026-10-01",
+          "notes": "Synthetic fixture for engine verification only."
+        },
+        "trust_state": "SIGNED_OFF",
+        "payload": {
+          "entry_type": "MAPPING",
+          "predecessor": {
+            "code": "DCrPC",
+            "provision": "161"
+          },
+          "successor": {
+            "code": "DNSS",
+            "provision": "180"
+          },
+          "equivalence": "RENUMBERED",
+          "transition_rule_ids": [
+            "fx.succ.t-procedure"
+          ]
+        }
+      }
+    ]
+  },
+  "draft": "The accused is charged under section 302 DPC read with section 34 of the DPC. The complainant also alleged cheating under Section 420 DPC. Sedition under s. 124A DPC was dropped. The prosecution now invokes section 111 DNS. His statement was recorded u/s 161 DCrPC. The High Court, deciding under Section 103 of the DNS, followed the earlier view. The agreement is void under Section 23 of the Demo Contract Act.",
+  "scenarios": [
+    {
+      "id": "A-dates-known",
+      "key_dates": {
+        "OFFENCE_DATE": "2024-03-10",
+        "INSTITUTION_DATE": "2024-08-05"
+      },
+      "expected": [
+        {
+          "match": "section 302 DPC",
+          "code": "DPC",
+          "provision": "302",
+          "equivalence": "RENUMBERED",
+          "counterpart": {
+            "direction": "SUCCESSOR",
+            "code": "DNS",
+            "provision": "103"
+          },
+          "governing_code": "DPC",
+          "basis_date_kind": "OFFENCE_DATE",
+          "rule_ids": [
+            "fx.succ.dpc-302",
+            "fx.succ.t-penal"
+          ],
+          "side_by_side": false
+        },
+        {
+          "match": "section 34 of the DPC",
+          "code": "DPC",
+          "provision": "34",
+          "equivalence": "IDENTICAL",
+          "counterpart": {
+            "direction": "SUCCESSOR",
+            "code": "DNS",
+            "provision": "34"
+          },
+          "governing_code": "DPC",
+          "basis_date_kind": "OFFENCE_DATE",
+          "rule_ids": [
+            "fx.succ.dpc-34",
+            "fx.succ.t-penal"
+          ],
+          "side_by_side": false
+        },
+        {
+          "match": "Section 420 DPC",
+          "code": "DPC",
+          "provision": "420",
+          "equivalence": "MODIFIED",
+          "counterpart": {
+            "direction": "SUCCESSOR",
+            "code": "DNS",
+            "provision": "318(4)"
+          },
+          "governing_code": "DPC",
+          "basis_date_kind": "OFFENCE_DATE",
+          "rule_ids": [
+            "fx.succ.dpc-420",
+            "fx.succ.t-penal"
+          ],
+          "side_by_side": true
+        },
+        {
+          "match": "s. 124A DPC",
+          "code": "DPC",
+          "provision": "124A",
+          "equivalence": "OMITTED",
+          "counterpart": null,
+          "governing_code": "DPC",
+          "basis_date_kind": "OFFENCE_DATE",
+          "rule_ids": [
+            "fx.succ.dpc-124a",
+            "fx.succ.t-penal"
+          ],
+          "side_by_side": false
+        },
+        {
+          "match": "section 111 DNS",
+          "code": "DNS",
+          "provision": "111",
+          "equivalence": "NEW",
+          "counterpart": null,
+          "governing_code": "DPC",
+          "basis_date_kind": "OFFENCE_DATE",
+          "rule_ids": [
+            "fx.succ.dns-111",
+            "fx.succ.t-penal"
+          ],
+          "side_by_side": false
+        },
+        {
+          "match": "u/s 161 DCrPC",
+          "code": "DCrPC",
+          "provision": "161",
+          "equivalence": "RENUMBERED",
+          "counterpart": {
+            "direction": "SUCCESSOR",
+            "code": "DNSS",
+            "provision": "180"
+          },
+          "governing_code": "DNSS",
+          "basis_date_kind": "INSTITUTION_DATE",
+          "rule_ids": [
+            "fx.succ.dcrpc-161",
+            "fx.succ.t-procedure"
+          ],
+          "side_by_side": false
+        },
+        {
+          "match": "Section 103 of the DNS",
+          "code": "DNS",
+          "provision": "103",
+          "equivalence": "RENUMBERED",
+          "counterpart": {
+            "direction": "PREDECESSOR",
+            "code": "DPC",
+            "provision": "302"
+          },
+          "governing_code": "DPC",
+          "basis_date_kind": "OFFENCE_DATE",
+          "rule_ids": [
+            "fx.succ.dpc-302",
+            "fx.succ.t-penal"
+          ],
+          "side_by_side": false
+        },
+        {
+          "match": "Section 23 of the Demo Contract Act",
+          "code": "Demo Contract Act",
+          "provision": "23",
+          "equivalence": "UNKNOWN",
+          "counterpart": null,
+          "governing_code": null,
+          "basis_date_kind": null,
+          "rule_ids": [],
+          "side_by_side": false
+        }
+      ]
+    },
+    {
+      "id": "B-dates-missing",
+      "key_dates": {},
+      "expected_governing_status": "NEEDS_COUNSEL_INPUT",
+      "planted_missing_date_refs": 7,
+      "note": "every reference with a transition rule must ask for the date; the UNKNOWN reference stays UNKNOWN"
+    },
+    {
+      "id": "C-boundary",
+      "key_dates": {
+        "OFFENCE_DATE": "2024-07-01",
+        "INSTITUTION_DATE": "2024-06-30"
+      },
+      "expected_governing": {
+        "section 302 DPC": "DNS",
+        "u/s 161 DCrPC": "DCrPC"
+      }
+    }
+  ],
+  "rule_table_exploits": [
+    {
+      "name": "dangling_chunk",
+      "patch": [
+        {
+          "path": "/rows/3/authorities/1/chunk_id",
+          "value": "cfchunk:fx.demo-official:does-not-exist"
+        }
+      ],
+      "error": "CF_PACK_RULE_TABLE_INVALID",
+      "detail": "does not resolve"
+    },
+    {
+      "name": "non_official_authority",
+      "patch": [
+        {
+          "path": "/rows/3/authorities/1",
+          "value": {
+            "pack_id": "fx.demo-official",
+            "source_id": "cfsrc:fx.demo-official:custom-memo",
+            "chunk_id": "cfchunk:fx.demo-official:custom-memo",
+            "char_start": null,
+            "char_end": null,
+            "provision_label": "memo"
+          }
+        }
+      ],
+      "error": "CF_PACK_RULE_TABLE_INVALID",
+      "detail": "OFFICIAL_VERIFIED"
+    },
+    {
+      "name": "overlapping_windows",
+      "append_row_copy": {
+        "from": 3,
+        "set": {
+          "/effective_from": "2025-01-01"
+        }
+      },
+      "error": "CF_PACK_RULE_TABLE_INVALID",
+      "detail": "overlap"
+    },
+    {
+      "name": "forged_signoff",
+      "patch": [
+        {
+          "path": "/rows/3/legal_editor_signoff",
+          "value": null
+        }
+      ],
+      "error": "CF_PACK_RULE_TABLE_INVALID",
+      "detail": "sign-off"
+    },
+    {
+      "name": "rule_table_in_custom_pack",
+      "pack_kind": "custom",
+      "patch": [],
+      "error": "CF_PACK_RULE_TABLE_IN_CUSTOM_PACK",
+      "detail": "custom"
+    },
+    {
+      "name": "modified_without_both_texts",
+      "patch": [
+        {
+          "path": "/rows/4/authorities",
+          "value": [
+            {
+              "pack_id": "fx.demo-official",
+              "source_id": "cfsrc:fx.demo-official:dpc-420",
+              "chunk_id": "cfchunk:fx.demo-official:dpc-420",
+              "char_start": null,
+              "char_end": null,
+              "provision_label": "DPC 420"
+            }
+          ]
+        }
+      ],
+      "error": "CF_PACK_RULE_TABLE_INVALID",
+      "detail": "both"
+    },
+    {
+      "name": "row_kind_mismatch",
+      "patch": [
+        {
+          "path": "/rows/2/table_kind",
+          "value": "LIMITATION_PERIOD"
+        }
+      ],
+      "error": "CF_PACK_RULE_TABLE_INVALID",
+      "detail": "table_kind"
+    },
+    {
+      "name": "window_ends_before_start",
+      "patch": [
+        {
+          "path": "/rows/5/effective_to",
+          "value": "2020-01-01"
+        }
+      ],
+      "error": "CF_PACK_RULE_TABLE_INVALID",
+      "detail": "effective"
+    }
+  ],
+  "development_only_variant": {
+    "note": "Same table with every sign-off removed and trust_state DEVELOPMENT_ONLY: installs, annotates, but never counts as verified (AC-S4-RT.2): no audit item becomes VERIFIED_WITH_NOTE and every annotation is marked DEVELOPMENT_ONLY.",
+    "patch_all_rows": {
+      "/legal_editor_signoff": null,
+      "/trust_state": "DEVELOPMENT_ONLY"
+    }
+  },
+  "audit_integration": {
+    "note": "A VERIFIED statute citation to a provision with a SIGNED_OFF RENUMBERED/MODIFIED/OMITTED mapping becomes VERIFIED_WITH_NOTE with a CODE_BRIDGE note naming the counterpart.",
+    "citation": "section 302 DPC",
+    "expected_note_contains": [
+      "DNS 103",
+      "RENUMBERED"
+    ]
+  }
+}
