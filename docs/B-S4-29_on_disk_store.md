@@ -51,8 +51,28 @@ a headnote scan that rejected a statute proviso ("shall be held:"), duplicate ju
 headnote sign-offs left in judgment text (see `packs::headnote_scan_pack`, `eval/tools/pack_dedupe.py`,
 `eval/tools/build_judgment_packs.py`).
 
+## Phase 2: citation audit and Code Bridge on the store
+
+`audit::audit_with_store` reads only the passages a draft needs: every passage of each authority it cites, and the 20
+best keyword matches for each quotation (so an unattributed quotation is still found anywhere in the installed law).
+`rule_tables::index_for_ids` looks up only the passages rule rows cite (`load_installed`, install-time validation,
+Code Bridge annotations, audit notes) instead of indexing the corpus. Tests: the store-backed audit report equals the
+whole-corpus report on the real pack (golden draft, unattributed quotation, altered quotation, missing Act), and the
+store's authority records equal `group_sources`.
+
+At full scale (56 packs, 74,071 passages): store audit 79 ms vs 76 ms with the corpus already in memory, but without
+the 6.7 s / 443 MB load; rule tables load in 80 ms and the 2,206 passages the 1,208 succession rows cite in 57 ms;
+reports identical (`audit_reports_identical=true`).
+
+Verifying it at scale found that the audit did not recognise most Indian statute names: its generic patterns need every
+word capitalised and the name to end in "Act", so "Arbitration and Conciliation Act, 1996" was cut to "Conciliation Act,
+1996" and "Indian Penal Code, 1860" was missed (both came back NOT_IN_CORPUS). The audit now also matches the installed
+Act or Code's own title with the section named just before or after it.
+
+A quotation with no attributed citation is looked for among its best keyword matches rather than in every passage; if
+the same words occurred in several sources, which one is reported could differ.
+
 ## Not yet covered
 
-`build_corpus` (whole-corpus load) is still used by the citation audit, opposition scan, rule-table validation and the
-Code Bridge, which run on occasional actions rather than on every search. They work, but load every installed
-passage each time they run (about 7 s and 250 MB at 72k passages). Phase 2 moves them to store lookups.
+The opposition scan (`lib.rs` `opposition_scan`) and the whole-corpus `build_corpus` itself remain; `build_corpus` is
+still used by the opposition scan only. Phase 3 moves it to `audit_with_store`.
