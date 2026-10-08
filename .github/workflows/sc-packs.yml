@@ -1,0 +1,56 @@
+# B-S4-25/26: citation graph over the processed Supreme Court corpus, then the judgment packs (unsigned).
+# Signing happens on the owner's machine (eval/tools/sign_pack_manifests.py); then run central-acts.yml with
+# stage=publish-signed and release_tag=sc-judgments-v1 to insert the verified signatures.
+name: Supreme Court graph and packs
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        type: string
+        default: sc-judgments-v1
+      landmark:
+        description: "Number of Landmark judgments"
+        type: number
+        default: 3000
+      ocr_floor:
+        description: "Minimum OCR word quality for scanned reports"
+        type: string
+        default: "0.95"
+
+permissions:
+  contents: write
+
+jobs:
+  graph-and-packs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: ${{ inputs.release_tag }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --disable-pip-version-check --quiet jsonschema==4.23.0
+      - name: Download the processed corpus
+        run: |
+          mkdir -p corpus
+          gh release download "$TAG" -p 'year*.jsonl.gz' -D corpus
+          ls corpus | wc -l
+      - name: Citation graph
+        run: |
+          python eval/tools/sc_citation_graph.py corpus graph | tee graph-metrics.txt
+          cat graph/metrics.json >> "$GITHUB_STEP_SUMMARY"
+      - name: Judgment packs
+        run: |
+          python eval/tools/build_judgment_packs.py --corpus corpus --graph graph --out packs-out --landmark ${{ inputs.landmark }} --ocr-floor ${{ inputs.ocr_floor }}
+          for d in packs-out/caseforge.*; do python scripts/legal_pack_tool.py validate "$d"; done
+          (cd packs-out && zip -q -r ../judgment-manifests.zip judgment_packs_index.json caseforge.*/manifest.json)
+          mkdir -p zips && for d in packs-out/caseforge.*; do (cd packs-out && zip -q -r "../zips/$(basename "$d").zip" "$(basename "$d")"); done
+          ls -la zips
+      - name: Publish graph and unsigned packs
+        run: |
+          (cd graph && tar czf ../citation-graph.tar.gz .)
+          gh release upload "$TAG" citation-graph.tar.gz judgment-manifests.zip zips/*.zip --clobber

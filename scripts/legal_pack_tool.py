@@ -61,7 +61,7 @@ def validate(pack: Path) -> None:
     manifest=read(pack/"manifest.json")
     if manifest.get("schema_version")=="1.0.0":
         print("DEVELOPMENT_ONLY legacy v1; controlled_beta_eligible=false"); return
-    schema_validate("akpkg.schema.json",manifest)
+    schema_validate("akpkg_v2_1.schema.json" if manifest.get("schema_version")=="2.1.0" else "akpkg.schema.json",manifest)
     for f in manifest["files"]:
         path=pack/f["path"]
         assert path.is_file() and digest(path.read_bytes())==f["sha256"], f"file checksum mismatch: {f['path']}"

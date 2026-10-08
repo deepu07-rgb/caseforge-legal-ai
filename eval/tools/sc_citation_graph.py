@@ -123,7 +123,7 @@ def main() -> int:
     by_insc, by_year = {}, defaultdict(list)
     occurrences = []            # (citing_path, citation dict, para_id, window)
     uf = UF()
-    for f in sorted(corpus.glob("year=*.jsonl.gz")):
+    for f in sorted(corpus.glob("year*.jsonl.gz")):
         with gzip.open(f, "rt", encoding="utf-8") as fh:
             for line in fh:
                 r = json.loads(line)
@@ -247,10 +247,12 @@ def main() -> int:
     pr = {n: 1 / len(nodes) for n in nodes} if nodes else {}
     for _ in range(40):
         nxt = {n: (1 - 0.85) / len(nodes) for n in nodes}
-        dangling = sum(pr[n] for n in nodes if not out_links[n])
+        dangling = sum(pr[n] for n in nodes if not out_links.get(n))
         for n in nodes:
             nxt[n] += 0.85 * dangling / len(nodes)
         for a, outs in out_links.items():
+            if not outs:
+                continue
             share = 0.85 * pr[a] / len(outs)
             for b in outs:
                 nxt[b] += share

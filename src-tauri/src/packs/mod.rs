@@ -499,7 +499,7 @@ fn validate_pack_tree(
                 && rel.extension().and_then(|v| v.to_str()) == Some("json")
                 && matches!(
                     file.role.as_deref(),
-                    Some("LEGAL_SOURCES" | "LEGAL_CHUNKS" | "DERIVED_ARTEFACT" | "RULE_TABLE")
+                    Some("LEGAL_SOURCES" | "LEGAL_CHUNKS" | "DERIVED_ARTEFACT" | "RULE_TABLE" | "TREATMENT_EDGES")
                 )
         } else {
             false
