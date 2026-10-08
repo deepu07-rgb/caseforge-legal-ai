@@ -41,6 +41,10 @@ VERSION = "1.0.0-beta.1"
 TODAY = datetime.now(timezone.utc).date().isoformat()
 
 
+HEADNOTE_TAIL = re.compile(r"(?is)head\s?notes?\s+prepared\s+by.*$")
+HELD_SUMMARY = re.compile(r"(?m)^[ \t\-*\[(]*HELD[ \t]*:")
+
+
 def iso(d: str | None) -> str:
     m = re.fullmatch(r"(\d{1,2})-(\d{1,2})-(\d{4})", (d or "").strip())
     return f"{m.group(3)}-{int(m.group(2)):02d}-{int(m.group(1)):02d}" if m else "UNKNOWN"
@@ -65,13 +69,22 @@ def build(pack_id: str, display: str, description: str, recs: list[dict], index:
         blocks, seen = [], set()
         for p in r["paragraphs"]:
             text = p["text"].strip()
+            tail = HEADNOTE_TAIL.search(text)
+            if tail:  # the reporter's "Headnotes prepared by: <editor>" sign-off and the running heads after it
+                text = text[: tail.start()].rstrip()
+            elif HELD_SUMMARY.search(text):  # the reporter's "HELD:" summary of an opinion is not the Court's text
+                continue
             if len(text) < 20:
+                if tail:
+                    break
                 continue
             block = f"[para {p['id']}]\n{text}"
             if block in seen:
                 continue
             seen.add(block)
             blocks.append((str(p["id"]), block))
+            if tail:
+                break
         if not blocks:
             continue
         full = f"[{title} | {cite}]\n" + "\n\n".join(b for _, b in blocks)

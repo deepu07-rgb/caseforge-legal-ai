@@ -1,4 +1,6 @@
 # B-S4-27: adds offline passage vectors (multilingual-e5-small, int8) to the unsigned packs on a release, before signing.
+# Passage vectors are cached by the SHA-256 of the passage text (models-v1/vector-cache.bin), so rebuilt packs only
+# embed passages they have not had before.
 # Run after sc-packs.yml (sc-judgments-v1, judgment-manifests.zip) or central-acts.yml crawl-and-build
 # (central-acts-v1, manifests.zip). Replaces each <pack_id>.zip and the manifests zip; then sign the new manifests locally:
 #   python eval/tools/sign_pack_manifests.py --manifests <manifests zip> --key <official_dev.sk.pem>
@@ -36,9 +38,10 @@ jobs:
         with:
           python-version: "3.12"
       - run: python -m pip install --disable-pip-version-check --quiet onnxruntime==1.20.1 tokenizers==0.21.0 numpy==2.1.3 jsonschema==4.23.0
-      - name: Offline embedding model
+      - name: Offline embedding model and vector cache
         run: |
-          gh release download models-v1 -D models/e5-small --clobber
+          gh release download models-v1 -p model_int8.onnx -p tokenizer.json -p model_manifest.json -D models/e5-small --clobber
+          mkdir -p cache && gh release download models-v1 -p vector-cache.bin -D cache --clobber || echo "no vector cache yet"
           echo "CASEFORGE_EMBED_MODEL=$PWD/models/e5-small" >> "$GITHUB_ENV"
       - name: Download unsigned packs
         run: |
@@ -52,7 +55,7 @@ jobs:
         if: inputs.embed
         run: |
           index=$(ls packs-out/*_index.json | head -1)
-          python eval/tools/embed_pack.py --index "$index" packs-out/caseforge.* | tee -a "$GITHUB_STEP_SUMMARY"
+          python eval/tools/embed_pack.py --index "$index" --cache cache/vector-cache.bin --cache-out cache/vector-cache.bin packs-out/caseforge.* | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Remove duplicate sources and passages (and their vectors)
         run: |
           index=$(ls packs-out/*_index.json | head -1)
@@ -65,3 +68,4 @@ jobs:
           for d in packs-out/caseforge.*; do (cd packs-out && zip -q -r "../zips/$(basename "$d").zip" "$(basename "$d")"); done
           ls -la zips
           gh release upload "$TAG" "$MANIFESTS" zips/*.zip --clobber
+          if [ -f cache/vector-cache.bin ]; then gh release upload models-v1 cache/vector-cache.bin --clobber; fi

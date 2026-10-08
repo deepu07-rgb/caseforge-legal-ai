@@ -625,6 +625,47 @@ fn authoritative_hash(files: &[PackFileEntry]) -> String {
     canonical_hash(&authoritative)
 }
 
+static JUDGMENT_HEADNOTE_MARKERS: Lazy<Vec<(&'static str, Regex)>> = Lazy::new(|| {
+    vec![
+        ("'Headnotes prepared by'", Regex::new(r"(?i)head\s?notes?\s+prepared\s+by").unwrap()),
+        ("a reporter's 'HELD:' summary at the start of a line", Regex::new(r"(?m)^[ \t\-*\[(]*HELD[ \t]*:").unwrap()),
+        ("a 'Headnote:' label at the start of a line", Regex::new(r"(?mi)^[ \t]*(editorial[ \t]+)?head\s?notes?[ \t]*:").unwrap()),
+        ("'editorial headnote' or 'ratio decidendi summary'", Regex::new(r"(?i)editorial\s+headnote|ratio\s+decidendi\s+summary").unwrap()),
+    ]
+});
+
+/// AC-7.1 for a pack: strict scan, except that a pack made only of judgments is scanned for the reporter's headnote
+/// markers. A judgment's own prose legitimately discusses headnotes ("as summarised in the headnote ...", "the
+/// Court held: ..."), so the bare words are not a leak there; the markers are.
+pub fn headnote_scan_pack(pack_dir: &Path) -> Vec<String> {
+    let content = pack_dir.join("content");
+    let judgments_only = fs::read_to_string(pack_dir.join("metadata/legal_sources.json"))
+        .ok()
+        .and_then(|raw| serde_json::from_str::<Vec<serde_json::Value>>(&raw).ok())
+        .map(|sources| !sources.is_empty() && sources.iter().all(|s| s["authority_type"] == "JUDGMENT"))
+        .unwrap_or(false);
+    if judgments_only {
+        headnote_scan_judgments(&content)
+    } else {
+        headnote_scan_dir(&content)
+    }
+}
+
+pub fn headnote_scan_judgments(content_root: &Path) -> Vec<String> {
+    let mut hits = Vec::new();
+    for path in walkdir_simple(content_root) {
+        let Ok(text) = fs::read_to_string(&path) else { continue };
+        if let Some((what, _)) = JUDGMENT_HEADNOTE_MARKERS.iter().find(|(_, re)| re.is_match(&text)) {
+            let rel = path
+                .strip_prefix(content_root)
+                .map(|p| p.to_string_lossy().replace('\\', "/"))
+                .unwrap_or_else(|_| path.display().to_string());
+            hits.push(format!("{rel} :: matched {what}"));
+        }
+    }
+    hits
+}
+
 /// AC-7.1 automated headnote scan over pack content files.
 pub fn headnote_scan_dir(content_root: &Path) -> Vec<String> {
     let mut hits = Vec::new();
@@ -1160,8 +1201,7 @@ pub fn install_pack_from_dir(
         crate::rule_tables::validate_pack(paths, source_dir, &man)?;
     }
 
-    let content_root = source_dir.join("content");
-    let hits = headnote_scan_dir(&content_root);
+    let hits = headnote_scan_pack(source_dir);
     let signature_ok = if man.pack_kind == "official" {
         if !man.headnotes_stripped {
             return Err(
@@ -1368,8 +1408,7 @@ pub fn scan_installed_official(
     if pack.pack_kind != "official" {
         return Err("CF_PACK_INSTALL_FAILED: headnote ship scan applies to official packs".into());
     }
-    let content = PathBuf::from(&pack.install_path).join("content");
-    let hits = headnote_scan_dir(&content);
+    let hits = headnote_scan_pack(Path::new(&pack.install_path));
     Ok(HeadnoteScanResult {
         pack_id: pack_id.into(),
         hits: hits.clone(),
@@ -1430,6 +1469,19 @@ Provided further that the tribunal may hear.
 Held: the appeal is allowed.
 ").unwrap();
         assert!(!headnote_scan_dir(dir.path()).is_empty(), "a line opening with Held: is a headnote");
+    }
+
+    #[test]
+    fn headnote_scan_for_judgment_packs_looks_for_reporter_markers_not_the_word() {
+        let dir = tempfile::tempdir().unwrap();
+        let f = dir.path().join("j.txt");
+        fs::write(&f, "As summarised in the headnote to the earlier report, the Court\nheld: that the order stands. See head-note (ii).\n").unwrap();
+        assert!(headnote_scan_judgments(dir.path()).is_empty(), "the Court's own prose is not a leak");
+        assert!(!headnote_scan_dir(dir.path()).is_empty(), "the strict scan still flags it for other packs");
+        for leak in ["Appeal allowed.\nHeadnotes prepared by:\nNidhi Jain\n", "[para intro]\nPer A, J.\nHELD: 1. The power to amend\n", "Headnote: the appeal is allowed\n"] {
+            fs::write(&f, leak).unwrap();
+            assert!(!headnote_scan_judgments(dir.path()).is_empty(), "{leak}");
+        }
     }
 
     #[test]
