@@ -2249,11 +2249,12 @@ fn working_set_suggest(
         .ok_or_else(|| "CF_WORKING_SET_CASE_NOT_FOUND".to_string())?;
     let graph = mgr.case_graph_get(&case_id).map_err(|e| e.to_string())?;
     let query = working_set::suggestion_query(&profile, graph.as_ref());
-    let chunks = retrieval::build_corpus(&mgr.vault_paths().map_err(|e| e.to_string())?, &[])?;
-    let index_checksum = retrieval::corpus_checksum(&chunks);
     let (terms, _) = retrieval::decompose(&query);
-    let hits = retrieval::retrieve_filtered(
-        &chunks,
+    let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
+    let small = retrieval::build_small_corpus(&paths, &[])?;
+    let found = retrieval::store::search(
+        &paths,
+        &query,
         &terms,
         12,
         &retrieval::MetadataFilters {
@@ -2263,11 +2264,15 @@ fn working_set_suggest(
             superseded_status: Some("CURRENT".into()),
             ..retrieval::MetadataFilters::default()
         },
-    );
-    let proposals: Vec<working_set::WorkingSetItemInput> = hits
+        true,
+        &small,
+        &[],
+    )?;
+    let proposals: Vec<working_set::WorkingSetItemInput> = found
+        .hits
         .iter()
-        .filter_map(|hit| chunks.iter().find(|chunk| chunk.chunk_id == hit.chunk_id))
-        .map(|chunk| working_set::item_from_chunk(chunk, &index_checksum))
+        .filter_map(|hit| found.chunks.iter().find(|chunk| chunk.chunk_id == hit.chunk_id))
+        .map(|chunk| working_set::item_from_chunk(chunk, &found.corpus_checksum))
         .collect();
     let regimes = working_set::regime_candidates(&profile, graph.as_ref());
     mgr.working_set_merge_suggestions(&case_id, &proposals, &regimes)
@@ -2289,14 +2294,10 @@ fn working_set_add_chunk(
         .find(|c| c.case_id == case_id)
         .ok_or_else(|| "CF_WORKING_SET_CASE_NOT_FOUND".to_string())?;
     let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
-    let chunks = retrieval::build_corpus(&paths, &[])?;
-    let checksum = retrieval::corpus_checksum(&chunks);
-    let chunk = chunks
-        .iter()
-        .find(|c| c.chunk_id == chunk_id)
-        .ok_or_else(|| {
-            "CF_WORKING_SET_CHUNK_NOT_FOUND: rerun retrieval against installed packs".to_string()
-        })?;
+    let (chunk, checksum) = retrieval::find_chunk(&paths, &chunk_id)?.ok_or_else(|| {
+        "CF_WORKING_SET_CHUNK_NOT_FOUND: rerun retrieval against installed packs".to_string()
+    })?;
+    let chunk = &chunk;
     if chunk.jurisdiction.as_deref() != Some(profile.jurisdiction.as_str()) {
         return Err("CF_WORKING_SET_WRONG_JURISDICTION".into());
     }

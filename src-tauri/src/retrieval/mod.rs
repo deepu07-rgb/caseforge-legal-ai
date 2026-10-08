@@ -4,6 +4,7 @@
 //! AC-4.3: PLANTED_FAKE / unknown → RED. AC-7.2: top-k hit rate on golden queries.
 
 pub mod dense;
+pub mod store;
 
 use crate::packs::{list_installed, load_legal_chunks, InstalledPack, LegalChunkRecord};
 use crate::vault::VaultPaths;
@@ -415,6 +416,15 @@ pub fn ensure_persisted_index(
     paths: &VaultPaths,
     chunks: &[CorpusChunk],
 ) -> Result<(PersistedIndexMetadata, String), String> {
+    ensure_persisted_meta(paths, corpus_checksum(chunks), chunks.len())
+}
+
+/// As `ensure_persisted_index`, for a corpus identified by `checksum` and `chunk_count` (B-S4-29: the on-disk store).
+pub fn ensure_persisted_meta(
+    paths: &VaultPaths,
+    checksum: String,
+    chunk_count: usize,
+) -> Result<(PersistedIndexMetadata, String), String> {
     let index_dir = paths.root.join("indexes").join("legal");
     let index_path = index_dir.join("index.json");
     let backup_path = index_dir.join("index.json.bak");
@@ -422,7 +432,6 @@ pub fn ensure_persisted_index(
         fs::rename(&backup_path, &index_path)
             .map_err(|e| format!("CF_RETRIEVAL_INDEX_RECOVER: {e}"))?;
     }
-    let checksum = corpus_checksum(chunks);
     if let Ok(raw) = fs::read_to_string(&index_path) {
         if let Ok(meta) = serde_json::from_str::<PersistedIndexMetadata>(&raw) {
             if meta.schema_version == INDEX_SCHEMA_VERSION && meta.corpus_checksum == checksum {
@@ -435,7 +444,7 @@ pub fn ensure_persisted_index(
         schema_version: INDEX_SCHEMA_VERSION.into(),
         index_id: INDEX_ID.into(),
         corpus_checksum: checksum,
-        chunk_count: chunks.len(),
+        chunk_count,
         semantic_engine_id: SEMANTIC_ENGINE_ID.into(),
         semantic_engine_license: SEMANTIC_ENGINE_LICENSE.into(),
         embedding_dimensions: EMBEDDING_DIMS,
@@ -522,6 +531,23 @@ fn legacy_metadata(pack_id: &str, pack_checksum: &str, text: &str) -> LegalMetad
     }
 }
 
+fn chunk_from_record(record: &LegalChunkRecord) -> CorpusChunk {
+    let hint = if record.citation == "UNKNOWN" {
+        authority_hint_from_text(&record.exact_text)
+    } else {
+        record.citation.clone()
+    };
+    CorpusChunk {
+        chunk_id: record.chunk_id.clone(),
+        pack_id: record.pack_id.clone(),
+        path: record.source_file.clone(),
+        jurisdiction: Some(record.jurisdiction.clone()),
+        text: record.exact_text.clone(),
+        authority_hint: hint,
+        metadata: metadata_from_record(record),
+    }
+}
+
 fn metadata_from_record(record: &LegalChunkRecord) -> LegalMetadata {
     LegalMetadata {
         source_id: record.source_id.clone(),
@@ -548,6 +574,33 @@ fn metadata_from_record(record: &LegalChunkRecord) -> LegalMetadata {
         content_kind: record.content_kind.clone(),
         temporal_status: record.temporal_status.clone(),
     }
+}
+
+/// Passages that live in memory rather than in the on-disk store: installed packs older than schema v2, plus loose
+/// content directories (evaluation). v2 packs are served by `store`.
+pub fn build_small_corpus(paths: &VaultPaths, extra_pack_dirs: &[PathBuf]) -> Result<Vec<CorpusChunk>, String> {
+    let mut chunks = Vec::new();
+    for pack in list_installed(paths).into_iter().filter(|p| !crate::packs::is_v2(&p.schema_version)) {
+        load_pack_chunks(&pack, &mut chunks)?;
+    }
+    for dir in extra_pack_dirs {
+        let pack_id = dir.file_name().and_then(|s| s.to_str()).unwrap_or("loose").to_string();
+        let content = dir.join("content");
+        let root = if content.is_dir() { content } else { dir.clone() };
+        load_content_dir(&pack_id, None, "UNKNOWN", &root, &mut chunks)?;
+    }
+    Ok(chunks)
+}
+
+/// One passage by id with the identity of the corpus it came from, without loading the corpus.
+pub fn find_chunk(paths: &VaultPaths, chunk_id: &str) -> Result<Option<(CorpusChunk, String)>, String> {
+    let store = store::open(paths)?;
+    if let Some(chunk) = store.get_chunk_by_id_checked(chunk_id) {
+        return Ok(Some((chunk, store::combined_checksum(&store, &[]))));
+    }
+    let small = build_small_corpus(paths, &[])?;
+    let checksum = store::combined_checksum(&store, &small);
+    Ok(small.into_iter().find(|c| c.chunk_id == chunk_id).map(|c| (c, checksum)))
 }
 
 /// Load chunks from installed packs (and optional extra content dirs for eval).
@@ -584,21 +637,8 @@ fn load_pack_chunks(pack: &InstalledPack, chunks: &mut Vec<CorpusChunk>) -> Resu
         let records = load_legal_chunks(&pack_dir)?;
         let ids: Vec<String> = records.iter().map(|r| r.chunk_id.clone()).collect();
         dense::register_pack(&pack_dir, &pack.content_sha256, &ids);
-        for record in records {
-            let hint = if record.citation == "UNKNOWN" {
-                authority_hint_from_text(&record.exact_text)
-            } else {
-                record.citation.clone()
-            };
-            chunks.push(CorpusChunk {
-                chunk_id: record.chunk_id.clone(),
-                pack_id: record.pack_id.clone(),
-                path: record.source_file.clone(),
-                jurisdiction: Some(record.jurisdiction.clone()),
-                text: record.exact_text.clone(),
-                authority_hint: hint,
-                metadata: metadata_from_record(&record),
-            });
+        for record in &records {
+            chunks.push(chunk_from_record(record));
         }
         return Ok(());
     }
@@ -1292,19 +1332,22 @@ pub fn run_pipeline(
     experience_hits: &[crate::vault::ExperienceHit],
     metadata_filters: &MetadataFilters,
 ) -> Result<RetrievalResult, String> {
-    let mut chunks = build_corpus(paths, extra_pack_dirs)?;
+    // B-S4-29: installed v2 packs are searched from the on-disk store; only small material is held in memory.
+    let mut small = build_small_corpus(paths, extra_pack_dirs)?;
     if let (Some(g), Some(cid)) = (case_graph, case_id) {
-        add_case_graph_chunks(&mut chunks, cid, g);
+        add_case_graph_chunks(&mut small, cid, g);
     }
     let experience_injected = experience_hits.len();
-    add_experience_chunks(&mut chunks, experience_hits);
-    let (index_metadata, index_state) = ensure_persisted_index(paths, &chunks)?;
+    add_experience_chunks(&mut small, experience_hits);
     let (terms, cite_cands) = decompose(query);
     let mut extra = cite_cands;
     extra.extend(force_authorities.iter().cloned());
     let semantic_available =
         std::env::var("CASEFORGE_DISABLE_SEMANTIC").ok().as_deref() != Some("1");
-    let hits = retrieve_filtered_with_text(&chunks, query, &terms, top_k, metadata_filters, semantic_available);
+    let found = store::search(paths, query, &terms, top_k, metadata_filters, semantic_available, &small, &extra)?;
+    let (index_metadata, index_state) = ensure_persisted_meta(paths, found.corpus_checksum.clone(), found.chunk_count)?;
+    let chunk_count = found.chunk_count;
+    let (hits, chunks) = (found.hits, found.chunks);
     let authorities = generate_constrained(&hits, &extra);
     let qid = format!("q_{}", Uuid::new_v4().to_string().replace('-', ""));
     let mut citations = Vec::new();
@@ -1349,7 +1392,7 @@ pub fn run_pipeline(
         semantic_engine_id: SEMANTIC_ENGINE_ID.into(),
         semantic_available,
         lexical_fallback_notice: (!semantic_available).then(|| "Semantic retrieval is unavailable. Results use BM25 lexical matching only and do not claim semantic coverage.".into()),
-        chunk_count: chunks.len(),
+        chunk_count,
         batch: "B-S3-11",
         experience_injected,
         experience_top_k: crate::vault::EXPERIENCE_TOP_K,

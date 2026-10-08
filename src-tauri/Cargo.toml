@@ -26,6 +26,8 @@ argon2 = "0.5"
 rand = "0.8"
 zeroize = { version = "1", features = ["derive"] }
 hex = "0.4"
+# B-S4-29: compressed passage records in the on-disk legal store (pure Rust).
+flate2 = "1"
 base64 = "0.22"
 sha2 = "0.10"
 ed25519-dalek = { version = "2", default-features = false, features = ["std"] }

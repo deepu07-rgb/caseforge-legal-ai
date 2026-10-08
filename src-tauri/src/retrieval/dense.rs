@@ -36,7 +36,7 @@ static QUERIES: Lazy<Mutex<HashMap<String, Vec<f32>>>> = Lazy::new(|| Mutex::new
 static UNAVAILABLE_UNTIL: Lazy<Mutex<Option<Instant>>> = Lazy::new(|| Mutex::new(None));
 static HELPER: Lazy<Mutex<Option<Helper>>> = Lazy::new(|| Mutex::new(None));
 
-fn key(chunk_id: &str) -> u64 {
+pub(crate) fn key(chunk_id: &str) -> u64 {
     let d = Sha256::digest(chunk_id.as_bytes());
     u64::from_le_bytes(d[..8].try_into().unwrap_or([0; 8]))
 }
@@ -74,6 +74,27 @@ pub fn register_pack(pack_dir: &Path, content_sha256: &str, chunk_ids: &[String]
         return;
     }
     insert_block(dims, chunk_ids, bytes.into_iter().map(|b| b as i8).collect());
+}
+
+/// The `k` passages nearest to the query among those `keep` accepts (by key), similarity > 0, best first.
+pub(crate) fn scan(query: &[f32], k: usize, keep: &dyn Fn(u64) -> bool) -> Vec<(u64, f32)> {
+    let Ok(s) = STORE.read() else { return Vec::new() };
+    if query.len() != s.dims {
+        return Vec::new();
+    }
+    let mut found: Vec<(u64, f32)> = s
+        .rows
+        .iter()
+        .filter(|(h, _)| keep(**h))
+        .filter_map(|(h, &(b, r))| {
+            let row = s.blocks.get(b as usize)?.get(r as usize * s.dims..(r as usize + 1) * s.dims)?;
+            let sim = row.iter().zip(query).map(|(a, q)| *a as f32 * q).sum::<f32>() / 127.0;
+            (sim > 0.0).then_some((*h, sim))
+        })
+        .collect();
+    found.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal).then(a.0.cmp(&b.0)));
+    found.truncate(k);
+    found
 }
 
 pub fn has_vectors() -> bool {
