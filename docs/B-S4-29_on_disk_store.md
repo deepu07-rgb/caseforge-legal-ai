@@ -72,7 +72,17 @@ Act or Code's own title with the section named just before or after it.
 A quotation with no attributed citation is looked for among its best keyword matches rather than in every passage; if
 the same words occurred in several sources, which one is reported could differ.
 
-## Not yet covered
+## Phase 3: opposition scan on the store
 
-The opposition scan (`lib.rs` `opposition_scan`) and the whole-corpus `build_corpus` itself remain; `build_corpus` is
-still used by the opposition scan only. Phase 3 moves it to `audit_with_store`.
+`opposition::scan` is split into the audit and `scan_with_report`; the `opposition_scan` command audits the filing with
+`audit_with_store` and passes the report in. A test asserts the record and audit report equal the whole-corpus scan on
+the real pack.
+
+## Result
+
+No production code path loads the whole corpus any more: search, working-set suggestions, the citation audit, the
+opposition scan, rule-table validation and the Code Bridge all read from the on-disk store. `retrieval::build_corpus`
+remains for the equivalence tests and the benchmark (old-path comparison).
+
+Open: the store keeps the term dictionary resident (about 165 MB RSS at 74k passages in the benchmark, which includes
+installing the packs). Passage text is read from disk on demand.
