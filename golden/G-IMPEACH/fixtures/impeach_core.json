@@ -1,0 +1,581 @@
+{
+  "fixture_id": "G-IMPEACH/impeach_core",
+  "status": "GOLDEN",
+  "authored": "2026-10-08, before the witness matrix (B-S4-07) and contradiction engine (B-S4-08) were written",
+  "source_class": "SYNTHETIC_CONTROLLED",
+  "note": "Synthetic. India: an FIR, statements under s.161 Cr.P.C. (one supplementary, under an initial-only name), and examinations-in-chief, with one same-name different person (PW-5, needs counsel SPLIT), one initial-only alias (needs counsel MERGE) and one similar-name different person (Ramesh Yadav, must never be merged). US: a declaration and a deposition transcript (page:line). Contradictions are compared within ONE witness only, each later statement against the most recent earlier statement that speaks to the same matter. Precision traps are listed under expected.traps; no finding outside expected.findings may be produced.",
+  "conventions": {
+    "statement_id": "st:<doc_id>",
+    "witness_id": "w:<normalised name, lower-case, hyphenated, honorifics and PW numbers removed>",
+    "page_index": "0-based index into pages[]",
+    "transcript_lines": "PAGE_LINE locators carry the printed line numbers of the transcript page"
+  },
+  "cases": [
+    {
+      "case_id": "case-imp-in",
+      "jurisdiction": "India",
+      "documents": [
+        {
+          "doc_id": "doc-fir",
+          "filename": "FIR_112_2023_Kotwali.pdf",
+          "pages": [
+            "FIRST INFORMATION REPORT\n(Under Section 154 Cr.P.C.)\n\nFIR No. 112/2023, P.S. Kotwali, District Agra\n\nDate and time of report: 11.03.2023, 11:40 p.m.\n\nInformant: Ramesh Kumar s/o Shyam Lal, aged 34 years, r/o Lohamandi, Agra\n\nStatement of the informant:\n\nOn 11.03.2023 at about 9 p.m., I was returning home on foot near the Hanuman temple, Lohamandi. Three persons stopped me. One of them, Mohan, hit me on the head with a lathi. They snatched my bag containing Rs 5,000 and ran away towards the railway crossing.\n\nI went to the police station at about 11.30 p.m. with my neighbour.\n"
+          ]
+        },
+        {
+          "doc_id": "doc-161-pw1",
+          "filename": "Statement_161_Ramesh_Kumar.pdf",
+          "pages": [
+            "STATEMENT UNDER SECTION 161 Cr.P.C.\n\nStatement of Ramesh Kumar s/o Shyam Lal recorded on 13.03.2023 at P.S. Kotwali\n\nOn the night of 11 March 2023 at around 9 pm I was returning home near the temple. Three men came and stopped me. They first snatched my bag and then Mohan hit me on my head with a lathi. The bag they snatched contained Rs. 5000/-.\n\nMy brother Suresh was not present at that time.\n"
+          ]
+        },
+        {
+          "doc_id": "doc-supp-pw1",
+          "filename": "Supplementary_statement_R_Kumar.pdf",
+          "pages": [
+            "SUPPLEMENTARY STATEMENT UNDER SECTION 161 Cr.P.C.\n\nSupplementary statement of R. Kumar recorded on 20.03.2023 at P.S. Kotwali\n\nThe police showed me my bag on 18.03.2023. It is the same bag that was snatched from me.\n"
+          ]
+        },
+        {
+          "doc_id": "doc-chief-pw1",
+          "filename": "PW1_Examination_in_chief.pdf",
+          "pages": [
+            "IN THE COURT OF THE ADDITIONAL SESSIONS JUDGE, AGRA\nS.T. No. 45/2023  State v. Raju and others\n\nPW-1 Ramesh Kumar\nExamination-in-chief recorded on 20.01.2024\n\nOn 10.03.2023 at about 11 p.m. I was returning home on foot near the bus stand. Two men came and stopped me. They first hit me and then snatched my bag. Raju hit me on the head with a lathi. The bag they snatched contained Rs 15,000. My brother Suresh was with me and saw the incident. I clearly saw Raju's face in the light of the street lamp and I can identify him.\n\nThereafter I went to the police station with my neighbour at about 11:30 pm.\n"
+          ]
+        },
+        {
+          "doc_id": "doc-161-pw2",
+          "filename": "Statement_161_Sunita_Devi.pdf",
+          "pages": [
+            "STATEMENT UNDER SECTION 161 Cr.P.C.\n\nStatement of Smt. Sunita Devi w/o Rakesh recorded on 13.03.2023 at P.S. Kotwali\n\nOn 11.03.2023 at about 9 p.m. I heard shouts and came out of my house. I saw two or three persons running towards the railway crossing.\n"
+          ]
+        },
+        {
+          "doc_id": "doc-chief-pw2",
+          "filename": "PW2_Examination_in_chief.pdf",
+          "pages": [
+            "IN THE COURT OF THE ADDITIONAL SESSIONS JUDGE, AGRA\nS.T. No. 45/2023  State v. Raju and others\n\nPW-2 Sunita Devi\nExamination-in-chief recorded on 22.01.2024\n\nOn 11.03.2023 at about 10 p.m. I heard shouts and came out of my house. I saw some persons running towards the railway crossing.\n"
+          ]
+        },
+        {
+          "doc_id": "doc-161-pw4",
+          "filename": "Statement_161_Ramesh_Yadav.pdf",
+          "pages": [
+            "STATEMENT UNDER SECTION 161 Cr.P.C.\n\nStatement of Ramesh Yadav s/o Hari Ram recorded on 14.03.2023 at P.S. Kotwali\n\nOn 11.03.2023 at about 10 p.m. I was returning home near the bus stand when I saw a crowd near the railway crossing.\n"
+          ]
+        },
+        {
+          "doc_id": "doc-161-pw5",
+          "filename": "Statement_161_Sunita_Devi_2.pdf",
+          "pages": [
+            "STATEMENT UNDER SECTION 161 Cr.P.C.\n\nStatement of Sunita Devi, aged 52 years, recorded on 15.03.2023 at P.S. Kotwali\n\nI run a tea stall in Lohamandi market. I came to know about the incident the next morning.\n"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "case-imp-us",
+      "jurisdiction": "United States",
+      "documents": [
+        {
+          "doc_id": "doc-decl",
+          "filename": "Miller_Declaration.pdf",
+          "pages": [
+            "UNITED STATES DISTRICT COURT\nDISTRICT OF NEW JERSEY\n\nPatel v. Rivera Logistics LLC, Civil Action No. 2:22-cv-01234\n\nDECLARATION OF JOHN MILLER\n\nI, John Miller, declare as follows:\n\n1. On April 3, 2022, I was standing at the corner of Main Street and 5th Avenue.\n\n2. At approximately 3:15 p.m., I saw a red pickup truck enter the intersection against the red light.\n\n3. The truck struck the plaintiff's sedan on the driver's side.\n\n4. I did not see anyone else at the corner.\n\nI declare under penalty of perjury that the foregoing is true and correct. Executed on May 2, 2022.\n"
+          ]
+        },
+        {
+          "doc_id": "doc-dep",
+          "filename": "Miller_Deposition_Transcript.txt",
+          "pages": [
+            "DEPOSITION OF JOHN MILLER\n\nTaken on November 15, 2022, at the offices of Hart & Cole LLP, Newark, New Jersey\n\nPatel v. Rivera Logistics LLC, Civil Action No. 2:22-cv-01234\n",
+            "                                                            12\n 1   Q.   Mr. Miller, where were you standing when\n 2        the collision happened?\n 3   A.   I was at the corner of Main Street and 3rd\n 4        Avenue.\n 5   Q.   What time was that?\n 6   A.   It was around 4:30 in the afternoon.\n 7   Q.   What color was the truck?\n 8   A.   It was a blue pickup truck.\n 9   Q.   Was anyone else at the corner with you?\n10   A.   Yes, my coworker Dana Lee was standing\n11        next to me.\n",
+            "                                                            13\n 1   Q.   Did the truck run the red light?\n 2   A.   I believe the light was yellow when the truck\n 3        entered.\n 4   Q.   On what date did the collision occur?\n 5   A.   April 3, 2022.\n"
+          ]
+        }
+      ]
+    }
+  ],
+  "expected": {
+    "proposals": [
+      {
+        "doc_id": "doc-fir",
+        "witness_name": "Ramesh Kumar",
+        "statement_kind": "FIR",
+        "recorded_on": "2023-03-11",
+        "locator_kind": "PAGE_SPAN"
+      },
+      {
+        "doc_id": "doc-161-pw1",
+        "witness_name": "Ramesh Kumar",
+        "statement_kind": "POLICE_STATEMENT",
+        "recorded_on": "2023-03-13",
+        "locator_kind": "PAGE_SPAN"
+      },
+      {
+        "doc_id": "doc-supp-pw1",
+        "witness_name": "R. Kumar",
+        "statement_kind": "POLICE_STATEMENT",
+        "recorded_on": "2023-03-20",
+        "locator_kind": "PAGE_SPAN"
+      },
+      {
+        "doc_id": "doc-chief-pw1",
+        "witness_name": "Ramesh Kumar",
+        "statement_kind": "EXAMINATION_IN_CHIEF",
+        "recorded_on": "2024-01-20",
+        "locator_kind": "PAGE_SPAN"
+      },
+      {
+        "doc_id": "doc-161-pw2",
+        "witness_name": "Sunita Devi",
+        "statement_kind": "POLICE_STATEMENT",
+        "recorded_on": "2023-03-13",
+        "locator_kind": "PAGE_SPAN"
+      },
+      {
+        "doc_id": "doc-chief-pw2",
+        "witness_name": "Sunita Devi",
+        "statement_kind": "EXAMINATION_IN_CHIEF",
+        "recorded_on": "2024-01-22",
+        "locator_kind": "PAGE_SPAN"
+      },
+      {
+        "doc_id": "doc-161-pw4",
+        "witness_name": "Ramesh Yadav",
+        "statement_kind": "POLICE_STATEMENT",
+        "recorded_on": "2023-03-14",
+        "locator_kind": "PAGE_SPAN"
+      },
+      {
+        "doc_id": "doc-161-pw5",
+        "witness_name": "Sunita Devi",
+        "statement_kind": "POLICE_STATEMENT",
+        "recorded_on": "2023-03-15",
+        "locator_kind": "PAGE_SPAN"
+      },
+      {
+        "doc_id": "doc-decl",
+        "witness_name": "John Miller",
+        "statement_kind": "DECLARATION",
+        "recorded_on": "2022-05-02",
+        "locator_kind": "PAGE_SPAN"
+      },
+      {
+        "doc_id": "doc-dep",
+        "witness_name": "John Miller",
+        "statement_kind": "DEPOSITION",
+        "recorded_on": "2022-11-15",
+        "locator_kind": "PAGE_LINE"
+      }
+    ],
+    "auto_witnesses": {
+      "w:ramesh-kumar": [
+        "doc-fir",
+        "doc-161-pw1",
+        "doc-chief-pw1"
+      ],
+      "w:r-kumar": [
+        "doc-supp-pw1"
+      ],
+      "w:sunita-devi": [
+        "doc-161-pw2",
+        "doc-161-pw5",
+        "doc-chief-pw2"
+      ],
+      "w:ramesh-yadav": [
+        "doc-161-pw4"
+      ],
+      "w:john-miller": [
+        "doc-decl",
+        "doc-dep"
+      ]
+    },
+    "counsel_decisions": [
+      {
+        "action": "MERGE",
+        "witness_id": "w:r-kumar",
+        "into_witness_id": "w:ramesh-kumar"
+      },
+      {
+        "action": "SPLIT",
+        "statement_id": "st:doc-161-pw5",
+        "new_display_name": "Sunita Devi (tea stall)"
+      }
+    ],
+    "resolved_witnesses": {
+      "w:ramesh-kumar": {
+        "statements_in_order": [
+          "doc-fir",
+          "doc-161-pw1",
+          "doc-supp-pw1",
+          "doc-chief-pw1"
+        ],
+        "resolution": "COUNSEL_CONFIRMED",
+        "alias_node_ids": [
+          "w:r-kumar"
+        ]
+      },
+      "w:sunita-devi": {
+        "statements_in_order": [
+          "doc-161-pw2",
+          "doc-chief-pw2"
+        ],
+        "resolution": "COUNSEL_CONFIRMED",
+        "alias_node_ids": []
+      },
+      "w:sunita-devi-tea-stall": {
+        "statements_in_order": [
+          "doc-161-pw5"
+        ],
+        "resolution": "COUNSEL_CONFIRMED",
+        "alias_node_ids": []
+      },
+      "w:ramesh-yadav": {
+        "statements_in_order": [
+          "doc-161-pw4"
+        ],
+        "resolution": "PROPOSED",
+        "alias_node_ids": []
+      },
+      "w:john-miller": {
+        "statements_in_order": [
+          "doc-decl",
+          "doc-dep"
+        ],
+        "resolution": "PROPOSED",
+        "alias_node_ids": []
+      }
+    },
+    "planted_contradictions": 12,
+    "findings": [
+      {
+        "witness_id": "w:ramesh-kumar",
+        "finding_kind": "CONTRADICTION",
+        "dimension": "DATE",
+        "earlier_doc": "doc-161-pw1",
+        "earlier_quote_contains": "11 March 2023",
+        "later_doc": "doc-chief-pw1",
+        "later_quote_contains": "10.03.2023"
+      },
+      {
+        "witness_id": "w:ramesh-kumar",
+        "finding_kind": "CONTRADICTION",
+        "dimension": "TIME",
+        "earlier_doc": "doc-161-pw1",
+        "earlier_quote_contains": "9 pm",
+        "later_doc": "doc-chief-pw1",
+        "later_quote_contains": "11 p.m."
+      },
+      {
+        "witness_id": "w:ramesh-kumar",
+        "finding_kind": "CONTRADICTION",
+        "dimension": "PLACE",
+        "earlier_doc": "doc-161-pw1",
+        "earlier_quote_contains": "near the temple",
+        "later_doc": "doc-chief-pw1",
+        "later_quote_contains": "near the bus stand"
+      },
+      {
+        "witness_id": "w:ramesh-kumar",
+        "finding_kind": "CONTRADICTION",
+        "dimension": "COUNT",
+        "earlier_doc": "doc-161-pw1",
+        "earlier_quote_contains": "Three men",
+        "later_doc": "doc-chief-pw1",
+        "later_quote_contains": "Two men"
+      },
+      {
+        "witness_id": "w:ramesh-kumar",
+        "finding_kind": "CONTRADICTION",
+        "dimension": "SEQUENCE",
+        "earlier_doc": "doc-161-pw1",
+        "earlier_quote_contains": "first snatched my bag",
+        "later_doc": "doc-chief-pw1",
+        "later_quote_contains": "first hit me"
+      },
+      {
+        "witness_id": "w:ramesh-kumar",
+        "finding_kind": "CONTRADICTION",
+        "dimension": "PERSON",
+        "earlier_doc": "doc-161-pw1",
+        "earlier_quote_contains": "Mohan hit me",
+        "later_doc": "doc-chief-pw1",
+        "later_quote_contains": "Raju hit me"
+      },
+      {
+        "witness_id": "w:ramesh-kumar",
+        "finding_kind": "CONTRADICTION",
+        "dimension": "AMOUNT",
+        "earlier_doc": "doc-161-pw1",
+        "earlier_quote_contains": "Rs. 5000/-",
+        "later_doc": "doc-chief-pw1",
+        "later_quote_contains": "Rs 15,000"
+      },
+      {
+        "witness_id": "w:ramesh-kumar",
+        "finding_kind": "CONTRADICTION",
+        "dimension": "PRESENCE",
+        "earlier_doc": "doc-161-pw1",
+        "earlier_quote_contains": "Suresh was not present",
+        "later_doc": "doc-chief-pw1",
+        "later_quote_contains": "Suresh was with me"
+      },
+      {
+        "witness_id": "w:ramesh-kumar",
+        "finding_kind": "OMISSION",
+        "dimension": "MATERIAL_FACT",
+        "earlier_doc": "doc-supp-pw1",
+        "earlier_quote_contains": null,
+        "later_doc": "doc-chief-pw1",
+        "later_quote_contains": "I can identify him"
+      },
+      {
+        "witness_id": "w:sunita-devi",
+        "finding_kind": "CONTRADICTION",
+        "dimension": "TIME",
+        "earlier_doc": "doc-161-pw2",
+        "earlier_quote_contains": "9 p.m.",
+        "later_doc": "doc-chief-pw2",
+        "later_quote_contains": "10 p.m."
+      },
+      {
+        "witness_id": "w:john-miller",
+        "finding_kind": "CONTRADICTION",
+        "dimension": "PLACE",
+        "earlier_doc": "doc-decl",
+        "earlier_quote_contains": "5th Avenue",
+        "later_doc": "doc-dep",
+        "later_quote_contains": "3rd",
+        "later_page_index": 1,
+        "later_lines": [
+          1,
+          4
+        ]
+      },
+      {
+        "witness_id": "w:john-miller",
+        "finding_kind": "CONTRADICTION",
+        "dimension": "TIME",
+        "earlier_doc": "doc-decl",
+        "earlier_quote_contains": "3:15 p.m.",
+        "later_doc": "doc-dep",
+        "later_quote_contains": "4:30 in the afternoon",
+        "later_page_index": 1,
+        "later_lines": [
+          5,
+          6
+        ]
+      },
+      {
+        "witness_id": "w:john-miller",
+        "finding_kind": "CONTRADICTION",
+        "dimension": "PRESENCE",
+        "earlier_doc": "doc-decl",
+        "earlier_quote_contains": "did not see anyone else",
+        "later_doc": "doc-dep",
+        "later_quote_contains": "Dana Lee",
+        "later_page_index": 1,
+        "later_lines": [
+          9,
+          11
+        ]
+      }
+    ],
+    "traps": [
+      "FIR '9 p.m.' and s.161 '9 pm' are the same time; FIR '11.03.2023' and s.161 '11 March 2023' the same date",
+      "FIR 'Rs 5,000' and s.161 'Rs. 5000/-' are the same amount",
+      "FIR 'near the Hanuman temple' and s.161 'near the temple' are the same place (one contains the other)",
+      "FIR police-station time '11.30 p.m.' and chief '11:30 pm' agree, and are never compared with the incident time",
+      "recording dates in headers ('recorded on', 'Date and time of report', 'Executed on', 'Taken on') are metadata, never testimony",
+      "the supplementary statement's date (18.03.2023) concerns the bag being shown, not the incident",
+      "Ramesh Yadav and PW-5 Sunita Devi are never compared with PW-1 / PW-2",
+      "deposition 13:4-5 'April 3, 2022' agrees with the declaration date",
+      "red truck vs blue truck and red light vs yellow light are SEMANTIC (model layer only), never deterministic"
+    ]
+  },
+  "model_candidates": {
+    "witness_id": "w:john-miller",
+    "note": "What the local model might return for the US witness (caseforge.proposition-ledger.v1 shape). A candidate is the pair <id>-a (earlier) / <id>-b (later). Only pairs whose BOTH quotes verify as exact substrings of two DIFFERENT statements of this witness may render.",
+    "propositions": [
+      {
+        "proposition_id": "c1-a",
+        "class": "FACTUAL_BASIS",
+        "text": "In the declaration the truck was red.",
+        "support_ids": [
+          "st:doc-decl"
+        ],
+        "support_claims": [
+          {
+            "support_id": "st:doc-decl",
+            "exact_excerpt": "I saw a red pickup truck enter the intersection against the red light"
+          }
+        ]
+      },
+      {
+        "proposition_id": "c1-b",
+        "class": "FACTUAL_BASIS",
+        "text": "In the deposition the truck was blue.",
+        "support_ids": [
+          "st:doc-dep"
+        ],
+        "support_claims": [
+          {
+            "support_id": "st:doc-dep",
+            "exact_excerpt": "It was a blue pickup truck."
+          }
+        ]
+      },
+      {
+        "proposition_id": "c2-a",
+        "class": "FACTUAL_BASIS",
+        "text": "The light was red.",
+        "support_ids": [
+          "st:doc-decl"
+        ],
+        "support_claims": [
+          {
+            "support_id": "st:doc-decl",
+            "exact_excerpt": "against the red light"
+          }
+        ]
+      },
+      {
+        "proposition_id": "c2-b",
+        "class": "FACTUAL_BASIS",
+        "text": "The light was green.",
+        "support_ids": [
+          "st:doc-dep"
+        ],
+        "support_claims": [
+          {
+            "support_id": "st:doc-dep",
+            "exact_excerpt": "the light was green when the truck"
+          }
+        ]
+      },
+      {
+        "proposition_id": "c3-a",
+        "class": "FACTUAL_BASIS",
+        "text": "He saw the truck run the light.",
+        "support_ids": [
+          "st:doc-decl"
+        ],
+        "support_claims": [
+          {
+            "support_id": "st:doc-decl",
+            "exact_excerpt": "I saw a red truck run the light"
+          }
+        ]
+      },
+      {
+        "proposition_id": "c3-b",
+        "class": "FACTUAL_BASIS",
+        "text": "The truck was blue.",
+        "support_ids": [
+          "st:doc-dep"
+        ],
+        "support_claims": [
+          {
+            "support_id": "st:doc-dep",
+            "exact_excerpt": "It was a blue pickup truck."
+          }
+        ]
+      },
+      {
+        "proposition_id": "c4-a",
+        "class": "FACTUAL_BASIS",
+        "text": "He stood at the corner.",
+        "support_ids": [
+          "st:doc-decl"
+        ],
+        "support_claims": [
+          {
+            "support_id": "st:doc-decl",
+            "exact_excerpt": "I was standing at the corner of Main Street and 5th Avenue."
+          }
+        ]
+      },
+      {
+        "proposition_id": "c4-b",
+        "class": "FACTUAL_BASIS",
+        "text": "Nobody else was there.",
+        "support_ids": [
+          "st:doc-decl"
+        ],
+        "support_claims": [
+          {
+            "support_id": "st:doc-decl",
+            "exact_excerpt": "I did not see anyone else at the corner."
+          }
+        ]
+      },
+      {
+        "proposition_id": "c5-a",
+        "class": "FACTUAL_BASIS",
+        "text": "The truck was red.",
+        "support_ids": [
+          "st:doc-decl"
+        ],
+        "support_claims": [
+          {
+            "support_id": "st:doc-decl",
+            "exact_excerpt": "I saw a red pickup truck"
+          }
+        ]
+      },
+      {
+        "proposition_id": "c5-b",
+        "class": "FACTUAL_BASIS",
+        "text": "Some other statement.",
+        "support_ids": [
+          "st:doc-unknown"
+        ],
+        "support_claims": [
+          {
+            "support_id": "st:doc-unknown",
+            "exact_excerpt": "It was a blue pickup truck."
+          }
+        ]
+      },
+      {
+        "proposition_id": "c6-a",
+        "class": "FACTUAL_BASIS",
+        "text": "The truck entered against the red light.",
+        "support_ids": [
+          "st:doc-decl"
+        ],
+        "support_claims": [
+          {
+            "support_id": "st:doc-decl",
+            "exact_excerpt": "enter the intersection against the red light"
+          }
+        ]
+      },
+      {
+        "proposition_id": "c6-b",
+        "class": "FACTUAL_BASIS",
+        "text": "The light was yellow.",
+        "support_ids": [
+          "st:doc-dep"
+        ],
+        "support_claims": [
+          {
+            "support_id": "st:doc-dep",
+            "exact_excerpt": "I believe the light was yellow when the truck"
+          }
+        ]
+      }
+    ],
+    "expected_rendered": [
+      "c1",
+      "c6"
+    ],
+    "expected_discarded": {
+      "c2": "later quote is not in the deposition (it says yellow)",
+      "c3": "earlier quote altered",
+      "c4": "both quotes from the same statement",
+      "c5": "unknown statement id"
+    }
+  }
+}
