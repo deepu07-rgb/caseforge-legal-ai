@@ -70,9 +70,14 @@ const HEADNOTE_PATTERNS: &[&str] = &[
     "headnote",
     "head note",
     "editorial headnote",
-    "held:",
     "ratio decidendi summary",
 ];
+
+/// A reporter's headnote opens a line with "Held:". Anywhere else the words are the statute's or the Court's own
+/// ("... no oral hearing shall be held: Provided that ...").
+fn has_held_headnote(lower: &str) -> bool {
+    lower.lines().any(|l| l.trim_start_matches(|c: char| c.is_whitespace() || matches!(c, '-' | '*' | '[' | '(')).starts_with("held:"))
+}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -629,6 +634,14 @@ pub fn headnote_scan_dir(content_root: &Path) -> Vec<String> {
             continue;
         };
         let lower = text.to_ascii_lowercase();
+        if has_held_headnote(&lower) {
+            let rel = path
+                .strip_prefix(content_root)
+                .map(|p| p.to_string_lossy().replace('\\', "/"))
+                .unwrap_or_else(|_| path.display().to_string());
+            hits.push(format!("{rel} :: matched 'held:' at the start of a line"));
+            continue;
+        }
         for pat in HEADNOTE_PATTERNS {
             if lower.contains(pat) {
                 let rel = path
@@ -1403,6 +1416,20 @@ mod tests {
         fs::write(&f, "This is a HEADNOTE for the case.\n").unwrap();
         let hits = headnote_scan_dir(dir.path());
         assert!(!hits.is_empty());
+    }
+
+    #[test]
+    fn headnote_held_only_at_line_start() {
+        let dir = tempfile::tempdir().unwrap();
+        let f = dir.path().join("x.txt");
+        fs::write(&f, "Provided that no oral hearing shall be held:
+Provided further that the tribunal may hear.
+").unwrap();
+        assert!(headnote_scan_dir(dir.path()).is_empty(), "a statute proviso is not a headnote");
+        fs::write(&f, "Facts.
+Held: the appeal is allowed.
+").unwrap();
+        assert!(!headnote_scan_dir(dir.path()).is_empty(), "a line opening with Held: is a headnote");
     }
 
     #[test]
