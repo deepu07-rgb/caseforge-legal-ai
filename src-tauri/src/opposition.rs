@@ -163,10 +163,20 @@ pub struct ScanInput<'a> {
     pub case_id: Option<String>,
 }
 
+/// The text of a filing as the audit reads it.
+pub fn filing_text(pages: &[String]) -> String {
+    pages.join("\n\n")
+}
+
 /// Returns (external_filing record per contracts/external_filing.schema.json, the audit report of its authorities).
+/// The authorities are audited against `input.corpus`; `scan_with_report` takes an audit made another way (the on-disk
+/// store, B-S4-29).
 pub fn scan(input: ScanInput) -> (Value, AuditReport) {
-    let full_text = input.pages.join("\n\n");
-    let mut report = audit::audit(&full_text, input.corpus, input.filename, "txt", input.case_id.clone());
+    let report = audit::audit(&filing_text(input.pages), input.corpus, input.filename, "txt", input.case_id.clone());
+    scan_with_report(input, report)
+}
+
+pub fn scan_with_report(input: ScanInput, mut report: AuditReport) -> (Value, AuditReport) {
     report.subject.subject_kind = "EXTERNAL_FILING".into();
     report.subject.doc_id = Some(input.doc_id.to_string());
     report.subject.filing_party_id = Some(input.filing_party_id.to_string());
@@ -326,6 +336,48 @@ mod tests {
             .map(|a| json!([a["argument_id"], a["matched_tree_node_id"]])).collect();
         let auth: Vec<Value> = report.items.iter().map(|i| json!([i.kind, i.draft_text, i.result])).collect();
         json!({"conflicts": conflicts, "unsupported": record["scan"]["unsupported_assertion_ids"], "arguments": args, "authorities": auth})
+    }
+
+    fn input<'a>(fx: &'a Value, pages: &'a [String], corpus: &'a [CorpusChunk]) -> ScanInput<'a> {
+        ScanInput {
+            doc_id: fx["filing"]["doc_id"].as_str().unwrap(),
+            filing_party_id: fx["filing"]["filing_party_id"].as_str().unwrap(),
+            filing_kind: fx["filing"]["filing_kind"].as_str().unwrap(),
+            filename: "reply.txt",
+            pages,
+            graph: &fx["graph"],
+            argument_tree: Some(&fx["argument_tree"]),
+            corpus,
+            case_id: None,
+        }
+    }
+
+    /// B-S4-29: a scan whose authorities are audited against the on-disk store equals the whole-corpus scan.
+    #[test]
+    fn store_backed_scan_equals_whole_corpus_scan_on_the_real_pack() {
+        let fx: Value = serde_json::from_str(FIXTURE).unwrap();
+        let pack = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../packs/official/caseforge.india.partition.highcourt.civil-appeal");
+        let vault = tempfile::tempdir().unwrap();
+        let paths = crate::vault::VaultPaths::new(vault.path().to_path_buf());
+        crate::packs::install_pack_from_dir(&paths, &pack).expect("official pack installs");
+        let whole = crate::retrieval::build_corpus(&paths, &[]).unwrap();
+        let store = crate::retrieval::store::open(&paths).unwrap();
+        let passage = whole.iter().map(|c| c.text.as_str()).find(|t| t.chars().count() > 200).unwrap();
+        let quote: String = passage.chars().skip(60).take(90).collect::<String>().split_whitespace().collect::<Vec<_>>().join(" ");
+        let pages = vec![
+            format!("1. The respondent relies on Section 2 of the Partition Act, 1893 and on \u{201c}{quote}\u{201d} without more.\n\n2. The appellant never paid rent in 2019. See also Section 99 of the Imaginary Act, 2099."),
+        ];
+        let strip = |mut v: Value| {
+            v["generated_at"] = Value::Null;
+            v
+        };
+        let (rec_a, rep_a) = scan(input(&fx, &pages, &whole));
+        let report = audit::audit_with_store(&store, &[], &filing_text(&pages), "reply.txt", "txt", None).unwrap();
+        let (rec_b, rep_b) = scan_with_report(input(&fx, &pages, &[]), report);
+        assert_eq!(rec_a, rec_b);
+        assert_eq!(strip(serde_json::to_value(&rep_a).unwrap()), strip(serde_json::to_value(&rep_b).unwrap()));
+        assert_eq!(rep_b.subject.subject_kind, "EXTERNAL_FILING");
+        assert!(!rep_b.items.is_empty());
     }
 
     #[test]

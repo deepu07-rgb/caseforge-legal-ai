@@ -446,18 +446,25 @@ fn opposition_scan(
     let graph = mgr.case_graph_get(&case_id).map_err(|e| e.to_string())?.unwrap_or_else(|| serde_json::json!({}));
     let stale_graph = opposition::graph_cites_doc(&graph, &doc_id);
     let tree = mgr.argument_tree_get(&case_id).map_err(|e| e.to_string())?;
-    let corpus = retrieval::build_corpus(&mgr.vault_paths().map_err(|e| e.to_string())?, &[])?;
-    let (record, report) = opposition::scan(opposition::ScanInput {
-        doc_id: &doc_id,
-        filing_party_id: &filing_party_id,
-        filing_kind: &filing_kind,
-        filename: &filename,
-        pages: &pages,
-        graph: &graph,
-        argument_tree: tree.as_ref(),
-        corpus: &corpus,
-        case_id: Some(case_id),
-    });
+    // B-S4-29: the filing's authorities are audited against the on-disk store (only the passages it needs are read).
+    let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
+    let store = retrieval::store::open(&paths)?;
+    let small = retrieval::build_small_corpus(&paths, &[])?;
+    let audit_report = audit::audit_with_store(&store, &small, &opposition::filing_text(&pages), &filename, "txt", Some(case_id.clone()))?;
+    let (record, report) = opposition::scan_with_report(
+        opposition::ScanInput {
+            doc_id: &doc_id,
+            filing_party_id: &filing_party_id,
+            filing_kind: &filing_kind,
+            filename: &filename,
+            pages: &pages,
+            graph: &graph,
+            argument_tree: tree.as_ref(),
+            corpus: &[],
+            case_id: Some(case_id),
+        },
+        audit_report,
+    );
     Ok(serde_json::json!({"pipeline_id": opposition::PIPELINE_ID, "stale_graph": stale_graph, "filing": record, "audit": report}))
 }
 
