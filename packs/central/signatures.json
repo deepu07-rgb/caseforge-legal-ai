@@ -253,5 +253,30 @@
     "content_sha256": "4f96a5974ef0cad8177bc53e1fde158cbcc58a1187a44022f742c70c115d3ae6",
     "signer_key_id": "caseforge-official-dev-2026",
     "signature": "RuzU6SNZpE3/Mm/bGzwGgORplRPQC+gqqzANvORABshGJ7kESJaeHmG7qr+c8IE16ZQIq5vpnKaJZY3tJvCzBg=="
+  },
+  "caseforge.india.sc.landmark.p1": {
+    "content_sha256": "167a2eafaa0400477aede1418b5581c205c518bdfead4f7ee8cc9051549117f1",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "Jt2ZgqS1lszDVykFefZqIpi/iWzuw+LELvWRTMl/7e67OkntCvH5qk0pEJSNcb1sfhuiik7oh/ZWyMmrsn0tDA=="
+  },
+  "caseforge.india.sc.landmark.p2": {
+    "content_sha256": "fc60691dcdcb140f5ab77b5d6792d374e6afa37d8bbd9b7a8f72f4996e92279e",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "aWD4ctOmxJb+LEULcv/KTLVGi58kLXS/jpOtXOmiJA3U1hWpeYbzlKi9GTGmyw1XC6AA0rXGj13zrn1EYVoFCQ=="
+  },
+  "caseforge.india.sc.landmark.p3": {
+    "content_sha256": "061e3049518eec8df11acebf696b42c49e3f66e8fb77bfd5e063d87bc2278173",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "88iVf0OV6tUqFTte9arosknhMX7XaVO1iJeNlj/7KPRIWnG+Lys1duyDqRb4tmlgcxv2Ea4EhWdGWhzEFH+ZCA=="
+  },
+  "caseforge.india.sc.landmark.p4": {
+    "content_sha256": "404c67894f6379e1e74b346a97bb80e927023acb3746ffc0ea60584b611db7b8",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "EjnDh0YM9gD8k4GrxwsynoNvc2+iqDC85UNZ+VlnHlD0FI6gIQXVj0dYJ2UnfVGCeQwItp+qksXJfA2eOrxDCQ=="
+  },
+  "caseforge.india.sc.recent": {
+    "content_sha256": "be8011bc664bc0a06bc02f9c2e745715d8b69b9447997e108a51a0068678c8c0",
+    "signer_key_id": "caseforge-official-dev-2026",
+    "signature": "IRG0eRe1jIIXq33VotsQydh1l/7Cbx2LvvshrajNpW67RqTeBcsr8WJW+9MJ4bxTkGMmmEBrgvSaFTnF5kByCA=="
   }
 }
