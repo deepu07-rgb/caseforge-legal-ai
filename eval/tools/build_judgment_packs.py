@@ -3,17 +3,18 @@
 (sc_citation_graph.py).
 
 Packs (akpkg v2.1, one paragraph per chunk, authority_type JUDGMENT):
-  caseforge.india.sc.recent    - every born-digital report (judgment marker found in the digital layout).
+  caseforge.india.sc.recent    - the newest born-digital reports (judgment marker found in the digital layout).
   caseforge.india.sc.landmark  - the most-cited judgments of all years by PageRank over the citation graph, limited to
                                  judgments whose judgment text was located and whose OCR quality passes the floor.
-Treatment edges (overruled / distinguished / followed / doubted / per incuriam / larger bench) between judgments in
+Each pack is split into parts (.p1, .p2, ...) of at most --part-mb of judgment text, in rank order, to respect the app's
+64 MB per-file pack limit. Treatment edges (overruled / distinguished / followed / doubted / per incuriam / larger bench) between judgments in
 the same pack ship as metadata/treatment_edges.json (contracts/treatment_edge.schema.json): derived, never changing
 supersession status.
 
 Only the Court's text is stored; reporter headnote prose is not. Precedential status is UNKNOWN: binding force and
 any later overruling are for counsel, informed by the treatment edges.
 
-Usage: python eval/tools/build_judgment_packs.py --corpus <dir> --graph <dir> --out <dir> [--landmark 4000] [--ocr-floor 0.95]
+Usage: python eval/tools/build_judgment_packs.py --corpus <dir> --graph <dir> --out <dir> [--landmark 600] [--recent 400] [--part-mb 20] [--ocr-floor 0.95]
 """
 from __future__ import annotations
 
@@ -148,7 +149,9 @@ def main() -> int:
     ap.add_argument("--corpus", type=Path, required=True)
     ap.add_argument("--graph", type=Path, required=True)
     ap.add_argument("--out", type=Path, required=True)
-    ap.add_argument("--landmark", type=int, default=3000)
+    ap.add_argument("--landmark", type=int, default=600, help="number of most-cited judgments")
+    ap.add_argument("--recent", type=int, default=400, help="number of newest born-digital judgments")
+    ap.add_argument("--part-mb", type=float, default=20.0, help="max judgment text per pack part (a part stores it three times; the app caps a pack file at 64 MB)")
     ap.add_argument("--ocr-floor", type=float, default=0.95)
     a = ap.parse_args()
     with gzip.open(a.graph / "judgments_index.json.gz", "rt", encoding="utf-8") as fh:
@@ -172,12 +175,27 @@ def main() -> int:
                     recent.append(r)
                 if r["path"] in landmark:
                     land.append(r)
-    built = [
-        build("caseforge.india.sc.recent", "Supreme Court of India - Recent judgments (born-digital reports)",
-              f"Every born-digital Supreme Court Report in the corpus ({len(recent)} judgments), paragraph by paragraph.", recent, index, treatments, a.out),
-        build("caseforge.india.sc.landmark", f"Supreme Court of India - Landmark judgments (top {a.landmark} by citation authority)",
-              "The most-cited Supreme Court judgments across all years (PageRank over the corpus citation graph), paragraph by paragraph.", land, index, treatments, a.out),
-    ]
+    recent.sort(key=lambda r: iso(r.get("decision_date")), reverse=True)
+    recent = recent[: a.recent]
+    land.sort(key=lambda r: -(index.get(r["path"], {}).get("pagerank") or 0))
+    built = []
+    for slug, label, recs, desc in (
+        ("recent", "Recent judgments", recent, f"The {len(recent)} newest born-digital Supreme Court Reports in the corpus, paragraph by paragraph."),
+        ("landmark", "Landmark judgments", land, f"The {len(land)} most-cited Supreme Court judgments across all years (PageRank over the corpus citation graph), paragraph by paragraph."),
+    ):
+        parts, cur, size = [], [], 0
+        for r in recs:  # rank order is kept: part 1 holds the most important judgments
+            n = sum(len(p["text"]) for p in r["paragraphs"])
+            if cur and size + n > a.part_mb * 1e6:
+                parts.append(cur)
+                cur, size = [], 0
+            cur.append(r)
+            size += n
+        if cur:
+            parts.append(cur)
+        for k, part in enumerate(parts, 1):
+            suffix = f".p{k}" if len(parts) > 1 else ""
+            built.append(build(f"caseforge.india.sc.{slug}{suffix}", f"Supreme Court of India - {label}" + (f" (part {k} of {len(parts)})" if suffix else ""), desc, part, index, treatments, a.out))
     write_json(a.out / "judgment_packs_index.json", {"packs": built})
     for b in built:
         print(f"{b['pack_id']}: {b['judgments']} judgments, {b['units']} paragraphs, {b['treatment_edges']} treatment edges, {b['bytes'] / 1e6:.0f} MB")

@@ -100,7 +100,7 @@ def fuse(lex_rank: dict[int, int], den_rank: dict[int, int], w_lex: float, w_den
 def engine_weights(terms: list[str]) -> tuple[float, float]:
     """Mirror of retrieval::fusion_weights: a question naming a section, citation or year (any term with a digit) leans
     on exact keyword matching; a plain-language or non-English question leans on meaning."""
-    return (1.0, 0.5) if any(any(ch.isdigit() for ch in t) for t in terms) else (0.5, 1.0)
+    return (1.0, 0.01) if any(any(ch.isdigit() for ch in t) for t in terms) else (0.5, 1.0)
 
 
 GRID = {"RRF_1_1": (1.0, 1.0), "RRF_LEX_HALF": (0.5, 1.0), "RRF_DENSE_HALF": (1.0, 0.5)}
@@ -157,7 +157,7 @@ def main() -> int:
     plain = report_sets["plain"]["results"]["ENGINE"]["recall_at_10"]
     report = {
         "batch": "B-S4-27", "model": MODEL_ID, "golden": "G-DENSE", "passages": len(chunks), "embedding_seconds": round(embed_s, 1),
-        "int8_min_cosine": round(int8_fidelity, 4), "engine_fusion": "weighted RRF 1/(61+r); digit in query -> keyword 1.0 / meaning 0.5, else 0.5 / 1.0",
+        "int8_min_cosine": round(int8_fidelity, 4), "engine_fusion": "weighted RRF 1/(61+r); digit in query -> keyword 1.0 / meaning 0.01, else 0.5 / 1.0",
         "sets": report_sets,
         "acs": {
             "AC-S4-27.1": {"status": "PASS" if not errors else "FAIL", "detail": "engine fusion not worse than keyword search on either set; int8 vectors faithful; goldens pinned"},

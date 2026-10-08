@@ -10,9 +10,13 @@ on:
         type: string
         default: sc-judgments-v1
       landmark:
-        description: "Number of Landmark judgments"
+        description: "Number of Landmark judgments (most cited)"
         type: number
-        default: 3000
+        default: 600
+      recent:
+        description: "Number of newest born-digital judgments"
+        type: number
+        default: 400
       ocr_floor:
         description: "Minimum OCR word quality for scanned reports"
         type: string
@@ -45,7 +49,7 @@ jobs:
           cat graph/metrics.json >> "$GITHUB_STEP_SUMMARY"
       - name: Judgment packs
         run: |
-          python eval/tools/build_judgment_packs.py --corpus corpus --graph graph --out packs-out --landmark ${{ inputs.landmark }} --ocr-floor ${{ inputs.ocr_floor }}
+          python eval/tools/build_judgment_packs.py --corpus corpus --graph graph --out packs-out --landmark ${{ inputs.landmark }} --recent ${{ inputs.recent }} --ocr-floor ${{ inputs.ocr_floor }}
           for d in packs-out/caseforge.*; do python scripts/legal_pack_tool.py validate "$d"; done
           (cd packs-out && zip -q -r ../judgment-manifests.zip judgment_packs_index.json caseforge.*/manifest.json)
           mkdir -p zips && for d in packs-out/caseforge.*; do (cd packs-out && zip -q -r "../zips/$(basename "$d").zip" "$(basename "$d")"); done
@@ -53,4 +57,6 @@ jobs:
       - name: Publish graph and unsigned packs
         run: |
           (cd graph && tar czf ../citation-graph.tar.gz .)
+          # earlier builds were not split into parts and exceeded the pack size limits: remove them from the release
+          for n in $(gh release view "$TAG" --json assets -q '.assets[].name' | grep -E '^caseforge\.india\.sc\..*\.zip$'); do gh release delete-asset "$TAG" "$n" --yes; done
           gh release upload "$TAG" citation-graph.tar.gz judgment-manifests.zip zips/*.zip --clobber

@@ -36,7 +36,7 @@ locally (`sign_pack_manifests.py`) → `central-acts.yml stage=publish-signed` i
    terms) is embedded and the top 100 passages by similarity (> 0) form the meaning ranking.
 3. Weighted reciprocal-rank fusion: score = w_k/(61 + keyword rank) + w_m/(61 + meaning rank). The weights follow
    the question: one naming a section, citation or year (a term with a digit, e.g. "s. 438 CrPC") needs the exact
-   provision, so w_k = 1.0, w_m = 0.5; a plain-language or non-English question uses w_k = 0.5, w_m = 1.0. Only
+   provision, so w_k = 1.0, w_m = 0.01 (keyword order stands, meaning only breaks ties and fills the tail; measured: with 0.5 the exact section stayed in the top 10 but MRR fell from 0.80 to 0.56); a plain-language or non-English question uses w_k = 0.5, w_m = 1.0. Only
    passages with real keyword evidence hold a keyword rank (the authority boost alone does not). Passages found only by meaning are added with the
    reason "meaning match (offline multilingual embedding)". Mode is reported as `HYBRID_DENSE`.
 4. A question with no keyword terms (e.g. Hindi, which the keyword index does not read) is answered by meaning alone.

@@ -1023,7 +1023,7 @@ fn retrieve_core(
 /// Measured on golden G-DENSE (plain and identifier sets) by eval/checks/dense_retrieval_b_s4_27.py.
 fn fusion_weights(query_terms: &[String]) -> (f64, f64) {
     if query_terms.iter().any(|t| t.chars().any(|c| c.is_ascii_digit())) {
-        (1.0, 0.5)
+        (1.0, 0.01) // keyword order stands; meaning only breaks ties and fills the tail
     } else {
         (0.5, 1.0)
     }
@@ -1618,7 +1618,7 @@ mod tests {
         let by_meaning = retrieve_core(&chunks, &[], 8, &filters, false, Some(&query));
         assert_eq!(by_meaning.first().map(|h| h.chunk_id.as_str()), Some("dense-test-arrest"));
         assert!(retrieve_core(&chunks, &[], 8, &filters, false, None).is_empty());
-        assert_eq!(fusion_weights(&tokenize("s. 438 CrPC")), (1.0, 0.5));
+        assert_eq!(fusion_weights(&tokenize("s. 438 CrPC")), (1.0, 0.01));
         assert_eq!(fusion_weights(&tokenize("protection before arrest")), (0.5, 1.0));
         assert_eq!(fusion_weights(&[]), (0.5, 1.0));
     }
