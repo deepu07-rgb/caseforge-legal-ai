@@ -255,28 +255,23 @@
     "signature": "RuzU6SNZpE3/Mm/bGzwGgORplRPQC+gqqzANvORABshGJ7kESJaeHmG7qr+c8IE16ZQIq5vpnKaJZY3tJvCzBg=="
   },
   "caseforge.india.sc.landmark.p1": {
-    "content_sha256": "08ff547da4f80585f0e7329c51770bd1221c10086100222acecb23aeab0d6d53",
+    "content_sha256": "eba76f4d926d4ef36958bc5a883561a5a07c9b3dcf07d38bba62a87926ae55a7",
     "signer_key_id": "caseforge-official-dev-2026",
-    "signature": "0fVcjIs6aChL4ZGjpwDUBNzzU4OuHstBGA6vqAgLyH6yawzwSEtFGkKnJoYCPeTFFHjx5SoaEGF1ERu+U725DA=="
+    "signature": "FDHv4nQu7ZppcEyfXvc8nKNJtfuWBHyk/KPmeNJEIkOMCdKkLH300yblTnYR74QPwPHotb+JNqHKbVxBiRcWAw=="
   },
   "caseforge.india.sc.landmark.p2": {
-    "content_sha256": "5dc3c8a4422a215ef5c082a66a2475eaabdb06e2eb7046e2a324cd9b1eca6fd1",
+    "content_sha256": "12daf5f1dd08379f61a38666c08416eb59788dbd9f89b74d7ecdaf0d5db98127",
     "signer_key_id": "caseforge-official-dev-2026",
-    "signature": "//GbvWNc7W9Z/InW8uzfJTlTQyrgBILhunRdsmNMQCJMDyjDw2eio1w72H8Ys2f4uerrwjY6L1Nn7yqzg+wUAQ=="
+    "signature": "fF30iDX33RJe4iOhCWh+CR8nJm4MUFPnhabFOtKgAeavfol0ZCiS1hlGpqRMIcPsBxJ2/2//bgYoomkDaRKIAg=="
   },
   "caseforge.india.sc.landmark.p3": {
-    "content_sha256": "6322db3dce815c15c321f1b16cd72e0507f6042b1ebbedc539fc604b9f75fa75",
+    "content_sha256": "292fe27aeda2d4d7de87eec42ba38d7f48dd8a05f183a4b65a771fe3c58a0e1c",
     "signer_key_id": "caseforge-official-dev-2026",
-    "signature": "dq0YjZ4eu9vN97Wmpee7biEcHcReLL8SASpDCcM9Z1DmIM+bwo6a2iWSuIMcvgeSHlhVkXD9EFvkiXQt9lLEAQ=="
-  },
-  "caseforge.india.sc.landmark.p4": {
-    "content_sha256": "3a2e1323f3330842766b0b5a08cc2a7d4f6f1fb39472d5b1711418bc4827f462",
-    "signer_key_id": "caseforge-official-dev-2026",
-    "signature": "h7hyvZYVBp/WLY5ZgSwA3mQ43lEMSM9ZNEaKUp9U40/2/G0N3YCpyVN6tzB1LIeG1zalxMXM94Y0ZWmI8TluCQ=="
+    "signature": "XacqelvKX+b+gnYEJY6DPkkDqcbAiy9a4veB1xSLNr3+GHAR/jbK1WhxFhjiTGKVfz89ItQEhQCXxV/RtaTSCw=="
   },
   "caseforge.india.sc.recent": {
-    "content_sha256": "be8011bc664bc0a06bc02f9c2e745715d8b69b9447997e108a51a0068678c8c0",
+    "content_sha256": "32b5abe31b041440487ca0e87423a30856a0905ea47018070c55bef8687480ed",
     "signer_key_id": "caseforge-official-dev-2026",
-    "signature": "IRG0eRe1jIIXq33VotsQydh1l/7Cbx2LvvshrajNpW67RqTeBcsr8WJW+9MJ4bxTkGMmmEBrgvSaFTnF5kByCA=="
+    "signature": "g+2WKyep/gJMFfcZOXxRt2WMvDrFJD6vJiGv1wMc5eAhAjalyAsIwdZ/3JUdzjDGXKDllFuDBBLdTaZBkJrqBg=="
   }
 }
