@@ -164,16 +164,18 @@ def main() -> int:
 
     ranked = sorted((j for j in index.values() if eligible(j)), key=lambda j: (-(j.get("pagerank") or 0), -(j.get("cited_by") or 0)))
     landmark = {j["path"] for j in ranked[: a.landmark]}
-    recent, land = [], []
+    recent, land, seen_land, seen_recent = [], [], set(), set()
     for f in sorted(a.corpus.glob("year*.jsonl.gz")):
         with gzip.open(f, "rt", encoding="utf-8") as fh:
             for line in fh:
                 r = json.loads(line)
                 if not r.get("paragraphs"):
                     continue
-                if r["split"] == "digital-marker":
+                if r["split"] == "digital-marker" and r["path"] not in seen_recent:
+                    seen_recent.add(r["path"])
                     recent.append(r)
-                if r["path"] in landmark:
+                if r["path"] in landmark and r["path"] not in seen_land:  # some old reports sit in two year archives
+                    seen_land.add(r["path"])
                     land.append(r)
     recent.sort(key=lambda r: iso(r.get("decision_date")), reverse=True)
     recent = recent[: a.recent]

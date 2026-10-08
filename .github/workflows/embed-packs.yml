@@ -14,6 +14,10 @@ on:
         description: "manifests.zip (Central Acts) or judgment-manifests.zip (Supreme Court)"
         type: string
         required: true
+      embed:
+        description: "Compute passage vectors (skip when the packs already have them and only need repair)"
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -45,9 +49,14 @@ jobs:
           unzip -q -o "$MANIFESTS" '*_index.json' -d packs-out
           ls packs-out
       - name: Embed
+        if: inputs.embed
         run: |
           index=$(ls packs-out/*_index.json | head -1)
           python eval/tools/embed_pack.py --index "$index" packs-out/caseforge.* | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Remove duplicate sources and passages (and their vectors)
+        run: |
+          index=$(ls packs-out/*_index.json | head -1)
+          python eval/tools/pack_dedupe.py --index "$index" packs-out/caseforge.* | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Validate and publish
         run: |
           for d in packs-out/caseforge.*; do python scripts/legal_pack_tool.py validate "$d"; done
