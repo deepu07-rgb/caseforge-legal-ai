@@ -26,7 +26,11 @@ jobs:
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - run: gh release view "${{ inputs.release_tag }}" >/dev/null 2>&1 || gh release create "${{ inputs.release_tag }}" --prerelease --title "Supreme Court judgments corpus (${{ inputs.release_tag }})" --notes "Processed Supreme Court Reports text by year (paragraphs, citations, OCR quality). Source: Indian Supreme Court Judgments open dataset (Dattam Labs, CC-BY-4.0), mirroring eCourts. Reporter headnote prose is not included."
+      - name: Release exists
+        run: |
+          gh release view "${{ inputs.release_tag }}" >/dev/null 2>&1 || gh release create "${{ inputs.release_tag }}" --prerelease \
+            --title "Supreme Court judgments corpus (${{ inputs.release_tag }})" \
+            --notes "Processed Supreme Court Reports text by year (paragraphs, citations, OCR quality). Source - Indian Supreme Court Judgments open dataset (Dattam Labs, CC-BY-4.0), mirroring eCourts. Reporter headnote prose is not included."
 
   shard:
     needs: release
