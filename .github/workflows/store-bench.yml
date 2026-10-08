@@ -1,0 +1,51 @@
+# B-S4-29: measures the on-disk legal store at real scale (install, index build, reopen, query latency, memory) against
+# the old load-everything path, using signed packs from the given releases.
+name: Store benchmark
+
+on:
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: "Space-separated releases whose signed caseforge.*.zip packs are installed"
+        type: string
+        default: central-acts-v1
+
+permissions:
+  contents: read
+
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      GH_TOKEN: ${{ github.token }}
+      CARGO_TERM_COLOR: never
+      CARGO_PROFILE_TEST_OPT_LEVEL: "3"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Linux libraries for the Tauri crates
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libwebkit2gtk-4.1-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev libsoup-3.0-dev libjavascriptcoregtk-4.1-dev libssl-dev pkg-config build-essential
+      - run: rustup toolchain install stable --profile minimal && rustup default stable
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cargo/registry/index
+            ~/.cargo/registry/cache
+            ~/.cargo/git/db
+            src-tauri/target
+          key: cargo-bench-${{ runner.os }}-${{ hashFiles('src-tauri/Cargo.lock') }}
+          restore-keys: cargo-bench-${{ runner.os }}-
+      - name: Download signed packs
+        run: |
+          mkdir -p zips packs
+          for t in ${{ inputs.tags }}; do gh release download "$t" -p 'caseforge.*.zip' -D zips --clobber; done
+          for z in zips/*.zip; do unzip -q -o "$z" -d packs; done
+          ls packs | wc -l
+          du -sm packs
+      - name: Benchmark
+        run: |
+          CASEFORGE_BENCH_PACKS="$PWD/packs" cargo test --manifest-path src-tauri/Cargo.toml --lib b_s4_29_scale_benchmark -- --ignored --nocapture 2>&1 | tee bench.log
+          { echo '```'; grep BENCH bench.log; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          grep -q "BENCH queries" bench.log

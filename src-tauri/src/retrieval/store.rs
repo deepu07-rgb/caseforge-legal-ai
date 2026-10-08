@@ -529,6 +529,57 @@ mod tests {
         assert!(!all_ok, "a flipped byte in docs.dat must fail a passage check");
     }
 
+    fn rss_mb() -> (u64, u64) {
+        let status = fs::read_to_string("/proc/self/status").unwrap_or_default();
+        let kb = |key: &str| status.lines().find(|l| l.starts_with(key)).and_then(|l| l.split_whitespace().nth(1)).and_then(|v| v.parse::<u64>().ok()).unwrap_or(0) / 1024;
+        (kb("VmRSS:"), kb("VmHWM:"))
+    }
+
+    /// Scale measurement on real packs (run by .github/workflows/store-bench.yml; CASEFORGE_BENCH_PACKS = folder of
+    /// unzipped signed packs). Prints install, index build, reopen, per-query latency and memory, and the old
+    /// whole-corpus load for comparison.
+    #[test]
+    #[ignore]
+    fn b_s4_29_scale_benchmark() {
+        use std::time::Instant;
+        let root = PathBuf::from(std::env::var("CASEFORGE_BENCH_PACKS").expect("CASEFORGE_BENCH_PACKS"));
+        let dir = tempfile::tempdir().unwrap();
+        let paths = VaultPaths::new(dir.path().to_path_buf());
+        let mut packs: Vec<PathBuf> = fs::read_dir(&root).unwrap().flatten().map(|e| e.path()).filter(|p| p.join("manifest.json").is_file()).collect();
+        packs.sort();
+        let t = Instant::now();
+        for p in &packs {
+            crate::packs::install_pack_from_dir(&paths, p).unwrap_or_else(|e| panic!("{}: {e}", p.display()));
+        }
+        println!("BENCH packs={} install_s={:.1}", packs.len(), t.elapsed().as_secs_f64());
+        let t = Instant::now();
+        let store = open(&paths).unwrap();
+        println!("BENCH passages={} first_open_build_s={:.1} rss_mb={:?}", store.len(), t.elapsed().as_secs_f64(), rss_mb());
+        drop(store);
+        *CURRENT.lock().unwrap() = None;
+        let t = Instant::now();
+        let store = open(&paths).unwrap();
+        println!("BENCH reopen_s={:.2} rss_mb={:?}", t.elapsed().as_secs_f64(), rss_mb());
+        let queries = ["anticipatory bail", "punishment for cheating", "limitation period for appeal", "electronic record certificate", "arbitration award setting aside", "consumer complaint deficiency in service", "income tax assessment reopening", "environment clearance", "companies act director disqualification", "motor accident compensation"];
+        let mut ms = Vec::new();
+        let mut returned = 0;
+        for q in queries {
+            let t = Instant::now();
+            let found = search_with(&store, &tokenize(q), 8, &india_verified(), true, &[], &[], None).unwrap();
+            ms.push(t.elapsed().as_secs_f64() * 1000.0);
+            returned += found.hits.len();
+        }
+        ms.sort_by(|a, b| a.partial_cmp(b).unwrap());
+        println!("BENCH queries={} hits_returned={} median_ms={:.0} max_ms={:.0} rss_mb={:?}", ms.len(), returned, ms[ms.len() / 2], ms[ms.len() - 1], rss_mb());
+        assert!(returned > 0);
+        let t = Instant::now();
+        let corpus = crate::retrieval::build_corpus(&paths, &[]).unwrap();
+        println!("BENCH old_full_load_s={:.1} passages={} rss_mb={:?}", t.elapsed().as_secs_f64(), corpus.len(), rss_mb());
+        let t = Instant::now();
+        let hits = crate::retrieval::retrieve_filtered(&corpus, &tokenize(queries[0]), 8, &india_verified());
+        println!("BENCH old_query_s={:.1} hits={}", t.elapsed().as_secs_f64(), hits.len());
+    }
+
     #[test]
     fn b_s4_29_varint_round_trip() {
         let mut b = Vec::new();
