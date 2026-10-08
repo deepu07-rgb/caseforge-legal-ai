@@ -956,7 +956,7 @@ fn retrieve_core(
             scored.push((index, lexical, semantic, rerank, reasons));
         }
     }
-    let dense_used = dense_query.map(|q| fuse_dense(chunks, &candidate_indexes, &mut scored, q)).unwrap_or(false);
+    let dense_used = dense_query.map(|q| fuse_dense(chunks, &candidate_indexes, &mut scored, q, fusion_weights(query_terms))).unwrap_or(false);
     scored.sort_by(|a, b| {
         b.3.partial_cmp(&a.3)
             .unwrap_or(std::cmp::Ordering::Equal)
@@ -1017,10 +1017,22 @@ fn retrieve_core(
         .collect()
 }
 
-/// Reciprocal-rank fusion of the existing ranking with the meaning-based ranking (top 100 by embedding similarity).
-/// Passages found only by meaning join the candidate list; the result is re-scored in place. Returns whether any
-/// candidate had a vector.
-fn fuse_dense(chunks: &[CorpusChunk], candidates: &[usize], scored: &mut Vec<(usize, f64, f64, f64, Vec<String>)>, query: &[f32]) -> bool {
+/// Fusion weights (keyword, meaning) chosen from the question itself. A question naming a section, citation or year
+/// (any term containing a digit: "438", "498a", "2023") needs the exact provision, so keyword matching leads; a
+/// plain-language or non-English question ("protection before arrest") is better served by meaning.
+/// Measured on golden G-DENSE (plain and identifier sets) by eval/checks/dense_retrieval_b_s4_27.py.
+fn fusion_weights(query_terms: &[String]) -> (f64, f64) {
+    if query_terms.iter().any(|t| t.chars().any(|c| c.is_ascii_digit())) {
+        (1.0, 0.5)
+    } else {
+        (0.5, 1.0)
+    }
+}
+
+/// Weighted reciprocal-rank fusion of the existing ranking with the meaning-based ranking (top 100 by embedding
+/// similarity): w_keyword/(61 + keyword rank) + w_meaning/(61 + meaning rank). Passages found only by meaning join the
+/// candidate list; the result is re-scored in place. Returns whether any candidate had a vector.
+fn fuse_dense(chunks: &[CorpusChunk], candidates: &[usize], scored: &mut Vec<(usize, f64, f64, f64, Vec<String>)>, query: &[f32], weights: (f64, f64)) -> bool {
     let mut ranked: Vec<(usize, f32)> = candidates.iter().filter_map(|&i| dense::similarity(query, &chunks[i].chunk_id).map(|s| (i, s))).collect();
     if ranked.is_empty() {
         return false;
@@ -1044,8 +1056,8 @@ fn fuse_dense(chunks: &[CorpusChunk], candidates: &[usize], scored: &mut Vec<(us
         }
     }
     for s in scored.iter_mut() {
-        let l = lexical_rank.get(&s.0).map(|r| 1.0 / (61.0 + *r as f64)).unwrap_or(0.0);
-        let d = dense_rank.get(&s.0).map(|r| 1.0 / (61.0 + *r as f64)).unwrap_or(0.0);
+        let l = lexical_rank.get(&s.0).map(|r| weights.0 / (61.0 + *r as f64)).unwrap_or(0.0);
+        let d = dense_rank.get(&s.0).map(|r| weights.1 / (61.0 + *r as f64)).unwrap_or(0.0);
         if d > 0.0 {
             s.4.push("meaning match (offline multilingual embedding)".into());
         }
@@ -1606,6 +1618,9 @@ mod tests {
         let by_meaning = retrieve_core(&chunks, &[], 8, &filters, false, Some(&query));
         assert_eq!(by_meaning.first().map(|h| h.chunk_id.as_str()), Some("dense-test-arrest"));
         assert!(retrieve_core(&chunks, &[], 8, &filters, false, None).is_empty());
+        assert_eq!(fusion_weights(&tokenize("s. 438 CrPC")), (1.0, 0.5));
+        assert_eq!(fusion_weights(&tokenize("protection before arrest")), (0.5, 1.0));
+        assert_eq!(fusion_weights(&[]), (0.5, 1.0));
     }
 
     fn controlled_chunks() -> Vec<CorpusChunk> {

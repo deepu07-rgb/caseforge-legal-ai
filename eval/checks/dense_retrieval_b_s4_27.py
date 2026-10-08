@@ -6,10 +6,13 @@ three ways, mirroring the app (src-tauri/src/retrieval/mod.rs):
   KEYWORD  the app's lexical-only ranking: same tokenizer, BM25 (k1 1.2, b 0.75) over title/section/citation/headings/
            text, + metadata boost x0.3 + 0.08 for OFFICIAL_VERIFIED;
   MEANING  cosine of the query vector with the pack's int8 passage vectors (as shipped);
-  FUSED    what the app ranks when vectors exist: reciprocal-rank fusion, 1/(61+r), of KEYWORD (passages with real
-           evidence) and the top 100 by MEANING with similarity > 0.
-Hard gates: golden pinned; FUSED is not worse than KEYWORD on Recall@10 and MRR@10; int8 passage vectors agree with
-float vectors (min cosine >= 0.98). The absolute Recall@10 target is a proposal awaiting the owner (Q-S4-01).
+  ENGINE   what the app ranks when vectors exist: weighted reciprocal-rank fusion, w/(61+r), of KEYWORD (passages with
+           real evidence) and the top 100 by MEANING with similarity > 0. Weights follow the question: one naming a
+           section, citation or year (a term with a digit) leans on keywords (1.0 / 0.5), any other on meaning (0.5 / 1.0).
+  RRF_*    fixed-weight alternatives, reported for comparison only.
+Two pinned sets: "plain" (plain-language and Hindi) and "identifier" (section numbers as lawyers cite them).
+Hard gates: goldens pinned; ENGINE is not worse than KEYWORD on Recall@10 and MRR@10 on either set; int8 passage vectors
+agree with float vectors (min cosine >= 0.98). The absolute Recall@10 target is a proposal awaiting the owner (Q-S4-01).
 
 Usage: CASEFORGE_EMBED_MODEL=<dir> python eval/checks/dense_retrieval_b_s4_27.py [--evidence out.json]
 """
@@ -31,8 +34,11 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "sidecars" / "docpipe"))
 from embed import MODEL_ID, embed, quantise  # noqa: E402
 
-GOLDEN = ROOT / "golden" / "G-DENSE" / "fixtures" / "dense_retrieval_queries.json"
-GOLDEN_SHA256 = "d118b6f7408f7a2fed1efd280e1718356c7b4676d33201d58b804876e5a55d0e"
+FIX = ROOT / "golden" / "G-DENSE" / "fixtures"
+GOLDENS = {  # pinned when committed, before the engine they measure
+    "plain": (FIX / "dense_retrieval_queries.json", "d118b6f7408f7a2fed1efd280e1718356c7b4676d33201d58b804876e5a55d0e"),
+    "identifier": (FIX / "identifier_queries.json", "2fbf037024b1e91c780d98bbb43a16f5e1c511dcb51d7307a96696d6cf3391bd"),
+}
 PACK = ROOT / "packs" / "official" / "caseforge.india.criminal-codes"
 STOP = set("the a an and or of to in on for from by is are was were be been being what when where which who whom whose how may must "
            "does do did this that these those with under into any it its as at if not".split())
@@ -87,14 +93,29 @@ def evaluate(ranked: list[list[str]], golden: list[dict]) -> dict:
     return {"recall_at_5": round(r5 / n, 4), "recall_at_10": round(r10 / n, 4), "mrr_at_10": round(mrr / n, 4), "missed": misses}
 
 
+def fuse(lex_rank: dict[int, int], den_rank: dict[int, int], w_lex: float, w_den: float) -> dict[int, float]:
+    return {i: (w_lex / (61 + lex_rank[i]) if i in lex_rank else 0) + (w_den / (61 + den_rank[i]) if i in den_rank else 0) for i in set(lex_rank) | set(den_rank)}
+
+
+def engine_weights(terms: list[str]) -> tuple[float, float]:
+    """Mirror of retrieval::fusion_weights: a question naming a section, citation or year (any term with a digit) leans
+    on exact keyword matching; a plain-language or non-English question leans on meaning."""
+    return (1.0, 0.5) if any(any(ch.isdigit() for ch in t) for t in terms) else (0.5, 1.0)
+
+
+GRID = {"RRF_1_1": (1.0, 1.0), "RRF_LEX_HALF": (0.5, 1.0), "RRF_DENSE_HALF": (1.0, 0.5)}
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--evidence", type=Path)
     args = ap.parse_args()
     errors: list[str] = []
-    if hashlib.sha256(GOLDEN.read_bytes()).hexdigest() != GOLDEN_SHA256:
-        errors.append("G-DENSE golden changed since it was pinned")
-    golden = json.loads(GOLDEN.read_text(encoding="utf-8"))["queries"]
+    sets = {}
+    for name, (path, pin) in GOLDENS.items():
+        if hashlib.sha256(path.read_bytes()).hexdigest() != pin:
+            errors.append(f"G-DENSE {name} set changed since it was pinned")
+        sets[name] = json.loads(path.read_text(encoding="utf-8"))["queries"]
     chunks = json.loads((PACK / "metadata" / "legal_chunks.json").read_text(encoding="utf-8"))
     labels = [LABEL.match(c["exact_text"]).group(1) for c in chunks]
 
@@ -103,43 +124,44 @@ def main() -> int:
     pv = np.asarray(embed(passages, kind="passage"), dtype=np.float32)
     shipped = np.frombuffer(quantise(pv.tolist()), dtype=np.int8).reshape(pv.shape).astype(np.float32) / 127.0  # as the app reads the pack
     int8_fidelity = float(np.min((pv * shipped).sum(1) / np.linalg.norm(shipped, axis=1)))
-    qv = np.asarray(embed([q["query"] for q in golden], kind="query"), dtype=np.float32)
-    all_sims = qv @ shipped.T
     embed_s = time.time() - t0
-
     docs = [tokenize(search_text(c)) for c in chunks]
     df = Counter(t for d in docs for t in set(d))
     avg = max(1.0, sum(map(len, docs)) / len(docs))
-    modes: dict[str, list[list[str]]] = {"KEYWORD": [], "MEANING": [], "FUSED": []}
-    expected_sim, top_sim = [], []
-    for q, sims in zip(golden, all_sims.tolist()):
-        kw = keyword_rank(chunks, docs, df, avg, tokenize(q["query"]))
-        dense = sorted(range(len(chunks)), key=lambda i: (-sims[i], i))
-        modes["KEYWORD"].append([labels[i] for i, _, _ in kw[:10]])
-        modes["MEANING"].append([labels[i] for i in dense[:10]])
-        lex_rank = {i: r for r, i in enumerate(i for i, _, ev in kw if ev)}
-        den_rank = {i: r for r, i in enumerate(i for i in dense[:100] if sims[i] > 0)}
-        fused = {i: (1 / (61 + lex_rank[i]) if i in lex_rank else 0) + (1 / (61 + den_rank[i]) if i in den_rank else 0) for i in set(lex_rank) | set(den_rank)}
-        modes["FUSED"].append([labels[i] for i in sorted(fused, key=lambda i: (-fused[i], chunks[i]["chunk_id"]))[:10]])
-        exp = [sims[i] for i in range(len(chunks)) if labels[i] in set(q["expected"])]
-        expected_sim.append(max(exp) if exp else 0.0)
-        top_sim.append(sims[dense[0]])
 
-    results = {m: evaluate(r, golden) for m, r in modes.items()}
-    by_lang = {lang: {m: evaluate([r for r, q in zip(modes[m], golden) if q["lang"] == lang], [q for q in golden if q["lang"] == lang])["recall_at_10"] for m in modes}
-               for lang in sorted({q["lang"] for q in golden})}
-    if results["FUSED"]["recall_at_10"] < results["KEYWORD"]["recall_at_10"] or results["FUSED"]["mrr_at_10"] < results["KEYWORD"]["mrr_at_10"]:
-        errors.append("meaning-based fusion ranks worse than keyword search on G-DENSE")
+    report_sets = {}
+    for name, golden in sets.items():
+        qv = np.asarray(embed([q["query"] for q in golden], kind="query"), dtype=np.float32)
+        modes: dict[str, list[list[str]]] = {m: [] for m in ["KEYWORD", "MEANING", "ENGINE", *GRID]}
+        for q, sims in zip(golden, (qv @ shipped.T).tolist()):
+            terms = tokenize(q["query"])
+            kw = keyword_rank(chunks, docs, df, avg, terms)
+            dense = sorted(range(len(chunks)), key=lambda i: (-sims[i], i))
+            modes["KEYWORD"].append([labels[i] for i, _, _ in kw[:10]])
+            modes["MEANING"].append([labels[i] for i in dense[:10]])
+            lex_rank = {i: r for r, i in enumerate(i for i, _, ev in kw if ev)}
+            den_rank = {i: r for r, i in enumerate(i for i in dense[:100] if sims[i] > 0)}
+            for m, (wl, wd) in [("ENGINE", engine_weights(terms)), *GRID.items()]:
+                f = fuse(lex_rank, den_rank, wl, wd)
+                modes[m].append([labels[i] for i in sorted(f, key=lambda i: (-f[i], chunks[i]["chunk_id"]))[:10]])
+        results = {m: evaluate(r, golden) for m, r in modes.items()}
+        report_sets[name] = {"queries": len(golden), "results": results,
+                             "recall_at_10_by_language": {lang: {m: evaluate([r for r, q in zip(modes[m], golden) if q["lang"] == lang], [q for q in golden if q["lang"] == lang])["recall_at_10"] for m in modes}
+                                                          for lang in sorted({q["lang"] for q in golden})}}
+        e, k = results["ENGINE"], results["KEYWORD"]
+        if e["recall_at_10"] < k["recall_at_10"] or e["mrr_at_10"] < k["mrr_at_10"]:
+            errors.append(f"engine fusion ranks worse than keyword search on the G-DENSE {name} set")
     if int8_fidelity < 0.98:
         errors.append(f"int8 passage vectors drift from float vectors (min cosine {int8_fidelity:.4f})")
 
+    plain = report_sets["plain"]["results"]["ENGINE"]["recall_at_10"]
     report = {
-        "batch": "B-S4-27", "model": MODEL_ID, "golden": "G-DENSE", "queries": len(golden), "passages": len(chunks),
-        "embedding_seconds": round(embed_s, 1), "int8_min_cosine": round(int8_fidelity, 4), "results": results, "recall_at_10_by_language": by_lang,
-        "similarity": {"expected_best_mean": round(sum(expected_sim) / len(golden), 4), "top1_mean": round(sum(top_sim) / len(golden), 4)},
+        "batch": "B-S4-27", "model": MODEL_ID, "golden": "G-DENSE", "passages": len(chunks), "embedding_seconds": round(embed_s, 1),
+        "int8_min_cosine": round(int8_fidelity, 4), "engine_fusion": "weighted RRF 1/(61+r); digit in query -> keyword 1.0 / meaning 0.5, else 0.5 / 1.0",
+        "sets": report_sets,
         "acs": {
-            "AC-S4-27.1": {"status": "PASS" if not errors else "FAIL", "detail": "fusion not worse than keyword search; int8 vectors faithful; golden pinned"},
-            "AC-S4-27.2": {"status": "PROPOSED", "target": f"FUSED Recall@10 >= {PROPOSED_RECALL_AT_10}", "measured": results["FUSED"]["recall_at_10"],
+            "AC-S4-27.1": {"status": "PASS" if not errors else "FAIL", "detail": "engine fusion not worse than keyword search on either set; int8 vectors faithful; goldens pinned"},
+            "AC-S4-27.2": {"status": "PROPOSED", "target": f"ENGINE Recall@10 >= {PROPOSED_RECALL_AT_10} on the plain set", "measured": plain,
                            "reason": "absolute retrieval threshold awaits owner approval (Q-S4-01)"},
         },
         "errors": errors,

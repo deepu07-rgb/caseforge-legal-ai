@@ -34,8 +34,10 @@ locally (`sign_pack_manifests.py`) → `central-acts.yml stage=publish-signed` i
 1. The existing ranking runs unchanged (BM25 + legal-concept vector + metadata + authority).
 2. If installed packs carry vectors and the local model answers, the user's own question (not the stop-word-stripped
    terms) is embedded and the top 100 passages by similarity (> 0) form the meaning ranking.
-3. Reciprocal-rank fusion: score = 1/(61 + keyword rank) + 1/(61 + meaning rank). Only passages with real keyword
-   evidence hold a keyword rank (the authority boost alone does not). Passages found only by meaning are added with the
+3. Weighted reciprocal-rank fusion: score = w_k/(61 + keyword rank) + w_m/(61 + meaning rank). The weights follow
+   the question: one naming a section, citation or year (a term with a digit, e.g. "s. 438 CrPC") needs the exact
+   provision, so w_k = 1.0, w_m = 0.5; a plain-language or non-English question uses w_k = 0.5, w_m = 1.0. Only
+   passages with real keyword evidence hold a keyword rank (the authority boost alone does not). Passages found only by meaning are added with the
    reason "meaning match (offline multilingual embedding)". Mode is reported as `HYBRID_DENSE`.
 4. A question with no keyword terms (e.g. Hindi, which the keyword index does not read) is answered by meaning alone.
 
@@ -52,7 +54,7 @@ passages). Grounding is unchanged: every hit is still a verbatim pack passage su
 |---|---|
 | `retrieval::tests::b_s4_27_dense_fusion_adds_meaning_matches_and_is_off_without_vectors` | fusion adds meaning-only passages, keeps keyword hits, wrong-size vectors fall back to the unchanged keyword result, Hindi-style empty-term queries answered by meaning |
 | `packs::tests::b_s4_27_pack_vectors_pass_install_checks_and_register` | a pack with vectors passes the install checks; vectors register; reordered chunk lists are ignored; any other binary is rejected |
-| `eval/checks/dense_retrieval_b_s4_27.py` (`dense-eval.yml`) | golden **G-DENSE** (42 plain-language/Hindi questions → criminal-code sections, pinned) over the official criminal-codes pack: KEYWORD vs MEANING vs FUSED; hard gate FUSED ≥ KEYWORD on Recall@10 and MRR@10, int8 vectors faithful |
+| `eval/checks/dense_retrieval_b_s4_27.py` (`dense-eval.yml`) | golden **G-DENSE**, two pinned sets over the official criminal-codes pack: 42 plain-language/Hindi questions and 22 section-number questions. KEYWORD vs MEANING vs ENGINE (adaptive weights) vs fixed-weight RRF; hard gate ENGINE ≥ KEYWORD on Recall@10 and MRR@10 on both sets, int8 vectors faithful |
 | `smoke_installed_layout.ps1` | the installed copy loads the model with the bundled Python (`embed.status`) |
 
 AC-S4-27.2 (absolute FUSED Recall@10 ≥ 0.80) is **PROPOSED** pending owner approval of retrieval thresholds (Q-S4-01).
