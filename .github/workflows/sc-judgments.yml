@@ -1,0 +1,59 @@
+# B-S4-24: Supreme Court judgment corpus. Processes the official Supreme Court Reports PDFs (Indian Supreme Court
+# Judgments open dataset, CC-BY-4.0, mirrored from eCourts) year by year on GitHub runners: judgment text by
+# paragraph, citations with case names, OCR quality. Output per year goes to the release (nothing on the dev PC).
+name: Supreme Court judgments corpus
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        type: string
+        default: sc-judgments-v1
+      first_year:
+        type: number
+        default: 1950
+      last_year:
+        type: number
+        default: 2025
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - run: gh release view "${{ inputs.release_tag }}" >/dev/null 2>&1 || gh release create "${{ inputs.release_tag }}" --prerelease --title "Supreme Court judgments corpus (${{ inputs.release_tag }})" --notes "Processed Supreme Court Reports text by year (paragraphs, citations, OCR quality). Source: Indian Supreme Court Judgments open dataset (Dattam Labs, CC-BY-4.0), mirroring eCourts. Reporter headnote prose is not included."
+
+  shard:
+    needs: release
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: ${{ inputs.release_tag }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --disable-pip-version-check --quiet pymupdf==1.25.5 pyarrow==19.0.1 wordfreq==3.1.1
+      - name: Process this shard's years
+        run: |
+          mkdir -p out
+          have=$(gh release view "$TAG" --json assets -q '.assets[].name' || true)
+          for y in $(seq ${{ inputs.first_year }} ${{ inputs.last_year }}); do
+            if [ $(( (y - 1950) % 10 )) -ne ${{ matrix.shard }} ]; then continue; fi
+            if echo "$have" | grep -qx "year=$y.jsonl.gz"; then echo "skip $y (done)"; continue; fi
+            python -I eval/tools/sc_judgments.py year "$y" out || { echo "year $y failed"; continue; }
+            gh release upload "$TAG" "out/year=$y.jsonl.gz" "out/year=$y.stats.json" --clobber
+            rm -f "out/year=$y.jsonl.gz"
+          done
