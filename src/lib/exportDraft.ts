@@ -23,7 +23,8 @@ export type TemplateId =
   | "court_formatted_digest"
   | "list_of_dates"
   | "synopsis"
-  | "counsel_memo";
+  | "counsel_memo"
+  | "impeachment_kit";
 
 export const TEMPLATES: {
   id: TemplateId;

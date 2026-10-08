@@ -1,0 +1,53 @@
+{
+  "batch": "B-S4-08",
+  "acceptance": {
+    "AC-S4-03.2": {
+      "status": "PASS",
+      "evidence": {
+        "quotes_exact": "ok",
+        "kit_contract": "ok",
+        "full_schema_validation": true
+      }
+    },
+    "AC-S4-03.3": {
+      "status": "PASS",
+      "evidence": {
+        "test": "ok",
+        "every_model_path_verifies": true
+      },
+      "detail": "model candidates render only if both quotes are exact substrings of two different statements (B-S3-14 verifier); 4 of 6 fixture candidates discarded"
+    },
+    "AC-S4-03.4": {
+      "status": "PASS",
+      "evidence": {
+        "g3_coaching": "ok"
+      },
+      "scope": "witness-coaching slice of G-REDTEAM-S4 (10 refuse, 8 allow); the full suite is authored in B-S4-02 and run in B-S4-23"
+    },
+    "AC-S4-03.1": {
+      "status": "BLOCKED",
+      "measured": {
+        "recall": 1.0,
+        "precision": 1.0
+      },
+      "planted_contradictions": 12,
+      "proposed": {
+        "recall": 0.95,
+        "precision": 0.9
+      },
+      "reason": "thresholds awaiting owner approval (Q-S4-01); measured on the small synthetic G-IMPEACH fixture only"
+    },
+    "STRUCTURE": {
+      "status": "PASS",
+      "checks": {
+        "deterministic_layer_model_free": true,
+        "commands_registered": true,
+        "export_carries_g4_footer": true,
+        "mock_court_consumes_kit": true,
+        "ui_vocabulary_honest": true,
+        "deterministic_part_has_no_proposition_bypass": true
+      }
+    }
+  },
+  "errors": []
+}

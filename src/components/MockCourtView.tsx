@@ -62,6 +62,8 @@ type Props = {
   onOpenCase: (caseId: string) => void;
   onRefreshLlm: () => void;
   initialInsightTab?: "bench" | "debrief";
+  /** B-S4-08: open a format with counsel's draft pre-filled (e.g. Witness Cross from an Impeachment Kit). */
+  seed?: { format: CourtFormat; draft: string; nonce: number } | null;
 };
 
 const ROLE_TO_MODE: Record<CourtRole, string> = {
@@ -93,6 +95,7 @@ export default function MockCourtView({
   onOpenCase,
   onRefreshLlm,
   initialInsightTab = "bench",
+  seed = null,
 }: Props) {
   const modelReady = Boolean(llm?.controlled_beta_ready);
   const [role, setRole] = useState<CourtRole>("adversary_drill");
@@ -155,6 +158,13 @@ export default function MockCourtView({
   useEffect(() => {
     setInsightTab(initialInsightTab);
   }, [initialInsightTab]);
+
+  useEffect(() => {
+    if (!seed) return;
+    setRole("counsel");
+    setFormat(seed.format);
+    setDraft(seed.draft);
+  }, [seed?.nonce]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!activeCase) { setPreparationTasks([]); return; }

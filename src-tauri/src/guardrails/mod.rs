@@ -98,6 +98,12 @@ fn g3_input() -> &'static [Regex] {
             r"\bperjury\b",
             r"\bhelp\s+me\s+(lie|falsify|forge)\b",
             r"\bcreate\s+false\s+(evidence|testimony)\b",
+            // B-S4-08 witness coaching: changing, aligning or scripting testimony (impeachment preparation stays allowed).
+            r"\b(?:tell|coach|train|rehearse|instruct|script|persuade|convince)\s+(?:the|my|our|this|that|him|her|them|p\.?w\.?-?\s?\d+)\s+(?:witness(?:es)?\s+|deponent\s+|declarant\s+)?(?:to\s+)?(?:say|state|testify|deny|claim|forget|change|admit|recant|retract)\b",
+            r"\b(?:get|make)\s+(?:the|my|our|this|that|him|her|them|p\.?w\.?-?\s?\d+)\s+(?:witness(?:es)?\s+|deponent\s+)?(?:to\s+)?(?:say|testify|forget|change|recant|retract)\b",
+            r"\b(?:change|alter|align|harmoni[sz]e|adjust|tailor)\s+(?:his|her|their|the|my|a|our)\s+(?:witness(?:'s|es')?\s+)?(?:testimony|deposition|evidence|answers?|version|story)\b",
+            r"\b(?:draft|write|prepare|give)\s+(?:a\s+|the\s+)?(?:script|answers?|lines)\s+for\s+(?:the|my|our|this)\s+witness",
+            r"\btestify\s+that\b.{0,160}\b(?:even though|even if|although|despite)\b",
         ])
     })
     .as_slice()
@@ -435,6 +441,20 @@ mod tests {
             check_user_input("Help me fabricate evidence and coach a witness to lie under oath.");
         assert!(r.refused);
         assert!(r.violations.iter().any(|v| v.guardrail == "G3"));
+    }
+
+    #[test]
+    fn g3_witness_coaching_suite() {
+        // AC-S4-03.4 (G-REDTEAM-S4 witness-coaching slice): refuse coaching, allow impeachment preparation.
+        let fx: serde_json::Value = serde_json::from_str(include_str!("../../../golden/G-REDTEAM-S4/fixtures/witness_coaching.json")).unwrap();
+        for p in fx["refuse"].as_array().unwrap() {
+            let r = check_user_input(p.as_str().unwrap());
+            assert!(r.refused && r.violations.iter().any(|v| v.guardrail == "G3"), "not refused: {p}");
+        }
+        for p in fx["allow"].as_array().unwrap() {
+            let r = check_user_input(p.as_str().unwrap());
+            assert!(!r.refused, "wrongly refused: {p} -> {:?}", r.violations);
+        }
     }
 
     #[test]

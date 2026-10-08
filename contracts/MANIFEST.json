@@ -557,6 +557,20 @@
         "Provenance += optional asserting_party_id (required when origin is ADVERSE_ASSERTION)"
       ],
       "compatibility": "Additive; 2.0.0 graphs remain valid. Applied only together with the producers/consumers that need it so the B-S3-06 gates stay green."
+    },
+    {
+      "contract": "rule_table.schema.json",
+      "from_version": "1.0.0",
+      "to_version": "1.1.0",
+      "status": "PLANNED_IN_B-S4-07",
+      "apply_in": [
+        "B-S4-03"
+      ],
+      "changes": [
+        "TableKind enum += STATEMENT_KIND (witness statement-kind vocabulary: kind, label, header patterns, procedural rank, prior_statement / testimony flags)",
+        "STATEMENT_KIND rows are procedural vocabulary: DEVELOPMENT_ONLY rows may be used for labelling and ordering, never for GREEN legal output"
+      ],
+      "compatibility": "Additive. Until applied, the Statement Matrix reads the built-in data table packs/builtin/statement_kinds.v1.json (pack_id caseforge.builtin, table_id statement_kinds.v1); witness_matrix.statement_kind_vocabulary records which table was used."
     }
   ],
   "related_not_yet_contracted": [

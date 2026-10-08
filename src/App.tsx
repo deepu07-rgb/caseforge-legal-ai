@@ -18,6 +18,7 @@ import ProtectionView from "./components/ProtectionView";
 import GuardrailsView from "./components/GuardrailsView";
 import WorkflowJourney from "./components/WorkflowJourney";
 import OppositionView from "./components/OppositionView";
+import WitnessView from "./components/WitnessView";
 import { ModelTierSelector } from "./components/ModelTierSelector";
 import {
   deriveLawyerWorkflow,
@@ -152,6 +153,7 @@ type NavId =
   | "guardrails"
   | "court"
   | "opposition"
+  | "witnesses"
   | "library"
   | "practice"
   | "settings";
@@ -179,6 +181,7 @@ const NAV: { id: NavId; label: string; section?: string; badge?: string }[] = [
   { id: "experience", label: "Experience" },
   { id: "court", label: "Mock Court" },
   { id: "opposition", label: "Opponent's Filing" },
+  { id: "witnesses", label: "Witnesses" },
   { id: "practice", label: "Integrity lab" },
   { id: "library", label: "Legal Authorities", section: "Library" },
   { id: "licence", label: "Licence", section: "App" },
@@ -186,7 +189,7 @@ const NAV: { id: NavId; label: string; section?: string; badge?: string }[] = [
   { id: "guardrails", label: "Guardrails" },
   { id: "settings", label: "System" },
 ];
-const PRIMARY_NAV_IDS:NavId[]=["home","cases","workspace","digest","library","integrity","court","opposition"];
+const PRIMARY_NAV_IDS:NavId[]=["home","cases","workspace","digest","library","integrity","court","opposition","witnesses"];
 const ADVANCED_NAV_IDS:NavId[]=["builder","voice","experience","practice","licence","protection","guardrails","settings"];
 const PRIMARY_NAV=NAV.filter(item=>PRIMARY_NAV_IDS.includes(item.id));
 const ADVANCED_NAV=NAV.filter(item=>ADVANCED_NAV_IDS.includes(item.id));
@@ -255,6 +258,8 @@ function titleFor(nav: NavId): { title: string; sub: string } {
       return { title: "Mock Court", sub: "Argue · bench prep · adversary drill" };
     case "opposition":
       return { title: "Opponent's Filing", sub: "Check their citations, record conflicts and new arguments · never added to your facts" };
+    case "witnesses":
+      return { title: "Witnesses", sub: "Statements lined up by topic · contradictions and omissions with exact quotes · impeachment kit" };
     case "library":
       return { title: "Legal Authorities", sub: "Confirm the applicable law and source-backed working set" };
     case "practice":
@@ -344,6 +349,7 @@ export default function App() {
   const [workflowLoading,setWorkflowLoading]=useState(false);
   const [workflowError,setWorkflowError]=useState<string|null>(null);
   const [courtInitialPanel,setCourtInitialPanel]=useState<"bench"|"debrief">("bench");
+  const [courtSeed,setCourtSeed]=useState<{format:"Witness_Cross_Examination";draft:string;nonce:number}|null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const folderInputRef = useRef<HTMLInputElement | null>(null);
   const lastFrameTs = useRef<number | null>(null);
@@ -1930,6 +1936,7 @@ export default function App() {
               onOpenCase={(id) => void openCase(id)}
               onRefreshLlm={() => void refreshLlm()}
               initialInsightTab={courtInitialPanel}
+              seed={courtSeed}
             />
           )}
 
@@ -1939,6 +1946,15 @@ export default function App() {
               documents={documents}
               onDocumentsChanged={() => { if (activeCase) void refreshDocs(activeCase.case_id); }}
               onNavigate={(target) => setNav(target)}
+            />
+          )}
+
+          {nav === "witnesses" && (
+            <WitnessView
+              activeCase={activeCase}
+              documents={documents}
+              modelReady={modelReady}
+              onRehearse={(draft) => { setCourtSeed({ format: "Witness_Cross_Examination", draft, nonce: Date.now() }); setNav("court"); }}
             />
           )}
 

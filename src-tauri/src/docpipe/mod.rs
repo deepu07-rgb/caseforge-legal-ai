@@ -1497,6 +1497,34 @@ pub(crate) fn external_filing_pages(
     Ok((meta.original_filename, pages))
 }
 
+/// B-S4-07: page texts of a witness statement. Uses the document's own text; for a scanned document, the reviewed
+/// (trusted) OCR layer. A text file with form feeds is split into its pages (deposition transcripts).
+pub(crate) fn statement_pages(
+    vault: &VaultManager,
+    case_id: &str,
+    doc_id: &str,
+) -> Result<(crate::vault::DocumentMeta, Vec<String>), String> {
+    let meta = vault.doc_get(case_id, doc_id).map_err(|e| e.to_string())?;
+    let bytes = vault.doc_content_bytes(case_id, doc_id).map_err(|e| e.to_string())?;
+    let mut pages: Vec<String> = triage::document_page_texts(&bytes, &meta.source_format, &meta.original_filename)?
+        .into_iter()
+        .map(|(_, text, _)| text)
+        .collect();
+    if pages.iter().all(|p| p.trim().is_empty()) {
+        let mut layers = vault.page_text_layer_list(case_id, Some(doc_id)).map_err(|e| e.to_string())?;
+        layers.sort_by_key(|l| l.page_index);
+        pages = layers
+            .iter()
+            .filter(|l| !l.page_quality_warn && !l.words.iter().any(|w| w.force_review))
+            .map(trusted_layer_text)
+            .collect();
+    }
+    if pages.len() == 1 && pages[0].contains('\u{c}') {
+        pages = pages[0].split('\u{c}').map(str::to_string).collect();
+    }
+    Ok((meta, pages))
+}
+
 #[cfg(test)]
 mod external_filing_barrier_tests {
     use super::*;

@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "caseforge.builtin",
+  "table_id": "statement_kinds.v1",
+  "description": "Statement-kind vocabulary for the Witness Statement Matrix (PRD v4.0 §7.3). Data, not code: a jurisdiction pack can replace it once rule tables carry a STATEMENT_KIND table kind (planned amendment, B-S4-03). 'header_patterns' are case-insensitive regexes tried against the first part of the statement. 'procedural_rank' orders statements recorded on the same day. 'prior_statement' kinds are earlier statements whose silence can make a later fact an OMISSION; 'testimony' kinds are the later statements checked for omissions.",
+  "kinds": [
+    { "kind": "FIR", "label": "First Information Report", "jurisdiction": "India", "procedural_rank": 10, "prior_statement": true, "testimony": false,
+      "header_patterns": ["first information report", "\\bF\\.?I\\.?R\\.? No\\b"] },
+    { "kind": "POLICE_STATEMENT", "label": "Statement to police (s.161 Cr.P.C. / s.180 BNSS)", "jurisdiction": "India", "procedural_rank": 20, "prior_statement": true, "testimony": false,
+      "header_patterns": ["(?:section|sec\\.?|u/s)\\s*161\\b", "(?:section|sec\\.?|u/s)\\s*180\\b[^\\n]{0,20}BNSS", "statement (?:recorded )?by (?:the )?police"] },
+    { "kind": "MAGISTRATE_STATEMENT", "label": "Statement before Magistrate (s.164 Cr.P.C. / s.183 BNSS)", "jurisdiction": "India", "procedural_rank": 30, "prior_statement": true, "testimony": false,
+      "header_patterns": ["(?:section|sec\\.?|u/s)\\s*164\\b", "(?:section|sec\\.?|u/s)\\s*183\\b[^\\n]{0,20}BNSS"] },
+    { "kind": "COMPLAINT", "label": "Complaint", "jurisdiction": "India", "procedural_rank": 15, "prior_statement": true, "testimony": false,
+      "header_patterns": ["^\\s*complaint\\b", "complaint under section 200"] },
+    { "kind": "EXAMINATION_IN_CHIEF", "label": "Examination-in-chief", "jurisdiction": "India", "procedural_rank": 50, "prior_statement": false, "testimony": true,
+      "header_patterns": ["examination[- ]in[- ]chief", "\\bchief examination\\b"] },
+    { "kind": "CROSS_EXAMINATION", "label": "Cross-examination", "jurisdiction": "*", "procedural_rank": 60, "prior_statement": false, "testimony": true,
+      "header_patterns": ["cross[- ]examination"] },
+    { "kind": "RE_EXAMINATION", "label": "Re-examination", "jurisdiction": "*", "procedural_rank": 70, "prior_statement": false, "testimony": true,
+      "header_patterns": ["re[- ]examination"] },
+    { "kind": "AFFIDAVIT", "label": "Affidavit", "jurisdiction": "*", "procedural_rank": 40, "prior_statement": true, "testimony": false,
+      "header_patterns": ["^\\s*affidavit\\b", "solemnly affirm", "make oath and say"] },
+    { "kind": "DECLARATION", "label": "Declaration", "jurisdiction": "United States", "procedural_rank": 20, "prior_statement": true, "testimony": false,
+      "header_patterns": ["declaration of", "declare under penalty of perjury"] },
+    { "kind": "INTERROGATORY_ANSWERS", "label": "Answers to interrogatories", "jurisdiction": "United States", "procedural_rank": 30, "prior_statement": true, "testimony": false,
+      "header_patterns": ["answers? to (?:\\w+ )?interrogatories", "responses? to (?:\\w+ )?interrogatories"] },
+    { "kind": "DEPOSITION", "label": "Deposition transcript", "jurisdiction": "United States", "procedural_rank": 40, "prior_statement": true, "testimony": true,
+      "header_patterns": ["deposition of", "oral deposition", "videotaped deposition"] },
+    { "kind": "TRIAL_TESTIMONY", "label": "Trial testimony", "jurisdiction": "*", "procedural_rank": 80, "prior_statement": false, "testimony": true,
+      "header_patterns": ["trial transcript", "direct examination", "testimony of"] }
+  ],
+  "metadata_markers": [
+    "recorded on", "recorded at", "date and time of report", "date of report", "executed on", "taken on", "sworn on", "affirmed on",
+    "under penalty of perjury", "under section", "u/s", "civil action no", "case no", "fir no", "s.t. no", "examination-in-chief recorded",
+    "declare as follows", "statement of the informant", "informant:", "verification"
+  ]
+}

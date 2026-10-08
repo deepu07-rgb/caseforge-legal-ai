@@ -81,6 +81,8 @@ jobs:
           python eval/checks/citation_audit_b_s4_04.py --cargo-log cargo-test.log
           python eval/checks/certificate_b_s4_05.py --cargo-log cargo-test.log
           python eval/checks/opposing_scan_b_s4_06.py --cargo-log cargo-test.log --record evidence/opposing_scan_record.json
+          python eval/checks/witness_matrix_b_s4_07.py --cargo-log cargo-test.log --matrix evidence/witness_matrix.json
+          python eval/checks/impeachment_b_s4_08.py --cargo-log cargo-test.log --kits evidence/impeachment_kits.json
 
       - name: Stage bundled portable Python
         run: ./scripts/stage_runtime_python.ps1

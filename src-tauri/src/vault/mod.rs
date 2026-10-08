@@ -107,6 +107,10 @@ const CASE_MIGRATIONS: &[(i64, &str)] = &[
         16,
         include_str!("../../migrations/case_016_mock_court_debrief_v2.sql"),
     ),
+    (
+        17,
+        include_str!("../../migrations/case_017_witness_store.sql"),
+    ),
 ];
 
 #[derive(Debug, Clone, Serialize)]
@@ -2453,6 +2457,49 @@ impl VaultManager {
                 Ok(Some(v))
             }
         }
+    }
+
+    // --- B-S4-07/08 witness store (statement register, counsel decisions, finding status) ---
+
+    pub fn witness_kv_put(&self, case_id: &str, key: &str, value: &serde_json::Value) -> VaultResult<()> {
+        let g = self.inner.lock().map_err(|_| VaultError::LockPoisoned)?;
+        let conn = g.cases.get(case_id).ok_or_else(|| VaultError::Internal {
+            detail: "CF_VAULT_LOCKED: open the case vault before writing witness data".into(),
+        })?;
+        sql::apply_pending_migrations(conn, CASE_MIGRATIONS)?;
+        conn.execute(
+            "INSERT INTO witness_store (key, value_json, updated_at_unix_ms) VALUES (?1, ?2, ?3)
+             ON CONFLICT(key) DO UPDATE SET value_json = excluded.value_json, updated_at_unix_ms = excluded.updated_at_unix_ms",
+            rusqlite::params![key, value.to_string(), now_ms()],
+        )?;
+        Ok(())
+    }
+
+    pub fn witness_kv_delete(&self, case_id: &str, key: &str) -> VaultResult<()> {
+        let g = self.inner.lock().map_err(|_| VaultError::LockPoisoned)?;
+        let conn = g.cases.get(case_id).ok_or_else(|| VaultError::Internal {
+            detail: "CF_VAULT_LOCKED: open the case vault before writing witness data".into(),
+        })?;
+        sql::apply_pending_migrations(conn, CASE_MIGRATIONS)?;
+        conn.execute("DELETE FROM witness_store WHERE key = ?1", [key])?;
+        Ok(())
+    }
+
+    /// All entries whose key starts with `prefix`, in key order.
+    pub fn witness_kv_list(&self, case_id: &str, prefix: &str) -> VaultResult<Vec<(String, serde_json::Value)>> {
+        let g = self.inner.lock().map_err(|_| VaultError::LockPoisoned)?;
+        let conn = g.cases.get(case_id).ok_or_else(|| VaultError::Internal {
+            detail: "CF_VAULT_LOCKED: open the case vault before reading witness data".into(),
+        })?;
+        sql::apply_pending_migrations(conn, CASE_MIGRATIONS)?;
+        let mut stmt = conn.prepare("SELECT key, value_json FROM witness_store WHERE substr(key, 1, length(?1)) = ?1 ORDER BY key")?;
+        let rows = stmt.query_map([prefix], |r| Ok((r.get::<_, String>(0)?, r.get::<_, String>(1)?)))?;
+        let mut out = Vec::new();
+        for row in rows {
+            let (k, v) = row?;
+            out.push((k, serde_json::from_str(&v).unwrap_or(serde_json::Value::Null)));
+        }
+        Ok(out)
     }
 
     // --- B-S1-08 review corrections ---

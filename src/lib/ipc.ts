@@ -2695,3 +2695,113 @@ export async function auditCertificateIssue(opts: {
 export async function auditCertificateVerify(certificateJson: string, draftText?: string | null): Promise<CertificateVerifyOutcome> {
   return invoke<CertificateVerifyOutcome>("audit_certificate_verify", { certificateJson, draftText: draftText ?? null });
 }
+
+// --- B-S4-07/08 Witness Statement Matrix and Impeachment Kit ---
+export type LocatorKind = "PAGE_SPAN" | "PAGE_LINE";
+export interface WitnessRegisterEntry {
+  doc_id: string;
+  witness_name: string;
+  relation?: string | null;
+  statement_kind: string;
+  recorded_on: string | null;
+  locator_kind: LocatorKind;
+  sequence_override?: number | null;
+  origin: "PROPOSED" | "COUNSEL_CONFIRMED";
+}
+export type WitnessDecision =
+  | { action: "MERGE"; witness_id: string; into_witness_id: string }
+  | { action: "SPLIT"; statement_id: string; new_display_name: string };
+export interface WitnessRegisterState {
+  register: WitnessRegisterEntry[];
+  decisions: { key: string; decision: WitnessDecision; active: boolean }[];
+  statement_kinds: { kind: string; label: string; jurisdiction: string }[];
+  vocabulary: { pack_id: string; table_id: string };
+}
+export interface MatterLocator {
+  doc_id: string;
+  page_index: number | null;
+  char_start: number;
+  char_end: number;
+  line_start?: number | null;
+  line_end?: number | null;
+  excerpt: string;
+}
+export interface MatrixWitness {
+  witness_id: string;
+  display_name: string;
+  alias_node_ids: string[];
+  resolution: "PROPOSED" | "COUNSEL_CONFIRMED";
+  statements: { statement_id: string; statement_kind: string; recorded_on: string | null; doc_id: string; locator_kind: LocatorKind; sequence_index: number }[];
+  topics: { topic_id: string; topic_kind: string; label: string }[];
+  cells: { topic_id: string; statement_id: string; assertions: { assertion_id: string; text: string; locator: MatterLocator }[] }[];
+}
+export interface WitnessMatrix {
+  schema_version: "1.0.0";
+  matrix_id: string;
+  case_id: string;
+  built_at: string;
+  graph_version: string;
+  statement_kind_vocabulary: { pack_id: string | null; table_id: string | null };
+  witnesses: MatrixWitness[];
+}
+export interface ImpeachSide { statement_id: string; quote: string | null; locator: MatterLocator | null; absence_note?: string | null }
+export interface ImpeachFinding {
+  finding_id: string;
+  finding_kind: "CONTRADICTION" | "OMISSION";
+  detection: "DETERMINISTIC" | "MODEL_VERIFIED";
+  dimension: string;
+  topic_id: string;
+  earlier: ImpeachSide;
+  later: ImpeachSide;
+  proposition_ids: string[];
+  counsel_judgement_required: boolean;
+  confrontation_order: number;
+  status: "PROPOSED" | "COUNSEL_ACCEPTED" | "COUNSEL_REJECTED";
+}
+export interface ImpeachmentKit {
+  schema_version: "1.0.0";
+  kit_id: string;
+  case_id: string;
+  witness_id: string;
+  matrix_id: string;
+  generated_at: string;
+  model_fingerprint: string | null;
+  findings: ImpeachFinding[];
+  export_footer_id: "caseforge.export_footer.v1";
+}
+export interface WitnessBuildResult {
+  pipeline_id: string;
+  matrix_pipeline_id: string;
+  matrix: WitnessMatrix;
+  kits: ImpeachmentKit[];
+  stale_decisions: string[];
+  unreadable: { doc_id: string; error: string }[];
+}
+
+export async function witnessPropose(caseId: string, docIds?: string[] | null): Promise<WitnessRegisterEntry[]> {
+  return invoke<WitnessRegisterEntry[]>("witness_propose", { caseId, docIds: docIds ?? null });
+}
+export async function witnessRegisterList(caseId: string): Promise<WitnessRegisterState> {
+  return invoke<WitnessRegisterState>("witness_register_list", { caseId });
+}
+export async function witnessRegisterSave(caseId: string, entry: WitnessRegisterEntry): Promise<WitnessRegisterEntry> {
+  return invoke<WitnessRegisterEntry>("witness_register_save", { caseId, entry });
+}
+export async function witnessRegisterRemove(caseId: string, docId: string): Promise<void> {
+  return invoke<void>("witness_register_remove", { caseId, docId });
+}
+export async function witnessDecisionAdd(caseId: string, decision: WitnessDecision): Promise<string> {
+  return invoke<string>("witness_decision_add", { caseId, decision });
+}
+export async function witnessDecisionRevoke(caseId: string, key: string): Promise<void> {
+  return invoke<void>("witness_decision_revoke", { caseId, key });
+}
+export async function witnessMatrixBuild(caseId: string): Promise<WitnessBuildResult> {
+  return invoke<WitnessBuildResult>("witness_matrix_build", { caseId });
+}
+export async function impeachFindingStatus(caseId: string, findingId: string, status: ImpeachFinding["status"]): Promise<void> {
+  return invoke<void>("impeach_finding_status", { caseId, findingId, status });
+}
+export async function impeachModelScan(caseId: string, witnessId: string): Promise<{ rendered: number; discarded: { candidate: string; reason: string }[]; model_fingerprint: string }> {
+  return invoke("impeach_model_scan", { caseId, witnessId });
+}

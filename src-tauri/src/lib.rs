@@ -23,6 +23,8 @@ mod licence;
 mod mock_court;
 mod mock_court_retrieval;
 mod opposition;
+mod witness;
+mod impeach;
 mod packs;
 mod proposition;
 mod protection;
@@ -354,6 +356,228 @@ fn opposition_scan(
         case_id: Some(case_id),
     });
     Ok(serde_json::json!({"pipeline_id": opposition::PIPELINE_ID, "stale_graph": stale_graph, "filing": record, "audit": report}))
+}
+
+// --- B-S4-07/08 Witness Statement Matrix and Impeachment Kit ---
+
+fn case_jurisdiction(mgr: &VaultManager, case_id: &str) -> Result<String, String> {
+    mgr.list_cases()
+        .map_err(|e| e.to_string())?
+        .into_iter()
+        .find(|c| c.case_id == case_id)
+        .map(|c| c.jurisdiction)
+        .ok_or_else(|| "CF_CASE_NOT_FOUND: matter is not registered".to_string())
+}
+
+fn witness_register(mgr: &VaultManager, case_id: &str) -> Result<Vec<witness::RegisterEntry>, String> {
+    Ok(mgr
+        .witness_kv_list(case_id, "register:")
+        .map_err(|e| e.to_string())?
+        .into_iter()
+        .filter_map(|(_, v)| serde_json::from_value(v).ok())
+        .collect())
+}
+
+/// Active counsel decisions in the order they were made, with their storage keys.
+fn witness_decisions(mgr: &VaultManager, case_id: &str) -> Result<Vec<(String, witness::Decision, bool)>, String> {
+    Ok(mgr
+        .witness_kv_list(case_id, "decision:")
+        .map_err(|e| e.to_string())?
+        .into_iter()
+        .filter_map(|(k, v)| {
+            let d: witness::Decision = serde_json::from_value(v.get("decision")?.clone()).ok()?;
+            Some((k, d, v.get("active").and_then(|a| a.as_bool()).unwrap_or(true)))
+        })
+        .collect())
+}
+
+/// Proposes register rows from statement headers. Counsel-confirmed rows are never overwritten (survive rerun).
+#[tauri::command]
+fn witness_propose(app: AppHandle, vault: State<'_, VaultState>, case_id: String, doc_ids: Option<Vec<String>>) -> Result<Vec<witness::RegisterEntry>, String> {
+    let mgr = vault.get_or_init(&app)?;
+    let jurisdiction = case_jurisdiction(&mgr, &case_id)?;
+    let existing: HashMap<String, witness::RegisterEntry> = witness_register(&mgr, &case_id)?.into_iter().map(|e| (e.doc_id.clone(), e)).collect();
+    let explicit = doc_ids.is_some();
+    let ids: Vec<String> = match doc_ids {
+        Some(ids) => ids,
+        None => mgr.doc_list(&case_id).map_err(|e| e.to_string())?.into_iter().map(|d| d.doc_id).collect(),
+    };
+    for id in ids {
+        let (_meta, pages) = docpipe::statement_pages(&mgr, &case_id, &id)?;
+        let doc = witness::StatementDoc { doc_id: id.clone(), pages };
+        let proposal = match witness::propose(&doc, &jurisdiction) {
+            Some(p) => p,
+            // Explicitly chosen by counsel but unrecognised: register it for counsel to fill in.
+            None if explicit => witness::RegisterEntry {
+                doc_id: id.clone(),
+                witness_name: "Unnamed witness".into(),
+                relation: None,
+                statement_kind: "OTHER".into(),
+                recorded_on: None,
+                locator_kind: if doc.pages.iter().any(|p| witness::is_transcript_page(p)) { "PAGE_LINE".into() } else { "PAGE_SPAN".into() },
+                sequence_override: None,
+                origin: "PROPOSED".into(),
+            },
+            None => continue,
+        };
+        let row = witness::merge_proposal(existing.get(&id), proposal);
+        mgr.witness_kv_put(&case_id, &format!("register:{id}"), &serde_json::to_value(&row).map_err(|e| e.to_string())?).map_err(|e| e.to_string())?;
+    }
+    witness_register(&mgr, &case_id)
+}
+
+#[tauri::command]
+fn witness_register_list(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<serde_json::Value, String> {
+    let mgr = vault.get_or_init(&app)?;
+    let kinds: Vec<serde_json::Value> = witness::VOCAB.kinds().iter().map(|k| serde_json::json!({"kind": k.kind, "label": k.label, "jurisdiction": k.jurisdiction})).collect();
+    let decisions: Vec<serde_json::Value> = witness_decisions(&mgr, &case_id)?.into_iter().map(|(key, d, active)| serde_json::json!({"key": key, "decision": d, "active": active})).collect();
+    Ok(serde_json::json!({"register": witness_register(&mgr, &case_id)?, "decisions": decisions, "statement_kinds": kinds,
+                          "vocabulary": {"pack_id": witness::VOCAB.pack_id, "table_id": witness::VOCAB.table_id}}))
+}
+
+/// Counsel edits or confirms a register row (origin becomes COUNSEL_CONFIRMED).
+#[tauri::command]
+fn witness_register_save(app: AppHandle, vault: State<'_, VaultState>, case_id: String, mut entry: witness::RegisterEntry) -> Result<witness::RegisterEntry, String> {
+    let mgr = vault.get_or_init(&app)?;
+    if entry.witness_name.trim().is_empty() {
+        return Err("CF_WITNESS_NAME_REQUIRED: enter the witness's name".into());
+    }
+    if entry.statement_kind != "OTHER" && witness::VOCAB.kind(&entry.statement_kind).is_none() {
+        return Err(format!("CF_WITNESS_KIND_UNKNOWN: {} is not in the statement-kind vocabulary", entry.statement_kind));
+    }
+    if !matches!(entry.locator_kind.as_str(), "PAGE_SPAN" | "PAGE_LINE") {
+        return Err("CF_WITNESS_LOCATOR_KIND: PAGE_SPAN or PAGE_LINE".into());
+    }
+    entry.origin = "COUNSEL_CONFIRMED".into();
+    mgr.witness_kv_put(&case_id, &format!("register:{}", entry.doc_id), &serde_json::to_value(&entry).map_err(|e| e.to_string())?).map_err(|e| e.to_string())?;
+    Ok(entry)
+}
+
+#[tauri::command]
+fn witness_register_remove(app: AppHandle, vault: State<'_, VaultState>, case_id: String, doc_id: String) -> Result<(), String> {
+    vault.get_or_init(&app)?.witness_kv_delete(&case_id, &format!("register:{doc_id}")).map_err(|e| e.to_string())
+}
+
+/// Counsel merge/split. Append-only: a decision is revoked (kept in history), never deleted.
+#[tauri::command]
+fn witness_decision_add(app: AppHandle, vault: State<'_, VaultState>, case_id: String, decision: witness::Decision) -> Result<String, String> {
+    let mgr = vault.get_or_init(&app)?;
+    let n = mgr.witness_kv_list(&case_id, "decision:").map_err(|e| e.to_string())?.len();
+    let key = format!("decision:{n:06}");
+    mgr.witness_kv_put(&case_id, &key, &serde_json::json!({"decision": decision, "active": true, "created_at": crate::docpipe::now_rfc3339()})).map_err(|e| e.to_string())?;
+    Ok(key)
+}
+
+#[tauri::command]
+fn witness_decision_revoke(app: AppHandle, vault: State<'_, VaultState>, case_id: String, key: String) -> Result<(), String> {
+    let mgr = vault.get_or_init(&app)?;
+    let (_, mut value) = mgr
+        .witness_kv_list(&case_id, &key)
+        .map_err(|e| e.to_string())?
+        .into_iter()
+        .find(|(k, _)| *k == key)
+        .ok_or_else(|| "CF_WITNESS_DECISION_NOT_FOUND".to_string())?;
+    value["active"] = serde_json::json!(false);
+    value["revoked_at"] = serde_json::json!(crate::docpipe::now_rfc3339());
+    mgr.witness_kv_put(&case_id, &key, &value).map_err(|e| e.to_string())
+}
+
+/// Builds the Statement Matrix and one Impeachment Kit per witness from the register, counsel decisions,
+/// counsel finding status and any stored (re-verified) model candidates. Deterministic.
+#[tauri::command]
+fn witness_matrix_build(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<serde_json::Value, String> {
+    let mgr = vault.get_or_init(&app)?;
+    let us = witness::is_us(&case_jurisdiction(&mgr, &case_id)?);
+    let register = witness_register(&mgr, &case_id)?;
+    let decisions: Vec<witness::Decision> = witness_decisions(&mgr, &case_id)?.into_iter().filter(|d| d.2).map(|d| d.1).collect();
+    let (witnesses, stale) = witness::resolve(&register, &decisions);
+    let mut docs = HashMap::new();
+    let mut unreadable = Vec::new();
+    for e in &register {
+        match docpipe::statement_pages(&mgr, &case_id, &e.doc_id) {
+            Ok((_, pages)) => {
+                docs.insert(e.doc_id.clone(), witness::StatementDoc { doc_id: e.doc_id.clone(), pages });
+            }
+            Err(err) => unreadable.push(serde_json::json!({"doc_id": e.doc_id, "error": err})),
+        }
+    }
+    let built: Vec<witness::BuiltWitness> = witnesses.iter().map(|w| witness::build_witness(w, &docs, us)).collect();
+    let graph_version = mgr
+        .case_graph_get(&case_id)
+        .map_err(|e| e.to_string())?
+        .and_then(|g| g.get("generated_at").and_then(|v| v.as_str()).map(str::to_string))
+        .unwrap_or_else(|| "no-graph".into());
+    let now = crate::docpipe::now_rfc3339();
+    let matrix = witness::matrix_json(&case_id, &graph_version, &now, &built);
+    let matrix_id = matrix["matrix_id"].as_str().unwrap_or("").to_string();
+    let statuses: HashMap<String, String> = mgr
+        .witness_kv_list(&case_id, "finding:")
+        .map_err(|e| e.to_string())?
+        .into_iter()
+        .filter_map(|(k, v)| Some((k.trim_start_matches("finding:").to_string(), v.get("status")?.as_str()?.to_string())))
+        .collect();
+    let models: HashMap<String, serde_json::Value> = mgr.witness_kv_list(&case_id, "model:").map_err(|e| e.to_string())?.into_iter().map(|(k, v)| (k.trim_start_matches("model:").to_string(), v)).collect();
+    let kits: Vec<serde_json::Value> = built
+        .iter()
+        .map(|b| {
+            let mut findings = impeach::detect(b);
+            let mut fingerprint = None;
+            if let Some(stored) = models.get(&b.witness.witness_id) {
+                let props: Vec<proposition::PropositionInput> = serde_json::from_value(stored["propositions"].clone()).unwrap_or_default();
+                let (semantic, _) = impeach::verify_model_candidates(b, &props, &findings);
+                if !semantic.is_empty() {
+                    fingerprint = stored["model_fingerprint"].as_str().map(str::to_string);
+                }
+                findings.extend(semantic);
+            }
+            impeach::kit(&case_id, &matrix_id, &now, b, findings, &statuses, fingerprint)
+        })
+        .collect();
+    Ok(serde_json::json!({"pipeline_id": impeach::PIPELINE_ID, "matrix_pipeline_id": witness::PIPELINE_ID, "matrix": matrix, "kits": kits,
+                          "stale_decisions": stale, "unreadable": unreadable}))
+}
+
+#[tauri::command]
+fn impeach_finding_status(app: AppHandle, vault: State<'_, VaultState>, case_id: String, finding_id: String, status: String) -> Result<(), String> {
+    if !matches!(status.as_str(), "PROPOSED" | "COUNSEL_ACCEPTED" | "COUNSEL_REJECTED") {
+        return Err("CF_IMPEACH_STATUS: PROPOSED, COUNSEL_ACCEPTED or COUNSEL_REJECTED".into());
+    }
+    vault
+        .get_or_init(&app)?
+        .witness_kv_put(&case_id, &format!("finding:{finding_id}"), &serde_json::json!({"status": status, "at": crate::docpipe::now_rfc3339()}))
+        .map_err(|e| e.to_string())
+}
+
+/// B-S4-08 model layer: asks the local model for meaning-level contradictions. Only candidates whose quotes verify
+/// exactly against two different statements render; the rest are counted and discarded (AC-S4-03.3).
+#[tauri::command]
+fn impeach_model_scan(app: AppHandle, vault: State<'_, VaultState>, case_id: String, witness_id: String) -> Result<serde_json::Value, String> {
+    let mgr = vault.get_or_init(&app)?;
+    let us = witness::is_us(&case_jurisdiction(&mgr, &case_id)?);
+    let register = witness_register(&mgr, &case_id)?;
+    let decisions: Vec<witness::Decision> = witness_decisions(&mgr, &case_id)?.into_iter().filter(|d| d.2).map(|d| d.1).collect();
+    let (witnesses, _) = witness::resolve(&register, &decisions);
+    let w = witnesses.into_iter().find(|w| w.witness_id == witness_id).ok_or_else(|| "CF_WITNESS_NOT_FOUND".to_string())?;
+    let mut docs = HashMap::new();
+    for s in &w.statements {
+        let (_, pages) = docpipe::statement_pages(&mgr, &case_id, &s.doc_id)?;
+        docs.insert(s.doc_id.clone(), witness::StatementDoc { doc_id: s.doc_id.clone(), pages });
+    }
+    let built = witness::build_witness(&w, &docs, us);
+    let (user_text, sources) = impeach::model_request(&built)?;
+    let request: infer_llm::LlmChatRequest = serde_json::from_value(serde_json::json!({
+        "user_text": user_text, "role": "counsel", "format": "impeachment_contradictions", "structured_propositions": true,
+        "output_kind": "REASONING", "support_sources": sources, "max_tokens": 1024
+    }))
+    .map_err(|e| e.to_string())?;
+    let result = infer_llm::chat_with_timeout(request, 300)?;
+    let existing = impeach::detect(&built);
+    let (rendered, discarded) = impeach::verify_model_candidates(&built, &result.propositions, &existing);
+    let fingerprint = format!("{} ({})", result.model, result.backend);
+    mgr.witness_kv_put(&case_id, &format!("model:{witness_id}"), &serde_json::json!({"propositions": result.propositions, "model_fingerprint": fingerprint, "at": crate::docpipe::now_rfc3339()}))
+        .map_err(|e| e.to_string())?;
+    Ok(serde_json::json!({"rendered": rendered.len(), "discarded": discarded.iter().map(|(id, why)| serde_json::json!({"candidate": id, "reason": why})).collect::<Vec<_>>(),
+                          "model_fingerprint": fingerprint}))
 }
 
 #[tauri::command]
@@ -3098,6 +3322,15 @@ pub fn run() {
             audit_certificate_issue,
             audit_certificate_verify,
             opposition_scan,
+            witness_propose,
+            witness_register_list,
+            witness_register_save,
+            witness_register_remove,
+            witness_decision_add,
+            witness_decision_revoke,
+            witness_matrix_build,
+            impeach_finding_status,
+            impeach_model_scan,
             llm_tiers,
             llm_set_tier,
             llm_chat,

@@ -1,0 +1,39 @@
+{
+  "batch": "B-S4-07",
+  "acceptance": {
+    "AC-S4-03.2(matrix)": {
+      "status": "PASS",
+      "evidence": {
+        "cells_exact": "ok",
+        "full_schema_validation": true
+      },
+      "detail": "every matrix cell is the exact stored substring at its page/span or page:line locator"
+    },
+    "MERGE_SPLIT_SURVIVES_RERUN": {
+      "status": "PASS",
+      "evidence": {
+        "resolution": "ok",
+        "survival": "ok",
+        "no_false_merge": "ok"
+      }
+    },
+    "STATEMENT_PROPOSALS": {
+      "status": "PASS",
+      "evidence": {
+        "proposals": "ok"
+      }
+    },
+    "STRUCTURE": {
+      "status": "PASS",
+      "checks": {
+        "engine_model_free": true,
+        "statement_kinds_are_data": true,
+        "commands_registered": true,
+        "register_survives_rerun": true,
+        "migration_present": true,
+        "ui_wired": true
+      }
+    }
+  },
+  "errors": []
+}
