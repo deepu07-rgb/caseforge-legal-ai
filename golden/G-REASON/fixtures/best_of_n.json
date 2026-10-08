@@ -1,0 +1,456 @@
+{
+  "schema_version": "1.0.0",
+  "golden": "G-REASON",
+  "batch": "B-S4-28",
+  "description": "Scripted model candidates for best-of-n reasoning. 'attempts' are what the model returns for variants 0, 1, 2 ...; 'repair' is what it returns to a repair request. Each proposition ledger is verified by the real host verifier (proposition::verify).",
+  "sources": [
+    {
+      "support_id": "matter:doc1",
+      "kind": "MATTER_SOURCE",
+      "exact_text": "The tenant paid rent of Rs 12,000 on 5 March 2023. The landlord gave notice to vacate on 1 June 2023. The lease was unregistered and ran for 14 months.",
+      "doc_id": "doc1",
+      "permitted": true
+    },
+    {
+      "support_id": "counsel:turn1",
+      "kind": "COUNSEL_INPUT",
+      "exact_text": "Counsel instructs: analyse whether the 14-month lease is enforceable.",
+      "permitted": true
+    },
+    {
+      "support_id": "legal:A1:c1",
+      "kind": "LEGAL_AUTHORITY",
+      "exact_text": "A lease of immovable property from year to year, or for any term exceeding one year, or reserving a yearly rent, can be made only by a registered instrument.",
+      "source_id": "cfsrc:test:aaaa",
+      "chunk_id": "cfchunk:test:bbbb",
+      "authority_id": "A1",
+      "trust_level": "OFFICIAL_VERIFIED",
+      "temporal_status": "APPLICABLE",
+      "superseded_status": "CURRENT",
+      "permitted": true
+    }
+  ],
+  "permitted_authority_ids": [
+    "A1"
+  ],
+  "candidates": {
+    "GOOD": [
+      {
+        "proposition_id": "f1",
+        "class": "FACTUAL_BASIS",
+        "text": "The lease ran for 14 months and was unregistered.",
+        "support_ids": [
+          "matter:doc1"
+        ],
+        "basis_ids": [],
+        "support_claims": [
+          {
+            "support_id": "matter:doc1",
+            "exact_excerpt": "The lease was unregistered and ran for 14 months."
+          }
+        ],
+        "quotation": null
+      },
+      {
+        "proposition_id": "l1",
+        "class": "LEGAL_BASIS",
+        "text": "A lease for a term exceeding one year can be made only by a registered instrument.",
+        "support_ids": [
+          "legal:A1:c1"
+        ],
+        "basis_ids": [],
+        "support_claims": [
+          {
+            "support_id": "legal:A1:c1",
+            "exact_excerpt": "for any term exceeding one year, or reserving a yearly rent, can be made only by a registered instrument."
+          }
+        ],
+        "quotation": null
+      },
+      {
+        "proposition_id": "i1",
+        "class": "INFERENCE",
+        "text": "Because the 14-month lease was unregistered, it was not validly made as a lease for a term exceeding one year.",
+        "support_ids": [],
+        "basis_ids": [
+          "f1",
+          "l1"
+        ],
+        "support_claims": [],
+        "quotation": null
+      },
+      {
+        "proposition_id": "i2",
+        "class": "INFERENCE",
+        "text": "The tenancy is therefore not enforceable as a 14-month lease; its status needs counsel's analysis of the year-to-year position.",
+        "support_ids": [],
+        "basis_ids": [
+          "i1"
+        ],
+        "support_claims": [],
+        "quotation": null
+      }
+    ],
+    "GOOD2": [
+      {
+        "proposition_id": "f1",
+        "class": "FACTUAL_BASIS",
+        "text": "The lease ran for 14 months and was unregistered.",
+        "support_ids": [
+          "matter:doc1"
+        ],
+        "basis_ids": [],
+        "support_claims": [
+          {
+            "support_id": "matter:doc1",
+            "exact_excerpt": "The lease was unregistered and ran for 14 months."
+          }
+        ],
+        "quotation": null
+      },
+      {
+        "proposition_id": "l1",
+        "class": "LEGAL_BASIS",
+        "text": "A lease for a term exceeding one year can be made only by a registered instrument.",
+        "support_ids": [
+          "legal:A1:c1"
+        ],
+        "basis_ids": [],
+        "support_claims": [
+          {
+            "support_id": "legal:A1:c1",
+            "exact_excerpt": "for any term exceeding one year, or reserving a yearly rent, can be made only by a registered instrument."
+          }
+        ],
+        "quotation": null
+      },
+      {
+        "proposition_id": "i1",
+        "class": "INFERENCE",
+        "text": "Because the 14-month lease was unregistered, it was not validly made as a lease for a term exceeding one year.",
+        "support_ids": [],
+        "basis_ids": [
+          "f1",
+          "l1"
+        ],
+        "support_claims": [],
+        "quotation": null
+      },
+      {
+        "proposition_id": "i2",
+        "class": "INFERENCE",
+        "text": "So the 14-month lease is not enforceable as a lease; counsel should analyse the year-to-year status of the tenancy.",
+        "support_ids": [],
+        "basis_ids": [
+          "i1"
+        ],
+        "support_claims": [],
+        "quotation": null
+      }
+    ],
+    "BAD": [
+      {
+        "proposition_id": "f1",
+        "class": "FACTUAL_BASIS",
+        "text": "The lease ran for 14 months and was unregistered.",
+        "support_ids": [
+          "matter:doc1"
+        ],
+        "basis_ids": [],
+        "support_claims": [
+          {
+            "support_id": "matter:doc1",
+            "exact_excerpt": "The lease was unregistered and ran for 14 months."
+          }
+        ],
+        "quotation": null
+      },
+      {
+        "proposition_id": "l1",
+        "class": "LEGAL_BASIS",
+        "text": "A lease exceeding eleven months must be registered.",
+        "support_ids": [
+          "legal:A1:c1"
+        ],
+        "basis_ids": [],
+        "support_claims": [
+          {
+            "support_id": "legal:A1:c1",
+            "exact_excerpt": "a lease exceeding eleven months must be registered"
+          }
+        ],
+        "quotation": null
+      },
+      {
+        "proposition_id": "i1",
+        "class": "INFERENCE",
+        "text": "The lease needed registration.",
+        "support_ids": [],
+        "basis_ids": [
+          "f1",
+          "l1"
+        ],
+        "support_claims": [],
+        "quotation": null
+      },
+      {
+        "proposition_id": "i2",
+        "class": "INFERENCE",
+        "text": "The tenancy is therefore void.",
+        "support_ids": [],
+        "basis_ids": [
+          "i1"
+        ],
+        "support_claims": [],
+        "quotation": null
+      }
+    ],
+    "PARTIAL": [
+      {
+        "proposition_id": "f1",
+        "class": "FACTUAL_BASIS",
+        "text": "The lease ran for 14 months and was unregistered.",
+        "support_ids": [
+          "matter:doc1"
+        ],
+        "basis_ids": [],
+        "support_claims": [
+          {
+            "support_id": "matter:doc1",
+            "exact_excerpt": "The lease was unregistered and ran for 14 months."
+          }
+        ],
+        "quotation": null
+      },
+      {
+        "proposition_id": "g1",
+        "class": "UNSUPPORTED_OR_GAP",
+        "text": "The controlling rule on registration is not among the supplied authorities.",
+        "support_ids": [],
+        "basis_ids": [],
+        "support_claims": [],
+        "quotation": null
+      },
+      {
+        "proposition_id": "i2",
+        "class": "INFERENCE",
+        "text": "On the facts alone the lease may be unenforceable; the governing rule must be confirmed.",
+        "support_ids": [],
+        "basis_ids": [
+          "f1"
+        ],
+        "support_claims": [],
+        "quotation": null
+      }
+    ]
+  },
+  "scenarios": [
+    {
+      "name": "first_candidate_verified_stops_early",
+      "depth": "CAREFUL",
+      "attempts": [
+        "GOOD"
+      ],
+      "repair": null,
+      "clock_ms_per_call": 1000,
+      "budget_ms": 600000,
+      "expect": {
+        "chosen_variant": 0,
+        "status": "VERIFIED",
+        "verified_answer": true,
+        "n_run": 1,
+        "stopped_early": true,
+        "stopped_for_time": false,
+        "repair_attempted": false,
+        "repair_accepted": false,
+        "discarded": 0
+      }
+    },
+    {
+      "name": "fabricated_first_good_second",
+      "depth": "CAREFUL",
+      "attempts": [
+        "BAD",
+        "GOOD",
+        "PARTIAL"
+      ],
+      "repair": null,
+      "clock_ms_per_call": 1000,
+      "budget_ms": 600000,
+      "expect": {
+        "chosen_variant": 1,
+        "status": "VERIFIED",
+        "verified_answer": true,
+        "n_run": 2,
+        "stopped_early": true,
+        "stopped_for_time": false,
+        "repair_attempted": false,
+        "repair_accepted": false,
+        "discarded": 0
+      }
+    },
+    {
+      "name": "thorough_runs_all_and_measures_agreement",
+      "depth": "THOROUGH",
+      "attempts": [
+        "GOOD",
+        "GOOD2",
+        "PARTIAL",
+        "BAD",
+        "GOOD"
+      ],
+      "repair": null,
+      "clock_ms_per_call": 1000,
+      "budget_ms": 600000,
+      "expect": {
+        "chosen_variant": 0,
+        "status": "VERIFIED",
+        "verified_answer": true,
+        "n_run": 5,
+        "stopped_early": false,
+        "stopped_for_time": false,
+        "repair_attempted": false,
+        "repair_accepted": false,
+        "discarded": 0,
+        "agreement_positive": true
+      }
+    },
+    {
+      "name": "partial_beats_fabricated_but_is_not_a_verified_answer",
+      "depth": "CAREFUL",
+      "attempts": [
+        "BAD",
+        "PARTIAL",
+        "BAD"
+      ],
+      "repair": "BAD",
+      "clock_ms_per_call": 1000,
+      "budget_ms": 600000,
+      "expect": {
+        "chosen_variant": 1,
+        "status": "PARTIAL",
+        "verified_answer": false,
+        "n_run": 3,
+        "stopped_early": false,
+        "stopped_for_time": false,
+        "repair_attempted": true,
+        "repair_accepted": false,
+        "discarded": 0
+      }
+    },
+    {
+      "name": "all_fabricated_gives_no_verified_answer",
+      "depth": "CAREFUL",
+      "attempts": [
+        "BAD",
+        "BAD",
+        "BAD"
+      ],
+      "repair": "BAD",
+      "clock_ms_per_call": 1000,
+      "budget_ms": 600000,
+      "expect": {
+        "chosen_variant": 0,
+        "status": "NO_VERIFIED_ANSWER",
+        "verified_answer": false,
+        "n_run": 3,
+        "stopped_early": false,
+        "stopped_for_time": false,
+        "repair_attempted": true,
+        "repair_accepted": false,
+        "discarded": 0
+      }
+    },
+    {
+      "name": "repair_fixes_the_fabricated_step",
+      "depth": "CAREFUL",
+      "attempts": [
+        "BAD",
+        "BAD",
+        "BAD"
+      ],
+      "repair": "GOOD",
+      "clock_ms_per_call": 1000,
+      "budget_ms": 600000,
+      "expect": {
+        "chosen_variant": 100,
+        "status": "VERIFIED",
+        "verified_answer": true,
+        "n_run": 3,
+        "stopped_early": false,
+        "stopped_for_time": false,
+        "repair_attempted": true,
+        "repair_accepted": true,
+        "discarded": 0
+      }
+    },
+    {
+      "name": "errors_and_empty_candidates_are_skipped",
+      "depth": "CAREFUL",
+      "attempts": [
+        {
+          "error": "CF_LLM_EMPTY: Empty model response"
+        },
+        [],
+        "GOOD"
+      ],
+      "repair": null,
+      "clock_ms_per_call": 1000,
+      "budget_ms": 600000,
+      "expect": {
+        "chosen_variant": 2,
+        "status": "VERIFIED",
+        "verified_answer": true,
+        "n_run": 3,
+        "stopped_early": false,
+        "stopped_for_time": false,
+        "repair_attempted": false,
+        "repair_accepted": false,
+        "discarded": 2
+      }
+    },
+    {
+      "name": "quick_is_one_candidate_and_never_repairs",
+      "depth": "QUICK",
+      "attempts": [
+        "BAD"
+      ],
+      "repair": "GOOD",
+      "clock_ms_per_call": 1000,
+      "budget_ms": 600000,
+      "expect": {
+        "chosen_variant": 0,
+        "status": "NO_VERIFIED_ANSWER",
+        "verified_answer": false,
+        "n_run": 1,
+        "stopped_early": false,
+        "stopped_for_time": false,
+        "repair_attempted": false,
+        "repair_accepted": false,
+        "discarded": 0
+      }
+    },
+    {
+      "name": "time_budget_stops_further_samples",
+      "depth": "CAREFUL",
+      "attempts": [
+        "BAD",
+        "GOOD"
+      ],
+      "repair": "GOOD",
+      "clock_ms_per_call": 40000,
+      "budget_ms": 60000,
+      "expect": {
+        "chosen_variant": 0,
+        "status": "NO_VERIFIED_ANSWER",
+        "verified_answer": false,
+        "n_run": 1,
+        "stopped_early": false,
+        "stopped_for_time": true,
+        "repair_attempted": false,
+        "repair_accepted": false,
+        "discarded": 0
+      }
+    }
+  ]
+}
