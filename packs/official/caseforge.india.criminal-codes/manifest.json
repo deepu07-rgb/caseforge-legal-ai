@@ -1,0 +1,109 @@
+{
+  "schema_version": "2.1.0",
+  "metadata_version": "2.0.0",
+  "pack_id": "caseforge.india.criminal-codes",
+  "pack_kind": "official",
+  "jurisdiction": "India",
+  "jurisdiction_path": [
+    "India",
+    "Central Law",
+    "Criminal"
+  ],
+  "version": "1.0.0-beta.1",
+  "display_name": "India Criminal Codes (IPC/CrPC/Evidence Act and BNS/BNSS/BSA) - Controlled Beta",
+  "description": "Section-level official texts of the repealed and new criminal codes, with an unsigned succession table for the Code Bridge.",
+  "content_sha256": "22038d50e5728fdbc9cae2640a37780a3c8e4ae2dea28d08273abd476dd2f254",
+  "authoritative_content_sha256": "a2e667439b3ab28b2beea981fdf9839963984bd6a5d7e4ba7a1112e232dd0b32",
+  "files": [
+    {
+      "path": "content/bns_2023.txt",
+      "sha256": "9b0291bacc10290d666b46d2d04f2de08151a2bbbd47d4aba631fa750df08896",
+      "bytes": 368845,
+      "role": "AUTHORITATIVE_CONTENT"
+    },
+    {
+      "path": "content/bnss_2023.txt",
+      "sha256": "757f4e4bbce6ea63fd20f6032052bd6bc4db13e6523ceeb7f5c827b1246c6e4f",
+      "bytes": 569805,
+      "role": "AUTHORITATIVE_CONTENT"
+    },
+    {
+      "path": "content/bsa_2023.txt",
+      "sha256": "5230971b163cce6b7d8303908e03df9d89e97f4f405ca75f9ae66d8d25e9d2c1",
+      "bytes": 149038,
+      "role": "AUTHORITATIVE_CONTENT"
+    },
+    {
+      "path": "content/crpc_1973.txt",
+      "sha256": "e8fa8e06d14d22730b6e93bb054cfbb4c4e7ba4244ccce1a8faeb49f199e1196",
+      "bytes": 555223,
+      "role": "AUTHORITATIVE_CONTENT"
+    },
+    {
+      "path": "content/evidence_1872.txt",
+      "sha256": "7d1d0bbaad9b0405e1d53b56c30a3a0f5dac0750f5c2f89dff4584a294ef06dd",
+      "bytes": 156372,
+      "role": "AUTHORITATIVE_CONTENT"
+    },
+    {
+      "path": "content/ipc_1860.txt",
+      "sha256": "657e3e1f8b4ed58a43d7ffaba102118471047491982620d6643d96a4a131b013",
+      "bytes": 420491,
+      "role": "AUTHORITATIVE_CONTENT"
+    },
+    {
+      "path": "metadata/code_aliases.json",
+      "sha256": "eb2bd63cb6e3b9a82558eb1d2dc011f5ca86f8203524652569e11dff222d91de",
+      "bytes": 747,
+      "role": "DERIVED_ARTEFACT"
+    },
+    {
+      "path": "metadata/editorial_checklist.json",
+      "sha256": "304731a573129abb711e4c9a3e71a31c2b3f5561db4f326baaf6575dba628bab",
+      "bytes": 620,
+      "role": "DERIVED_ARTEFACT"
+    },
+    {
+      "path": "metadata/legal_chunks.json",
+      "sha256": "941689d3eb7d26d8983db653301846c494113a67adb73621160287fa031768de",
+      "bytes": 6396451,
+      "role": "LEGAL_CHUNKS"
+    },
+    {
+      "path": "metadata/legal_sources.json",
+      "sha256": "d0a0720a9ebce948f509863019679df681f90a328e011c8303f4fbdd1f93b43a",
+      "bytes": 5691708,
+      "role": "LEGAL_SOURCES"
+    },
+    {
+      "path": "metadata/rule_tables/india_criminal_succession.json",
+      "sha256": "9f5cf4f98cc8eae5e66242b7bdf5d3fc7a7f10e5664e5c87a602ee621cd79093",
+      "bytes": 1565197,
+      "role": "RULE_TABLE"
+    },
+    {
+      "path": "metadata/source_ledger.json",
+      "sha256": "a0fd8bfeed4a42bd69bb6c7e40c1f789f295daeda3d8891d45903291222ae325",
+      "bytes": 5034,
+      "role": "DERIVED_ARTEFACT"
+    }
+  ],
+  "headnotes_stripped": true,
+  "signature_alg": "Ed25519",
+  "signer_key_id": "caseforge-official-dev-2026",
+  "trust_level": "OFFICIAL_VERIFIED",
+  "controlled_beta_eligible": true,
+  "sources_file": "metadata/legal_sources.json",
+  "chunks_file": "metadata/legal_chunks.json",
+  "publisher": "India Code / Ministry of Law and Justice; CaseForge original matter",
+  "updated_at": "2026-10-08",
+  "source_status": "CURRENT",
+  "supersedes_version": null,
+  "superseded_by_version": null,
+  "editorial_review_status": "TWO_LEGAL_EDITORS_PENDING",
+  "rights_basis": "Copyright Act, 1957, section 52(1)(q)(ii)",
+  "rule_tables_files": [
+    "metadata/rule_tables/india_criminal_succession.json"
+  ],
+  "currency_date": "2026-10-08"
+}

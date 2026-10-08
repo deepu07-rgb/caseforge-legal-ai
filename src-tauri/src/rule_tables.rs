@@ -107,6 +107,9 @@ pub fn precheck_manifest(man: &PackManifest) -> Result<(), String> {
     if man.schema_version != "2.1.0" {
         return Err(format!("{ERR_INVALID}: rule tables require pack manifest schema 2.1.0"));
     }
+    if !man.currency_date.as_deref().map(is_date).unwrap_or(false) {
+        return Err(format!("{ERR_INVALID}: a v2.1 pack must state its currency_date (YYYY-MM-DD)"));
+    }
     Ok(())
 }
 
@@ -415,6 +418,8 @@ pub(crate) mod tests {
         assert!(precheck_manifest(&v1).unwrap_err().contains("2.1.0"));
         let mut ok = v1.clone();
         ok.schema_version = "2.1.0".into();
+        assert!(precheck_manifest(&ok).unwrap_err().contains("currency_date"));
+        ok.currency_date = Some("2026-10-08".into());
         assert!(precheck_manifest(&ok).is_ok());
     }
 }

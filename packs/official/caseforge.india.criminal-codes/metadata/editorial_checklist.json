@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "review_status": "TECHNICALLY_VERIFIED_LEGAL_EDITOR_PENDING",
+  "automated_checks": [
+    "official-domain",
+    "pdf-sha256",
+    "section-sequence",
+    "lineage",
+    "signature"
+  ],
+  "human_legal_editor_1": "PENDING",
+  "human_legal_editor_2": "PENDING",
+  "client_release_allowed": false,
+  "succession_rows": {
+    "total": 1208,
+    "signed": 0,
+    "worksheet": "docs/worksheets/Q-S4-02_criminal_succession_candidates.csv"
+  },
+  "note": "Section texts are official. Succession rows are unsigned candidates and never count as verified until a named legal editor signs them."
+}

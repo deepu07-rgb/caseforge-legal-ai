@@ -486,6 +486,35 @@ mod tests {
     }
 
     #[test]
+    fn shipped_criminal_codes_pack_installs_and_bridges() {
+        // The real official pack (IPC/CrPC/IEA -> BNS/BNSS/BSA) through the real installer and loader.
+        let pack = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../packs/official/caseforge.india.criminal-codes");
+        assert!(pack.exists(), "criminal-codes pack is shipped in packs/official");
+        let vault = tempfile::tempdir().unwrap();
+        let paths = crate::vault::VaultPaths::new(vault.path().to_path_buf());
+        crate::packs::install_pack_from_dir(&paths, &pack).expect("official pack installs");
+        let (tables, rejected) = crate::rule_tables::load_installed(&paths);
+        assert!(rejected.is_empty(), "{rejected:?}");
+        let rows = query(&tables, "STATUTE_SUCCESSION", Some("India"), "2026-10-08");
+        assert!(rows.len() > 1000, "{} rows", rows.len());
+        assert!(rows.iter().all(|r| !r.signed()), "no row counts as signed until a named legal editor signs it");
+        let corpus = crate::retrieval::build_corpus(&paths, &[]).unwrap();
+        let chunks = crate::rule_tables::index_corpus(&corpus);
+        let dates = HashMap::from([("OFFENCE_DATE".to_string(), KeyDate { kind: "OFFENCE_DATE".into(), date: "2024-03-01".into(), locator: json!({"kind": "COUNSEL_INPUT"}) })]);
+        let got = annotate("He is charged under section 302 IPC. His statement was recorded u/s 161 of the Code of Criminal Procedure, 1973.", "DRAFT", None, &rows, &chunks, &dates);
+        let a302 = &got.iter().find(|a| a.annotation["provision"] == "302").expect("302 IPC annotated").annotation;
+        assert_eq!(a302["counterpart"], json!({"direction": "SUCCESSOR", "code": "BNS", "provision": "103(1)"}), "{a302}");
+        assert_eq!(a302["equivalence"], "RENUMBERED");
+        assert_eq!(a302["governing"]["governing_code"], "IPC", "offence before 1 July 2024");
+        let a161 = got.iter().find(|a| a.annotation["provision"] == "161").expect("161 CrPC annotated (long name via pack aliases)");
+        assert_eq!(a161.annotation["code"], "CrPC");
+        assert_eq!(a161.annotation["counterpart"]["code"], "BNSS");
+        assert_eq!(a161.annotation["counterpart"]["provision"], "180");
+        assert_eq!(a161.annotation["governing"]["status"], "NEEDS_COUNSEL_INPUT", "institution date not given");
+        assert!(got.iter().all(|a| a.trust == "DEVELOPMENT_ONLY"));
+    }
+
+    #[test]
     fn pack_aliases_join_long_and_short_code_names() {
         assert!(!same_code("Code of Criminal Procedure, 1973", "TstCrPC"));
         add_code_aliases(&[vec!["TstCrPC".into(), "Code of Criminal Procedure".into(), "Criminal Procedure Code".into()]]);

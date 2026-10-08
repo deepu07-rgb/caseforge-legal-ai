@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "codes": [
+    {
+      "code": "IPC",
+      "aliases": [
+        "Indian Penal Code",
+        "Penal Code",
+        "I.P.C."
+      ]
+    },
+    {
+      "code": "CrPC",
+      "aliases": [
+        "Code of Criminal Procedure",
+        "Criminal Procedure Code",
+        "Cr.P.C."
+      ]
+    },
+    {
+      "code": "IEA",
+      "aliases": [
+        "Indian Evidence Act",
+        "Evidence Act"
+      ]
+    },
+    {
+      "code": "BNS",
+      "aliases": [
+        "Bharatiya Nyaya Sanhita"
+      ]
+    },
+    {
+      "code": "BNSS",
+      "aliases": [
+        "Bharatiya Nagarik Suraksha Sanhita"
+      ]
+    },
+    {
+      "code": "BSA",
+      "aliases": [
+        "Bharatiya Sakshya Adhiniyam"
+      ]
+    }
+  ]
+}

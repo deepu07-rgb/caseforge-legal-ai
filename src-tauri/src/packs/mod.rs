@@ -122,6 +122,15 @@ pub struct PackManifest {
     /// akpkg v2.1 (B-S4-03): signed rule tables under metadata/rule_tables/.
     #[serde(default)]
     pub rule_tables_files: Vec<String>,
+    /// akpkg v2.1: date up to which the pack's legal content was checked (required by the v2.1 contract).
+    #[serde(default)]
+    pub currency_date: Option<String>,
+    #[serde(default)]
+    pub delta: Option<serde_json::Value>,
+    #[serde(default)]
+    pub treatment_edges_file: Option<String>,
+    #[serde(default)]
+    pub disclosure_templates_file: Option<String>,
 }
 
 /// Manifest v2 metadata (v2.1 adds rule tables).
@@ -1554,6 +1563,10 @@ mod tests {
             editorial_review_status: None,
             rights_basis: None,
             rule_tables_files: vec![],
+            currency_date: None,
+            delta: None,
+            treatment_edges_file: None,
+            disclosure_templates_file: None,
         };
         assert!(validate_legal_metadata(dir.path(), &manifest).is_ok());
         let sources_path = dir.path().join("metadata/legal_sources.json");
