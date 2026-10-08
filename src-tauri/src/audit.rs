@@ -8,12 +8,13 @@
 //! Pinpoints (para / section) are checked against the source text. Deterministic: no model.
 //! Contract: contracts/audit_report.schema.json. Golden: golden/G-AUDIT.
 
+use crate::retrieval::store::{DocRef, GroupRec, Store};
 use crate::retrieval::CorpusChunk;
 use once_cell::sync::Lazy;
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, HashMap};
 
 pub const PIPELINE_ID: &str = "caseforge.audit.v1";
 pub const SCHEMA_VERSION: &str = "1.0.0";
@@ -415,7 +416,131 @@ fn hash_hex(text: &str) -> String {
 }
 
 pub fn audit(text: &str, corpus: &[CorpusChunk], filename: &str, format: &str, case_id: Option<String>) -> AuditReport {
-    let sources = group_sources(corpus);
+    let mut packs: BTreeMap<String, PackSnapshot> = BTreeMap::new();
+    for c in corpus {
+        packs.entry(c.pack_id.clone()).or_insert_with(|| pack_snapshot(&c.pack_id, &c.metadata.version, &c.metadata.trust_level));
+    }
+    audit_core(text, group_sources(corpus), packs, filename, format, case_id)
+}
+
+fn pack_snapshot(pack_id: &str, version: &str, trust_level: &str) -> PackSnapshot {
+    PackSnapshot {
+        pack_id: pack_id.to_string(),
+        version: version.to_string(),
+        currency_date: None,
+        trust_level: match trust_level {
+            "OFFICIAL_VERIFIED" => "OFFICIAL_VERIFIED",
+            "CUSTOM" => "CUSTOM",
+            _ => "DEVELOPMENT_ONLY",
+        }
+        .into(),
+    }
+}
+
+/// B-S4-29: the same audit over the on-disk store. Only the passages the draft needs are read: every passage of each
+/// authority the draft cites, and the best keyword matches for each quotation (to find an unattributed quotation
+/// anywhere in the installed law). Results equal `audit` over the whole corpus except that an unattributed quotation
+/// is looked for among those best matches, not in every passage.
+pub fn audit_with_store(store: &Store, small: &[CorpusChunk], text: &str, filename: &str, format: &str, case_id: Option<String>) -> Result<AuditReport, String> {
+    struct G {
+        rec: GroupRec,
+        docs: Vec<DocRef>,
+        members: Vec<usize>,
+    }
+    let mut arena: Vec<CorpusChunk> = small.to_vec();
+    let mut groups: BTreeMap<(String, String, String), G> = BTreeMap::new();
+    for v in store.group_views() {
+        groups.insert((v.pack_id.clone(), v.rec.title.clone(), v.rec.citation.clone()), G { rec: v.rec.clone(), docs: v.docs.clone(), members: Vec::new() });
+    }
+    for (i, c) in small.iter().enumerate() {
+        let g = groups
+            .entry((c.pack_id.clone(), c.metadata.title.clone(), c.metadata.citation.clone()))
+            .or_insert_with(|| G { rec: GroupRec::new(&c.metadata), docs: Vec::new(), members: Vec::new() });
+        g.rec.absorb(&c.metadata);
+        g.members.push(i);
+    }
+    let position: HashMap<(String, String, String), usize> = groups.keys().cloned().enumerate().map(|(i, k)| (k, i)).collect();
+    let mut groups: Vec<G> = groups.into_values().collect();
+    let light = |groups: &[G]| -> Vec<Source<'static>> {
+        groups
+            .iter()
+            .map(|g| Source {
+                source_id: g.rec.source_id.clone(),
+                title: g.rec.title.clone(),
+                citation: g.rec.citation.clone(),
+                authority_type: g.rec.authority_type.clone(),
+                trust_level: g.rec.trust_level.clone(),
+                temporal_status: g.rec.temporal_status.clone(),
+                superseded_status: g.rec.superseded_status.clone(),
+                chunks: Vec::new(),
+            })
+            .collect()
+    };
+    let mut loaded: HashMap<DocRef, usize> = HashMap::new();
+    // 1. Authorities the draft cites: all their passages.
+    let sources = light(&groups);
+    let mut cited: Vec<usize> = Vec::new();
+    for cand in extract_citations(text, &sources) {
+        if let Some(s) = resolve(&cand, &sources) {
+            if let Some(i) = sources.iter().position(|x| x.source_id == s.source_id) {
+                if !cited.contains(&i) {
+                    cited.push(i);
+                }
+            }
+        }
+    }
+    for i in cited {
+        for r in groups[i].docs.clone() {
+            if !loaded.contains_key(&r) {
+                arena.push(store.load_doc(r)?);
+                loaded.insert(r, arena.len() - 1);
+                groups[i].members.push(arena.len() - 1);
+            }
+        }
+    }
+    // 2. Best keyword matches for each quotation.
+    let mut quotes: Vec<String> = CURLY_QUOTE
+        .captures_iter(text)
+        .chain(STRAIGHT_QUOTE.captures_iter(text))
+        .filter_map(|c| c.get(1).map(|m| text[m.start()..m.end()].trim().to_string()))
+        .filter(|q| q.chars().count() >= MIN_QUOTE_CHARS)
+        .collect();
+    quotes.sort();
+    quotes.dedup();
+    for quote in quotes {
+        for r in store.quote_candidates(&quote, 20) {
+            if loaded.contains_key(&r) {
+                continue;
+            }
+            let Some(vi) = store.group_of_doc(r) else { continue };
+            let v = &store.group_views()[vi];
+            let Some(&gi) = position.get(&(v.pack_id.clone(), v.rec.title.clone(), v.rec.citation.clone())) else { continue };
+            arena.push(store.load_doc(r)?);
+            loaded.insert(r, arena.len() - 1);
+            groups[gi].members.push(arena.len() - 1);
+        }
+    }
+    let sources: Vec<Source<'_>> = groups
+        .iter()
+        .map(|g| Source {
+            source_id: g.rec.source_id.clone(),
+            title: g.rec.title.clone(),
+            citation: g.rec.citation.clone(),
+            authority_type: g.rec.authority_type.clone(),
+            trust_level: g.rec.trust_level.clone(),
+            temporal_status: g.rec.temporal_status.clone(),
+            superseded_status: g.rec.superseded_status.clone(),
+            chunks: g.members.iter().map(|&i| &arena[i]).collect(),
+        })
+        .collect();
+    let mut packs: BTreeMap<String, PackSnapshot> = store.pack_snapshots().into_iter().map(|(id, version, trust)| (id.clone(), pack_snapshot(&id, &version, &trust))).collect();
+    for c in small {
+        packs.entry(c.pack_id.clone()).or_insert_with(|| pack_snapshot(&c.pack_id, &c.metadata.version, &c.metadata.trust_level));
+    }
+    Ok(audit_core(text, sources, packs, filename, format, case_id))
+}
+
+fn audit_core(text: &str, sources: Vec<Source<'_>>, packs: BTreeMap<String, PackSnapshot>, filename: &str, format: &str, case_id: Option<String>) -> AuditReport {
     let mut items: Vec<AuditItem> = Vec::new();
     // Citations first so quotations can be attributed to them.
     let mut cite_index: Vec<(usize, usize, String, Option<usize>)> = Vec::new(); // (start, end, item_id, source index)
@@ -504,20 +629,6 @@ pub fn audit(text: &str, corpus: &[CorpusChunk], filename: &str, format: &str, c
     let mut counts: BTreeMap<String, usize> = RESULTS.iter().map(|r| (r.to_string(), 0)).collect();
     for i in &items {
         *counts.entry(i.result.clone()).or_insert(0) += 1;
-    }
-    let mut packs: BTreeMap<String, PackSnapshot> = BTreeMap::new();
-    for c in corpus {
-        packs.entry(c.pack_id.clone()).or_insert_with(|| PackSnapshot {
-            pack_id: c.pack_id.clone(),
-            version: c.metadata.version.clone(),
-            currency_date: None,
-            trust_level: match c.metadata.trust_level.as_str() {
-                "OFFICIAL_VERIFIED" => "OFFICIAL_VERIFIED",
-                "CUSTOM" => "CUSTOM",
-                _ => "DEVELOPMENT_ONLY",
-            }
-            .into(),
-        });
     }
     let sha = hash_hex(text);
     AuditReport {
@@ -640,6 +751,54 @@ mod tests {
             let result = item["result"].as_str().unwrap();
             assert_eq!(item["resolved"].is_null(), result == "NOT_IN_CORPUS", "resolved/result mismatch: {item}");
             assert_eq!(item["misquote"].is_null(), result != "MISQUOTED", "misquote/result mismatch: {item}");
+        }
+    }
+
+    /// B-S4-29: the store-backed audit reports exactly what the whole-corpus audit reports.
+    #[test]
+    fn store_backed_audit_equals_whole_corpus_audit_on_the_real_pack() {
+        let fx: Value = serde_json::from_str(FIXTURE).unwrap();
+        let rp = &fx["real_pack"];
+        let pack = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("..").join(rp["pack_dir"].as_str().unwrap());
+        let vault = tempfile::tempdir().unwrap();
+        let paths = crate::vault::VaultPaths::new(vault.path().to_path_buf());
+        crate::packs::install_pack_from_dir(&paths, &pack).expect("official pack installs");
+        let corpus = crate::retrieval::build_corpus(&paths, &[]).unwrap();
+        let store = crate::retrieval::store::open(&paths).unwrap();
+        // The golden draft (citations, pinpoints, quotations) plus a quotation with no attributed citation, an altered
+        // quotation, and a reference to an authority that is not installed.
+        let passage = corpus.iter().map(|c| c.text.as_str()).find(|t| t.chars().count() > 200).unwrap();
+        let quote: String = passage.chars().skip(60).take(90).collect::<String>().split_whitespace().collect::<Vec<_>>().join(" ");
+        let altered = quote.replacen(' ', " certainly ", 1);
+        let drafts = [
+            rp["draft"].as_str().unwrap().to_string(),
+            format!("The rule is stated plainly: \u{201c}{quote}\u{201d} and counsel adds \u{201c}{altered}\u{201d}. See also Section 99 of the Imaginary Act, 2099."),
+        ];
+        for text in drafts {
+            let whole = serde_json::to_value(audit(&text, &corpus, "x.txt", "txt", None)).unwrap();
+            let stored = serde_json::to_value(audit_with_store(&store, &[], &text, "x.txt", "txt", None).unwrap()).unwrap();
+            let strip = |mut v: Value| {
+                v["generated_at"] = Value::Null;
+                v
+            };
+            assert_eq!(strip(whole), strip(stored), "draft: {text}");
+        }
+    }
+
+    #[test]
+    fn group_records_match_group_sources() {
+        let fx: Value = serde_json::from_str(FIXTURE).unwrap();
+        let corpus: Vec<CorpusChunk> = fx["corpus"].as_array().unwrap().iter().map(chunk).collect();
+        let mut by_key: BTreeMap<(String, String, String), GroupRec> = BTreeMap::new();
+        for c in &corpus {
+            let g = by_key.entry((c.pack_id.clone(), c.metadata.title.clone(), c.metadata.citation.clone())).or_insert_with(|| GroupRec::new(&c.metadata));
+            g.absorb(&c.metadata);
+        }
+        let sources = group_sources(&corpus);
+        assert_eq!(sources.len(), by_key.len());
+        for (s, g) in sources.iter().zip(by_key.values()) {
+            assert_eq!((&s.source_id, &s.title, &s.citation, &s.authority_type), (&g.source_id, &g.title, &g.citation, &g.authority_type));
+            assert_eq!((&s.trust_level, &s.temporal_status, &s.superseded_status), (&g.trust_level, &g.temporal_status, &g.superseded_status));
         }
     }
 

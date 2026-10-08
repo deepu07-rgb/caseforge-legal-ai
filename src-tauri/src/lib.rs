@@ -295,15 +295,17 @@ fn audit_draft(
     }
     let mgr = vault.get_or_init(&app)?;
     let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
-    let corpus = retrieval::build_corpus(&paths, &[])?;
-    let mut report = audit::audit(&text, &corpus, filename.as_deref().unwrap_or("draft.txt"), "drafting_surface", case_id.clone());
+    // B-S4-29: read only the passages this draft needs from the on-disk store.
+    let store = retrieval::store::open(&paths)?;
+    let small = retrieval::build_small_corpus(&paths, &[])?;
+    let mut report = audit::audit_with_store(&store, &small, &text, filename.as_deref().unwrap_or("draft.txt"), "drafting_surface", case_id.clone())?;
     // B-S4-09: signed succession rows add CODE_BRIDGE notes (VERIFIED_WITH_NOTE); unsigned rows change nothing.
     let (tables, _) = rule_tables::load_installed(&paths);
     if !tables.is_empty() {
         let jurisdiction = case_id.as_deref().and_then(|c| case_jurisdiction(&mgr, c).ok());
         let rows = rule_tables::query(&tables, "STATUTE_SUCCESSION", jurisdiction.as_deref(), &crate::docpipe::now_rfc3339()[..10]);
         let dates = case_id.as_deref().map(|c| key_dates(&mgr, c)).transpose()?.unwrap_or_default();
-        code_bridge::add_audit_notes(&mut report.items, &mut report.counts, &rows, &rule_tables::index_corpus(&corpus), &dates);
+        code_bridge::add_audit_notes(&mut report.items, &mut report.counts, &rows, &rule_tables::index_for_rows(&paths, &rows), &dates);
     }
     Ok(report)
 }
@@ -366,11 +368,10 @@ fn code_bridge_set_key_date(app: AppHandle, vault: State<'_, VaultState>, case_i
 fn code_bridge_annotate(app: AppHandle, vault: State<'_, VaultState>, case_id: String, text: Option<String>, context: Option<String>) -> Result<serde_json::Value, String> {
     let mgr = vault.get_or_init(&app)?;
     let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
-    let corpus = retrieval::build_corpus(&paths, &[])?;
-    let chunks = rule_tables::index_corpus(&corpus);
     let (tables, rejected) = rule_tables::load_installed(&paths);
     let jurisdiction = case_jurisdiction(&mgr, &case_id)?;
     let rows = rule_tables::query(&tables, "STATUTE_SUCCESSION", Some(&jurisdiction), &crate::docpipe::now_rfc3339()[..10]);
+    let chunks = rule_tables::index_for_rows(&paths, &rows);
     let dates = key_dates(&mgr, &case_id)?;
     let annotated: Vec<code_bridge::Annotated> = match text {
         Some(t) => {

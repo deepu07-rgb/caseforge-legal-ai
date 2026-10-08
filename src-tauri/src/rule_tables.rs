@@ -14,7 +14,7 @@ use once_cell::sync::Lazy;
 use regex::Regex;
 use serde::Serialize;
 use serde_json::Value;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::path::Path;
 
 pub const ERR_INVALID: &str = "CF_PACK_RULE_TABLE_INVALID";
@@ -36,6 +36,62 @@ pub struct ChunkRef {
 }
 
 pub type ChunkIndex = HashMap<String, ChunkRef>;
+
+fn chunk_ref(c: &CorpusChunk) -> ChunkRef {
+    ChunkRef { pack_id: c.pack_id.clone(), source_id: c.metadata.source_id.clone(), trust_level: c.metadata.trust_level.clone(), text: c.text.clone() }
+}
+
+/// Chunk ids cited by the authorities of a rule table (or any value shaped like one).
+pub fn cited_chunk_ids(table: &Value) -> HashSet<String> {
+    table
+        .get("rows")
+        .and_then(Value::as_array)
+        .into_iter()
+        .flatten()
+        .flat_map(|r| r.get("authorities").and_then(Value::as_array).into_iter().flatten())
+        .filter_map(|a| a.get("chunk_id").and_then(Value::as_str).map(str::to_string))
+        .collect()
+}
+
+/// The chunk index for just the chunks in `ids`, looked up in the on-disk store (and in-memory material) instead of by
+/// loading the corpus (B-S4-29). A cited id that is not installed is simply absent, so validation reports it.
+pub fn index_for_ids(paths: &VaultPaths, ids: &HashSet<String>) -> ChunkIndex {
+    let mut out = ChunkIndex::new();
+    if ids.is_empty() {
+        return out;
+    }
+    if let Ok(store) = crate::retrieval::store::open(paths) {
+        for id in ids {
+            if let Some(c) = store.get_by_chunk_id(id) {
+                out.insert(id.clone(), chunk_ref(&c));
+            }
+        }
+    }
+    if out.len() < ids.len() {
+        for c in crate::retrieval::build_small_corpus(paths, &[]).unwrap_or_default() {
+            if ids.contains(&c.chunk_id) {
+                out.entry(c.chunk_id.clone()).or_insert_with(|| chunk_ref(&c));
+            }
+        }
+    }
+    out
+}
+
+/// The chunk index a set of rows needs (for side-by-side excerpts and audit notes).
+pub fn index_for_rows(paths: &VaultPaths, rows: &[&RuleRow]) -> ChunkIndex {
+    let ids: HashSet<String> = rows.iter().flat_map(|r| r.authorities.iter()).filter_map(|a| a.get("chunk_id").and_then(Value::as_str).map(str::to_string)).collect();
+    index_for_ids(paths, &ids)
+}
+
+fn cited_ids_in_files(pack_dir: &Path, man: &PackManifest) -> HashSet<String> {
+    let mut ids = HashSet::new();
+    for file in man.rule_tables_files.iter().filter(|f| FILE_PATH.is_match(f)) {
+        if let Some(v) = std::fs::read_to_string(pack_dir.join(file)).ok().and_then(|raw| serde_json::from_str::<Value>(&raw).ok()) {
+            ids.extend(cited_chunk_ids(&v));
+        }
+    }
+    ids
+}
 
 pub fn index_corpus(corpus: &[CorpusChunk]) -> ChunkIndex {
     corpus
@@ -264,9 +320,12 @@ pub fn validate_table(table: &Value, pack_kind: &str, chunks: &ChunkIndex) -> Re
 /// Install-time check for every rule table a pack declares (AC-S4-RT.1).
 pub fn validate_pack(paths: &VaultPaths, pack_dir: &Path, man: &PackManifest) -> Result<(), String> {
     precheck_manifest(man)?;
-    let mut index = crate::retrieval::build_corpus(paths, &[]).map(|c| index_corpus(&c)).unwrap_or_default();
+    let ids = cited_ids_in_files(pack_dir, man);
+    let mut index = index_for_ids(paths, &ids);
     for c in packs::load_legal_chunks(pack_dir)? {
-        index.insert(c.chunk_id.clone(), ChunkRef { pack_id: c.pack_id, source_id: c.source_id, trust_level: c.trust_level, text: c.exact_text });
+        if ids.contains(&c.chunk_id) {
+            index.insert(c.chunk_id.clone(), ChunkRef { pack_id: c.pack_id, source_id: c.source_id, trust_level: c.trust_level, text: c.exact_text });
+        }
     }
     for file in &man.rule_tables_files {
         validate_file(pack_dir, man, file, &index)?;
@@ -290,12 +349,17 @@ fn validate_file(pack_dir: &Path, man: &PackManifest, file: &str, index: &ChunkI
 /// Rule tables of installed official packs, re-validated on every load (defence in depth). Returns the accepted
 /// tables and a reason for each rejected one.
 pub fn load_installed(paths: &VaultPaths) -> (Vec<RuleTable>, Vec<String>) {
-    let index = crate::retrieval::build_corpus(paths, &[]).map(|c| index_corpus(&c)).unwrap_or_default();
     let mut tables = Vec::new();
     let mut rejected = Vec::new();
-    for p in packs::list_installed(paths).into_iter().filter(|p| p.pack_kind == "official") {
+    let official: Vec<_> = packs::list_installed(paths)
+        .into_iter()
+        .filter(|p| p.pack_kind == "official")
+        .filter_map(|p| packs::read_manifest(Path::new(&p.install_path)).ok().map(|man| (p, man)))
+        .collect();
+    let ids: HashSet<String> = official.iter().flat_map(|(p, man)| cited_ids_in_files(Path::new(&p.install_path), man)).collect();
+    let index = index_for_ids(paths, &ids);
+    for (p, man) in official {
         let dir = Path::new(&p.install_path);
-        let Ok(man) = packs::read_manifest(dir) else { continue };
         // Code-name aliases ("CrPC" = "Code of Criminal Procedure"), only if bound to the signed manifest.
         let alias_file = "metadata/code_aliases.json";
         if man.files.iter().any(|f| f.path == alias_file) {

@@ -31,10 +31,10 @@ use std::path::Path;
 use std::sync::{Arc, Mutex};
 use uuid::Uuid;
 
-const FORMAT: u32 = 1;
+const FORMAT: u32 = 2;
 const LEXICAL_CANDIDATES: usize = 300;
 const DENSE_CANDIDATES: usize = 100;
-const VERIFIED_FILES: [&str; 4] = ["docs.off", "postings.dat", "terms.dat", "meta.dat"];
+const VERIFIED_FILES: [&str; 5] = ["docs.off", "postings.dat", "terms.dat", "meta.dat", "groups.json"];
 
 #[derive(Serialize, Deserialize)]
 struct IndexInfo {
@@ -43,9 +43,53 @@ struct IndexInfo {
     content_sha256: String,
     n: u32,
     total_len: u64,
+    /// Version and trust level of the pack's first passage (the audit's pack snapshot).
+    version: String,
+    trust_level: String,
     /// Distinct filter values; meta.dat holds indexes into this table.
     strings: Vec<String>,
     files: BTreeMap<String, String>,
+}
+
+/// One authority as the citation audit sees it: pages/passages of the same work (same pack, title and citation) form one
+/// group, and the most restrictive status across them applies. Mirrors `audit::group_sources`.
+#[derive(Serialize, Deserialize, Clone)]
+pub struct GroupRec {
+    pub title: String,
+    pub citation: String,
+    pub source_id: String,
+    pub authority_type: String,
+    pub trust_level: String,
+    pub temporal_status: String,
+    pub superseded_status: String,
+    pub docs: Vec<u32>,
+}
+
+impl GroupRec {
+    pub fn new(m: &super::LegalMetadata) -> GroupRec {
+        GroupRec {
+            title: m.title.clone(),
+            citation: m.citation.clone(),
+            source_id: m.source_id.clone(),
+            authority_type: m.authority_type.clone(),
+            trust_level: m.trust_level.clone(),
+            temporal_status: m.temporal_status.clone(),
+            superseded_status: m.superseded_status.clone(),
+            docs: Vec::new(),
+        }
+    }
+
+    pub fn absorb(&mut self, m: &super::LegalMetadata) {
+        if m.trust_level != "OFFICIAL_VERIFIED" {
+            self.trust_level = m.trust_level.clone();
+        }
+        if m.superseded_status != "CURRENT" && self.superseded_status != "SUPERSEDED" {
+            self.superseded_status = m.superseded_status.clone();
+        }
+        if m.temporal_status != "APPLICABLE" {
+            self.temporal_status = m.temporal_status.clone();
+        }
+    }
 }
 
 fn file_sha(path: &Path) -> Result<String, String> {
@@ -121,8 +165,17 @@ fn write_files(pack: &InstalledPack, records: &[crate::packs::LegalChunkRecord],
     let mut postings: BTreeMap<String, Vec<(u32, u32)>> = BTreeMap::new();
     let mut strings: Vec<String> = Vec::new();
     let mut total_len = 0u64;
+    let mut groups: BTreeMap<(String, String), GroupRec> = BTreeMap::new();
+    let (mut first_version, mut first_trust) = (String::new(), String::new());
     for (i, record) in records.iter().enumerate() {
         let chunk = chunk_from_record(record);
+        if i == 0 {
+            first_version = chunk.metadata.version.clone();
+            first_trust = chunk.metadata.trust_level.clone();
+        }
+        let group = groups.entry((chunk.metadata.title.clone(), chunk.metadata.citation.clone())).or_insert_with(|| GroupRec::new(&chunk.metadata));
+        group.absorb(&chunk.metadata);
+        group.docs.push(i as u32);
         offsets.extend_from_slice(&pos.to_le_bytes());
         let json = serde_json::to_vec(&chunk).map_err(|e| e.to_string())?;
         let mut enc = ZlibEncoder::new(Vec::new(), Compression::new(6));
@@ -167,11 +220,12 @@ fn write_files(pack: &InstalledPack, records: &[crate::packs::LegalChunkRecord],
     fs::write(tmp.join("terms.dat"), terms.as_bytes()).map_err(io)?;
     fs::write(tmp.join("meta.dat"), &meta).map_err(io)?;
     fs::write(tmp.join("ids.txt"), ids.as_bytes()).map_err(io)?;
+    fs::write(tmp.join("groups.json"), serde_json::to_vec(&groups.into_values().collect::<Vec<_>>()).map_err(|e| e.to_string())?).map_err(io)?;
     let mut files = BTreeMap::new();
     for name in VERIFIED_FILES.iter().chain(["ids.txt"].iter()) {
         files.insert(name.to_string(), file_sha(&tmp.join(name))?);
     }
-    let info = IndexInfo { format: FORMAT, pack_id: pack.pack_id.clone(), content_sha256: pack.content_sha256.clone(), n: records.len() as u32, total_len, strings, files };
+    let info = IndexInfo { format: FORMAT, pack_id: pack.pack_id.clone(), content_sha256: pack.content_sha256.clone(), n: records.len() as u32, total_len, version: first_version, trust_level: first_trust, strings, files };
     fs::write(tmp.join("index.json"), serde_json::to_vec_pretty(&info).map_err(|e| e.to_string())?).map_err(io)
 }
 
@@ -186,6 +240,9 @@ pub struct PackIndex {
     lens: Vec<u32>,
     offsets: Vec<u64>,
     ids: Vec<String>,
+    groups: Vec<GroupRec>,
+    version: String,
+    trust_level: String,
     postings: Mutex<File>,
     docs: Mutex<File>,
 }
@@ -234,9 +291,13 @@ impl PackIndex {
             let (Some(t), Some(o), Some(l), Some(d)) = (it.next(), it.next(), it.next(), it.next()) else { return Err("CF_STORE_TAMPERED: terms.dat".into()) };
             terms.insert(t.to_string(), (o.parse().map_err(|_| "terms.dat")?, l.parse().map_err(|_| "terms.dat")?, d.parse().map_err(|_| "terms.dat")?));
         }
+        let groups: Vec<GroupRec> = serde_json::from_slice(&fs::read(dir.join("groups.json")).map_err(|e| e.to_string())?).map_err(|_| "CF_STORE_TAMPERED: groups.json".to_string())?;
+        if groups.iter().map(|g| g.docs.len()).sum::<usize>() != n || groups.iter().flat_map(|g| &g.docs).any(|d| *d as usize >= n) {
+            return Err("CF_STORE_TAMPERED: groups.json".into());
+        }
         let postings = Mutex::new(File::open(dir.join("postings.dat")).map_err(|e| e.to_string())?);
         dense::register_pack(Path::new(&pack.install_path), &pack.content_sha256, &ids);
-        Ok(PackIndex { pack_id: pack.pack_id.clone(), content_sha256: pack.content_sha256.clone(), n: info.n, total_len: info.total_len, strings: info.strings, terms, meta, lens, offsets, ids, postings, docs: Mutex::new(docs) })
+        Ok(PackIndex { pack_id: pack.pack_id.clone(), content_sha256: pack.content_sha256.clone(), n: info.n, total_len: info.total_len, strings: info.strings, terms, meta, lens, offsets, ids, groups, version: info.version, trust_level: info.trust_level, postings, docs: Mutex::new(docs) })
     }
 
     fn ensure(paths: &VaultPaths, pack: &InstalledPack) -> Result<PackIndex, String> {
@@ -306,8 +367,17 @@ impl PackIndex {
     }
 }
 
+/// One authority across the store (see `GroupRec`), with its passages.
+pub struct GroupView {
+    pub pack_id: String,
+    pub rec: GroupRec,
+    pub docs: Vec<DocRef>,
+}
+
 pub struct Store {
     packs: Vec<PackIndex>,
+    views: Vec<GroupView>,
+    doc_group: HashMap<DocRef, usize>,
     by_hash: HashMap<u64, (u16, u32)>,
     n_total: u64,
     total_len: u64,
@@ -315,7 +385,7 @@ pub struct Store {
     pub checksum: String,
 }
 
-type DocRef = (u16, u32);
+pub type DocRef = (u16, u32);
 
 impl Store {
     fn new(packs: Vec<PackIndex>) -> Store {
@@ -325,6 +395,14 @@ impl Store {
                 by_hash.insert(dense::key(id), (p as u16, d as u32));
             }
         }
+        let mut views: Vec<GroupView> = Vec::new();
+        for (p, pack) in packs.iter().enumerate() {
+            for g in &pack.groups {
+                views.push(GroupView { pack_id: pack.pack_id.clone(), rec: g.clone(), docs: g.docs.iter().map(|d| (p as u16, *d)).collect() });
+            }
+        }
+        views.sort_by(|a, b| (&a.pack_id, &a.rec.title, &a.rec.citation).cmp(&(&b.pack_id, &b.rec.title, &b.rec.citation)));
+        let doc_group: HashMap<DocRef, usize> = views.iter().enumerate().flat_map(|(i, v)| v.docs.iter().map(move |d| (*d, i))).collect();
         let mut identity: Vec<String> = packs.iter().map(|p| format!("{}:{}", p.pack_id, p.content_sha256)).collect();
         identity.sort();
         Store {
@@ -332,8 +410,33 @@ impl Store {
             total_len: packs.iter().map(|p| p.total_len).sum(),
             checksum: sha256_prefixed(&identity.join("\n")),
             by_hash,
+            views,
+            doc_group,
             packs,
         }
+    }
+
+    /// Authorities in the order `audit::group_sources` yields them (pack id, title, citation).
+    pub fn group_views(&self) -> &[GroupView] {
+        &self.views
+    }
+
+    pub fn group_of_doc(&self, r: DocRef) -> Option<usize> {
+        self.doc_group.get(&r).copied()
+    }
+
+    pub fn load_doc(&self, r: DocRef) -> Result<CorpusChunk, String> {
+        self.load(r)
+    }
+
+    /// Passages most likely to contain a quotation (keyword ranking of its words), whatever their status.
+    pub fn quote_candidates(&self, quote: &str, k: usize) -> Vec<DocRef> {
+        self.lexical(&tokenize(quote), &MetadataFilters::default(), false, k)
+    }
+
+    /// (pack id, version, trust level) of each installed v2 pack, from its first passage.
+    pub fn pack_snapshots(&self) -> Vec<(String, String, String)> {
+        self.packs.iter().map(|p| (p.pack_id.clone(), p.version.clone(), p.trust_level.clone())).collect()
     }
 
     pub fn len(&self) -> usize {

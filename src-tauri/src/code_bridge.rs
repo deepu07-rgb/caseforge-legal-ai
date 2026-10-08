@@ -498,8 +498,7 @@ mod tests {
         let rows = query(&tables, "STATUTE_SUCCESSION", Some("India"), "2026-10-08");
         assert!(rows.len() > 1000, "{} rows", rows.len());
         assert!(rows.iter().all(|r| !r.signed()), "no row counts as signed until a named legal editor signs it");
-        let corpus = crate::retrieval::build_corpus(&paths, &[]).unwrap();
-        let chunks = crate::rule_tables::index_corpus(&corpus);
+        let chunks = crate::rule_tables::index_for_rows(&paths, &rows);
         let dates = HashMap::from([("OFFENCE_DATE".to_string(), KeyDate { kind: "OFFENCE_DATE".into(), date: "2024-03-01".into(), locator: json!({"kind": "COUNSEL_INPUT"}) })]);
         let got = annotate("He is charged under section 302 IPC. His statement was recorded u/s 161 of the Code of Criminal Procedure, 1973.", "DRAFT", None, &rows, &chunks, &dates);
         let a302 = &got.iter().find(|a| a.annotation["provision"] == "302").expect("302 IPC annotated").annotation;
