@@ -96,6 +96,9 @@ pub struct LlmChatRequest {
     /// Prior turns: [{role, content}, ...]
     pub messages: Option<Vec<LlmMessage>>,
     pub max_tokens: Option<u32>,
+    /// B-S4-28: best-of-n sample number (0 = the contract's settings, 1-7 = deterministic seed/temperature variants).
+    #[serde(default)]
+    pub variant: Option<u32>,
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
@@ -415,6 +418,7 @@ pub fn chat(req: LlmChatRequest) -> Result<LlmChatResult, String> {
         "permitted_authority_ids": req.permitted_authority_ids.clone().unwrap_or_default(),
         "mock_court_schema_v2": req.mock_court_schema_v2.unwrap_or(false),
         "max_tokens": req.max_tokens.unwrap_or(512),
+        "variant": req.variant.unwrap_or(0),
     });
     if let Some(msgs) = &req.messages {
         params["messages"] = serde_json::to_value(msgs).unwrap_or(json!([]));
@@ -488,6 +492,7 @@ pub fn chat_with_timeout(req: LlmChatRequest, timeout_secs: u64) -> Result<LlmCh
         "permitted_authority_ids": req.permitted_authority_ids.clone().unwrap_or_default(),
         "mock_court_schema_v2": req.mock_court_schema_v2.unwrap_or(false),
         "max_tokens": req.max_tokens.unwrap_or(512),
+        "variant": req.variant.unwrap_or(0),
     });
     if let Some(msgs) = &req.messages {
         params["messages"] = serde_json::to_value(msgs).unwrap_or(json!([]));

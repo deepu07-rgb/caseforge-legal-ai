@@ -93,6 +93,7 @@ jobs:
           python eval/checks/impeachment_b_s4_08.py --cargo-log cargo-test.log --kits evidence/impeachment_kits.json
           python eval/checks/rule_tables_b_s4_03.py --cargo-log cargo-test.log
           python eval/checks/code_bridge_b_s4_09.py --cargo-log cargo-test.log --annotations evidence/code_bridge_annotations.json
+          python eval/checks/reasoning_b_s4_28.py --cargo-log cargo-test.log
 
       - name: Upload gate reports
         if: always()

@@ -1,0 +1,15 @@
+{
+  "batch": "B-S4-28",
+  "fixture_sha256": "24cb84dbf711cc54a3a85012598db1cb31fa3cd8618f4a6f1f1ed34f8492c194",
+  "acs": {
+    "AC-S4-28.1": {
+      "status": "BLOCKED",
+      "reason": "pass --cargo-log with `cargo test --lib` output"
+    },
+    "AC-S4-28.2": {
+      "status": "BLOCKED",
+      "reason": "Whether best-of-n raises the share of fully verified answers for the 7B model must be measured with the model on the owner's machine; the threshold (e.g. +X points of verified answers over a single attempt on held-out questions) awaits owner approval (Q-S4-01). The engine and its guarantees are proven above with scripted candidates, not with the model."
+    }
+  },
+  "errors": []
+}

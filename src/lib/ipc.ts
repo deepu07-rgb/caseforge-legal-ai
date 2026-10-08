@@ -2848,3 +2848,18 @@ export async function codeBridgeSetKeyDate(caseId: string, kind: DateKind, date:
 export async function ruleTablesStatus(): Promise<{ tables: { table_id: string; table_kind: string; jurisdiction: string; pack_id: string; rows: number; signed_rows: number }[]; rejected: string[] }> {
   return invoke("rule_tables_status");
 }
+
+// --- B-S4-28 step-by-step reasoning with best-of-n verification ---
+export type ReasoningDepth = "QUICK" | "CAREFUL" | "THOROUGH";
+export interface ReasoningCandidate { variant: number; points: number; trusted: number; labelled: number; red: number; conclusion_ok: boolean; agreement: number; repair: boolean; }
+export interface ReasoningResult {
+  schema_version: "caseforge.reasoning-run.v1"; depth: ReasoningDepth; candidates_requested: number; candidates_run: number;
+  chosen_variant: number | null; status: "VERIFIED" | "PARTIAL" | "NO_VERIFIED_ANSWER"; verified_answer: boolean; agreement: number;
+  stopped_early: boolean; stopped_for_time: boolean; repair_attempted: boolean; repair_accepted: boolean;
+  candidates: ReasoningCandidate[]; discarded: { variant: number; reason: string }[];
+  ledger: PropositionLedger | null; rendered_text: string; question: string;
+  model: { model: string; backend: string; digest: string }; elapsed_ms: number; disclaimer: string;
+}
+export async function reasoningRun(caseId: string, question: string, depth: ReasoningDepth): Promise<ReasoningResult> {
+  return invoke<ReasoningResult>("reasoning_run", { caseId, question, depth });
+}

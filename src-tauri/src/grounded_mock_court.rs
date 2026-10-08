@@ -52,7 +52,7 @@ pub struct GroundedModelResult {
 static HISTORY: Lazy<Mutex<HashMap<String, Vec<LlmMessage>>>> =
     Lazy::new(|| Mutex::new(HashMap::new()));
 
-fn support_sources(
+pub(crate) fn support_sources(
     case_id: &str,
     graph: &Value,
     graph_version: &str,
@@ -310,6 +310,7 @@ pub fn run(
         mock_court_schema_v2: Some(true),
         messages: Some(history_for(session_id)),
         max_tokens: Some(112),
+        variant: None,
     };
     let generation_started = Instant::now();
     let mut model = crate::infer_llm::chat_with_timeout(request.clone(), TURN_TIMEOUT_SECONDS)?;

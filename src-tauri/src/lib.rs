@@ -23,6 +23,7 @@ mod licence;
 mod mock_court;
 mod mock_court_retrieval;
 mod opposition;
+mod reasoning;
 mod witness;
 mod impeach;
 mod rule_tables;
@@ -308,6 +309,94 @@ fn audit_draft(
         code_bridge::add_audit_notes(&mut report.items, &mut report.counts, &rows, &rule_tables::index_for_rows(&paths, &rows), &dates);
     }
     Ok(report)
+}
+
+// --- B-S4-28 step-by-step reasoning with best-of-n verification ---
+
+/// Reasons through a question over the matter's working set: several candidate step-by-step ledgers from the local model,
+/// each checked by the host verifier, the best-verified one kept, one targeted repair. A result is called verified only
+/// when the host verified every step. Needs a counsel-confirmed working set, like Mock Court.
+#[tauri::command]
+fn reasoning_run(app: AppHandle, vault: State<'_, VaultState>, case_id: String, question: String, depth: Option<String>) -> Result<serde_json::Value, String> {
+    let question = question.trim().to_string();
+    if question.is_empty() || question.chars().count() > 2000 {
+        return Err("CF_REASONING_QUESTION: enter a question of up to 2000 characters".into());
+    }
+    let depth = reasoning::Depth::parse(depth.as_deref().unwrap_or("CAREFUL")).ok_or_else(|| "CF_REASONING_DEPTH: use QUICK, CAREFUL or THOROUGH".to_string())?;
+    if guardrails::check_user_input(&question).refused {
+        return Err("CF_REASONING_INPUT_REFUSED: safety policy blocked the question".into());
+    }
+    let status = infer_llm::status();
+    if !status.controlled_beta_ready {
+        return Err(format!("CF_REASONING_MODEL_NOT_READY: {}", status.detail));
+    }
+    let mgr = vault.get_or_init(&app)?;
+    let profile = mgr
+        .list_cases()
+        .map_err(|e| e.to_string())?
+        .into_iter()
+        .find(|c| c.case_id == case_id)
+        .ok_or_else(|| "CF_CASE_NOT_FOUND: matter is not registered".to_string())?;
+    let graph = mgr.case_graph_get(&case_id).map_err(|e| e.to_string())?.unwrap_or_else(|| serde_json::json!({}));
+    let set = mgr.working_set_get(&case_id).map_err(|e| e.to_string())?;
+    let readiness = mock_court_retrieval::readiness(&case_id, &profile.jurisdiction, Some(&graph), &set);
+    let retrieval = mock_court_retrieval::retrieve(&readiness, "oral_argument", "counsel", &question, &graph)?;
+    let sources = grounded_mock_court::support_sources(&case_id, &graph, &readiness.graph_version, &question, &retrieval.authorities);
+    let permitted: Vec<String> = retrieval.authorities.iter().map(|a| a.authority_id.clone()).collect();
+    let authority_context = retrieval
+        .authorities
+        .iter()
+        .map(|a| format!("[{} | {} | {}] {}", a.authority_id, a.citation, a.section_label, a.exact_text))
+        .collect::<Vec<_>>()
+        .join("\n\n");
+    let started = std::time::Instant::now();
+    let budget_ms = depth.budget_ms();
+    let mut clock = || started.elapsed().as_millis() as u64;
+    let mut generate = |attempt: reasoning::Attempt| -> Result<Vec<proposition::PropositionInput>, String> {
+        let (user_text, variant) = match &attempt.repair {
+            Some(note) => (reasoning::repair_prompt(&question, note.previous, &note.problems), 0),
+            None => (reasoning::prompt(&question), attempt.variant.min(7)),
+        };
+        let left_s = (budget_ms.saturating_sub(started.elapsed().as_millis() as u64) / 1000).clamp(30, 300);
+        let request = infer_llm::LlmChatRequest {
+            user_text,
+            role: Some("counsel".into()),
+            format: Some("reasoning_steps".into()),
+            case_title: Some(profile.cause_title.clone()),
+            jurisdiction: Some(profile.jurisdiction.clone()),
+            user_side: Some(profile.user_side.clone()),
+            case_context: None,
+            authority_context: Some(authority_context.clone()),
+            authority_ids: Some(permitted.clone()),
+            working_set_version: Some(readiness.working_set_version.to_string()),
+            structured_propositions: Some(true),
+            output_kind: Some("REASONING".into()),
+            support_sources: Some(sources.clone()),
+            permitted_authority_ids: Some(permitted.clone()),
+            mock_court_schema_v2: None,
+            messages: None,
+            max_tokens: Some(1024),
+            variant: Some(variant),
+        };
+        let out = infer_llm::chat_with_timeout(request, left_s)?;
+        if !out.controlled_beta_ready {
+            return Err("CF_REASONING_MODEL_DRIFT: generation did not report controlled-beta readiness".into());
+        }
+        Ok(out.propositions)
+    };
+    let result = reasoning::run(&sources, &permitted, depth, budget_ms, &mut clock, &mut generate);
+    let guarded = guardrails::check_model_output(&question, &result.rendered_text, &status.model, &[]);
+    if guarded.refused {
+        return Err("CF_REASONING_OUTPUT_REFUSED: the verified reasoning still failed the safety policy".into());
+    }
+    let output_id = format!("reasoning:{}:{}", case_id, crate::docpipe::now_rfc3339());
+    mgr.working_set_select_for_output(&case_id, "REASONING", &output_id).map_err(|e| e.to_string())?;
+    let mut out = serde_json::to_value(&result).map_err(|e| e.to_string())?;
+    out["question"] = serde_json::json!(question);
+    out["model"] = serde_json::json!({"model": status.model, "backend": status.backend, "digest": status.model_digest});
+    out["elapsed_ms"] = serde_json::json!(started.elapsed().as_millis() as u64);
+    out["disclaimer"] = serde_json::json!("Preparation material only. Not legal advice. Each verified step shows the supplied source it copies from; counsel inspects every source.");
+    Ok(out)
 }
 
 // --- B-S4-03 rule tables / B-S4-09 Code Bridge ---
@@ -3451,6 +3540,7 @@ pub fn run() {
             code_bridge_key_dates,
             code_bridge_set_key_date,
             code_bridge_annotate,
+            reasoning_run,
             llm_tiers,
             llm_set_tier,
             llm_chat,

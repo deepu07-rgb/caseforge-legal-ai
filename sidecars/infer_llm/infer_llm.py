@@ -261,13 +261,25 @@ Rules: Split every important factual, legal, inferential, and counsel propositio
     return messages, {"case_context_chars": len(case_context), "authority_context_chars": len(authority_context), "structured_support_chars": sum(len(str(source.get("exact_text") or "")) for source in support_sources if isinstance(source, dict)), "authority_ids": authority_ids, "working_set_version": working_set_version or None, "context_truncated": bounded_excerpt, "proposition_schema_version": "caseforge.proposition-ledger.v1" if structured else None, "mock_court_prompt_version": MOCK_COURT_REGISTRY["version"] if mock_court_v2 else None, "mock_court_prompt_hash": f"sha256:{MOCK_COURT_PROMPT_HASH}" if mock_court_v2 else None}
 
 
-def _options(max_tokens: int) -> dict[str, Any]:
-    return {"temperature": float(GENERATION["temperature"]), "top_p": float(GENERATION["top_p"]), "seed": int(GENERATION["seed"]), "num_ctx": int(GENERATION["num_ctx"]), "num_predict": max_tokens}
+# B-S4-28 best-of-n reasoning samples. Variant 0 is exactly the contract's settings. Variants 1-7 keep top_p and num_ctx
+# and use a different seed and a higher temperature, so candidates differ while each stays reproducible.
+VARIANT_TEMPERATURE = (None, 0.5, 0.7, 0.9, 0.6, 0.8, 0.4, 1.0)
 
 
-def chat_ollama(model: str, messages: list[dict[str, str]], max_tokens: int, response_format: dict[str, Any] | None = None) -> dict[str, Any]:
+def _variant(value: Any) -> int:
+    try: return max(0, min(int(value or 0), 7))
+    except (TypeError, ValueError): return 0
+
+
+def _options(max_tokens: int, variant: int = 0) -> dict[str, Any]:
+    variant = _variant(variant)
+    temperature = float(GENERATION["temperature"]) if variant == 0 else VARIANT_TEMPERATURE[variant]
+    return {"temperature": temperature, "top_p": float(GENERATION["top_p"]), "seed": int(GENERATION["seed"]) + 1000 * variant, "num_ctx": int(GENERATION["num_ctx"]), "num_predict": max_tokens}
+
+
+def chat_ollama(model: str, messages: list[dict[str, str]], max_tokens: int, response_format: dict[str, Any] | None = None, variant: int = 0) -> dict[str, Any]:
     started = time.time()
-    payload: dict[str, Any] = {"model": model, "messages": messages, "stream": False, "options": _options(max_tokens)}
+    payload: dict[str, Any] = {"model": model, "messages": messages, "stream": False, "options": _options(max_tokens, variant)}
     if "think" in GENERATION: payload["think"] = bool(GENERATION["think"])
     if response_format is not None: payload["format"] = response_format
     data = http_json(f"{DEFAULT_OLLAMA}/api/chat", payload, timeout=300.0)
@@ -281,9 +293,10 @@ def strip_reasoning(content: str) -> str:
     return re.sub(r"<think>.*\Z", "", without_closed, flags=re.S | re.I).strip()
 
 
-def chat_openai_compat(model: str, messages: list[dict[str, str]], max_tokens: int) -> dict[str, Any]:
+def chat_openai_compat(model: str, messages: list[dict[str, str]], max_tokens: int, variant: int = 0) -> dict[str, Any]:
     started = time.time()
-    data = http_json(f"{OPENAI_BASE}/chat/completions", {"model": model, "messages": messages, "temperature": GENERATION["temperature"], "top_p": GENERATION["top_p"], "seed": GENERATION["seed"], "max_tokens": max_tokens, "stream": False}, timeout=300.0)
+    opts = _options(max_tokens, variant)
+    data = http_json(f"{OPENAI_BASE}/chat/completions", {"model": model, "messages": messages, "temperature": opts["temperature"], "top_p": opts["top_p"], "seed": opts["seed"], "max_tokens": max_tokens, "stream": False}, timeout=300.0)
     choices = data.get("choices") or []
     return {"content": str(((choices[0].get("message") or {}).get("content")) if choices else "").strip(), "model": data.get("model") or model, "backend": "openai_compat", "elapsed_ms": int((time.time() - started) * 1000)}
 
@@ -291,13 +304,14 @@ def chat_openai_compat(model: str, messages: list[dict[str, str]], max_tokens: i
 _LLAMA_MODEL = None
 
 
-def chat_llama_cpp(messages: list[dict[str, str]], max_tokens: int) -> dict[str, Any]:
+def chat_llama_cpp(messages: list[dict[str, str]], max_tokens: int, variant: int = 0) -> dict[str, Any]:
     global _LLAMA_MODEL
     from llama_cpp import Llama  # type: ignore
     started = time.time()
     if _LLAMA_MODEL is None:
         _LLAMA_MODEL = Llama(model_path=GGUF_PATH, n_ctx=int(GENERATION["num_ctx"]), verbose=False)
-    data = _LLAMA_MODEL.create_chat_completion(messages=messages, temperature=GENERATION["temperature"], top_p=GENERATION["top_p"], seed=GENERATION["seed"], max_tokens=max_tokens)
+    opts = _options(max_tokens, variant)
+    data = _LLAMA_MODEL.create_chat_completion(messages=messages, temperature=opts["temperature"], top_p=opts["top_p"], seed=opts["seed"], max_tokens=max_tokens)
     choices = data.get("choices") or []
     return {"content": str(((choices[0].get("message") or {}).get("content")) if choices else "").strip(), "model": GGUF_PATH, "backend": "llama_cpp", "elapsed_ms": int((time.time() - started) * 1000)}
 
@@ -371,9 +385,9 @@ def guard_untrusted_citations(content: str, params: dict[str, Any]) -> tuple[str
     return content, {"version": GUARD_VERSION, "untrusted_citations_detected": len(patterns), "occurrences_neutralised": neutralised}
 
 
-def _provenance(info: dict[str, Any], messages: list[dict[str, str]], context: dict[str, Any], max_tokens: int) -> dict[str, Any]:
+def _provenance(info: dict[str, Any], messages: list[dict[str, str]], context: dict[str, Any], max_tokens: int, variant: int = 0) -> dict[str, Any]:
     prompt_hash = hashlib.sha256(json.dumps(messages, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
-    return {"model_digest": info.get("digest") or "unverified", "prompt_version": CONTRACT["prompt"]["version"], "system_prompt_hash": f"sha256:{SYSTEM_PROMPT_HASH}", "prompt_hash": f"sha256:{prompt_hash}", "generation": _options(max_tokens), **context}
+    return {"model_digest": info.get("digest") or "unverified", "prompt_version": CONTRACT["prompt"]["version"], "system_prompt_hash": f"sha256:{SYSTEM_PROMPT_HASH}", "prompt_hash": f"sha256:{prompt_hash}", "generation": _options(max_tokens, variant), "sample_variant": _variant(variant), **context}
 
 
 def _parse_propositions(content: str) -> list[dict[str, Any]]:
@@ -450,11 +464,12 @@ def handle(req: dict[str, Any]) -> dict[str, Any]:
         except ValueError as exc: return err(rid, -32602, str(exc), {"code": str(exc).split(":", 1)[0]})
         if len(messages) < 2: return err(rid, -32602, "user_text or messages required", {"code": "CF_LLM_BAD_PARAMS"})
         max_tokens = max(32, min(int(params.get("max_tokens") or GENERATION["num_predict_default"]), 1024))
+        variant = _variant(params.get("variant"))
         try:
             backend, model = info.get("backend"), str(info.get("model") or DEFAULT_MODEL)
-            if backend == "ollama": result = chat_ollama(model, messages, max_tokens, MOCK_COURT_TURN_SCHEMA if params.get("mock_court_schema_v2") else None)
-            elif backend == "openai_compat": result = chat_openai_compat(model, messages, max_tokens)
-            elif backend == "llama_cpp": result = chat_llama_cpp(messages, max_tokens)
+            if backend == "ollama": result = chat_ollama(model, messages, max_tokens, MOCK_COURT_TURN_SCHEMA if params.get("mock_court_schema_v2") else None, variant)
+            elif backend == "openai_compat": result = chat_openai_compat(model, messages, max_tokens, variant)
+            elif backend == "llama_cpp": result = chat_llama_cpp(messages, max_tokens, variant)
             else: return err(rid, -32000, f"Unsupported backend: {backend}")
         except Exception as exc: return err(rid, -32001, f"LLM generation failed: {exc}", {"code": "CF_LLM_GENERATE_FAILED"})
         if not result.get("content"): return err(rid, -32001, "Empty model response", {"code": "CF_LLM_EMPTY"})
@@ -463,7 +478,7 @@ def handle(req: dict[str, Any]) -> dict[str, Any]:
         context["untrusted_citation_guard"] = guard
         propositions = _parse_propositions(result["content"]) if params.get("structured_propositions") else []
         structured_turn = _parse_mock_court_turn(result["content"]) if params.get("mock_court_schema_v2") else None
-        return ok(rid, {**result, "propositions": propositions, "mock_court_turn": structured_turn, "role": params.get("role") or "counsel", "format": params.get("format") or "oral_argument", "controlled_beta_ready": bool(info.get("controlled_beta_ready")), "provenance": _provenance(info, messages, context, max_tokens), "disclaimer": "Local preparation output only. Not legal advice. Inspect every cited source before use."})
+        return ok(rid, {**result, "propositions": propositions, "mock_court_turn": structured_turn, "role": params.get("role") or "counsel", "format": params.get("format") or "oral_argument", "controlled_beta_ready": bool(info.get("controlled_beta_ready")), "provenance": _provenance(info, messages, context, max_tokens, variant), "disclaimer": "Local preparation output only. Not legal advice. Inspect every cited source before use."})
     return err(rid, -32601, f"Method not found: {method}")
 
 

@@ -13,7 +13,7 @@ pub const DECISIONS: &[&str] = &[
     "REMOVED",
     "SUPERSEDED",
 ];
-pub const OUTPUT_KINDS: &[&str] = &["DIGEST", "DRAFTING", "ARGUMENT_INTEGRITY", "MOCK_COURT"];
+pub const OUTPUT_KINDS: &[&str] = &["DIGEST", "DRAFTING", "ARGUMENT_INTEGRITY", "MOCK_COURT", "REASONING"];
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RegimeCandidate {
