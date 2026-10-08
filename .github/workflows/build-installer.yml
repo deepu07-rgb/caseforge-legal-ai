@@ -78,6 +78,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python eval/checks/answer_feedback_b_s4_00b.py --cargo-log cargo-test.log
           python eval/checks/citation_audit_b_s4_04.py --cargo-log cargo-test.log
+          python eval/checks/certificate_b_s4_05.py --cargo-log cargo-test.log
 
       - name: Stage bundled portable Python
         run: ./scripts/stage_runtime_python.ps1

@@ -31,7 +31,8 @@
       "../sidecars/**/*",
       "../contracts/**/*",
       "../packs/official/**/*",
-      "../runtime-python/**/*"
+      "../runtime-python/**/*",
+      "../scripts/verify_certificate.py"
     ],
     "icon": [
       "icons/32x32.png",

@@ -813,3 +813,20 @@ export function makeAiSpan(opts: {
     },
   };
 }
+
+/** B-S4-05: printable PDF from plain lines (Helvetica, WinAnsi-safe: typographic characters are mapped to ASCII). */
+export function renderLinesPdf(lines: string[]): Uint8Array {
+  const ascii = (s: string) =>
+    s
+      .replace(/[‘’]/g, "'")
+      .replace(/[“”]/g, '"')
+      .replace(/[–—]/g, "-")
+      .replace(/…/g, "...")
+      .replace(/[^\x20-\x7E]/g, "?");
+  const wrapped: string[] = [];
+  for (const ln of lines) wrapped.push(...wrapLine(ln.length ? ascii(ln) : " ", 90));
+  const pages: string[][] = [];
+  for (let i = 0; i < wrapped.length; i += 58) pages.push(wrapped.slice(i, i + 58));
+  if (!pages.length) pages.push([" "]);
+  return buildPdfDocument(pages);
+}

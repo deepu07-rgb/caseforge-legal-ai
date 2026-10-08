@@ -1,0 +1,36 @@
+{
+  "batch": "B-S4-05",
+  "acceptance": {
+    "AC-S4-01.4": {
+      "status": "PASS",
+      "independent": {
+        "contract_errors": [],
+        "reference_valid": true,
+        "tampering_accepted": {}
+      },
+      "rust": {
+        "issued_certificate_verifies_and_matches_contract": "ok",
+        "any_change_breaks_verification": "ok",
+        "disclosure_rules": "ok",
+        "stale_report_is_refused": "ok",
+        "reference_certificate_is_reproducible_and_cross_verifiable": "ok"
+      }
+    },
+    "AC-S4-01.5": {
+      "status": "PASS",
+      "reference_copy_clean": true,
+      "rust_disclosure_rules": "ok"
+    },
+    "STRUCTURE": {
+      "status": "PASS",
+      "checks": {
+        "verifier_stdlib_only": true,
+        "seed_only_in_encrypted_vault": true,
+        "certificate_never_writes_seed": true,
+        "commands_registered": true,
+        "ui_wired": true
+      }
+    }
+  },
+  "errors": []
+}

@@ -6,6 +6,7 @@
 mod adaptive_bench;
 mod answer_feedback;
 mod audit;
+mod certificate;
 mod authority;
 mod bench_prep;
 mod choreography;
@@ -290,6 +291,29 @@ fn audit_draft(
     let mgr = vault.get_or_init(&app)?;
     let corpus = retrieval::build_corpus(&mgr.vault_paths().map_err(|e| e.to_string())?, &[])?;
     Ok(audit::audit(&text, &corpus, filename.as_deref().unwrap_or("draft.txt"), "drafting_surface", case_id))
+}
+
+/// B-S4-05: sign an Audit Certificate for an audit report and the exact draft text it was run on.
+#[tauri::command]
+fn audit_certificate_issue(
+    app: AppHandle,
+    vault: State<'_, VaultState>,
+    report: audit::AuditReport,
+    draft_text: String,
+    disclosure_text: Option<String>,
+    disclosure_confirmed: Option<bool>,
+) -> Result<serde_json::Value, String> {
+    let mgr = vault.get_or_init(&app)?;
+    let seed = mgr.audit_signing_seed().map_err(|e| e.to_string())?;
+    let disclosure = disclosure_text.map(|text| certificate::Disclosure { text, template_id: None, confirmed: disclosure_confirmed.unwrap_or(false) });
+    certificate::issue(&report, &draft_text, &seed, env!("CARGO_PKG_VERSION"), disclosure, &crate::docpipe::now_rfc3339())
+}
+
+/// B-S4-05: verify a certificate offline (no vault, no network). `draft_text` optional.
+#[tauri::command]
+fn audit_certificate_verify(certificate_json: String, draft_text: Option<String>) -> Result<certificate::VerifyOutcome, String> {
+    let cert: serde_json::Value = serde_json::from_str(&certificate_json).map_err(|e| format!("CF_AUDIT_CERT_SIGNATURE_INVALID: not a certificate JSON ({e})"))?;
+    Ok(certificate::verify(&cert, draft_text.as_deref()))
 }
 
 #[tauri::command]
@@ -3025,6 +3049,8 @@ pub fn run() {
             working_set_select_for_output,
             llm_status,
             audit_draft,
+            audit_certificate_issue,
+            audit_certificate_verify,
             llm_tiers,
             llm_set_tier,
             llm_chat,

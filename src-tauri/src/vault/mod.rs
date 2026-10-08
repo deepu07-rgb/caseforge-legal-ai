@@ -4943,6 +4943,28 @@ impl VaultManager {
         self.licence_status_inner()
     }
 
+    /// B-S4-05: per-install Ed25519 seed for Audit Certificates. Created on first use from the OS RNG and kept ONLY
+    /// inside the encrypted app vault (vault_meta), never in a plain file.
+    pub fn audit_signing_seed(&self) -> VaultResult<[u8; 32]> {
+        let mut g = self.inner.lock().map_err(|_| VaultError::LockPoisoned)?;
+        let app = g.app.as_mut().ok_or(VaultError::Locked)?;
+        sql::apply_pending_migrations(app, APP_MIGRATIONS)?;
+        let existing: Option<String> = app
+            .query_row("SELECT value FROM vault_meta WHERE key='audit_signing_seed_v1'", [], |r| r.get(0))
+            .optional()?;
+        if let Some(hex_seed) = existing {
+            let bytes = hex::decode(hex_seed.trim()).map_err(|e| VaultError::Internal { detail: format!("audit signing seed: {e}") })?;
+            return bytes.try_into().map_err(|_| VaultError::Internal { detail: "audit signing seed has the wrong length".into() });
+        }
+        let mut seed = [0u8; 32];
+        rand::RngCore::fill_bytes(&mut rand::rngs::OsRng, &mut seed);
+        app.execute(
+            "INSERT INTO vault_meta (key, value) VALUES ('audit_signing_seed_v1', ?1)",
+            [hex::encode(seed)],
+        )?;
+        Ok(seed)
+    }
+
     pub fn air_gap_enabled(&self) -> VaultResult<bool> {
         Ok(self.licence_status_inner()?.air_gap_enabled)
     }

@@ -110,7 +110,6 @@ pub struct AuditReport {
 /// One installed source (all its chunks), with the metadata that decides the audit result.
 struct Source<'a> {
     source_id: String,
-    pack_id: String,
     title: String,
     citation: String,
     authority_type: String,
@@ -183,7 +182,6 @@ fn group_sources(corpus: &[CorpusChunk]) -> Vec<Source<'_>> {
             .entry((c.pack_id.clone(), m.title.clone(), m.citation.clone()))
             .or_insert_with(|| Source {
                 source_id: m.source_id.clone(),
-                pack_id: c.pack_id.clone(),
                 title: m.title.clone(),
                 citation: m.citation.clone(),
                 authority_type: m.authority_type.clone(),

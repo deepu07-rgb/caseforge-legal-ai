@@ -898,7 +898,7 @@ The answer is evidence-backed **yes** to:
 | B-S4-02 | Twelve golden sets + editor protocol | NOT STARTED |
 | B-S4-03 | Rule-table install/query + exploit suite | NOT STARTED |
 | B-S4-04 | G-AUDIT report (IN/US) | IMPLEMENTED — AC-S4-01.1/01.2 PASS (Rust 88/88); AC-S4-01.3 BLOCKED on Q-S4-01 threshold (measured 10/10 on G-AUDIT) (2026-10-08) |
-| B-S4-05 | Certificate verify/tamper report | NOT STARTED |
+| B-S4-05 | Certificate verify/tamper report | IMPLEMENTED — AC-S4-01.4/01.5 PASS; Rust 93/93; independent stdlib verifier (2026-10-08) |
 | B-S4-06 | G-OPPOSING report + leak audit | NOT STARTED |
 | B-S4-07 | Matrix locator report | NOT STARTED |
 | B-S4-08 | G-IMPEACH precision/recall + G3 red-team | NOT STARTED |

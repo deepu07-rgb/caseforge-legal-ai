@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { auditDraft, type AuditItem, type AuditReport, type AuditResult } from "../lib/ipc";
+import { CertificatePanel, VerifyCertificatePanel } from "./CertificatePanel";
 
 /**
  * B-S4-04: audit every citation and quotation in the draft against the installed legal packs.
@@ -114,8 +115,10 @@ export function AuditPanel({ text, caseId, filename }: { text: string; caseId?: 
           <div className="muted mono" style={{ fontSize: "0.7rem", marginTop: 6 }}>
             {report.pipeline_id} · {report.audit_id} · draft sha256 {report.subject.sha256.slice(0, 12)}… · deterministic, no AI model
           </div>
+          {report.pack_snapshot.length > 0 && <CertificatePanel report={report} text={text} />}
         </>
       )}
+      <VerifyCertificatePanel currentDraft={text} />
     </div>
   );
 }

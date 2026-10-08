@@ -2632,3 +2632,29 @@ export interface AuditReport {
 export async function auditDraft(text: string, filename?: string | null, caseId?: string | null): Promise<AuditReport> {
   return invoke<AuditReport>("audit_draft", { text, filename: filename ?? null, caseId: caseId ?? null });
 }
+
+// --- B-S4-05 Audit Certificate ---
+export interface CertificateVerifyOutcome {
+  valid: boolean;
+  key_id: string | null;
+  checks: { name: string; passed: boolean; detail: string }[];
+  note: string;
+}
+
+export async function auditCertificateIssue(opts: {
+  report: AuditReport;
+  draftText: string;
+  disclosureText?: string | null;
+  disclosureConfirmed?: boolean;
+}): Promise<Record<string, any>> {
+  return invoke("audit_certificate_issue", {
+    report: opts.report,
+    draftText: opts.draftText,
+    disclosureText: opts.disclosureText ?? null,
+    disclosureConfirmed: opts.disclosureConfirmed ?? false,
+  });
+}
+
+export async function auditCertificateVerify(certificateJson: string, draftText?: string | null): Promise<CertificateVerifyOutcome> {
+  return invoke<CertificateVerifyOutcome>("audit_certificate_verify", { certificateJson, draftText: draftText ?? null });
+}
