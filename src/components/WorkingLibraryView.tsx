@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { CurrencyStamp, TreatmentBlock } from "./CurrencyStamp";
 import {
   workingSetAddChunk, workingSetConfirmRegime, workingSetGet, workingSetSuggest, workingSetUpdateItem,
   type LegalWorkingSet, type RetrievalResult, type WorkingSetDecision,
@@ -24,6 +25,8 @@ export default function WorkingLibraryView({ caseId, retrievalResult, onError, o
       {set.items.length===0?<p className="muted">No authorities yet. Generate proposals or add a retrieved result.</p>:<ul className="retrieval-hits">{set.items.map((item)=><li key={item.item_id} data-testid="working-set-item">
         <div className="row" style={{justifyContent:"space-between",gap:".5rem"}}><strong>{item.title} · {item.section_label}</strong><span className="chip muted">{item.decision}</span></div>
         <div className="mono muted" style={{fontSize:".7rem"}}>{item.citation} · {item.jurisdiction} · {item.authority_type} · {item.trust_level} · temporal={item.temporal_status} · supersession={item.superseded_status}</div>
+        <CurrencyStamp packId={item.pack_id}/>
+        {item.authority_type==="JUDGMENT"&&<TreatmentBlock sourceId={item.source_id} chunkId={item.chunk_id}/>}
         <div className="row" style={{gap:".4rem",flexWrap:"wrap",marginTop:".5rem"}}>
           <button onClick={()=>void update(item.item_id,"INCLUDED",item.pinned,false)}>Include</button><button onClick={()=>void update(item.item_id,"EXCLUDED",item.pinned,false)}>Exclude</button><button onClick={()=>void update(item.item_id,"IRRELEVANT",item.pinned,false)}>Irrelevant</button><button onClick={()=>void update(item.item_id,"REMOVED",false,false)}>Remove</button>
           <button onClick={()=>void update(item.item_id,item.decision,!item.pinned,item.controlling)}>{item.pinned?"Unpin":"Pin"}</button><button disabled={item.decision!=="INCLUDED"||item.temporal_status!=="APPLICABLE"||item.superseded_status!=="CURRENT"} onClick={()=>void update(item.item_id,"INCLUDED",item.pinned,!item.controlling)}>{item.controlling?"Unconfirm controlling":"Confirm controlling"}</button>

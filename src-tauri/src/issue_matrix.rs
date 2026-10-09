@@ -457,7 +457,7 @@ pub fn audited_from_report(doc_id: &str, pages: &[String], report: &crate::audit
             let page = starts.iter().rposition(|&s| s <= i.draft_char_start)?;
             let base = starts[page];
             let end = i.draft_char_end - base;
-            (end <= pages[page].chars().count()).then(|| Audited { doc_id: doc_id.to_string(), page_index: page, char_start: i.draft_char_start - base, char_end: end, item_id: i.item_id.clone(), result: i.result.clone() })
+            (end <= pages[page].chars().count()).then(|| Audited { doc_id: doc_id.to_string(), page_index: page, char_start: i.draft_char_start - base, char_end: end, item_id: format!("{doc_id}:{}", i.item_id), result: i.result.clone() })
         })
         .collect()
 }
@@ -790,6 +790,7 @@ mod tests {
         let a = audited_from_report("d1", &pages, &report);
         assert_eq!(a.len(), 1);
         assert_eq!((a[0].page_index, a[0].char_start), (1, "2. See ".len()));
+        assert_eq!(a[0].item_id, "d1:i9", "item ids are namespaced by document so two filings cannot collide");
         assert_eq!(pages[1].chars().skip(a[0].char_start).take(a[0].char_end - a[0].char_start).collect::<String>(), "section 2 of the Partition Act, 1893");
     }
 }

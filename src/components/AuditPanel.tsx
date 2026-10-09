@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { auditDraft, type AuditItem, type AuditReport, type AuditResult } from "../lib/ipc";
 import { CertificatePanel, VerifyCertificatePanel } from "./CertificatePanel";
+import { CurrencyStamp, TreatmentBlock } from "./CurrencyStamp";
 
 /**
  * B-S4-04: audit every citation and quotation in the draft against the installed legal packs.
@@ -61,6 +62,13 @@ export function AuditRow({ item, whose = "your" }: { item: AuditItem; whose?: st
           {item.result !== "MISQUOTED" && <div style={{ whiteSpace: "pre-wrap" }}>"{loc.excerpt.slice(0, 220)}{loc.excerpt.length > 220 ? "…" : ""}"</div>}
         </div>
       )}
+      {loc && <CurrencyStamp packId={loc.pack_id} />}
+      {item.notes.map((n, i) => (
+        <div key={i} style={{ fontSize: "0.78rem", color: n.note_kind === "TREATMENT" ? TONE.warn : undefined, whiteSpace: "pre-wrap" }}>
+          {n.note_kind === "TREATMENT" ? "Treatment note · " : n.note_kind === "CODE_BRIDGE" ? "Code note · " : ""}{n.text}
+        </div>
+      ))}
+      {loc && item.kind === "CITATION" && item.citation_kind !== "STATUTE" && <TreatmentBlock sourceId={loc.source_id} chunkId={loc.chunk_id} />}
       <Diff item={item} whose={whose} />
     </li>
   );
@@ -107,6 +115,11 @@ export function AuditPanel({ text, caseId, filename }: { text: string; caseId?: 
             {report.items.length === 0 && <span className="muted">No citations or quotations found.</span>}
           </div>
           {report.pack_snapshot.length === 0 && <div className="notice warn">No legal packs are installed, so nothing can be verified yet.</div>}
+          {report.pack_snapshot.length > 0 && (
+            <div className="muted" style={{ fontSize: "0.75rem", marginBottom: 6 }} data-testid="currency-stamp">
+              Checked against: {report.pack_snapshot.map((p) => `${p.pack_id} ${p.currency_date ? `as of ${p.currency_date}` : "(no currency date stated)"}`).join("; ")}
+            </div>
+          )}
           <ul style={{ paddingLeft: "1.1rem", margin: 0 }}>
             {items.map((item) => (
               <AuditRow key={item.item_id} item={item} />

@@ -11,8 +11,8 @@ Input: the per-year corpus from sc_judgments.py (year=YYYY.jsonl.gz). For every 
       citation resolves if ANY occurrence anywhere was printed beside an S.C.R./INSC citation;
    d. case name + year: party tokens of the cited name against judgments decided that year or the year before
       (SCC/AIR are dated by report year), accepted only above a similarity floor AND a clear margin over the runner-up.
-2. DETECT treatment in the citing sentence (overruled, distinguished, followed/relied on, doubted, per incuriam,
-   referred to a larger bench) — attached only when the cue is nearest to that citation in the sentence.
+2. DETECT treatment in the citing sentence (overruled, reversed, distinguished, followed, doubted, per incuriam,
+   referred to a larger bench; negated cues and cues inside a submission or question are ignored) — attached only when the cue is nearest to that citation in the sentence.
 3. SCORE authority: PageRank over the resolved citation graph (plus in-degree), used to pick the Landmark set.
 
 Evaluation hooks: the reporter's own labels in digital-era reports ("– relied on", "– distinguished") are compared
@@ -29,16 +29,12 @@ import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from treatment_patterns import CUES, guarded  # noqa: E402
+
 STOP = {"and", "others", "other", "ors", "anr", "another", "the", "of", "etc", "ltd", "limited", "m", "s", "pvt", "private", "co",
         "company", "corporation", "versus", "vs", "v", "through", "thr", "its", "by", "in", "re", "state", "union", "india"}
-TREATMENT = [
-    ("PER_INCURIAM", "per-incuriam.v1", re.compile(r"\bper\s+incuriam\b", re.I)),
-    ("OVERRULED", "overruled.v1", re.compile(r"\b(?:is|are|stands?|be|been|was|were)\s+(?:hereby\s+|accordingly\s+|expressly\s+)?overruled\b|\bwe\s+(?:hereby\s+)?overrule\b", re.I)),
-    ("REFERRED_TO_LARGER_BENCH", "larger-bench.v1", re.compile(r"\b(?:refer|referred|referring|placed?)\b[^.]{0,80}\blarger\s+bench\b", re.I)),
-    ("DOUBTED", "doubted.v1", re.compile(r"\b(?:doubt(?:ed)?\s+the\s+correctness|correctness\s+of\b[^.]{0,60}\bdoubted|we\s+have\s+our\s+doubts)\b", re.I)),
-    ("DISTINGUISHED", "distinguished.v1", re.compile(r"\bdistinguishable\b|\b(?:is|are|was|were|stands?|be)\s+(?:clearly\s+)?distinguished\b|\bdistinguish(?:ed|ing)\s+on\s+(?:the\s+)?facts\b", re.I)),
-    ("FOLLOWED", "followed.v1", re.compile(r"\b(?:we\s+)?(?:follow|followed|following)\s+(?:the\s+)?(?:decision|judgment|view|ratio|law\s+laid\s+down|dictum)\b|\b(?:relied|placed\s+reliance)\s+(?:up)?on\b|\breliance\s+(?:is|was)\s+placed\b|\bapproved\b", re.I)),
-]
+TREATMENT = CUES  # shared, guarded wording rules (treatment_patterns.py); the host re-verifies every edge against the same rules
 
 
 def norm_scr(c: str):
@@ -224,6 +220,8 @@ def main() -> int:
             sentence, pos = win
             for name, pid, rx in TREATMENT:
                 for m in rx.finditer(sentence):
+                    if guarded(sentence, m):  # negated, or part of a submission or a question: not the Court's treatment
+                        continue
                     # the cue must be nearer to this citation than to any other citation in the sentence
                     others = [mm.start() for mm in re.finditer(r"\(\d{4}\)\s*\d+\s*SCC|\[\d{4}\]|AIR\s*\d{4}|\d{4}\s*:?\s*INSC", sentence) if abs(mm.start() - pos) > 3]
                     d = abs(m.start() - pos)

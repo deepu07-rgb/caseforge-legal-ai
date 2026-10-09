@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { PackCurrencyList } from "./CurrencyStamp";
 import { reasoningRun, type ReasoningDepth, type ReasoningResult, type VerifiedProposition } from "../lib/ipc";
 
 /**
@@ -158,6 +159,7 @@ export function ReasoningPanel({ caseId }: { caseId: string }) {
           <div className="muted mono" style={{ fontSize: "0.7rem", marginTop: 6 }}>
             {result.model.model} ({result.model.backend}) · {(result.elapsed_ms / 1000).toFixed(0)} s · steps checked by the app, not by the model · {result.disclaimer}
           </div>
+          <PackCurrencyList />
         </div>
       )}
     </div>

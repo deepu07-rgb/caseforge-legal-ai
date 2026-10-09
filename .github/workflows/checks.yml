@@ -97,6 +97,7 @@ jobs:
           python eval/checks/deadlines_b_s4_11.py --cargo-log cargo-test.log --records evidence/deadline_records.json
           python eval/checks/foundation_b_s4_10.py --cargo-log cargo-test.log --checks evidence/foundation_checks.json
           python eval/checks/issue_matrix_b_s4_18.py --cargo-log cargo-test.log --evidence-dir evidence
+          python eval/checks/treatment_b_s4_13.py --cargo-log cargo-test.log
 
       - name: Upload gate reports
         if: always()

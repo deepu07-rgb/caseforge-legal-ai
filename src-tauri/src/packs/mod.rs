@@ -14,6 +14,9 @@ use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 use uuid::Uuid;
 
+#[cfg(test)]
+mod test_pack;
+
 pub const MAX_PACK_FILES: usize = 4096;
 pub const MAX_PACK_FILE_BYTES: u64 = 64 * 1024 * 1024;
 pub const MAX_PACK_TOTAL_BYTES: u64 = 512 * 1024 * 1024;
@@ -1180,7 +1183,88 @@ fn copy_dir(src: &Path, dst: &Path) -> Result<(), String> {
 }
 
 /// Install pack from a source directory (USB/download extracted .akpkg layout).
-pub fn install_pack_from_dir(
+/// Delta install (B-S4-13): a delta manifest names its base; the installed base must be exactly that version and content
+/// hash, or the install fails closed. Files the delta does not carry are taken from the installed base and must hash to
+/// what the (signed) manifest lists, so the result is the full pack the manifest describes. The result then goes through
+/// the ordinary install - signature, lineage, protection, transactional activate with rollback - so a delta can never
+/// install anything a full pack could not, and a failed delta leaves the base pack installed and untouched.
+fn materialize_delta(paths: &VaultPaths, delta_dir: &Path, man: &PackManifest) -> Result<PathBuf, String> {
+    let d = man.delta.as_ref().ok_or("CF_PACK_DELTA_INVALID: not a delta")?;
+    let (base_version, base_hash) = (d["base_version"].as_str().unwrap_or(""), d["base_content_sha256"].as_str().unwrap_or(""));
+    let base = list_installed(paths)
+        .into_iter()
+        .find(|p| p.pack_id == man.pack_id && p.pack_kind == man.pack_kind)
+        .ok_or_else(|| format!("CF_PACK_DELTA_BASE_MISSING: {} {base_version} is not installed, so this update cannot be applied; install the full pack", man.pack_id))?;
+    if base.version != base_version || base.content_sha256 != base_hash {
+        return Err(format!("CF_PACK_DELTA_BASE_MISMATCH: this update is for {} {base_version}, but {} is installed", man.pack_id, base.version));
+    }
+    if version_triple(&man.version) <= version_triple(&base.version) {
+        return Err(format!("CF_PACK_DELTA_NOT_NEWER: {} is not newer than the installed {}", man.version, base.version));
+    }
+    let base_dir = PathBuf::from(&base.install_path);
+    let base_man = read_manifest(&base_dir)?;
+    let dest_root = if man.pack_kind == "official" { paths.packs_official_dir() } else { paths.packs_custom_dir() };
+    fs::create_dir_all(&dest_root).map_err(|e| format!("CF_PACK_INSTALL_FAILED: {e}"))?;
+    let work = dest_root.join(format!(".delta-{}-{}", man.pack_id, Uuid::new_v4()));
+    let built = (|| -> Result<(), String> {
+        copy_dir(delta_dir, &work)?;
+        let protected: HashMap<String, String> = crate::protection::read_pack_text_files(&base_dir)?.into_iter().collect();
+        for f in &man.files {
+            let rel = safe_relative_path(&f.path)?;
+            let target = work.join(&rel);
+            if target.exists() {
+                continue;
+            }
+            // Not carried: it must be unchanged from the installed base.
+            let base_entry = base_man
+                .files
+                .iter()
+                .find(|b| b.path == f.path && b.sha256 == f.sha256)
+                .ok_or_else(|| format!("CF_PACK_DELTA_FILE_MISMATCH: {} is neither in the update nor unchanged from the installed pack", f.path))?;
+            let bytes = match f.path.strip_prefix("content/") {
+                Some(inner) => protected.get(inner).map(|t| t.clone().into_bytes()).ok_or_else(|| format!("CF_PACK_DELTA_FILE_MISMATCH: {} cannot be read from the installed pack", f.path))?,
+                None => fs::read(base_dir.join(&rel)).map_err(|e| format!("CF_PACK_DELTA_FILE_MISMATCH: {}: {e}", f.path))?,
+            };
+            if sha256_bytes(&bytes) != base_entry.sha256 {
+                return Err(format!("CF_PACK_DELTA_FILE_MISMATCH: {} in the installed pack no longer matches its recorded hash", f.path));
+            }
+            if let Some(parent) = target.parent() {
+                fs::create_dir_all(parent).map_err(|e| format!("CF_PACK_INSTALL_FAILED: {e}"))?;
+            }
+            fs::write(&target, bytes).map_err(|e| format!("CF_PACK_INSTALL_FAILED: {e}"))?;
+        }
+        // The full pack no longer needs to name its base (the signature binds content_sha256, not this key).
+        let mut m: serde_json::Value = serde_json::from_str(&fs::read_to_string(work.join("manifest.json")).map_err(|e| e.to_string())?).map_err(|e| e.to_string())?;
+        m.as_object_mut().map(|o| o.remove("delta"));
+        fs::write(work.join("manifest.json"), serde_json::to_string_pretty(&m).map_err(|e| e.to_string())? + "\n").map_err(|e| e.to_string())
+    })();
+    match built {
+        Ok(()) => Ok(work),
+        Err(e) => {
+            let _ = fs::remove_dir_all(&work);
+            Err(e)
+        }
+    }
+}
+
+fn version_triple(v: &str) -> (u64, u64, u64) {
+    let mut it = v.split(|c: char| !c.is_ascii_digit()).filter(|s| !s.is_empty()).map(|s| s.parse::<u64>().unwrap_or(0));
+    (it.next().unwrap_or(0), it.next().unwrap_or(0), it.next().unwrap_or(0))
+}
+
+pub fn install_pack_from_dir(paths: &VaultPaths, source_dir: &Path) -> Result<PackInstallResult, String> {
+    preflight_source_root(source_dir)?;
+    let man = read_manifest(source_dir)?;
+    if man.delta.as_ref().is_some_and(|d| !d.is_null()) {
+        let full = materialize_delta(paths, source_dir, &man)?;
+        let result = install_full(paths, &full);
+        let _ = fs::remove_dir_all(&full);
+        return result;
+    }
+    install_full(paths, source_dir)
+}
+
+fn install_full(
     paths: &VaultPaths,
     source_dir: &Path,
 ) -> Result<PackInstallResult, String> {
@@ -1195,6 +1279,8 @@ pub fn install_pack_from_dir(
     if is_v2(&man.schema_version) {
         validate_legal_metadata(source_dir, &man)?;
     }
+    // B-S4-13: treatment edges must satisfy the frozen contract (derived content, never touching supersession).
+    crate::treatment::precheck_pack(source_dir, &man)?;
     reject_trust_and_source_collisions(paths, &man, source_dir)?;
     // B-S4-03: every rule table must validate (authorities resolve to installed official chunks, windows, sign-off).
     if !man.rule_tables_files.is_empty() {

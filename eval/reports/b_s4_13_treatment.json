@@ -1,0 +1,86 @@
+{
+  "batch": "B-S4-13",
+  "fixture_sha256": "e99813cbb2b3026af2aec8148d03fcc842e693e6bcbc7856cb0d620d42a54d19",
+  "acs": {
+    "AC-S4-08.1": {
+      "status": "PASS",
+      "evidence": {
+        "golden_sentences": 18,
+        "edges_checked": 14,
+        "end_to_end": "ok",
+        "python_and_rust_rules_identical": true
+      },
+      "detail": "A planted overruling surfaces on the overruled citation with the exact citing paragraph (through the real installer, store and audit); edges that are negated, argued, altered, self-referential or point at passages that are not installed are not shown."
+    },
+    "AC-S4-08.2": {
+      "status": "PASS",
+      "evidence": {
+        "prohibited_phrases_found": [],
+        "files_scanned": 47
+      },
+      "detail": "No screen says a case is good law, valid or the like; absence of treatment reads 'no treatment found in installed corpus' and says it speaks only for the library."
+    },
+    "AC-S4-08.3": {
+      "status": "PASS",
+      "evidence": {
+        "citation_surfaces_with_stamp": [
+          "AuditPanel.tsx",
+          "CodeBridgePanel.tsx",
+          "DeadlinesView.tsx",
+          "FoundationPanel.tsx",
+          "IssueMatrixView.tsx",
+          "MockCourtView.tsx",
+          "RetrievalView.tsx",
+          "WorkingLibraryView.tsx"
+        ],
+        "uncovered": [],
+        "not_surfaces": [
+          "ArgumentBuilderView.tsx",
+          "CertificatePanel.tsx",
+          "CurrencyStamp.tsx",
+          "DemoArgumentPanel.tsx",
+          "PacksView.tsx",
+          "ProvenanceInspector.tsx"
+        ]
+      },
+      "detail": "Every component that renders a pack citation carries 'verified against <pack> as of <currency date>', or says the pack states no date; the audit's pack snapshot carries the date."
+    },
+    "delta-packs": {
+      "status": "PASS",
+      "evidence": {
+        "delta_tests": {
+          "delta_installs": "ok",
+          "delta_base": "ok",
+          "delta_tamper": "ok"
+        },
+        "build_tool": true,
+        "existing_install_tests": {
+          "packs::tests::b_s3_08_b_s3_09_v2_lineage_duplicate_and_tamper_validation": "ok",
+          "packs::tests::b_s3_09_failed_upgrade_preserves_prior_pack": "ok",
+          "packs::tests::b_s3_09_protection_failure_is_fail_closed": "ok",
+          "packs::tests::b_s3_09_malicious_paths_active_content_and_hashes_are_rejected": "ok",
+          "packs::tests::b_s3_09_signed_official_positive_and_protection_rollback": "ok",
+          "packs::tests::b_s4_27_pack_vectors_pass_install_checks_and_register": "ok",
+          "packs::tests::b_s3_09_symlink_or_reparse_is_rejected_when_platform_can_create_it": "ok"
+        }
+      },
+      "detail": "Build (tool) -> install (host, fails closed on a missing or different base, a version that is not newer, a tampered or unavailable file) -> a failed delta leaves the installed base untouched. Distribution channel is a file the user installs (undecided channel: QUESTION)."
+    }
+  },
+  "static": {
+    "engine_has_no_model_or_network": true,
+    "edges_never_change_supersession": true,
+    "commands_registered": true,
+    "audit_decorated_everywhere": true,
+    "install_checks_treatment_edges": true,
+    "delta_fails_closed": true,
+    "delta_uses_the_ordinary_install": true
+  },
+  "ui": {
+    "none_found_wording": true,
+    "no_data_is_not_none_found": true,
+    "currency_missing_is_stated": true,
+    "excerpt_quoted_exactly": true
+  },
+  "errors": []
+}

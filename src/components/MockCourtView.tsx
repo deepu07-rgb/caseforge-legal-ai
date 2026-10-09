@@ -3,6 +3,7 @@
  * Adversary path: mockCourtTurnForCase → case_graph + retrieval only (AC-2.1).
  */
 
+import { CurrencyStamp } from "./CurrencyStamp";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnswerFeedbackPanel } from "./AnswerFeedbackPanel";
 import {
@@ -1205,6 +1206,7 @@ export default function MockCourtView({
                   <div className="mono muted" style={{ fontSize: "0.7rem", marginTop: 6 }}>
                     {authority.citation} · {authority.authority_id} · {authority.chunk_id}
                   </div>
+                  <CurrencyStamp packId={authority.pack_id} />
                   <p style={{ whiteSpace: "pre-wrap", fontSize: "0.82rem" }}>{authority.exact_text}</p>
                   <div className="muted" style={{ fontSize: "0.72rem" }}>{authority.source_reference}</div>
                 </details>
@@ -1226,6 +1228,7 @@ export default function MockCourtView({
                       <div className="mono muted" style={{ fontSize: "0.68rem" }}>
                         {authority.authority_id} · {authority.chunk_id} · {authority.chunk_checksum.slice(0, 12)}
                       </div>
+                      <CurrencyStamp packId={authority.pack_id} />
                     </details>
                   ))}
                 </div>

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import type { CaseSummary, IssueMatrixState, MatrixIssue, MatrixLocator } from "../lib/ipc";
 import { issueMatrixAdd, issueMatrixBuild, issueMatrixDecide, issueMatrixMemo, issueMatrixSetFiling, issueMatrixSetMatterType } from "../lib/ipc";
+import { CurrencyStamp } from "./CurrencyStamp";
 
 /**
  * B-S4-18: Issue Matrix. A neutral, side-by-side view of each issue the judge has accepted: what each party has pleaded,
@@ -205,7 +206,16 @@ export default function IssueMatrixView({ activeCase }: { activeCase: CaseSummar
                 )}
                 {pos.authorities.length > 0 && (
                   <ul style={{ paddingLeft: "1.1rem", margin: "4px 0", fontSize: "0.8rem" }}>
-                    {pos.authorities.map((a) => <li key={a.audit_item_id}>Authority check: {AUDIT[a.result] ?? a.result}</li>)}
+                    {pos.authorities.map((a) => {
+                      const info = state?.authority_info?.[a.audit_item_id];
+                      return (
+                        <li key={a.audit_item_id}>
+                          {info ? <span className="mono">{info.citation}</span> : null} Authority check: {AUDIT[a.result] ?? a.result}
+                          {info?.pack_id ? <CurrencyStamp packId={info.pack_id} /> : null}
+                          {info?.notes.map((n, i) => <div key={i} style={{ color: TONE.warn }}>{n.note_kind === "TREATMENT" ? "Treatment note · " : ""}{n.text}</div>)}
+                        </li>
+                      );
+                    })}
                   </ul>
                 )}
               </div>

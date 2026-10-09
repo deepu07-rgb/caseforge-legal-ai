@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { CurrencyStamp } from "./CurrencyStamp";
 import { codeBridgeAnnotate, codeBridgeSetKeyDate, type CodeBridgeResult, type DateKind, type StatuteMapping } from "../lib/ipc";
 
 /**
@@ -108,8 +109,8 @@ export function CodeBridgePanel({ caseId, text }: { caseId: string; text: string
                 </div>
                 {a.side_by_side && (
                   <div className="row" style={{ gap: 8, marginTop: 4, alignItems: "stretch" }}>
-                    <div style={{ flex: 1, fontSize: "0.78rem", whiteSpace: "pre-wrap" }}><div className="muted">Old text</div>{a.side_by_side.old.excerpt}</div>
-                    <div style={{ flex: 1, fontSize: "0.78rem", whiteSpace: "pre-wrap" }}><div className="muted">New text</div>{a.side_by_side.new.excerpt}</div>
+                    <div style={{ flex: 1, fontSize: "0.78rem", whiteSpace: "pre-wrap" }}><div className="muted">Old text</div>{a.side_by_side.old.excerpt}<CurrencyStamp packId={a.side_by_side.old.pack_id} /></div>
+                    <div style={{ flex: 1, fontSize: "0.78rem", whiteSpace: "pre-wrap" }}><div className="muted">New text</div>{a.side_by_side.new.excerpt}<CurrencyStamp packId={a.side_by_side.new.pack_id} /></div>
                   </div>
                 )}
               </li>

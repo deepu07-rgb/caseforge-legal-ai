@@ -25,6 +25,7 @@ mod mock_court_retrieval;
 mod deadlines;
 mod foundation;
 mod issue_matrix;
+mod treatment;
 mod opposition;
 mod reasoning;
 mod witness;
@@ -311,6 +312,8 @@ fn audit_draft(
         let dates = case_id.as_deref().map(|c| key_dates(&mgr, c)).transpose()?.unwrap_or_default();
         code_bridge::add_audit_notes(&mut report.items, &mut report.counts, &rows, &rule_tables::index_for_rows(&paths, &rows), &dates);
     }
+    // B-S4-13: currency date of each pack, and verified treatment of the cited judgments, as notes.
+    treatment::decorate_report(&paths, &store, &mut report);
     Ok(report)
 }
 
@@ -443,6 +446,41 @@ fn foundation_link(app: AppHandle, vault: State<'_, VaultState>, case_id: String
     mgr.witness_kv_put(&case_id, &key, &serde_json::json!({"evidence_id": evidence_id, "element_id": element_id, "doc_id": doc_id, "at": crate::docpipe::now_rfc3339()})).map_err(|e| e.to_string())
 }
 
+// --- B-S4-13 Law Currency Stamp and Treatment Graph ---
+
+/// Installed packs with the date up to which each was checked, for the stamp every citation shows.
+#[tauri::command]
+fn pack_currency(app: AppHandle, vault: State<'_, VaultState>) -> Result<Vec<treatment::PackStamp>, String> {
+    let mgr = vault.get_or_init(&app)?;
+    let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
+    Ok(treatment::pack_stamps(&paths))
+}
+
+#[derive(Deserialize)]
+struct TreatmentQuery {
+    source_id: String,
+    chunk_id: String,
+}
+
+/// What the installed corpus says about how later judgments treated each of these cited sources. Every edge is
+/// re-verified against the installed text before it is returned; "no treatment found in installed corpus" is a statement
+/// about the library, never about the law.
+#[tauri::command]
+fn treatment_lookup(app: AppHandle, vault: State<'_, VaultState>, sources: Vec<TreatmentQuery>) -> Result<Vec<serde_json::Value>, String> {
+    let mgr = vault.get_or_init(&app)?;
+    let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
+    let store = retrieval::store::open(&paths)?;
+    let set = treatment::TreatmentSet::load(&paths);
+    let get = |id: &str| store.get_by_chunk_id(id);
+    Ok(sources
+        .iter()
+        .map(|q| {
+            let authority_type = get(&q.chunk_id).map(|c| c.metadata.authority_type).unwrap_or_default();
+            treatment::lookup_json(&set.lookup(&q.source_id, &authority_type, &get))
+        })
+        .collect())
+}
+
 // --- B-S4-18 Issue Matrix ---
 
 fn issue_parties(graph: &serde_json::Value) -> Vec<issue_matrix::Party> {
@@ -496,6 +534,7 @@ fn issue_matrix_compute(mgr: &VaultManager, case_id: &str) -> Result<serde_json:
     let docs = mgr.doc_list(case_id).map_err(|e| e.to_string())?;
     let mut filings = Vec::new();
     let mut audited = Vec::new();
+    let mut authority_info = serde_json::Map::new();
     let mut warnings = Vec::new();
     let store = retrieval::store::open(&paths).ok();
     let small = retrieval::build_small_corpus(&paths, &[]).unwrap_or_default();
@@ -511,7 +550,18 @@ fn issue_matrix_compute(mgr: &VaultManager, case_id: &str) -> Result<serde_json:
             docpipe::statement_pages(mgr, case_id, doc_id)?.1
         };
         if let Some(store) = store.as_deref() {
-            if let Ok(report) = audit::audit_with_store(store, &small, &opposition::filing_text(&pages), &meta.original_filename, "txt", Some(case_id.to_string())) {
+            if let Ok(mut report) = audit::audit_with_store(store, &small, &opposition::filing_text(&pages), &meta.original_filename, "txt", Some(case_id.to_string())) {
+                treatment::decorate_report(&paths, store, &mut report);
+                for item in report.items.iter().filter(|i| i.resolved.is_some() || i.result == "NOT_IN_CORPUS") {
+                    let loc = item.resolved.as_ref();
+                    authority_info.insert(
+                        format!("{doc_id}:{}", item.item_id),
+                        serde_json::json!({
+                            "citation": item.draft_text, "result": item.result, "pack_id": loc.map(|l| l.pack_id.clone()), "source_id": loc.map(|l| l.source_id.clone()),
+                            "chunk_id": loc.map(|l| l.chunk_id.clone()), "notes": item.notes.iter().map(|n| serde_json::json!({"note_kind": n.note_kind, "text": n.text})).collect::<Vec<_>>(),
+                        }),
+                    );
+                }
                 audited.extend(issue_matrix::audited_from_report(doc_id, &pages, &report));
             }
         } else {
@@ -527,7 +577,7 @@ fn issue_matrix_compute(mgr: &VaultManager, case_id: &str) -> Result<serde_json:
     Ok(serde_json::json!({
         "pipeline_id": issue_matrix::PIPELINE_ID, "matrix": out.matrix, "warnings": warnings, "filings": assigned,
         "docs": docs.iter().map(|d| serde_json::json!({"doc_id": d.doc_id, "filename": d.original_filename, "type_tag": d.type_tag})).collect::<Vec<_>>(),
-        "matter_types": matter_types, "matter_type": matter_type,
+        "matter_types": matter_types, "matter_type": matter_type, "authority_info": authority_info,
         "note": "A neutral view of the filings. It ranks nothing, scores nothing and suggests no answer; the decisions are the judge's.",
     }))
 }
@@ -1036,7 +1086,7 @@ fn opposition_scan(
     let store = retrieval::store::open(&paths)?;
     let small = retrieval::build_small_corpus(&paths, &[])?;
     let audit_report = audit::audit_with_store(&store, &small, &opposition::filing_text(&pages), &filename, "txt", Some(case_id.clone()))?;
-    let (record, report) = opposition::scan_with_report(
+    let (record, mut report) = opposition::scan_with_report(
         opposition::ScanInput {
             doc_id: &doc_id,
             filing_party_id: &filing_party_id,
@@ -1050,6 +1100,7 @@ fn opposition_scan(
         },
         audit_report,
     );
+    treatment::decorate_report(&paths, &store, &mut report);
     Ok(serde_json::json!({"pipeline_id": opposition::PIPELINE_ID, "stale_graph": stale_graph, "filing": record, "audit": report}))
 }
 
@@ -4046,6 +4097,8 @@ pub fn run() {
             foundation_check,
             foundation_set_type,
             foundation_link,
+            pack_currency,
+            treatment_lookup,
             issue_matrix_build,
             issue_matrix_set_matter_type,
             issue_matrix_add,

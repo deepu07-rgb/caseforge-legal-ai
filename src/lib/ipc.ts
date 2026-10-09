@@ -2928,6 +2928,7 @@ export interface IssueMatrixState {
   matrix: { matrix_id: string; case_id: string; built_at: string; parties: { party_id: string; display_name: string; role: string }[]; issues: MatrixIssue[]; neutrality: { party_scoring: false; outcome_suggestion: false; record_only: true } };
   filings: { doc_id: string; party_id: string; filename: string }[]; docs: { doc_id: string; filename: string; type_tag: string }[];
   matter_types: string[]; matter_type: string | null;
+  authority_info: Record<string, { citation: string; result: string; pack_id: string | null; source_id: string | null; chunk_id: string | null; notes: { note_kind: string; text: string }[] }>;
 }
 export async function issueMatrixBuild(caseId: string): Promise<IssueMatrixState> { return invoke<IssueMatrixState>("issue_matrix_build", { caseId }); }
 export async function issueMatrixSetMatterType(caseId: string, matterType: string | null): Promise<void> { return invoke<void>("issue_matrix_set_matter_type", { caseId, matterType }); }
@@ -2935,3 +2936,14 @@ export async function issueMatrixAdd(caseId: string, text: string): Promise<void
 export async function issueMatrixDecide(caseId: string, issueId: string, decision: string, text: string | null, mergedInto: string | null): Promise<void> { return invoke<void>("issue_matrix_decide", { caseId, issueId, decision, text, mergedInto }); }
 export async function issueMatrixSetFiling(caseId: string, docId: string, partyId: string | null): Promise<void> { return invoke<void>("issue_matrix_set_filing", { caseId, docId, partyId }); }
 export async function issueMatrixMemo(caseId: string): Promise<string> { return invoke<string>("issue_matrix_memo", { caseId }); }
+
+// --- B-S4-13 Law Currency Stamp and Treatment Graph ---
+export interface PackStamp { pack_id: string; version: string; display_name: string; currency_date: string | null; updated_at: string | null; scanned_for_treatment: boolean }
+export interface TreatmentEdge {
+  edge_id: string; treatment: "OVERRULED" | "REVERSED" | "PER_INCURIAM" | "REFERRED_TO_LARGER_BENCH" | "DOUBTED" | "DISTINGUISHED" | "FOLLOWED"; pattern_id: string;
+  cited_source_id: string; citing_pack_id: string; citing_source_id: string; citing_chunk_id: string; citing_title: string; citing_citation: string;
+  citing_decision_date: string | null; paragraph: string | null; char_start: number; char_end: number; excerpt: string;
+}
+export interface TreatmentLookup { source_id: string; state: "FOUND" | "NONE_FOUND" | "NO_DATA" | "NOT_APPLICABLE"; edges: TreatmentEdge[]; rejected_count: number; none_found_text: string }
+export async function packCurrency(): Promise<PackStamp[]> { return invoke<PackStamp[]>("pack_currency"); }
+export async function treatmentLookup(sources: { source_id: string; chunk_id: string }[]): Promise<TreatmentLookup[]> { return invoke<TreatmentLookup[]>("treatment_lookup", { sources }); }

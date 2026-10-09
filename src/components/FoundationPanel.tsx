@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { CurrencyStamp } from "./CurrencyStamp";
 import { foundationCheck, foundationLink, foundationSetType, type FoundationResult, type FoundationCheck, type FoundationElement } from "../lib/ipc";
 
 /**
@@ -70,6 +71,7 @@ export function FoundationPanel({ caseId, v1Panel }: { caseId: string; v1Panel: 
               </div>
               <div className="muted" style={{ fontSize: "0.78rem" }}>
                 {String((g.authority as Record<string, unknown>).provision_label ?? g.rule_id)}
+                <CurrencyStamp packId={String((g.authority as Record<string, unknown>).pack_id ?? "")} />
                 {g.authority_excerpt ? `: “${String(g.authority_excerpt)}”` : ""}
               </div>
             </li>

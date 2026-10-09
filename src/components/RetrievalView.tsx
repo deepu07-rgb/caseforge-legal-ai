@@ -3,6 +3,7 @@
  * Pipeline: DECOMPOSE → RETRIEVE → GENERATE → VERIFY → SCORE → RENDER
  */
 
+import { CurrencyStamp } from "./CurrencyStamp";
 import { useState } from "react";
 import type { CitationRecord, RetrievalResult } from "../lib/ipc";
 import { citationProvenance, retrievalHitProvenance } from "../lib/provenance";
@@ -282,6 +283,7 @@ function CitationRow({ c }: { c: CitationRecord }) {
           {c.notes}
         </div>
       )}
+      <CurrencyStamp packId={c.pack_id} />
       <ProvenanceInspector record={citationProvenance(c)} compact />
     </li>
   );

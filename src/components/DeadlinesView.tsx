@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { CurrencyStamp } from "./CurrencyStamp";
 import type { CaseSummary } from "../lib/ipc";
 import { deadlinesAssign, deadlinesCompute, deadlinesExportIcs, deadlinesFactRemove, deadlinesFactSave, deadlinesUnassign, type DeadlinesState, type DeadlineRecord } from "../lib/ipc";
 
@@ -148,6 +149,7 @@ export default function DeadlinesView({ activeCase }: { activeCase: CaseSummary 
                     {r.computation.calendar_rule_ids.length > 0 && <li>Court calendar used: {r.computation.calendar_rule_ids.join(", ")}.</li>}
                     <li>
                       Rule <span className="mono">{r.rule_id}</span> — authority: {(r.authority.provision_label as string | undefined) ?? r.authority.chunk_id}
+                      <CurrencyStamp packId={r.authority.pack_id} />
                     </li>
                   </ol>
                 </details>
