@@ -33,22 +33,22 @@ static RECORD_SUPPORT: Lazy<Regex> = Lazy::new(|| {
     Regex::new(r"(?i)\b(annexure|exhibit|ex\.|document no|marked as|page \d|p\.\s?\d|paragraph \d|para \d)").unwrap()
 });
 
-struct Paragraph {
-    id: String,
-    page_index: usize,
-    char_start: usize,
-    char_end: usize,
-    text: String,
-    factual: bool,
-    argument: bool,
-    denies: bool,
+pub(crate) struct Paragraph {
+    pub(crate) id: String,
+    pub(crate) page_index: usize,
+    pub(crate) char_start: usize,
+    pub(crate) char_end: usize,
+    pub(crate) text: String,
+    pub(crate) factual: bool,
+    pub(crate) argument: bool,
+    pub(crate) denies: bool,
 }
 
 fn char_index(text: &str, byte: usize) -> usize {
     text[..byte].chars().count()
 }
 
-fn paragraphs(pages: &[String]) -> Vec<Paragraph> {
+pub(crate) fn paragraphs(pages: &[String]) -> Vec<Paragraph> {
     let mut out = Vec::new();
     for (page_index, page) in pages.iter().enumerate() {
         let starts: Vec<(usize, String)> = PARA_START.captures_iter(page).map(|c| (c.get(0).unwrap().start(), c[1].to_string())).collect();

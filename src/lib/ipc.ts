@@ -2912,3 +2912,26 @@ export interface FoundationResult {
 export async function foundationCheck(caseId: string, v1Panel: Record<string, unknown>[]): Promise<FoundationResult> { return invoke<FoundationResult>("foundation_check", { caseId, v1Panel }); }
 export async function foundationSetType(caseId: string, evidenceId: string, evidenceType: string | null): Promise<void> { return invoke<void>("foundation_set_type", { caseId, evidenceId, evidenceType }); }
 export async function foundationLink(caseId: string, evidenceId: string, elementId: string, docId: string | null): Promise<void> { return invoke<void>("foundation_link", { caseId, evidenceId, elementId, docId }); }
+
+// --- B-S4-18 Issue Matrix ---
+export interface MatrixLocator { doc_id: string; page_index: number | null; char_start: number; char_end: number; excerpt: string }
+export interface MatrixIssue {
+  issue_id: string; text: string; origin: "TEMPLATE" | "GRAPH_ISSUE" | "JUDGE_AUTHORED"; template_rule_id: string | null;
+  judge_decision: "PROPOSED" | "ACCEPTED" | "EDITED" | "MERGED" | "REJECTED"; merged_into: string | null;
+  positions: { party_id: string; sentences: { text: string; classification: "RECORD" | "LAW" | "INFERENCE_FROM_RECORD"; locators: MatrixLocator[] }[]; evidence: MatrixLocator[]; authorities: { audit_item_id: string; result: string }[] }[];
+  admitted_facts: { fact_node_id: string; locators: MatrixLocator[]; party_ids: string[] }[];
+  disputed_facts: { fact_node_id: string; locators: MatrixLocator[]; party_ids: string[] }[];
+  unanswered_arguments: { argument_node_id: string; by_party_id: string; unanswered_by_party_id: string; locator: MatrixLocator }[];
+}
+export interface IssueMatrixState {
+  pipeline_id: string; note: string; warnings: string[];
+  matrix: { matrix_id: string; case_id: string; built_at: string; parties: { party_id: string; display_name: string; role: string }[]; issues: MatrixIssue[]; neutrality: { party_scoring: false; outcome_suggestion: false; record_only: true } };
+  filings: { doc_id: string; party_id: string; filename: string }[]; docs: { doc_id: string; filename: string; type_tag: string }[];
+  matter_types: string[]; matter_type: string | null;
+}
+export async function issueMatrixBuild(caseId: string): Promise<IssueMatrixState> { return invoke<IssueMatrixState>("issue_matrix_build", { caseId }); }
+export async function issueMatrixSetMatterType(caseId: string, matterType: string | null): Promise<void> { return invoke<void>("issue_matrix_set_matter_type", { caseId, matterType }); }
+export async function issueMatrixAdd(caseId: string, text: string): Promise<void> { return invoke<void>("issue_matrix_add", { caseId, text }); }
+export async function issueMatrixDecide(caseId: string, issueId: string, decision: string, text: string | null, mergedInto: string | null): Promise<void> { return invoke<void>("issue_matrix_decide", { caseId, issueId, decision, text, mergedInto }); }
+export async function issueMatrixSetFiling(caseId: string, docId: string, partyId: string | null): Promise<void> { return invoke<void>("issue_matrix_set_filing", { caseId, docId, partyId }); }
+export async function issueMatrixMemo(caseId: string): Promise<string> { return invoke<string>("issue_matrix_memo", { caseId }); }

@@ -1,0 +1,30 @@
+{
+  "batch": "B-S4-10",
+  "fixture_sha256": "140b5ea0e5c04a5ab1a46425810b26b87ec70c65317e9b2f0f51c0ea6a0a3c79",
+  "cases": 11,
+  "acs": {
+    "AC-S4-05.2": {
+      "status": "PASS",
+      "evidence": {
+        "integrity_v1_file_pinned": true,
+        "integrity_v1_tests": 3
+      },
+      "detail": "The v1 scorer file is byte-identical to the pinned version and its tests pass; this batch adds no scorer code, so v1 outputs cannot change."
+    },
+    "AC-S4-05.3": {
+      "status": "PASS",
+      "evidence": {
+        "golden": "ok",
+        "shipped_rules": "ok",
+        "full_schema_validation": true
+      },
+      "detail": "Every element of every check cites a rule row and an authority; each gap carries the rule, its trust state and the cited sentence; the shipped rules' citations are the sentences of the section they rest on."
+    },
+    "AC-S4-05.1": {
+      "status": "BLOCKED",
+      "engine_measured": "a planted missing foundation element is in the top 3 of the merged Missing Links panel",
+      "reason": "The criterion is measured against legal-editor-approved rows (Q-S4-02). The shipped admissibility rows (caseforge.india.admissibility-rules) are DEVELOPMENT_ONLY, so this stays BLOCKED until two legal editors sign them."
+    }
+  },
+  "errors": []
+}

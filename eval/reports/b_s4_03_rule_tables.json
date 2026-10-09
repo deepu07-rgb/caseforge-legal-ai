@@ -3,16 +3,41 @@
   "scope": "core: rule-table install validation, query API, exploit suite; pack-tool authoring support deferred",
   "acceptance": {
     "AC-S4-RT.1": {
-      "status": "BLOCKED",
-      "reason": "pass --cargo-log with `cargo test --lib` output"
+      "status": "PASS",
+      "evidence": {
+        "golden_table": "ok",
+        "exploits": "ok",
+        "manifest_precheck": "ok"
+      },
+      "checks": {
+        "install_prechecks_manifest": true,
+        "install_validates_tables": true,
+        "load_revalidates": true,
+        "authority_must_be_official": true,
+        "table_bound_to_signed_manifest": true
+      },
+      "detail": "8 G-CODEBRIDGE exploits rejected: dangling chunk, non-official authority, overlapping windows, forged sign-off, custom pack, MODIFIED without both texts, kind mismatch, inverted window"
     },
     "AC-S4-RT.2": {
-      "status": "BLOCKED",
-      "reason": "pass --cargo-log with `cargo test --lib` output"
+      "status": "PASS",
+      "evidence": {
+        "dev_only_rows": "ok",
+        "dev_only_never_verifies": "ok"
+      },
+      "checks": {
+        "signed_requires_signoff": true,
+        "audit_note_only_from_signed": true
+      }
     },
     "B-S3-09_MALICIOUS_PACK_SUITE": {
-      "status": "BLOCKED",
-      "reason": "pass --cargo-log with `cargo test --lib` output"
+      "status": "PASS",
+      "evidence": {
+        "packs::tests::b_s3_09_protection_failure_is_fail_closed": "ok",
+        "packs::tests::b_s3_09_failed_upgrade_preserves_prior_pack": "ok",
+        "packs::tests::b_s3_09_malicious_paths_active_content_and_hashes_are_rejected": "ok",
+        "packs::tests::b_s3_09_signed_official_positive_and_protection_rollback": "ok",
+        "packs::tests::b_s3_09_symlink_or_reparse_is_rejected_when_platform_can_create_it": "ok"
+      }
     },
     "AC-S4-RT.3": {
       "status": "PASS",

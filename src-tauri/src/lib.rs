@@ -24,6 +24,7 @@ mod mock_court;
 mod mock_court_retrieval;
 mod deadlines;
 mod foundation;
+mod issue_matrix;
 mod opposition;
 mod reasoning;
 mod witness;
@@ -440,6 +441,214 @@ fn foundation_link(app: AppHandle, vault: State<'_, VaultState>, case_id: String
         return Err("CF_FOUNDATION_ELEMENT_UNKNOWN: no installed rule has that element".into());
     }
     mgr.witness_kv_put(&case_id, &key, &serde_json::json!({"evidence_id": evidence_id, "element_id": element_id, "doc_id": doc_id, "at": crate::docpipe::now_rfc3339()})).map_err(|e| e.to_string())
+}
+
+// --- B-S4-18 Issue Matrix ---
+
+fn issue_parties(graph: &serde_json::Value) -> Vec<issue_matrix::Party> {
+    graph_items(graph, "parties")
+        .iter()
+        .filter_map(|p| Some(issue_matrix::Party { party_id: p["party_id"].as_str()?.to_string(), display_name: p["display_name"].as_str().unwrap_or("").to_string(), role: p["role"].as_str().unwrap_or("").to_string() }))
+        .collect()
+}
+
+/// Issues the judge has decided on (or authored), in the order they were first recorded.
+fn issue_stored(mgr: &VaultManager, case_id: &str) -> Result<Vec<(u64, issue_matrix::IssueIn)>, String> {
+    let mut v: Vec<(u64, issue_matrix::IssueIn)> = deadline_kv(mgr, case_id, "issue:item:")?
+        .into_iter()
+        .filter_map(|v| Some((v["seq"].as_u64()?, serde_json::from_value(v["issue"].clone()).ok()?)))
+        .collect();
+    v.sort_by_key(|(s, _)| *s);
+    Ok(v)
+}
+
+fn issue_put(mgr: &VaultManager, case_id: &str, seq: u64, issue: &issue_matrix::IssueIn) -> Result<(), String> {
+    mgr.witness_kv_put(case_id, &format!("issue:item:{}", issue.issue_id), &serde_json::json!({"seq": seq, "issue": issue, "at": crate::docpipe::now_rfc3339()})).map_err(|e| e.to_string())
+}
+
+/// Template and case-graph issues not yet decided, with the matter types the installed templates cover.
+fn issue_proposals(mgr: &VaultManager, case_id: &str, paths: &vault::VaultPaths, graph: &serde_json::Value, stored: &[issue_matrix::IssueIn]) -> Result<(Vec<issue_matrix::IssueIn>, Vec<String>, Option<String>), String> {
+    let jurisdiction = case_jurisdiction(mgr, case_id)?;
+    let (tables, _) = rule_tables::load_installed(paths);
+    let matter_types = issue_matrix::matter_types(&tables, &jurisdiction);
+    let matter_type = deadline_kv(mgr, case_id, "issue:matter_type")?.into_iter().next().and_then(|v| v["matter_type"].as_str().map(str::to_string));
+    let skeletons = matter_type.as_deref().map(|m| issue_matrix::skeletons_for(&tables, &jurisdiction, m)).unwrap_or_default();
+    let graph_issues: Vec<(String, String)> = graph_items(graph, "nodes")
+        .iter()
+        .filter(|n| n["node_type"] == "issue")
+        .filter_map(|n| Some((n["node_id"].as_str()?.to_string(), n["label"].as_str()?.to_string())))
+        .collect();
+    Ok((issue_matrix::propose(stored, &skeletons, &graph_issues), matter_types, matter_type))
+}
+
+/// The matrix with everything the screen needs. The filings are the documents counsel assigned to a party; their
+/// citations are audited against the installed law so each position shows the audit result of its authorities.
+fn issue_matrix_compute(mgr: &VaultManager, case_id: &str) -> Result<serde_json::Value, String> {
+    let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
+    let graph = mgr.case_graph_get(case_id).map_err(|e| e.to_string())?.unwrap_or_else(|| serde_json::json!({}));
+    let parties = issue_parties(&graph);
+    let stored = issue_stored(mgr, case_id)?;
+    let decided: Vec<issue_matrix::IssueIn> = stored.iter().map(|(_, i)| i.clone()).collect();
+    let (proposed, matter_types, matter_type) = issue_proposals(mgr, case_id, &paths, &graph, &decided)?;
+    let mut issues = decided;
+    issues.extend(proposed);
+
+    let docs = mgr.doc_list(case_id).map_err(|e| e.to_string())?;
+    let mut filings = Vec::new();
+    let mut audited = Vec::new();
+    let mut warnings = Vec::new();
+    let store = retrieval::store::open(&paths).ok();
+    let small = retrieval::build_small_corpus(&paths, &[]).unwrap_or_default();
+    for v in deadline_kv(mgr, case_id, "issue:filing:")? {
+        let (Some(doc_id), Some(party_id)) = (v["doc_id"].as_str(), v["party_id"].as_str()) else { continue };
+        let Some(meta) = docs.iter().find(|d| d.doc_id == doc_id) else {
+            warnings.push(format!("A document assigned to a party is no longer in the matter ({doc_id})."));
+            continue;
+        };
+        let pages = if meta.type_tag == docpipe::EXTERNAL_FILING_TAG {
+            docpipe::external_filing_pages(mgr, case_id, doc_id)?.1
+        } else {
+            docpipe::statement_pages(mgr, case_id, doc_id)?.1
+        };
+        if let Some(store) = store.as_deref() {
+            if let Ok(report) = audit::audit_with_store(store, &small, &opposition::filing_text(&pages), &meta.original_filename, "txt", Some(case_id.to_string())) {
+                audited.extend(issue_matrix::audited_from_report(doc_id, &pages, &report));
+            }
+        } else {
+            warnings.push("No legal packs are installed, so the authorities in the filings were not checked.".to_string());
+        }
+        filings.push(issue_matrix::Filing { doc_id: doc_id.to_string(), party_id: party_id.to_string(), pages });
+    }
+    warnings.dedup();
+    let built_at = crate::docpipe::now_rfc3339();
+    let out = issue_matrix::build(&issue_matrix::Inputs { case_id, built_at: &built_at, parties: &parties, filings: &filings, issues: &issues, audited: &audited })?;
+    warnings.extend(out.warnings);
+    let assigned: Vec<serde_json::Value> = filings.iter().map(|f| serde_json::json!({"doc_id": f.doc_id, "party_id": f.party_id, "filename": docs.iter().find(|d| d.doc_id == f.doc_id).map(|d| d.original_filename.clone()).unwrap_or_default()})).collect();
+    Ok(serde_json::json!({
+        "pipeline_id": issue_matrix::PIPELINE_ID, "matrix": out.matrix, "warnings": warnings, "filings": assigned,
+        "docs": docs.iter().map(|d| serde_json::json!({"doc_id": d.doc_id, "filename": d.original_filename, "type_tag": d.type_tag})).collect::<Vec<_>>(),
+        "matter_types": matter_types, "matter_type": matter_type,
+        "note": "A neutral view of the filings. It ranks nothing, scores nothing and suggests no answer; the decisions are the judge's.",
+    }))
+}
+
+/// The matrix for the matter: accepted issues with each party's pleaded position, agreed and disputed facts, and
+/// arguments the other side never answered; undecided issues are listed as proposals.
+#[tauri::command]
+fn issue_matrix_build(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<serde_json::Value, String> {
+    let mgr = vault.get_or_init(&app)?;
+    issue_matrix_compute(&mgr, &case_id)
+}
+
+/// Which kind of matter this is, so the installed issue templates for it are proposed.
+#[tauri::command]
+fn issue_matrix_set_matter_type(app: AppHandle, vault: State<'_, VaultState>, case_id: String, matter_type: Option<String>) -> Result<(), String> {
+    let mgr = vault.get_or_init(&app)?;
+    match matter_type {
+        None => mgr.witness_kv_delete(&case_id, "issue:matter_type").map_err(|e| e.to_string()),
+        Some(m) => {
+            let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
+            let (tables, _) = rule_tables::load_installed(&paths);
+            if !issue_matrix::matter_types(&tables, &case_jurisdiction(&mgr, &case_id)?).contains(&m) {
+                return Err("CF_ISSUE_MATTER_TYPE: no installed issue template covers that kind of matter".into());
+            }
+            mgr.witness_kv_put(&case_id, "issue:matter_type", &serde_json::json!({"matter_type": m})).map_err(|e| e.to_string())
+        }
+    }
+}
+
+/// The judge writes an issue of their own. It starts accepted.
+#[tauri::command]
+fn issue_matrix_add(app: AppHandle, vault: State<'_, VaultState>, case_id: String, text: String) -> Result<issue_matrix::IssueIn, String> {
+    let mgr = vault.get_or_init(&app)?;
+    if text.trim().is_empty() {
+        return Err("CF_ISSUE_TEXT: write the issue".into());
+    }
+    let stored = issue_stored(&mgr, &case_id)?;
+    let n = stored.iter().filter_map(|(_, i)| i.issue_id.strip_prefix("judge:").and_then(|n| n.parse::<u64>().ok())).max().unwrap_or(0) + 1;
+    let seq = stored.iter().map(|(s, _)| *s).max().unwrap_or(0) + 1;
+    let issue = issue_matrix::IssueIn { issue_id: format!("judge:{n}"), text: text.trim().to_string(), origin: "JUDGE_AUTHORED".into(), template_rule_id: None, decision: "ACCEPTED".into(), merged_into: None };
+    issue_put(&mgr, &case_id, seq, &issue)?;
+    Ok(issue)
+}
+
+/// The judge accepts, edits, merges or rejects an issue (or sends a decided template/graph issue back to the proposals
+/// with PROPOSED). Nothing proceeds into the matrix until the judge has accepted it.
+#[tauri::command]
+fn issue_matrix_decide(app: AppHandle, vault: State<'_, VaultState>, case_id: String, issue_id: String, decision: String, text: Option<String>, merged_into: Option<String>) -> Result<(), String> {
+    let mgr = vault.get_or_init(&app)?;
+    if !["PROPOSED", "ACCEPTED", "EDITED", "MERGED", "REJECTED"].contains(&decision.as_str()) {
+        return Err("CF_ISSUE_DECISION: choose accept, edit, merge or reject".into());
+    }
+    let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
+    let graph = mgr.case_graph_get(&case_id).map_err(|e| e.to_string())?.unwrap_or_else(|| serde_json::json!({}));
+    let stored = issue_stored(&mgr, &case_id)?;
+    let decided: Vec<issue_matrix::IssueIn> = stored.iter().map(|(_, i)| i.clone()).collect();
+    let existing = stored.iter().find(|(_, i)| i.issue_id == issue_id).map(|(s, i)| (*s, i.clone()));
+    let (seq, mut issue) = match existing {
+        Some(e) => e,
+        None => {
+            let (proposed, _, _) = issue_proposals(&mgr, &case_id, &paths, &graph, &decided)?;
+            let p = proposed.into_iter().find(|i| i.issue_id == issue_id).ok_or_else(|| "CF_ISSUE_UNKNOWN: that issue is not in the matter".to_string())?;
+            (stored.iter().map(|(s, _)| *s).max().unwrap_or(0) + 1, p)
+        }
+    };
+    let was_target = matches!(issue.decision.as_str(), "ACCEPTED" | "EDITED");
+    let stays_target = matches!(decision.as_str(), "ACCEPTED" | "EDITED");
+    if was_target && !stays_target && decided.iter().any(|i| i.decision == "MERGED" && i.merged_into.as_deref() == Some(issue_id.as_str())) {
+        return Err("CF_ISSUE_MERGE_TARGET: other issues are merged into this one; send them back first".into());
+    }
+    match decision.as_str() {
+        "PROPOSED" => {
+            if issue.origin == "JUDGE_AUTHORED" {
+                return Err("CF_ISSUE_DECISION: an issue you wrote is removed by rejecting it".into());
+            }
+            return mgr.witness_kv_delete(&case_id, &format!("issue:item:{issue_id}")).map_err(|e| e.to_string());
+        }
+        "EDITED" => {
+            let t = text.unwrap_or_default();
+            if t.trim().is_empty() {
+                return Err("CF_ISSUE_TEXT: write the edited issue".into());
+            }
+            issue.text = t.trim().to_string();
+            issue.merged_into = None;
+        }
+        "MERGED" => {
+            let target = merged_into.unwrap_or_default();
+            let ok = target != issue_id && decided.iter().any(|i| i.issue_id == target && matches!(i.decision.as_str(), "ACCEPTED" | "EDITED"));
+            if !ok {
+                return Err("CF_ISSUE_MERGE_TARGET: merge into an issue you have accepted".into());
+            }
+            issue.merged_into = Some(target);
+        }
+        _ => issue.merged_into = None,
+    }
+    issue.decision = decision;
+    issue_put(&mgr, &case_id, seq, &issue)
+}
+
+/// Counsel (or the judge's staff) says whose filing a document is, or clears it with None.
+#[tauri::command]
+fn issue_matrix_set_filing(app: AppHandle, vault: State<'_, VaultState>, case_id: String, doc_id: String, party_id: Option<String>) -> Result<(), String> {
+    let mgr = vault.get_or_init(&app)?;
+    let key = format!("issue:filing:{doc_id}");
+    let Some(party_id) = party_id else { return mgr.witness_kv_delete(&case_id, &key).map_err(|e| e.to_string()) };
+    if !mgr.doc_list(&case_id).map_err(|e| e.to_string())?.iter().any(|d| d.doc_id == doc_id) {
+        return Err("CF_ISSUE_DOC_UNKNOWN: that document is not in the matter".into());
+    }
+    let graph = mgr.case_graph_get(&case_id).map_err(|e| e.to_string())?.unwrap_or_else(|| serde_json::json!({}));
+    if !issue_parties(&graph).iter().any(|p| p.party_id == party_id) {
+        return Err("CF_ISSUE_PARTY_UNKNOWN: that party is not in the matter".into());
+    }
+    mgr.witness_kv_put(&case_id, &key, &serde_json::json!({"doc_id": doc_id, "party_id": party_id, "at": crate::docpipe::now_rfc3339()})).map_err(|e| e.to_string())
+}
+
+/// The bench memo as text, with the G4 footer and G5 provenance. Only accepted issues appear.
+#[tauri::command]
+fn issue_matrix_memo(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<String, String> {
+    let mgr = vault.get_or_init(&app)?;
+    let computed = issue_matrix_compute(&mgr, &case_id)?;
+    Ok(issue_matrix::bench_memo(&computed["matrix"], &crate::docpipe::now_rfc3339()))
 }
 
 // --- B-S4-11 Deadline & Limitation Watch ---
@@ -3837,6 +4046,12 @@ pub fn run() {
             foundation_check,
             foundation_set_type,
             foundation_link,
+            issue_matrix_build,
+            issue_matrix_set_matter_type,
+            issue_matrix_add,
+            issue_matrix_decide,
+            issue_matrix_set_filing,
+            issue_matrix_memo,
             llm_tiers,
             llm_set_tier,
             llm_chat,

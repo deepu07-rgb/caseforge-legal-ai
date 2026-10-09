@@ -4,12 +4,53 @@
   "cases": 21,
   "acs": {
     "AC-S4-06.2": {
-      "status": "BLOCKED",
-      "reason": "pass --cargo-log with `cargo test --lib` output"
+      "status": "PASS",
+      "evidence": {
+        "golden": "ok",
+        "reasons_exercised": [
+          "CALENDAR_MISSING",
+          "EXCLUSION_FACT_UNCONFIRMED",
+          "RULE_WINDOW_AMBIGUOUS",
+          "TRIGGER_DATE_CONFLICT",
+          "TRIGGER_DATE_IMPRECISE"
+        ],
+        "triggers": "ok",
+        "full_schema_validation": true
+      },
+      "detail": "An imprecise or conflicting trigger date, an unconfirmed exclusion, a missing calendar year and a rule that changes inside the trigger range each give a RANGE with its reason; never a single date."
     },
     "AC-S4-06.3": {
-      "status": "BLOCKED",
-      "reason": "pass --cargo-log with `cargo test --lib` output"
+      "status": "PASS",
+      "evidence": {
+        "refusals_in_golden": [
+          "CF_DEADLINE_NO_AUTHORITY",
+          "CF_DEADLINE_NO_LOCATOR",
+          "CF_DEADLINE_NO_RULE",
+          "CF_DEADLINE_TRIGGER_UNKNOWN"
+        ],
+        "static": {
+          "engine_has_no_model_or_network": true,
+          "every_record_is_labelled_verify_and_g9": true,
+          "refuses_without_locator_or_authority": true,
+          "ui_shows_verify_and_the_working": true,
+          "ui_explains_every_range_reason": true,
+          "ui_vocabulary_honest": true,
+          "calendar_export_is_local": true,
+          "development_rules_are_flagged": true
+        },
+        "shipped_rules": "ok"
+      },
+      "detail": "No deadline without a rule, an authority and a trigger locator; every record carries VERIFY and G9; every rule row cites the exact line it comes from."
+    },
+    "AC-S4-06.arithmetic": {
+      "status": "PASS",
+      "evidence": {
+        "arithmetic": "ok",
+        "months": "ok",
+        "roll": "ok",
+        "ics": "ok"
+      },
+      "detail": "Property tests: day counting against an independent walk (1996-2032), month-end and leap-day clamping, monotonic month arithmetic, roll-forward never on a closed day, calendar-file format."
     },
     "AC-S4-06.1": {
       "status": "BLOCKED",

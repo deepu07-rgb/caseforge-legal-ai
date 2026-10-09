@@ -1,0 +1,57 @@
+{
+  "batch": "B-S4-18",
+  "fixtures": {
+    "core": "301c5742795323ea726c33207b7bee4ebfaa2ff2d522cc48ae3247dc74ce01da",
+    "fallback": "96a2321af5d5429203c8bb5b6ca81be1e35c8b7b0a80eb08d4ba1631139f9120"
+  },
+  "acs": {
+    "AC-S4-12.1": {
+      "status": "PASS",
+      "evidence": {
+        "fixtures": 2,
+        "planted_unanswered_per_fixture": {
+          "core": 2,
+          "fallback": 1
+        },
+        "golden_core": "ok",
+        "golden_fallback": "ok",
+        "no_filing_never_blamed": "ok"
+      },
+      "detail": "Every planted unanswered argument is listed, in each fixture, and nothing else is."
+    },
+    "AC-S4-12.2": {
+      "status": "PASS",
+      "evidence": {
+        "planted_admitted_or_disputed_per_fixture": {
+          "core": 2,
+          "fallback": 4
+        },
+        "agreement": "100 % of expected admitted/disputed facts, exact match, no extras"
+      },
+      "threshold": "PROPOSED 95 % (Q-S4-01)",
+      "detail": "Measured on the synthetic G-CHAMBERS golden (cross-referenced pleadings, and pleadings paired by wording). Re-measure on judge-annotated pleadings when available."
+    },
+    "AC-S4-12.3": {
+      "status": "PASS",
+      "evidence": {
+        "party_swap": "ok",
+        "memo_vocabulary": "ok",
+        "ranking_words_found": [],
+        "schema_validated": true
+      },
+      "detail": "Swapping which party filed which pleading mirrors the result and changes nothing else; the engine, memo and screen contain no ranking, scoring or favouring words; the neutrality block is constant."
+    }
+  },
+  "static": {
+    "engine_has_no_model_or_network": true,
+    "engine_writes_no_graph_or_score": true,
+    "neutrality_block_is_constant": true,
+    "commands_registered": true,
+    "only_judge_accepted_issues_get_content": true,
+    "ui_says_nothing_is_ranked": true,
+    "ui_proposals_need_acceptance": true,
+    "ui_vocabulary_honest": true,
+    "no_ranking_or_favour_words_in_engine_or_screen": true
+  },
+  "errors": []
+}

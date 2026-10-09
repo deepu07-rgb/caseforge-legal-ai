@@ -2,16 +2,26 @@
   "batch": "B-S4-07",
   "acceptance": {
     "AC-S4-03.2(matrix)": {
-      "status": "BLOCKED",
-      "reason": "pass --cargo-log with `cargo test --lib` output"
+      "status": "PASS",
+      "evidence": {
+        "cells_exact": "ok",
+        "full_schema_validation": true
+      },
+      "detail": "every matrix cell is the exact stored substring at its page/span or page:line locator"
     },
     "MERGE_SPLIT_SURVIVES_RERUN": {
-      "status": "BLOCKED",
-      "reason": "pass --cargo-log with `cargo test --lib` output"
+      "status": "PASS",
+      "evidence": {
+        "resolution": "ok",
+        "survival": "ok",
+        "no_false_merge": "ok"
+      }
     },
     "STATEMENT_PROPOSALS": {
-      "status": "BLOCKED",
-      "reason": "pass --cargo-log with `cargo test --lib` output"
+      "status": "PASS",
+      "evidence": {
+        "proposals": "ok"
+      }
     },
     "STRUCTURE": {
       "status": "PASS",

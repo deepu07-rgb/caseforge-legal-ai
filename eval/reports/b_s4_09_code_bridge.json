@@ -2,17 +2,25 @@
   "batch": "B-S4-09",
   "acceptance": {
     "AC-S4-04.2": {
-      "status": "BLOCKED",
-      "reason": "pass --cargo-log with `cargo test --lib` output"
+      "status": "PASS",
+      "evidence": {
+        "missing_dates": "ok"
+      },
+      "measured": "7/7 planted missing-date references -> NEEDS_COUNSEL_INPUT"
     },
     "AC-S4-04.3": {
-      "status": "BLOCKED",
-      "reason": "pass --cargo-log with `cargo test --lib` output"
+      "status": "PASS",
+      "evidence": {
+        "known_dates": "ok",
+        "contract": "ok",
+        "full_schema_validation": true
+      },
+      "detail": "MODIFIED mapping carries the exact old and new authoritative texts; the validator rejects a MODIFIED row without both"
     },
     "AC-S4-04.1": {
       "status": "BLOCKED",
       "reason": "needs legal-editor-signed STATUTE_SUCCESSION rows for real codes in an official pack (Q-S4-02); none are installed",
-      "engine_matches_synthetic_signed_fixture": null
+      "engine_matches_synthetic_signed_fixture": true
     },
     "STRUCTURE": {
       "status": "PASS",

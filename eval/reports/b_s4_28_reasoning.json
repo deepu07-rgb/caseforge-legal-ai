@@ -3,8 +3,26 @@
   "fixture_sha256": "24cb84dbf711cc54a3a85012598db1cb31fa3cd8618f4a6f1f1ed34f8492c194",
   "acs": {
     "AC-S4-28.1": {
-      "status": "BLOCKED",
-      "reason": "pass --cargo-log with `cargo test --lib` output"
+      "status": "PASS",
+      "evidence": {
+        "scenarios": "ok",
+        "fabrication": "ok",
+        "prompts": "ok",
+        "depth": "ok",
+        "scenarios_in_golden": 9,
+        "sidecar_variants": true,
+        "static": {
+          "engine_does_not_call_a_model": true,
+          "scores_come_from_the_host_verifier": true,
+          "verified_answer_requires_every_step_verified": true,
+          "command_checks_input_and_output_guards": true,
+          "command_requires_controlled_beta_model": true,
+          "command_uses_working_set_authorities_only": true,
+          "ui_vocabulary_honest": true,
+          "ui_never_shows_unverified_as_verified": true
+        }
+      },
+      "detail": "An answer is called verified only if the host verified every step; the best-verified of several candidates is kept; a fabricated excerpt never reaches a verified answer in any depth."
     },
     "AC-S4-28.2": {
       "status": "BLOCKED",
