@@ -1,0 +1,334 @@
+{
+  "schema_version": "1.0.0",
+  "golden": "G-CHAMBERS",
+  "set": "record_only",
+  "batch": "B-S4-17",
+  "description": "Statements from a model with planted extra-record content (model memory, an invented quotation, a custom-pack law, a fact supplied in the prompt, inferences resting on those). Expectations are hand-authored.",
+  "support_sources": [
+    {
+      "support_id": "rec:d-plaint:p2",
+      "kind": "MATTER_SOURCE",
+      "exact_text": "The defendant has been in exclusive possession of the entire house since 2020 and has not allowed the plaintiff to enter it.",
+      "source_id": null,
+      "chunk_id": null,
+      "authority_id": null,
+      "doc_id": "d-plaint",
+      "page": 1,
+      "paragraph": "p2",
+      "trust_level": null,
+      "temporal_status": null,
+      "superseded_status": null,
+      "permitted": true
+    },
+    {
+      "support_id": "rec:d-ws:p3",
+      "kind": "MATTER_SOURCE",
+      "exact_text": "The plaintiff has known of the defendant's possession of the house since 2012.",
+      "source_id": null,
+      "chunk_id": null,
+      "authority_id": null,
+      "doc_id": "d-ws",
+      "page": 1,
+      "paragraph": "p3",
+      "trust_level": null,
+      "temporal_status": null,
+      "superseded_status": null,
+      "permitted": true
+    },
+    {
+      "support_id": "law:a1",
+      "kind": "LEGAL_AUTHORITY",
+      "exact_text": "A co-owner of a dwelling-house may apply for partition of the joint property by metes and bounds.",
+      "source_id": "cfsrc:test:a1",
+      "chunk_id": "cfchunk:test:a1",
+      "authority_id": "a1",
+      "doc_id": null,
+      "page": null,
+      "paragraph": "section 44",
+      "trust_level": "OFFICIAL_VERIFIED",
+      "temporal_status": "APPLICABLE",
+      "superseded_status": "CURRENT",
+      "permitted": true
+    },
+    {
+      "support_id": "law:a2",
+      "kind": "LEGAL_AUTHORITY",
+      "exact_text": "A person who sells a house by a forged deed commits an offence punishable with imprisonment.",
+      "source_id": "cfsrc:test:a2",
+      "chunk_id": "cfchunk:test:a2",
+      "authority_id": "a2",
+      "doc_id": null,
+      "page": null,
+      "paragraph": "section 44",
+      "trust_level": "CUSTOM",
+      "temporal_status": "APPLICABLE",
+      "superseded_status": "CURRENT",
+      "permitted": true
+    },
+    {
+      "support_id": "prompt:judge",
+      "kind": "COUNSEL_INPUT",
+      "exact_text": "The defendant also forged the sale deed.",
+      "source_id": null,
+      "chunk_id": null,
+      "authority_id": null,
+      "doc_id": null,
+      "page": null,
+      "paragraph": null,
+      "trust_level": null,
+      "temporal_status": null,
+      "superseded_status": null,
+      "permitted": true
+    }
+  ],
+  "propositions": [
+    {
+      "proposition_id": "p1",
+      "class": "FACTUAL_BASIS",
+      "text": "The defendant has been in exclusive possession since 2020.",
+      "support_ids": [
+        "rec:d-plaint:p2"
+      ],
+      "basis_ids": [],
+      "support_claims": [
+        {
+          "support_id": "rec:d-plaint:p2",
+          "exact_excerpt": "exclusive possession of the entire house since 2020"
+        }
+      ]
+    },
+    {
+      "proposition_id": "p2",
+      "class": "FACTUAL_BASIS",
+      "text": "The plaintiff has known of the possession since 2012.",
+      "support_ids": [
+        "rec:d-ws:p3"
+      ],
+      "basis_ids": [],
+      "support_claims": [
+        {
+          "support_id": "rec:d-ws:p3",
+          "exact_excerpt": "has known of the defendant's possession of the house since 2012"
+        }
+      ]
+    },
+    {
+      "proposition_id": "p3",
+      "class": "LEGAL_BASIS",
+      "text": "A co-owner may apply for partition by metes and bounds.",
+      "support_ids": [
+        "law:a1"
+      ],
+      "basis_ids": [],
+      "support_claims": [
+        {
+          "support_id": "law:a1",
+          "exact_excerpt": "may apply for partition of the joint property by metes and bounds"
+        }
+      ]
+    },
+    {
+      "proposition_id": "p4",
+      "class": "INFERENCE",
+      "text": "The parties differ on when the plaintiff came to know of the possession.",
+      "support_ids": [],
+      "basis_ids": [
+        "p1",
+        "p2"
+      ],
+      "support_claims": []
+    },
+    {
+      "proposition_id": "p5",
+      "class": "INFERENCE",
+      "text": "Partition is a remedy open to a co-owner who is kept out of possession.",
+      "support_ids": [],
+      "basis_ids": [
+        "p1",
+        "p3"
+      ],
+      "support_claims": []
+    },
+    {
+      "proposition_id": "x1",
+      "class": "FACTUAL_BASIS",
+      "text": "The defendant is a notorious land grabber known across the district.",
+      "support_ids": [],
+      "basis_ids": [],
+      "support_claims": []
+    },
+    {
+      "proposition_id": "x2",
+      "class": "FACTUAL_BASIS",
+      "text": "The defendant admitted possession in a letter to the plaintiff.",
+      "support_ids": [
+        "rec:d-plaint:p2"
+      ],
+      "basis_ids": [],
+      "support_claims": [
+        {
+          "support_id": "rec:d-plaint:p2",
+          "exact_excerpt": "admitted possession in a letter to the plaintiff"
+        }
+      ]
+    },
+    {
+      "proposition_id": "x3",
+      "class": "LEGAL_BASIS",
+      "text": "Selling a house by a forged deed is punishable.",
+      "support_ids": [
+        "law:a2"
+      ],
+      "basis_ids": [],
+      "support_claims": [
+        {
+          "support_id": "law:a2",
+          "exact_excerpt": "sells a house by a forged deed commits an offence"
+        }
+      ]
+    },
+    {
+      "proposition_id": "x4",
+      "class": "COUNSEL_INPUT",
+      "text": "The defendant also forged the sale deed.",
+      "support_ids": [
+        "prompt:judge"
+      ],
+      "basis_ids": [],
+      "support_claims": [
+        {
+          "support_id": "prompt:judge",
+          "exact_excerpt": "The defendant also forged the sale deed."
+        }
+      ]
+    },
+    {
+      "proposition_id": "x5",
+      "class": "INFERENCE",
+      "text": "Because the deed was forged, the defendant cannot claim a share.",
+      "support_ids": [],
+      "basis_ids": [
+        "x4"
+      ],
+      "support_claims": []
+    },
+    {
+      "proposition_id": "x6",
+      "class": "INFERENCE",
+      "text": "The defendant must be lying about the lease.",
+      "support_ids": [],
+      "basis_ids": [],
+      "support_claims": []
+    },
+    {
+      "proposition_id": "x7",
+      "class": "FACTUAL_BASIS",
+      "text": "The lease ended in 2019.",
+      "support_ids": [
+        "law:a1"
+      ],
+      "basis_ids": [],
+      "support_claims": [
+        {
+          "support_id": "law:a1",
+          "exact_excerpt": "may apply for partition"
+        }
+      ]
+    },
+    {
+      "proposition_id": "x8",
+      "class": "INFERENCE",
+      "text": "The plaintiff will win.",
+      "support_ids": [],
+      "basis_ids": [
+        "x1"
+      ],
+      "support_claims": []
+    },
+    {
+      "proposition_id": "x9",
+      "class": "UNSUPPORTED_OR_GAP",
+      "text": "The court should decree partition.",
+      "support_ids": [],
+      "basis_ids": [],
+      "support_claims": []
+    }
+  ],
+  "expect": {
+    "record_only_on": {
+      "rendered": [
+        {
+          "id": "p1",
+          "class": "RECORD",
+          "locator": {
+            "kind": "MATTER",
+            "doc_id": "d-plaint",
+            "page": 1,
+            "paragraph": "p2"
+          }
+        },
+        {
+          "id": "p2",
+          "class": "RECORD",
+          "locator": {
+            "kind": "MATTER",
+            "doc_id": "d-ws",
+            "page": 1,
+            "paragraph": "p3"
+          }
+        },
+        {
+          "id": "p3",
+          "class": "LAW",
+          "locator": {
+            "kind": "LAW",
+            "authority_id": "a1",
+            "source_id": "cfsrc:test:a1",
+            "chunk_id": "cfchunk:test:a1"
+          }
+        },
+        {
+          "id": "p4",
+          "class": "INFERENCE_FROM_RECORD",
+          "bases": [
+            "p1",
+            "p2"
+          ]
+        },
+        {
+          "id": "p5",
+          "class": "INFERENCE_FROM_RECORD",
+          "bases": [
+            "p1",
+            "p3"
+          ]
+        }
+      ],
+      "withheld": {
+        "x1": "NO_SUPPORT",
+        "x2": "NOT_VERIFIED",
+        "x3": "NOT_VERIFIED",
+        "x4": "NOT_FROM_THE_RECORD",
+        "x5": "RESTS_ON_EXTRA_RECORD",
+        "x6": "NO_SUPPORT",
+        "x7": "NOT_VERIFIED",
+        "x8": "NOT_VERIFIED",
+        "x9": "NO_SUPPORT"
+      }
+    },
+    "record_only_off": {
+      "note": "Before a judgment scaffold exists the judge may switch record-only off: unsupported statements then show, labelled EXTRA_RECORD, and are never given a RECORD or LAW class.",
+      "extra_record_rendered": [
+        "x1",
+        "x2",
+        "x3",
+        "x4",
+        "x5",
+        "x6",
+        "x7",
+        "x8",
+        "x9"
+      ]
+    }
+  }
+}
