@@ -1,0 +1,272 @@
+{
+  "schema_version": "1.0.0",
+  "golden": "G-CHAMBERS",
+  "set": "issue_matrix",
+  "batch": "B-S4-18",
+  "description": "Two-party partition-suit pleadings with planted facts: paragraph 1 admitted by reference, paragraph 2 denied by reference, paragraph 6 of the plaint (an argument for an account of rents) never answered, and paragraph 6 of the written statement (suppression of facts) never answered. Expected results come from an independent implementation of the written rules and were reviewed by hand.",
+  "parties": [
+    {
+      "party_id": "P",
+      "display_name": "Ravi Kumar",
+      "role": "Plaintiff"
+    },
+    {
+      "party_id": "D",
+      "display_name": "Anil Kumar",
+      "role": "Defendant"
+    }
+  ],
+  "filings": [
+    {
+      "doc_id": "d-plaint",
+      "party_id": "P",
+      "pages": [
+        "1. The plaintiff and the defendant are brothers and are the registered owners of the house at 12 Gandhi Road, each holding an equal half share under the registered sale deed marked Annexure P-1.\n2. The defendant has been in exclusive possession of the entire house since the year 2020 and has not allowed the plaintiff to enter it.\n3. It is submitted that a co-owner is entitled to partition of the joint house by metes and bounds, and the plaintiff is entitled to a half share. Reliance is placed on section 2 of the Partition Act, 1893.\n4. It is submitted that the suit is within limitation because the cause of action arose in the year 2020 when the plaintiff was excluded from possession of the house.\n5. The plaintiff paid the repair charges of the house in the year 2021, as shown in Exhibit P-2, the receipt.\n6. It is submitted that the plaintiff is entitled to an account of the rents collected by the defendant from the tenants of the ground floor of the house.\n"
+      ]
+    },
+    {
+      "doc_id": "d-ws",
+      "party_id": "D",
+      "pages": [
+        "1. Paragraph 1 of the plaint is admitted to the extent that the parties are brothers and are the registered owners of the house, each holding an equal half share.\n2. The contents of paragraph 2 of the plaint are denied. The defendant has never excluded the plaintiff from possession of the house.\n3. It is submitted that the suit is barred by limitation because the plaintiff has known of the defendant's possession of the house since the year 2012.\n4. The defendant has paid the property tax of the house from his own funds, which the plaintiff has never shared.\n5. It is submitted that the house is incapable of division by metes and bounds and ought to be sold instead of being divided.\n6. It is submitted that the plaintiff has suppressed material facts and is guilty of want of clean hands.\n"
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "judge:1",
+      "text": "Whether the plaintiff and the defendant are co-owners of the house holding equal shares?",
+      "origin": "GRAPH_ISSUE",
+      "template_rule_id": null,
+      "decision": "ACCEPTED",
+      "merged_into": null
+    },
+    {
+      "issue_id": "tpl:possession",
+      "text": "Whether the defendant has been in exclusive possession of the house and excluded the plaintiff from it?",
+      "origin": "TEMPLATE",
+      "template_rule_id": "test.issue.partition",
+      "decision": "ACCEPTED",
+      "merged_into": null
+    },
+    {
+      "issue_id": "tpl:limitation",
+      "text": "Whether the suit is barred by limitation?",
+      "origin": "TEMPLATE",
+      "template_rule_id": "test.issue.partition",
+      "decision": "ACCEPTED",
+      "merged_into": null
+    },
+    {
+      "issue_id": "judge:4",
+      "text": "Whether the plaintiff is entitled to an account of the rents collected by the defendant?",
+      "origin": "JUDGE_AUTHORED",
+      "template_rule_id": null,
+      "decision": "EDITED",
+      "merged_into": null
+    },
+    {
+      "issue_id": "judge:5",
+      "text": "Whether the house is capable of partition by metes and bounds or ought to be sold instead of being divided?",
+      "origin": "JUDGE_AUTHORED",
+      "template_rule_id": null,
+      "decision": "ACCEPTED",
+      "merged_into": null
+    },
+    {
+      "issue_id": "judge:6",
+      "text": "Whether the plaintiff has suppressed material facts?",
+      "origin": "JUDGE_AUTHORED",
+      "template_rule_id": null,
+      "decision": "ACCEPTED",
+      "merged_into": null
+    },
+    {
+      "issue_id": "tpl:costs",
+      "text": "Whether costs should follow the event?",
+      "origin": "TEMPLATE",
+      "template_rule_id": "test.issue.partition",
+      "decision": "PROPOSED",
+      "merged_into": null
+    },
+    {
+      "issue_id": "graph:necessary",
+      "text": "Whether the defendant is a necessary party?",
+      "origin": "GRAPH_ISSUE",
+      "template_rule_id": null,
+      "decision": "REJECTED",
+      "merged_into": null
+    },
+    {
+      "issue_id": "graph:brothers",
+      "text": "Whether the brothers are co-owners of the house?",
+      "origin": "GRAPH_ISSUE",
+      "template_rule_id": null,
+      "decision": "MERGED",
+      "merged_into": "judge:1"
+    }
+  ],
+  "audited": [
+    {
+      "doc_id": "d-plaint",
+      "page_index": 0,
+      "char_start": 501,
+      "char_end": 537,
+      "item_id": "i1",
+      "result": "VERIFIED"
+    }
+  ],
+  "templates": {
+    "matter_type": "CIVIL_PARTITION_SUIT",
+    "rule_id": "test.issue.partition",
+    "issue_skeletons": [
+      {
+        "template_id": "possession",
+        "text": "Whether the defendant has been in exclusive possession of the house and excluded the plaintiff from it?"
+      },
+      {
+        "template_id": "limitation",
+        "text": "Whether the suit is barred by limitation?"
+      },
+      {
+        "template_id": "costs",
+        "text": "Whether costs should follow the event?"
+      },
+      {
+        "template_id": "relief",
+        "text": "To what relief, if any, is the plaintiff entitled?"
+      }
+    ]
+  },
+  "graph_issues": [
+    {
+      "node_id": "necessary",
+      "label": "Whether the defendant is a necessary party?"
+    },
+    {
+      "node_id": "brothers",
+      "label": "Whether the brothers are co-owners of the house?"
+    },
+    {
+      "node_id": "new",
+      "label": "Whether the sale deed was validly registered?"
+    }
+  ],
+  "thresholds": {
+    "assign_min_shared_keywords": 2,
+    "response_min_shared_keywords": 3
+  },
+  "expect": {
+    "judge:1": {
+      "decision": "ACCEPTED",
+      "positions": {
+        "P": [
+          "d-plaint:p1"
+        ],
+        "D": [
+          "d-ws:p1"
+        ]
+      },
+      "admitted": [
+        "d-plaint:p1"
+      ],
+      "disputed": [],
+      "unanswered": []
+    },
+    "tpl:possession": {
+      "decision": "ACCEPTED",
+      "positions": {
+        "P": [
+          "d-plaint:p2",
+          "d-plaint:p4"
+        ],
+        "D": [
+          "d-ws:p2",
+          "d-ws:p3"
+        ]
+      },
+      "admitted": [],
+      "disputed": [
+        "d-plaint:p2"
+      ],
+      "unanswered": []
+    },
+    "tpl:limitation": {
+      "decision": "ACCEPTED",
+      "positions": {
+        "P": [
+          "d-plaint:p4"
+        ],
+        "D": [
+          "d-ws:p3"
+        ]
+      },
+      "admitted": [],
+      "disputed": [],
+      "unanswered": []
+    },
+    "judge:4": {
+      "decision": "EDITED",
+      "positions": {
+        "P": [
+          "d-plaint:p6"
+        ],
+        "D": []
+      },
+      "admitted": [],
+      "disputed": [],
+      "unanswered": [
+        [
+          "d-plaint:p6",
+          "P",
+          "D"
+        ]
+      ]
+    },
+    "judge:5": {
+      "decision": "ACCEPTED",
+      "positions": {
+        "P": [
+          "d-plaint:p3"
+        ],
+        "D": [
+          "d-ws:p5"
+        ]
+      },
+      "admitted": [],
+      "disputed": [],
+      "unanswered": []
+    },
+    "judge:6": {
+      "decision": "ACCEPTED",
+      "positions": {
+        "P": [],
+        "D": [
+          "d-ws:p6"
+        ]
+      },
+      "admitted": [],
+      "disputed": [],
+      "unanswered": [
+        [
+          "d-ws:p6",
+          "D",
+          "P"
+        ]
+      ]
+    },
+    "tpl:costs": {
+      "decision": "PROPOSED"
+    },
+    "graph:necessary": {
+      "decision": "REJECTED"
+    },
+    "graph:brothers": {
+      "decision": "MERGED"
+    }
+  },
+  "expect_proposed": [
+    "tpl:relief",
+    "graph:new"
+  ]
+}
