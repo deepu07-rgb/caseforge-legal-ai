@@ -312,6 +312,162 @@ fn audit_draft(
     Ok(report)
 }
 
+// --- B-S4-11 Deadline & Limitation Watch ---
+
+fn deadline_rules(tables: &[rule_tables::RuleTable], jurisdiction: &str) -> (std::collections::BTreeMap<String, Vec<deadlines::Rule>>, Vec<String>) {
+    let mut by_rule: std::collections::BTreeMap<String, Vec<deadlines::Rule>> = std::collections::BTreeMap::new();
+    let mut problems = Vec::new();
+    for t in tables.iter().filter(|t| matches!(t.table_kind.as_str(), "LIMITATION_PERIOD" | "PROCEDURAL_DEADLINE") && t.jurisdiction.eq_ignore_ascii_case(jurisdiction)) {
+        for row in &t.rows {
+            match deadlines::Rule::from_row(row) {
+                Ok(rule) => by_rule.entry(rule.rule_id.clone()).or_default().push(rule),
+                Err(e) => problems.push(e),
+            }
+        }
+    }
+    (by_rule, problems)
+}
+
+fn deadline_calendars(tables: &[rule_tables::RuleTable]) -> deadlines::Calendars {
+    let mut cals = deadlines::Calendars::default();
+    for t in tables.iter().filter(|t| t.table_kind == "COURT_CALENDAR") {
+        for row in &t.rows {
+            let _ = cals.add(&t.table_id, &row.payload);
+        }
+    }
+    cals
+}
+
+fn deadline_kv(mgr: &VaultManager, case_id: &str, prefix: &str) -> Result<Vec<serde_json::Value>, String> {
+    Ok(mgr.witness_kv_list(case_id, prefix).map_err(|e| e.to_string())?.into_iter().map(|(_, v)| v).collect())
+}
+
+/// Deadlines for the matter: the rules installed for its jurisdiction, the chronology events counsel can choose as
+/// triggers, counsel's assignments and exclusion facts, and the computed records (or the reason one cannot be made).
+#[tauri::command]
+fn deadlines_compute(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<serde_json::Value, String> {
+    let mgr = vault.get_or_init(&app)?;
+    let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
+    let jurisdiction = case_jurisdiction(&mgr, &case_id)?;
+    let (tables, rejected) = rule_tables::load_installed(&paths);
+    let (by_rule, rule_problems) = deadline_rules(&tables, &jurisdiction);
+    let cals = deadline_calendars(&tables);
+    let graph = mgr.case_graph_get(&case_id).map_err(|e| e.to_string())?.unwrap_or_else(|| serde_json::json!({}));
+    let events: Vec<serde_json::Value> = graph["chronology"].as_array().cloned().unwrap_or_default();
+    let assignments = deadline_kv(&mgr, &case_id, "deadline:assign:")?;
+    let fact_values = deadline_kv(&mgr, &case_id, "deadline:fact:")?;
+    let facts: Vec<deadlines::Fact> = fact_values
+        .iter()
+        .filter_map(|f| {
+            Some(deadlines::Fact {
+                fact_type: f["fact_type"].as_str()?.to_string(),
+                node_id: f["node_id"].as_str()?.to_string(),
+                days: f["days"].as_u64().map(|d| d as u32),
+                confirmed: f["confirmed"].as_bool().unwrap_or(false),
+                locator: deadlines::Locator { doc_id: f["doc_id"].as_str().unwrap_or("").to_string(), excerpt: f["excerpt"].as_str().unwrap_or("").to_string() },
+            })
+        })
+        .collect();
+    let now = crate::docpipe::now_rfc3339();
+    let (mut records, mut errors) = (Vec::new(), Vec::new());
+    for a in &assignments {
+        let (rule_id, event_id) = (a["rule_id"].as_str().unwrap_or(""), a["event_id"].as_str().unwrap_or(""));
+        let (Some(rules), Some(event)) = (by_rule.get(rule_id), events.iter().find(|e| e["event_id"] == event_id)) else {
+            errors.push(serde_json::json!({"rule_id": rule_id, "event_id": event_id, "error": "CF_DEADLINE_ASSIGNMENT_STALE: the rule or the chronology event is no longer available"}));
+            continue;
+        };
+        let trigger = deadlines::trigger_from_event(event, &rules[0].trigger_event_type);
+        match deadlines::compute(&deadlines::Inputs { case_id: &case_id, rules, trigger: &trigger, facts: &facts, calendars: &cals, computed_at: &now }) {
+            Ok(r) => records.push(r),
+            Err(e) => errors.push(serde_json::json!({"rule_id": rule_id, "event_id": event_id, "error": e})),
+        }
+    }
+    let rule_list: Vec<serde_json::Value> = by_rule
+        .values()
+        .map(|rs| {
+            let r = &rs[0];
+            serde_json::json!({
+                "rule_id": r.rule_id, "label": r.label, "trigger_event_type": r.trigger_event_type, "period": {"value": r.value, "unit": format!("{:?}", r.unit).to_uppercase()},
+                "exclude_trigger_day": r.exclude_trigger_day, "roll_forward": r.roll_forward, "calendar_table_id": r.calendar_table_id,
+                "trust_state": r.trust_state, "provision": r.authorities.first().and_then(|a| a["provision_label"].as_str()),
+                "exclusions": r.exclusions.iter().map(|e| serde_json::json!({"exclusion_id": e.id, "fact_type": e.fact_type})).collect::<Vec<_>>(),
+            })
+        })
+        .collect();
+    let event_list: Vec<serde_json::Value> = events
+        .iter()
+        .map(|e| {
+            let t = deadlines::trigger_from_event(e, "");
+            serde_json::json!({
+                "event_id": e["event_id"], "summary": e["summary"], "date": e["date"], "precision": t.precision, "date_range": t.range, "other_dates": t.conflicting,
+                "doc_id": t.locator.doc_id, "excerpt": t.locator.excerpt,
+            })
+        })
+        .collect();
+    Ok(serde_json::json!({
+        "engine_version": deadlines::ENGINE_VERSION, "jurisdiction": jurisdiction, "rules": rule_list, "events": event_list,
+        "assignments": assignments, "facts": fact_values, "records": records, "errors": errors,
+        "rule_problems": rule_problems, "rejected_tables": rejected,
+        "calendar_tables": tables.iter().filter(|t| t.table_kind == "COURT_CALENDAR").map(|t| t.table_id.clone()).collect::<Vec<_>>(),
+        "unsigned_rules": rule_list.iter().any(|r| r["trust_state"] != "SIGNED_OFF"),
+    }))
+}
+
+/// Counsel chooses which chronology event starts a rule's period.
+#[tauri::command]
+fn deadlines_assign(app: AppHandle, vault: State<'_, VaultState>, case_id: String, rule_id: String, event_id: String) -> Result<(), String> {
+    let mgr = vault.get_or_init(&app)?;
+    let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
+    let (tables, _) = rule_tables::load_installed(&paths);
+    let (by_rule, _) = deadline_rules(&tables, &case_jurisdiction(&mgr, &case_id)?);
+    if !by_rule.contains_key(&rule_id) {
+        return Err("CF_DEADLINE_RULE_UNKNOWN: that rule is not installed for this matter's jurisdiction".into());
+    }
+    let graph = mgr.case_graph_get(&case_id).map_err(|e| e.to_string())?.unwrap_or_else(|| serde_json::json!({}));
+    if !graph["chronology"].as_array().map(|a| a.iter().any(|e| e["event_id"] == event_id.as_str())).unwrap_or(false) {
+        return Err("CF_DEADLINE_EVENT_UNKNOWN: that event is not in the matter's chronology".into());
+    }
+    mgr.witness_kv_put(&case_id, &format!("deadline:assign:{rule_id}:{event_id}"), &serde_json::json!({"rule_id": rule_id, "event_id": event_id, "at": crate::docpipe::now_rfc3339()})).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+fn deadlines_unassign(app: AppHandle, vault: State<'_, VaultState>, case_id: String, rule_id: String, event_id: String) -> Result<(), String> {
+    vault.get_or_init(&app)?.witness_kv_delete(&case_id, &format!("deadline:assign:{rule_id}:{event_id}")).map_err(|e| e.to_string())
+}
+
+/// Counsel records a fact that excludes time (for example the days taken to obtain a copy): how many days, whether it is
+/// confirmed, and where it is recorded. Applied only when confirmed; an unconfirmed fact turns the result into a range.
+#[tauri::command]
+fn deadlines_fact_save(app: AppHandle, vault: State<'_, VaultState>, case_id: String, fact_type: String, days: u32, confirmed: bool, doc_id: String, excerpt: String) -> Result<(), String> {
+    let mgr = vault.get_or_init(&app)?;
+    let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
+    let (tables, _) = rule_tables::load_installed(&paths);
+    let (by_rule, _) = deadline_rules(&tables, &case_jurisdiction(&mgr, &case_id)?);
+    if !by_rule.values().flatten().any(|r| r.exclusions.iter().any(|e| e.fact_type == fact_type)) {
+        return Err("CF_DEADLINE_FACT_UNKNOWN: no installed rule excludes time for that kind of fact".into());
+    }
+    if doc_id.trim().is_empty() || excerpt.trim().is_empty() || days > 3650 {
+        return Err("CF_DEADLINE_FACT_INVALID: give the number of days (up to 3650) and where the fact is recorded".into());
+    }
+    mgr.witness_kv_put(&case_id, &format!("deadline:fact:{fact_type}"), &serde_json::json!({"fact_type": fact_type, "node_id": format!("counsel_fact:{fact_type}"), "days": days, "confirmed": confirmed, "doc_id": doc_id.trim(), "excerpt": excerpt.trim(), "at": crate::docpipe::now_rfc3339()})).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+fn deadlines_fact_remove(app: AppHandle, vault: State<'_, VaultState>, case_id: String, fact_type: String) -> Result<(), String> {
+    vault.get_or_init(&app)?.witness_kv_delete(&case_id, &format!("deadline:fact:{fact_type}")).map_err(|e| e.to_string())
+}
+
+/// The computed deadlines as an iCalendar file (local; nothing is sent anywhere).
+#[tauri::command]
+fn deadlines_export_ics(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<String, String> {
+    let all = deadlines_compute(app, vault, case_id)?;
+    let records = all["records"].as_array().cloned().unwrap_or_default();
+    if records.is_empty() {
+        return Err("CF_DEADLINE_NOTHING_TO_EXPORT: no deadline has been computed for this matter yet".into());
+    }
+    Ok(deadlines::to_ics(&records, &crate::docpipe::now_rfc3339()))
+}
+
 // --- B-S4-28 step-by-step reasoning with best-of-n verification ---
 
 /// Reasons through a question over the matter's working set: several candidate step-by-step ledgers from the local model,
@@ -3542,6 +3698,12 @@ pub fn run() {
             code_bridge_set_key_date,
             code_bridge_annotate,
             reasoning_run,
+            deadlines_compute,
+            deadlines_assign,
+            deadlines_unassign,
+            deadlines_fact_save,
+            deadlines_fact_remove,
+            deadlines_export_ics,
             llm_tiers,
             llm_set_tier,
             llm_chat,

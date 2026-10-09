@@ -1,0 +1,419 @@
+{
+  "schema_version": "1.0.0",
+  "table_id": "in.limitation.civil-appeals.v1",
+  "table_kind": "LIMITATION_PERIOD",
+  "jurisdiction": "India",
+  "pack_id": "caseforge.india.limitation-rules",
+  "description": "Limitation periods for civil appeals and related applications from the Schedule to the Limitation Act, 1963, counted under sections 4 and 12. DEVELOPMENT_ONLY: awaiting two legal editors (Q-S4-02). Not covered: other Articles, state amendments, special-law periods.",
+  "rows": [
+    {
+      "rule_id": "in.limitation.cpc.appeal.high-court",
+      "table_kind": "LIMITATION_PERIOD",
+      "jurisdiction": "India",
+      "effective_from": "1964-01-01",
+      "effective_to": null,
+      "authorities": [
+        {
+          "pack_id": "caseforge.india.limitation-rules",
+          "source_id": "cfsrc:caseforge.india.limitation-rules:b1c115da8501b76f",
+          "chunk_id": "cfchunk:caseforge.india.limitation-rules:8d3ac314c7dd076d",
+          "char_start": 58,
+          "char_end": 132,
+          "provision_label": "Limitation Act Schedule, Art. 116(a)"
+        },
+        {
+          "pack_id": "caseforge.india.limitation-rules",
+          "source_id": "cfsrc:caseforge.india.limitation-rules:2b4a8fddfc4aa4c7",
+          "chunk_id": "cfchunk:caseforge.india.limitation-rules:5cf4d3f30d394a42",
+          "char_start": 123,
+          "char_end": 191,
+          "provision_label": "Limitation Act s.12(1)"
+        },
+        {
+          "pack_id": "caseforge.india.limitation-rules",
+          "source_id": "cfsrc:caseforge.india.limitation-rules:2b4a8fddfc4aa4c7",
+          "chunk_id": "cfchunk:caseforge.india.limitation-rules:5cf4d3f30d394a42",
+          "char_start": 394,
+          "char_end": 496,
+          "provision_label": "Limitation Act s.12(2)"
+        },
+        {
+          "pack_id": "caseforge.india.limitation-rules",
+          "source_id": "cfsrc:caseforge.india.limitation-rules:c60c2fa528267fa5",
+          "chunk_id": "cfchunk:caseforge.india.limitation-rules:51f69ec4f0914620",
+          "char_start": 117,
+          "char_end": 158,
+          "provision_label": "Limitation Act s.4"
+        }
+      ],
+      "legal_editor_signoff": null,
+      "trust_state": "DEVELOPMENT_ONLY",
+      "payload": {
+        "deadline_label": "Appeal to a High Court from a decree or order",
+        "trigger_event_type": "DECREE_OR_ORDER",
+        "applies_to_matter_types": [
+          "CIVIL"
+        ],
+        "period": {
+          "value": 90,
+          "unit": "DAYS"
+        },
+        "counting": {
+          "exclude_trigger_day": true,
+          "roll_forward_if_court_closed": true,
+          "calendar_table_id": null
+        },
+        "exclusions": [
+          {
+            "exclusion_id": "copy-obtaining-time",
+            "condition_fact_type": "COPY_OBTAINING_TIME",
+            "description": "Time requisite for obtaining a copy of the decree or order appealed from (section 12(2)); the day the order was pronounced is already excluded.",
+            "authority_index": 2
+          }
+        ]
+      }
+    },
+    {
+      "rule_id": "in.limitation.cpc.appeal.other-court",
+      "table_kind": "LIMITATION_PERIOD",
+      "jurisdiction": "India",
+      "effective_from": "1964-01-01",
+      "effective_to": null,
+      "authorities": [
+        {
+          "pack_id": "caseforge.india.limitation-rules",
+          "source_id": "cfsrc:caseforge.india.limitation-rules:b1c115da8501b76f",
+          "chunk_id": "cfchunk:caseforge.india.limitation-rules:8d3ac314c7dd076d",
+          "char_start": 150,
+          "char_end": 227,
+          "provision_label": "Limitation Act Schedule, Art. 116(b)"
+        },
+        {
+          "pack_id": "caseforge.india.limitation-rules",
+          "source_id": "cfsrc:caseforge.india.limitation-rules:2b4a8fddfc4aa4c7",
+          "chunk_id": "cfchunk:caseforge.india.limitation-rules:5cf4d3f30d394a42",
+          "char_start": 123,
+          "char_end": 191,
+          "provision_label": "Limitation Act s.12(1)"
+        },
+        {
+          "pack_id": "caseforge.india.limitation-rules",
+          "source_id": "cfsrc:caseforge.india.limitation-rules:2b4a8fddfc4aa4c7",
+          "chunk_id": "cfchunk:caseforge.india.limitation-rules:5cf4d3f30d394a42",
+          "char_start": 394,
+          "char_end": 496,
+          "provision_label": "Limitation Act s.12(2)"
+        },
+        {
+          "pack_id": "caseforge.india.limitation-rules",
+          "source_id": "cfsrc:caseforge.india.limitation-rules:c60c2fa528267fa5",
+          "chunk_id": "cfchunk:caseforge.india.limitation-rules:51f69ec4f0914620",
+          "char_start": 117,
+          "char_end": 158,
+          "provision_label": "Limitation Act s.4"
+        }
+      ],
+      "legal_editor_signoff": null,
+      "trust_state": "DEVELOPMENT_ONLY",
+      "payload": {
+        "deadline_label": "Appeal to a court other than a High Court from a decree or order",
+        "trigger_event_type": "DECREE_OR_ORDER",
+        "applies_to_matter_types": [
+          "CIVIL"
+        ],
+        "period": {
+          "value": 30,
+          "unit": "DAYS"
+        },
+        "counting": {
+          "exclude_trigger_day": true,
+          "roll_forward_if_court_closed": true,
+          "calendar_table_id": null
+        },
+        "exclusions": [
+          {
+            "exclusion_id": "copy-obtaining-time",
+            "condition_fact_type": "COPY_OBTAINING_TIME",
+            "description": "Time requisite for obtaining a copy of the decree or order appealed from (section 12(2)); the day the order was pronounced is already excluded.",
+            "authority_index": 2
+          }
+        ]
+      }
+    },
+    {
+      "rule_id": "in.limitation.hc.appeal.same-court",
+      "table_kind": "LIMITATION_PERIOD",
+      "jurisdiction": "India",
+      "effective_from": "1964-01-01",
+      "effective_to": null,
+      "authorities": [
+        {
+          "pack_id": "caseforge.india.limitation-rules",
+          "source_id": "cfsrc:caseforge.india.limitation-rules:b1c115da8501b76f",
+          "chunk_id": "cfchunk:caseforge.india.limitation-rules:8d3ac314c7dd076d",
+          "char_start": 245,
+          "char_end": 330,
+          "provision_label": "Limitation Act Schedule, Art. 117"
+        },
+        {
+          "pack_id": "caseforge.india.limitation-rules",
+          "source_id": "cfsrc:caseforge.india.limitation-rules:2b4a8fddfc4aa4c7",
+          "chunk_id": "cfchunk:caseforge.india.limitation-rules:5cf4d3f30d394a42",
+          "char_start": 123,
+          "char_end": 191,
+          "provision_label": "Limitation Act s.12(1)"
+        },
+        {
+          "pack_id": "caseforge.india.limitation-rules",
+          "source_id": "cfsrc:caseforge.india.limitation-rules:2b4a8fddfc4aa4c7",
+          "chunk_id": "cfchunk:caseforge.india.limitation-rules:5cf4d3f30d394a42",
+          "char_start": 394,
+          "char_end": 496,
+          "provision_label": "Limitation Act s.12(2)"
+        },
+        {
+          "pack_id": "caseforge.india.limitation-rules",
+          "source_id": "cfsrc:caseforge.india.limitation-rules:c60c2fa528267fa5",
+          "chunk_id": "cfchunk:caseforge.india.limitation-rules:51f69ec4f0914620",
+          "char_start": 117,
+          "char_end": 158,
+          "provision_label": "Limitation Act s.4"
+        }
+      ],
+      "legal_editor_signoff": null,
+      "trust_state": "DEVELOPMENT_ONLY",
+      "payload": {
+        "deadline_label": "Appeal from a High Court decree or order to the same Court",
+        "trigger_event_type": "DECREE_OR_ORDER",
+        "applies_to_matter_types": [
+          "CIVIL"
+        ],
+        "period": {
+          "value": 30,
+          "unit": "DAYS"
+        },
+        "counting": {
+          "exclude_trigger_day": true,
+          "roll_forward_if_court_closed": true,
+          "calendar_table_id": null
+        },
+        "exclusions": [
+          {
+            "exclusion_id": "copy-obtaining-time",
+            "condition_fact_type": "COPY_OBTAINING_TIME",
+            "description": "Time requisite for obtaining a copy of the decree or order appealed from (section 12(2)); the day the order was pronounced is already excluded.",
+            "authority_index": 2
+          }
+        ]
+      }
+    },
+    {
+      "rule_id": "in.limitation.summary-suit.leave-to-defend",
+      "table_kind": "LIMITATION_PERIOD",
+      "jurisdiction": "India",
+      "effective_from": "1964-01-01",
+      "effective_to": null,
+      "authorities": [
+        {
+          "pack_id": "caseforge.india.limitation-rules",
+          "source_id": "cfsrc:caseforge.india.limitation-rules:c3a96b50385c6e93",
+          "chunk_id": "cfchunk:caseforge.india.limitation-rules:70ec9f7114db4fce",
+          "char_start": 0,
+          "char_end": 75,
+          "provision_label": "Limitation Act Schedule, Art. 118"
+        },
+        {
+          "pack_id": "caseforge.india.limitation-rules",
+          "source_id": "cfsrc:caseforge.india.limitation-rules:2b4a8fddfc4aa4c7",
+          "chunk_id": "cfchunk:caseforge.india.limitation-rules:5cf4d3f30d394a42",
+          "char_start": 123,
+          "char_end": 191,
+          "provision_label": "Limitation Act s.12(1)"
+        },
+        {
+          "pack_id": "caseforge.india.limitation-rules",
+          "source_id": "cfsrc:caseforge.india.limitation-rules:c60c2fa528267fa5",
+          "chunk_id": "cfchunk:caseforge.india.limitation-rules:51f69ec4f0914620",
+          "char_start": 117,
+          "char_end": 158,
+          "provision_label": "Limitation Act s.4"
+        }
+      ],
+      "legal_editor_signoff": null,
+      "trust_state": "DEVELOPMENT_ONLY",
+      "payload": {
+        "deadline_label": "Application for leave to appear and defend a summary suit",
+        "trigger_event_type": "SUMMONS_SERVED",
+        "applies_to_matter_types": [
+          "CIVIL"
+        ],
+        "period": {
+          "value": 10,
+          "unit": "DAYS"
+        },
+        "counting": {
+          "exclude_trigger_day": true,
+          "roll_forward_if_court_closed": true,
+          "calendar_table_id": null
+        },
+        "exclusions": []
+      }
+    },
+    {
+      "rule_id": "in.limitation.cpc.legal-representative",
+      "table_kind": "LIMITATION_PERIOD",
+      "jurisdiction": "India",
+      "effective_from": "1964-01-01",
+      "effective_to": null,
+      "authorities": [
+        {
+          "pack_id": "caseforge.india.limitation-rules",
+          "source_id": "cfsrc:caseforge.india.limitation-rules:c3a96b50385c6e93",
+          "chunk_id": "cfchunk:caseforge.india.limitation-rules:70ec9f7114db4fce",
+          "char_start": 430,
+          "char_end": 507,
+          "provision_label": "Limitation Act Schedule, Art. 120"
+        },
+        {
+          "pack_id": "caseforge.india.limitation-rules",
+          "source_id": "cfsrc:caseforge.india.limitation-rules:2b4a8fddfc4aa4c7",
+          "chunk_id": "cfchunk:caseforge.india.limitation-rules:5cf4d3f30d394a42",
+          "char_start": 123,
+          "char_end": 191,
+          "provision_label": "Limitation Act s.12(1)"
+        },
+        {
+          "pack_id": "caseforge.india.limitation-rules",
+          "source_id": "cfsrc:caseforge.india.limitation-rules:c60c2fa528267fa5",
+          "chunk_id": "cfchunk:caseforge.india.limitation-rules:51f69ec4f0914620",
+          "char_start": 117,
+          "char_end": 158,
+          "provision_label": "Limitation Act s.4"
+        }
+      ],
+      "legal_editor_signoff": null,
+      "trust_state": "DEVELOPMENT_ONLY",
+      "payload": {
+        "deadline_label": "Application to bring the legal representative of a deceased party on record",
+        "trigger_event_type": "PARTY_DEATH",
+        "applies_to_matter_types": [
+          "CIVIL"
+        ],
+        "period": {
+          "value": 90,
+          "unit": "DAYS"
+        },
+        "counting": {
+          "exclude_trigger_day": true,
+          "roll_forward_if_court_closed": true,
+          "calendar_table_id": null
+        },
+        "exclusions": []
+      }
+    },
+    {
+      "rule_id": "in.limitation.cpc.set-aside-abatement",
+      "table_kind": "LIMITATION_PERIOD",
+      "jurisdiction": "India",
+      "effective_from": "1964-01-01",
+      "effective_to": null,
+      "authorities": [
+        {
+          "pack_id": "caseforge.india.limitation-rules",
+          "source_id": "cfsrc:caseforge.india.limitation-rules:c3a96b50385c6e93",
+          "chunk_id": "cfchunk:caseforge.india.limitation-rules:70ec9f7114db4fce",
+          "char_start": 718,
+          "char_end": 790,
+          "provision_label": "Limitation Act Schedule, Art. 121"
+        },
+        {
+          "pack_id": "caseforge.india.limitation-rules",
+          "source_id": "cfsrc:caseforge.india.limitation-rules:2b4a8fddfc4aa4c7",
+          "chunk_id": "cfchunk:caseforge.india.limitation-rules:5cf4d3f30d394a42",
+          "char_start": 123,
+          "char_end": 191,
+          "provision_label": "Limitation Act s.12(1)"
+        },
+        {
+          "pack_id": "caseforge.india.limitation-rules",
+          "source_id": "cfsrc:caseforge.india.limitation-rules:c60c2fa528267fa5",
+          "chunk_id": "cfchunk:caseforge.india.limitation-rules:51f69ec4f0914620",
+          "char_start": 117,
+          "char_end": 158,
+          "provision_label": "Limitation Act s.4"
+        }
+      ],
+      "legal_editor_signoff": null,
+      "trust_state": "DEVELOPMENT_ONLY",
+      "payload": {
+        "deadline_label": "Application to set aside an abatement",
+        "trigger_event_type": "ABATEMENT",
+        "applies_to_matter_types": [
+          "CIVIL"
+        ],
+        "period": {
+          "value": 60,
+          "unit": "DAYS"
+        },
+        "counting": {
+          "exclude_trigger_day": true,
+          "roll_forward_if_court_closed": true,
+          "calendar_table_id": null
+        },
+        "exclusions": []
+      }
+    },
+    {
+      "rule_id": "in.limitation.restore-dismissed-for-default",
+      "table_kind": "LIMITATION_PERIOD",
+      "jurisdiction": "India",
+      "effective_from": "1964-01-01",
+      "effective_to": null,
+      "authorities": [
+        {
+          "pack_id": "caseforge.india.limitation-rules",
+          "source_id": "cfsrc:caseforge.india.limitation-rules:c3a96b50385c6e93",
+          "chunk_id": "cfchunk:caseforge.india.limitation-rules:70ec9f7114db4fce",
+          "char_start": 818,
+          "char_end": 889,
+          "provision_label": "Limitation Act Schedule, Art. 122"
+        },
+        {
+          "pack_id": "caseforge.india.limitation-rules",
+          "source_id": "cfsrc:caseforge.india.limitation-rules:2b4a8fddfc4aa4c7",
+          "chunk_id": "cfchunk:caseforge.india.limitation-rules:5cf4d3f30d394a42",
+          "char_start": 123,
+          "char_end": 191,
+          "provision_label": "Limitation Act s.12(1)"
+        },
+        {
+          "pack_id": "caseforge.india.limitation-rules",
+          "source_id": "cfsrc:caseforge.india.limitation-rules:c60c2fa528267fa5",
+          "chunk_id": "cfchunk:caseforge.india.limitation-rules:51f69ec4f0914620",
+          "char_start": 117,
+          "char_end": 158,
+          "provision_label": "Limitation Act s.4"
+        }
+      ],
+      "legal_editor_signoff": null,
+      "trust_state": "DEVELOPMENT_ONLY",
+      "payload": {
+        "deadline_label": "Application to restore a matter dismissed for default",
+        "trigger_event_type": "DISMISSAL_FOR_DEFAULT",
+        "applies_to_matter_types": [
+          "CIVIL"
+        ],
+        "period": {
+          "value": 30,
+          "unit": "DAYS"
+        },
+        "counting": {
+          "exclude_trigger_day": true,
+          "roll_forward_if_court_closed": true,
+          "calendar_table_id": null
+        },
+        "exclusions": []
+      }
+    }
+  ]
+}

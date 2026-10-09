@@ -1,0 +1,20 @@
+{
+  "batch": "B-S4-11",
+  "fixture_sha256": "ae4ac55da440f46a928ee5b4a5065561a1ff89ee1bf8dbd9beb017e81b675fbb",
+  "cases": 21,
+  "acs": {
+    "AC-S4-06.2": {
+      "status": "BLOCKED",
+      "reason": "pass --cargo-log with `cargo test --lib` output"
+    },
+    "AC-S4-06.3": {
+      "status": "BLOCKED",
+      "reason": "pass --cargo-log with `cargo test --lib` output"
+    },
+    "AC-S4-06.1": {
+      "status": "BLOCKED",
+      "reason": "100% match with legal-editor answers needs real signed rule rows and court calendars (Q-S4-02, Q-S4-11). The shipped limitation rules (caseforge.india.limitation-rules) are DEVELOPMENT_ONLY; no court calendar is installed, so shipped rules give a range, not a single date."
+    }
+  },
+  "errors": []
+}

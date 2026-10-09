@@ -1,0 +1,61 @@
+{
+  "schema_version": "2.1.0",
+  "metadata_version": "2.0.0",
+  "pack_id": "caseforge.india.limitation-rules",
+  "pack_kind": "official",
+  "jurisdiction": "India",
+  "jurisdiction_path": [
+    "India",
+    "Central Law",
+    "Limitation"
+  ],
+  "version": "1.0.0-beta.1",
+  "display_name": "India Limitation Rules for Civil Appeals (Limitation Act, 1963) - Development",
+  "description": "Verbatim sections 4 and 12 and Schedule Articles 116-122 of the Limitation Act, 1963, with an unsigned LIMITATION_PERIOD rule table for the Deadlines view.",
+  "content_sha256": "1236476463ea8ab797661eb7fe18baa9f9350892a1f22fe84b90c7824ca510b7",
+  "authoritative_content_sha256": "c9c097eef5d08d2cdaa72c80ff61c046ade86ac18acca1cdc5516fd1c7081bb2",
+  "headnotes_stripped": true,
+  "signature_alg": "Ed25519",
+  "signer_key_id": "caseforge-official-dev-2026",
+  "trust_level": "OFFICIAL_VERIFIED",
+  "controlled_beta_eligible": true,
+  "sources_file": "metadata/legal_sources.json",
+  "chunks_file": "metadata/legal_chunks.json",
+  "files": [
+    {
+      "path": "content/limitation_act_1963_extract.txt",
+      "sha256": "42b2513e277fdfd144980610df72037599311cb7d9a998c2cc9e337bfa0ac777",
+      "bytes": 3058,
+      "role": "AUTHORITATIVE_CONTENT"
+    },
+    {
+      "path": "metadata/legal_chunks.json",
+      "sha256": "22d92723ee64450852bc918a1c660b7df8d1750926eb22e5a473d396133e11bb",
+      "bytes": 10714,
+      "role": "LEGAL_CHUNKS"
+    },
+    {
+      "path": "metadata/legal_sources.json",
+      "sha256": "c6c7d7b780545b820ebc94a31b271f98b4ed9246a9dcd2a5aba54b861a6768c8",
+      "bytes": 9510,
+      "role": "LEGAL_SOURCES"
+    },
+    {
+      "path": "metadata/rule_tables/india_limitation_civil_appeals.json",
+      "sha256": "04784b071f7df092fed7080894c134bbc0fdbab7cc77b0340acfe7c2972b9df8",
+      "bytes": 15698,
+      "role": "RULE_TABLE"
+    }
+  ],
+  "publisher": "India Code / Ministry of Law and Justice; CaseForge original matter",
+  "updated_at": "2026-10-09",
+  "source_status": "CURRENT",
+  "supersedes_version": null,
+  "superseded_by_version": null,
+  "editorial_review_status": "TWO_LEGAL_EDITORS_PENDING",
+  "rights_basis": "Copyright Act, 1957, section 52(1)(q)(ii)",
+  "rule_tables_files": [
+    "metadata/rule_tables/india_limitation_civil_appeals.json"
+  ],
+  "currency_date": "2026-10-09"
+}

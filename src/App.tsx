@@ -19,6 +19,7 @@ import GuardrailsView from "./components/GuardrailsView";
 import WorkflowJourney from "./components/WorkflowJourney";
 import OppositionView from "./components/OppositionView";
 import WitnessView from "./components/WitnessView";
+import DeadlinesView from "./components/DeadlinesView";
 import { ModelTierSelector } from "./components/ModelTierSelector";
 import {
   deriveLawyerWorkflow,
@@ -154,6 +155,7 @@ type NavId =
   | "court"
   | "opposition"
   | "witnesses"
+  | "deadlines"
   | "library"
   | "practice"
   | "settings";
@@ -182,6 +184,7 @@ const NAV: { id: NavId; label: string; section?: string; badge?: string }[] = [
   { id: "court", label: "Mock Court" },
   { id: "opposition", label: "Opponent's Filing" },
   { id: "witnesses", label: "Witnesses" },
+  { id: "deadlines", label: "Deadlines" },
   { id: "practice", label: "Integrity lab" },
   { id: "library", label: "Legal Authorities", section: "Library" },
   { id: "licence", label: "Licence", section: "App" },
@@ -189,7 +192,7 @@ const NAV: { id: NavId; label: string; section?: string; badge?: string }[] = [
   { id: "guardrails", label: "Guardrails" },
   { id: "settings", label: "System" },
 ];
-const PRIMARY_NAV_IDS:NavId[]=["home","cases","workspace","digest","library","integrity","court","opposition","witnesses"];
+const PRIMARY_NAV_IDS:NavId[]=["home","cases","workspace","digest","library","integrity","court","opposition","witnesses","deadlines"];
 const ADVANCED_NAV_IDS:NavId[]=["builder","voice","experience","practice","licence","protection","guardrails","settings"];
 const PRIMARY_NAV=NAV.filter(item=>PRIMARY_NAV_IDS.includes(item.id));
 const ADVANCED_NAV=NAV.filter(item=>ADVANCED_NAV_IDS.includes(item.id));
@@ -260,6 +263,8 @@ function titleFor(nav: NavId): { title: string; sub: string } {
       return { title: "Opponent's Filing", sub: "Check their citations, record conflicts and new arguments · never added to your facts" };
     case "witnesses":
       return { title: "Witnesses", sub: "Statements lined up by topic · contradictions and omissions with exact quotes · impeachment kit" };
+    case "deadlines":
+      return { title: "Deadlines", sub: "Limitation and procedural dates computed from the rule, the start event and the court calendar · always to verify" };
     case "library":
       return { title: "Legal Authorities", sub: "Confirm the applicable law and source-backed working set" };
     case "practice":
@@ -1957,6 +1962,8 @@ export default function App() {
               onRehearse={(draft) => { setCourtSeed({ format: "Witness_Cross_Examination", draft, nonce: Date.now() }); setNav("court"); }}
             />
           )}
+
+          {nav === "deadlines" && <DeadlinesView activeCase={activeCase} />}
 
           {nav === "library" && (
             <>

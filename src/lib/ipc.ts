@@ -2863,3 +2863,36 @@ export interface ReasoningResult {
 export async function reasoningRun(caseId: string, question: string, depth: ReasoningDepth): Promise<ReasoningResult> {
   return invoke<ReasoningResult>("reasoning_run", { caseId, question, depth });
 }
+
+// --- B-S4-11 Deadline & Limitation Watch ---
+export interface DeadlineRecord {
+  schema_version: "1.0.0"; deadline_id: string; case_id: string; label: string; rule_id: string;
+  authority: { pack_id: string; source_id: string; chunk_id: string; provision_label?: string | null; rule_trust_state?: string };
+  trigger: { event_node_id: string; event_type: string; date: string | null; date_precision: string; date_range: { from: string; to: string } | null; locator: { doc_id: string; excerpt: string }; origin: string };
+  computation: {
+    period: { value: number; unit: "DAYS" | "MONTHS" | "YEARS" }; exclude_trigger_day: boolean;
+    exclusions_applied: { exclusion_id: string; rule_id: string; days_excluded: number; triggering_fact_node_id: string; locator: { doc_id: string; excerpt: string } }[];
+    calendar_rule_ids: string[]; rolled_forward_from: string | null;
+  };
+  result: { kind: "DATE" | "RANGE"; date: string | null; range_from: string | null; range_to: string | null; uncertainty_reasons: string[] };
+  verify_label: "VERIFY"; guardrail: "G9"; computed_at: string; engine_version: "caseforge.deadlines.v1";
+}
+export interface DeadlineRuleInfo {
+  rule_id: string; label: string; trigger_event_type: string; period: { value: number; unit: "DAYS" | "MONTHS" | "YEARS" };
+  exclude_trigger_day: boolean; roll_forward: boolean; calendar_table_id: string | null; trust_state: string; provision: string | null;
+  exclusions: { exclusion_id: string; fact_type: string }[];
+}
+export interface DeadlinesState {
+  engine_version: string; jurisdiction: string; rules: DeadlineRuleInfo[];
+  events: { event_id: string; summary: string; date: string; precision: string; date_range: [string, string] | null; other_dates: string[]; doc_id: string; excerpt: string }[];
+  assignments: { rule_id: string; event_id: string }[];
+  facts: { fact_type: string; days: number; confirmed: boolean; doc_id: string; excerpt: string }[];
+  records: DeadlineRecord[]; errors: { rule_id: string; event_id: string; error: string }[];
+  rule_problems: string[]; rejected_tables: string[]; calendar_tables: string[]; unsigned_rules: boolean;
+}
+export async function deadlinesCompute(caseId: string): Promise<DeadlinesState> { return invoke<DeadlinesState>("deadlines_compute", { caseId }); }
+export async function deadlinesAssign(caseId: string, ruleId: string, eventId: string): Promise<void> { return invoke<void>("deadlines_assign", { caseId, ruleId, eventId }); }
+export async function deadlinesUnassign(caseId: string, ruleId: string, eventId: string): Promise<void> { return invoke<void>("deadlines_unassign", { caseId, ruleId, eventId }); }
+export async function deadlinesFactSave(caseId: string, factType: string, days: number, confirmed: boolean, docId: string, excerpt: string): Promise<void> { return invoke<void>("deadlines_fact_save", { caseId, factType, days, confirmed, docId, excerpt }); }
+export async function deadlinesFactRemove(caseId: string, factType: string): Promise<void> { return invoke<void>("deadlines_fact_remove", { caseId, factType }); }
+export async function deadlinesExportIcs(caseId: string): Promise<string> { return invoke<string>("deadlines_export_ics", { caseId }); }

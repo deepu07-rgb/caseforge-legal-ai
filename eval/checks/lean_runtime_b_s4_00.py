@@ -36,6 +36,7 @@ DETERMINISTIC_ENGINES = [
     "src-tauri/src/guardrails/mod.rs",
     "src-tauri/src/answer_feedback.rs",
     "src-tauri/src/reasoning.rs",
+    "src-tauri/src/deadlines.rs",
 ]
 LLM_TOKENS = re.compile(r"infer_llm|ollama|openai|llm_chat|llama_cpp|chat_with_timeout", re.I)
 

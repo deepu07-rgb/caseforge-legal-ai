@@ -276,6 +276,73 @@ impl Calendars {
     }
 }
 
+/// First and last day of a `YYYY-MM` or `YYYY` expression.
+fn partial_span(s: &str) -> Option<(Date, Date)> {
+    let s = s.trim();
+    match s.len() {
+        7 if s.as_bytes()[4] == b'-' => {
+            let (y, m): (i32, u32) = (s.get(0..4)?.parse().ok()?, s.get(5..7)?.parse().ok()?);
+            Some((Date::ymd(y, m, 1)?, Date::ymd(y, m, days_in_month(y, m))?))
+        }
+        4 => {
+            let y: i32 = s.parse().ok()?;
+            Some((Date::ymd(y, 1, 1)?, Date::ymd(y, 12, 31)?))
+        }
+        _ => None,
+    }
+}
+
+/// The trigger a case-graph chronology event gives to a rule that runs from `rule_trigger_type` (counsel assigned the
+/// event to that rule). Precision, ambiguity and the source location come from the event itself, never from a guess:
+/// an unresolved or relative date is UNKNOWN, a month or year is a range, an ambiguous or disputed day keeps every
+/// candidate date so the result becomes a range.
+pub fn trigger_from_event(event: &Value, rule_trigger_type: &str) -> Trigger {
+    let dx = &event["date_expression"];
+    let precision = dx["precision"].as_str().or(event["date_precision"].as_str()).unwrap_or("unknown");
+    let status = dx["status"].as_str().unwrap_or("resolved");
+    let resolved = dx["resolved"].as_str().filter(|s| !s.is_empty()).or(event["date"].as_str()).unwrap_or("");
+    let candidates: Vec<String> = dx["candidates"].as_array().into_iter().flatten().filter_map(Value::as_str).filter(|c| Date::parse(c).is_some()).map(str::to_string).collect();
+    let unknown = || ("UNKNOWN", None, None, Vec::new());
+    let (prec, date, range, conflicting): (&str, Option<String>, Option<(String, String)>, Vec<String>) = if status == "unresolved" {
+        unknown()
+    } else {
+        match precision {
+            "day" => {
+                let first = Date::parse(resolved).map(Date::iso).or_else(|| candidates.first().cloned());
+                match first {
+                    Some(d) => ("DAY", Some(d.clone()), None, candidates.iter().filter(|c| **c != d).cloned().collect()),
+                    None => unknown(),
+                }
+            }
+            "month" | "year" => match partial_span(resolved) {
+                Some((a, b)) => (if precision == "month" { "MONTH" } else { "YEAR" }, None, Some((a.iso(), b.iso())), Vec::new()),
+                None => unknown(),
+            },
+            "range" => match dx["range_start"].as_str().and_then(Date::parse).zip(dx["range_end"].as_str().and_then(Date::parse)) {
+                Some((a, b)) => ("RANGE", None, Some((a.iso(), b.iso())), Vec::new()),
+                None => unknown(),
+            },
+            _ => unknown(),
+        }
+    };
+    let source = &event["provenance"]["sources"][0];
+    let quote = source["quote"].as_str().filter(|q| !q.trim().is_empty()).or(event["summary"].as_str()).unwrap_or("");
+    let origin = match event["provenance"]["origin"].as_str() {
+        Some(o @ ("SOURCED_BY_COUNSEL" | "USER_EDIT")) => o,
+        _ => "EXTRACTED",
+    };
+    Trigger {
+        event_node_id: event["event_id"].as_str().unwrap_or("").to_string(),
+        event_type: rule_trigger_type.to_string(),
+        date,
+        precision: prec.to_string(),
+        range,
+        conflicting,
+        locator: Locator { doc_id: source["doc_id"].as_str().unwrap_or("").to_string(), excerpt: quote.to_string() },
+        origin: origin.to_string(),
+    }
+}
+
 pub struct Inputs<'a> {
     pub case_id: &'a str,
     pub rules: &'a [Rule],
@@ -625,6 +692,84 @@ mod tests {
         if let Some(dir) = std::env::var_os("CASEFORGE_EVIDENCE_DIR") {
             std::fs::write(PathBuf::from(dir).join("deadline_records.json"), serde_json::to_vec_pretty(&records).unwrap()).unwrap();
         }
+    }
+
+    #[test]
+    fn chronology_events_become_triggers_without_guessing() {
+        let ev = |dx: Value, date: &str, origin: &str| json!({"event_id": "event_0001", "date": date, "date_precision": dx["precision"], "date_expression": dx, "summary": "The order was passed.", "provenance": {"sources": [{"doc_id": "doc-9", "page_index": 2, "quote": "order passed on 15 January 2024"}], "origin": origin, "counsel_confirmed": false}});
+        let dx = |precision: &str, status: &str, resolved: Value, cands: Vec<&str>| json!({"raw": "x", "kind": "exact", "precision": precision, "status": status, "candidates": cands, "resolved": resolved, "range_start": null, "range_end": null});
+        let t = trigger_from_event(&ev(dx("day", "resolved", json!("2024-01-15"), vec![]), "2024-01-15", "EXTRACTED"), "ORDER_PASSED");
+        assert_eq!((t.precision.as_str(), t.date.as_deref(), t.event_type.as_str(), t.locator.doc_id.as_str(), t.locator.excerpt.as_str()), ("DAY", Some("2024-01-15"), "ORDER_PASSED", "doc-9", "order passed on 15 January 2024"));
+        let t = trigger_from_event(&ev(dx("day", "ambiguous", json!(null), vec!["2024-03-04", "2024-04-03"]), "04/03/2024", "EXTRACTED"), "E");
+        assert_eq!((t.precision.as_str(), t.date.as_deref(), t.conflicting.as_slice()), ("DAY", Some("2024-03-04"), &["2024-04-03".to_string()][..]), "both readings are kept");
+        let t = trigger_from_event(&ev(dx("month", "resolved", json!("2024-02"), vec![]), "2024-02", "EXTRACTED"), "E");
+        assert_eq!((t.precision.as_str(), t.range.clone()), ("MONTH", Some(("2024-02-01".into(), "2024-02-29".into()))));
+        let t = trigger_from_event(&ev(dx("year", "resolved", json!("2023"), vec![]), "2023", "EXTRACTED"), "E");
+        assert_eq!((t.precision.as_str(), t.range.clone()), ("YEAR", Some(("2023-01-01".into(), "2023-12-31".into()))));
+        let mut d = dx("range", "resolved", json!(null), vec![]);
+        d["range_start"] = json!("2024-05-01");
+        d["range_end"] = json!("2024-05-09");
+        assert_eq!(trigger_from_event(&ev(d, "x", "EXTRACTED"), "E").range, Some(("2024-05-01".into(), "2024-05-09".into())));
+        for (precision, status) in [("relative", "resolved"), ("unknown", "unresolved"), ("day", "unresolved")] {
+            let t = trigger_from_event(&ev(dx(precision, status, json!("2024-01-15"), vec![]), "later", "EXTRACTED"), "E");
+            assert_eq!(t.precision, "UNKNOWN", "{precision}/{status}");
+        }
+        assert_eq!(trigger_from_event(&ev(dx("day", "resolved", json!("2024-01-15"), vec![]), "2024-01-15", "SOURCED_BY_COUNSEL"), "E").origin, "SOURCED_BY_COUNSEL");
+        assert_eq!(trigger_from_event(&ev(dx("day", "resolved", json!("2024-01-15"), vec![]), "2024-01-15", "INFERRED"), "E").origin, "EXTRACTED", "only counsel origins are kept as such");
+        // An event with no source document yields a trigger that compute() refuses (no locator), not a guessed one.
+        let mut bare = ev(dx("day", "resolved", json!("2024-01-15"), vec![]), "2024-01-15", "EXTRACTED");
+        bare["provenance"]["sources"] = json!([]);
+        assert_eq!(trigger_from_event(&bare, "E").locator.doc_id, "");
+    }
+
+    #[test]
+    fn shipped_limitation_rules_install_cite_the_right_lines_and_compute() {
+        // The real development pack through the real installer, loader and store; no stand-ins.
+        let pack = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../packs/official/caseforge.india.limitation-rules");
+        let vault = tempfile::tempdir().unwrap();
+        let paths = crate::vault::VaultPaths::new(vault.path().to_path_buf());
+        crate::packs::install_pack_from_dir(&paths, &pack).expect("the rules pack installs");
+        let (tables, rejected) = crate::rule_tables::load_installed(&paths);
+        assert!(rejected.is_empty(), "{rejected:?}");
+        let table = tables.iter().find(|t| t.table_kind == "LIMITATION_PERIOD").expect("limitation table");
+        assert_eq!(table.rows.len(), 7);
+        assert!(table.rows.iter().all(|r| r.trust_state == "DEVELOPMENT_ONLY" && r.signed_by.is_none()), "no row counts as signed off");
+        // Each rule's first authority is the exact line of the Schedule it takes its period from.
+        let store = crate::retrieval::store::open(&paths).unwrap();
+        for r in &table.rows {
+            let a = &r.authorities[0];
+            let chunk = store.get_by_chunk_id(a["chunk_id"].as_str().unwrap()).expect("cited chunk is installed");
+            let cited: String = chunk.text.chars().skip(a["char_start"].as_u64().unwrap() as usize).take((a["char_end"].as_u64().unwrap() - a["char_start"].as_u64().unwrap()) as usize).collect();
+            let period = r.payload["period"]["value"].as_u64().unwrap();
+            let word = match period {
+                10 => "Ten days",
+                30 => "Thirty days",
+                60 => "Sixty days",
+                90 => "Ninety days",
+                other => panic!("unexpected period {other}"),
+            };
+            assert!(cited.contains(word), "{}: '{cited}' should state {word}", r.rule_id);
+        }
+        // A High Court appeal: 90 days from the order, the time to obtain the copy excluded once confirmed. No court
+        // calendar is installed, so the answer is a range whose earliest date is the safe one.
+        let rules: Vec<Rule> = table.rows.iter().filter(|r| r.rule_id == "in.limitation.cpc.appeal.high-court").map(|r| Rule::from_row(r).unwrap()).collect();
+        let trig = Trigger { event_node_id: "ev-1".into(), event_type: "DECREE_OR_ORDER".into(), date: Some("2024-01-15".into()), precision: "DAY".into(), range: None, conflicting: vec![], locator: Locator { doc_id: "doc-order".into(), excerpt: "Decree dated 15 January 2024".into() }, origin: "EXTRACTED".into() };
+        let none = Calendars::default();
+        let without = compute(&Inputs { case_id: "c", rules: &rules, trigger: &trig, facts: &[], calendars: &none, computed_at: "2026-10-09T09:00:00Z" }).unwrap();
+        assert_eq!((without["result"]["kind"].as_str(), without["result"]["range_from"].as_str(), without["result"]["range_to"].as_str()), (Some("RANGE"), Some("2024-04-14"), Some("2024-04-28")));
+        assert_eq!(without["result"]["uncertainty_reasons"], json!(["CALENDAR_MISSING"]));
+        assert_eq!(without["authority"]["provision_label"], "Limitation Act Schedule, Art. 116(a)");
+        assert_eq!(without["authority"]["rule_trust_state"], "DEVELOPMENT_ONLY");
+        let copy = Fact { fact_type: "COPY_OBTAINING_TIME".into(), node_id: "fact-1".into(), days: Some(12), confirmed: true, locator: Locator { doc_id: "doc-copy".into(), excerpt: "Copy applied 2 Feb, ready 14 Feb".into() } };
+        let with = compute(&Inputs { case_id: "c", rules: &rules, trigger: &trig, facts: &[copy], calendars: &none, computed_at: "2026-10-09T09:00:00Z" }).unwrap();
+        assert_eq!((with["result"]["range_from"].as_str(), with["computation"]["exclusions_applied"][0]["days_excluded"].as_u64()), (Some("2024-04-26"), Some(12)));
+        // With the court's calendar the answer is a single date; a Sunday end rolls to the next open day.
+        let mut cal = Calendars::default();
+        cal.add("t", &json!({"court_id": "C", "year": 2024, "closed_dates": [{"date": "2024-04-14", "label": "Sunday"}], "closed_ranges": []})).unwrap();
+        let mut rule = rules[0].clone();
+        rule.calendar_table_id = Some("t".into());
+        let dated = compute(&Inputs { case_id: "c", rules: &[rule], trigger: &trig, facts: &[], calendars: &cal, computed_at: "2026-10-09T09:00:00Z" }).unwrap();
+        assert_eq!((dated["result"]["kind"].as_str(), dated["result"]["date"].as_str(), dated["computation"]["rolled_forward_from"].as_str()), (Some("DATE"), Some("2024-04-15"), Some("2024-04-14")));
     }
 
     #[test]
