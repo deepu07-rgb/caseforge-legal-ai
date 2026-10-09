@@ -26,6 +26,8 @@ mod deadlines;
 mod foundation;
 mod issue_matrix;
 mod treatment;
+mod edition;
+mod record_only;
 mod opposition;
 mod reasoning;
 mod witness;
@@ -300,6 +302,7 @@ fn audit_draft(
     }
     let mgr = vault.get_or_init(&app)?;
     let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
+    edition::require_capability(&edition_of(&mgr)?, &paths.root, "citation_audit")?;
     // B-S4-29: read only the passages this draft needs from the on-disk store.
     let store = retrieval::store::open(&paths)?;
     let small = retrieval::build_small_corpus(&paths, &[])?;
@@ -587,6 +590,9 @@ fn issue_matrix_compute(mgr: &VaultManager, case_id: &str) -> Result<serde_json:
 #[tauri::command]
 fn issue_matrix_build(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<serde_json::Value, String> {
     let mgr = vault.get_or_init(&app)?;
+    let ctx = edition_of(&mgr)?;
+    edition::require_chambers(&ctx)?;
+    edition::require_capability(&ctx, &mgr.vault_paths().map_err(|e| e.to_string())?.root, "issue_matrix")?;
     issue_matrix_compute(&mgr, &case_id)
 }
 
@@ -594,6 +600,7 @@ fn issue_matrix_build(app: AppHandle, vault: State<'_, VaultState>, case_id: Str
 #[tauri::command]
 fn issue_matrix_set_matter_type(app: AppHandle, vault: State<'_, VaultState>, case_id: String, matter_type: Option<String>) -> Result<(), String> {
     let mgr = vault.get_or_init(&app)?;
+    edition::require_chambers(&edition_of(&mgr)?)?;
     match matter_type {
         None => mgr.witness_kv_delete(&case_id, "issue:matter_type").map_err(|e| e.to_string()),
         Some(m) => {
@@ -611,6 +618,7 @@ fn issue_matrix_set_matter_type(app: AppHandle, vault: State<'_, VaultState>, ca
 #[tauri::command]
 fn issue_matrix_add(app: AppHandle, vault: State<'_, VaultState>, case_id: String, text: String) -> Result<issue_matrix::IssueIn, String> {
     let mgr = vault.get_or_init(&app)?;
+    edition::require_chambers(&edition_of(&mgr)?)?;
     if text.trim().is_empty() {
         return Err("CF_ISSUE_TEXT: write the issue".into());
     }
@@ -627,6 +635,7 @@ fn issue_matrix_add(app: AppHandle, vault: State<'_, VaultState>, case_id: Strin
 #[tauri::command]
 fn issue_matrix_decide(app: AppHandle, vault: State<'_, VaultState>, case_id: String, issue_id: String, decision: String, text: Option<String>, merged_into: Option<String>) -> Result<(), String> {
     let mgr = vault.get_or_init(&app)?;
+    edition::require_chambers(&edition_of(&mgr)?)?;
     if !["PROPOSED", "ACCEPTED", "EDITED", "MERGED", "REJECTED"].contains(&decision.as_str()) {
         return Err("CF_ISSUE_DECISION: choose accept, edit, merge or reject".into());
     }
@@ -681,6 +690,7 @@ fn issue_matrix_decide(app: AppHandle, vault: State<'_, VaultState>, case_id: St
 #[tauri::command]
 fn issue_matrix_set_filing(app: AppHandle, vault: State<'_, VaultState>, case_id: String, doc_id: String, party_id: Option<String>) -> Result<(), String> {
     let mgr = vault.get_or_init(&app)?;
+    edition::require_chambers(&edition_of(&mgr)?)?;
     let key = format!("issue:filing:{doc_id}");
     let Some(party_id) = party_id else { return mgr.witness_kv_delete(&case_id, &key).map_err(|e| e.to_string()) };
     if !mgr.doc_list(&case_id).map_err(|e| e.to_string())?.iter().any(|d| d.doc_id == doc_id) {
@@ -697,6 +707,9 @@ fn issue_matrix_set_filing(app: AppHandle, vault: State<'_, VaultState>, case_id
 #[tauri::command]
 fn issue_matrix_memo(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<String, String> {
     let mgr = vault.get_or_init(&app)?;
+    let ctx = edition_of(&mgr)?;
+    edition::require_chambers(&ctx)?;
+    edition::require_capability(&ctx, &mgr.vault_paths().map_err(|e| e.to_string())?.root, "memo_export")?;
     let computed = issue_matrix_compute(&mgr, &case_id)?;
     Ok(issue_matrix::bench_memo(&computed["matrix"], &crate::docpipe::now_rfc3339()))
 }
@@ -859,35 +872,40 @@ fn deadlines_export_ics(app: AppHandle, vault: State<'_, VaultState>, case_id: S
 
 // --- B-S4-28 step-by-step reasoning with best-of-n verification ---
 
-/// Reasons through a question over the matter's working set: several candidate step-by-step ledgers from the local model,
-/// each checked by the host verifier, the best-verified one kept, one targeted repair. A result is called verified only
-/// when the host verified every step. Needs a counsel-confirmed working set, like Mock Court.
-#[tauri::command]
-fn reasoning_run(app: AppHandle, vault: State<'_, VaultState>, case_id: String, question: String, depth: Option<String>) -> Result<serde_json::Value, String> {
-    let question = question.trim().to_string();
-    if question.is_empty() || question.chars().count() > 2000 {
-        return Err("CF_REASONING_QUESTION: enter a question of up to 2000 characters".into());
-    }
-    let depth = reasoning::Depth::parse(depth.as_deref().unwrap_or("CAREFUL")).ok_or_else(|| "CF_REASONING_DEPTH: use QUICK, CAREFUL or THOROUGH".to_string())?;
-    if guardrails::check_user_input(&question).refused {
+/// The reasoning loop shared by counsel's reasoning and the Chambers record-only reasoning. In Chambers the model sees
+/// passages of the record (instead of the case graph) and holds the record-only permit; nothing the question says is a source.
+struct ReasoningRun {
+    result: reasoning::ReasoningResult,
+    sources: Vec<proposition::SupportSource>,
+    status: infer_llm::LlmStatus,
+    elapsed_ms: u64,
+    coverage: Option<serde_json::Value>,
+}
+
+fn reasoning_core(mgr: &VaultManager, case_id: &str, question: &str, depth: reasoning::Depth, chambers: bool) -> Result<ReasoningRun, String> {
+    if guardrails::check_user_input(question).refused {
         return Err("CF_REASONING_INPUT_REFUSED: safety policy blocked the question".into());
     }
     let status = infer_llm::status();
     if !status.controlled_beta_ready {
         return Err(format!("CF_REASONING_MODEL_NOT_READY: {}", status.detail));
     }
-    let mgr = vault.get_or_init(&app)?;
     let profile = mgr
         .list_cases()
         .map_err(|e| e.to_string())?
         .into_iter()
         .find(|c| c.case_id == case_id)
         .ok_or_else(|| "CF_CASE_NOT_FOUND: matter is not registered".to_string())?;
-    let graph = mgr.case_graph_get(&case_id).map_err(|e| e.to_string())?.unwrap_or_else(|| serde_json::json!({}));
-    let set = mgr.working_set_get(&case_id).map_err(|e| e.to_string())?;
-    let readiness = mock_court_retrieval::readiness(&case_id, &profile.jurisdiction, Some(&graph), &set);
-    let retrieval = mock_court_retrieval::retrieve(&readiness, "oral_argument", "counsel", &question, &graph)?;
-    let sources = grounded_mock_court::support_sources(&case_id, &graph, &readiness.graph_version, &question, &retrieval.authorities);
+    let graph = mgr.case_graph_get(case_id).map_err(|e| e.to_string())?.unwrap_or_else(|| serde_json::json!({}));
+    let set = mgr.working_set_get(case_id).map_err(|e| e.to_string())?;
+    let readiness = mock_court_retrieval::readiness(case_id, &profile.jurisdiction, Some(&graph), &set);
+    let retrieval = mock_court_retrieval::retrieve(&readiness, "oral_argument", "counsel", question, &graph)?;
+    let (sources, coverage) = if chambers {
+        let (s, c) = chambers_record_sources(mgr, case_id, question, &retrieval.authorities)?;
+        (s, Some(c))
+    } else {
+        (grounded_mock_court::support_sources(case_id, &graph, &readiness.graph_version, question, &retrieval.authorities), None)
+    };
     let permitted: Vec<String> = retrieval.authorities.iter().map(|a| a.authority_id.clone()).collect();
     let authority_context = retrieval
         .authorities
@@ -900,8 +918,8 @@ fn reasoning_run(app: AppHandle, vault: State<'_, VaultState>, case_id: String, 
     let mut clock = || started.elapsed().as_millis() as u64;
     let mut generate = |attempt: reasoning::Attempt| -> Result<Vec<proposition::PropositionInput>, String> {
         let (user_text, variant) = match &attempt.repair {
-            Some(note) => (reasoning::repair_prompt(&question, note.previous, &note.problems), 0),
-            None => (reasoning::prompt(&question), attempt.variant.min(7)),
+            Some(note) => (reasoning::repair_prompt(question, note.previous, &note.problems), 0),
+            None => (reasoning::prompt(question), attempt.variant.min(7)),
         };
         let left_s = (budget_ms.saturating_sub(started.elapsed().as_millis() as u64) / 1000).clamp(30, 300);
         let request = infer_llm::LlmChatRequest {
@@ -910,7 +928,7 @@ fn reasoning_run(app: AppHandle, vault: State<'_, VaultState>, case_id: String, 
             format: Some("reasoning_steps".into()),
             case_title: Some(profile.cause_title.clone()),
             jurisdiction: Some(profile.jurisdiction.clone()),
-            user_side: Some(profile.user_side.clone()),
+            user_side: Some(if chambers { String::new() } else { profile.user_side.clone() }),
             case_context: None,
             authority_context: Some(authority_context.clone()),
             authority_ids: Some(permitted.clone()),
@@ -930,19 +948,206 @@ fn reasoning_run(app: AppHandle, vault: State<'_, VaultState>, case_id: String, 
         }
         Ok(out.propositions)
     };
+    // B-S4-17: in Chambers this is the only road to the model, and it ends at the G7 classifier.
+    let _permit = chambers.then(edition::record_only_permit);
     let result = reasoning::run(&sources, &permitted, depth, budget_ms, &mut clock, &mut generate);
-    let guarded = guardrails::check_model_output(&question, &result.rendered_text, &status.model, &[]);
+    Ok(ReasoningRun { result, sources, status, elapsed_ms: started.elapsed().as_millis() as u64, coverage })
+}
+
+/// Reasons through a question over the matter's working set: several candidate step-by-step ledgers from the local model,
+/// each checked by the host verifier, the best-verified one kept, one targeted repair. A result is called verified only
+/// when the host verified every step. Needs a counsel-confirmed working set, like Mock Court.
+#[tauri::command]
+fn reasoning_run(app: AppHandle, vault: State<'_, VaultState>, case_id: String, question: String, depth: Option<String>) -> Result<serde_json::Value, String> {
+    let question = question.trim().to_string();
+    if question.is_empty() || question.chars().count() > 2000 {
+        return Err("CF_REASONING_QUESTION: enter a question of up to 2000 characters".into());
+    }
+    let depth = reasoning::Depth::parse(depth.as_deref().unwrap_or("CAREFUL")).ok_or_else(|| "CF_REASONING_DEPTH: use QUICK, CAREFUL or THOROUGH".to_string())?;
+    let mgr = vault.get_or_init(&app)?;
+    edition::require_advocacy(&edition_of(&mgr)?)?; // Chambers reasons through chambers_reason, which is confined to the record
+    let run = reasoning_core(&mgr, &case_id, &question, depth, false)?;
+    let guarded = guardrails::check_model_output(&question, &run.result.rendered_text, &run.status.model, &[]);
     if guarded.refused {
         return Err("CF_REASONING_OUTPUT_REFUSED: the verified reasoning still failed the safety policy".into());
     }
     let output_id = format!("reasoning:{}:{}", case_id, crate::docpipe::now_rfc3339());
     mgr.working_set_select_for_output(&case_id, "REASONING", &output_id).map_err(|e| e.to_string())?;
-    let mut out = serde_json::to_value(&result).map_err(|e| e.to_string())?;
+    let mut out = serde_json::to_value(&run.result).map_err(|e| e.to_string())?;
     out["question"] = serde_json::json!(question);
-    out["model"] = serde_json::json!({"model": status.model, "backend": status.backend, "digest": status.model_digest});
-    out["elapsed_ms"] = serde_json::json!(started.elapsed().as_millis() as u64);
+    out["model"] = serde_json::json!({"model": run.status.model, "backend": run.status.backend, "digest": run.status.model_digest});
+    out["elapsed_ms"] = serde_json::json!(run.elapsed_ms);
     out["disclaimer"] = serde_json::json!("Preparation material only. Not legal advice. Each verified step shows the supplied source it copies from; counsel inspects every source.");
     Ok(out)
+}
+
+// --- B-S4-17 Chambers Edition shell and record-only mode (G7) ---
+
+fn edition_of(mgr: &VaultManager) -> Result<edition::EditionContext, String> {
+    mgr.refresh_edition().map_err(|e| e.to_string())
+}
+
+/// What the licence entitles, the screens to show and hide, and the court's pilot configuration.
+#[tauri::command]
+fn edition_status(app: AppHandle, vault: State<'_, VaultState>) -> Result<serde_json::Value, String> {
+    let mgr = vault.get_or_init(&app)?;
+    let ctx = edition_of(&mgr)?;
+    let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
+    Ok(edition::status_json(&ctx, &paths.root))
+}
+
+/// Record-only is on unless the judge switched it off, and always on once a judgment scaffold exists.
+fn chambers_record_only(mgr: &VaultManager, case_id: &str) -> Result<(bool, bool), String> {
+    let scaffold = !deadline_kv(mgr, case_id, "scaffold:")?.is_empty();
+    let stored = deadline_kv(mgr, case_id, "chambers:record_only")?.first().and_then(|v| v["on"].as_bool()).unwrap_or(true);
+    Ok((stored || scaffold, scaffold))
+}
+
+#[tauri::command]
+fn chambers_status(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<serde_json::Value, String> {
+    let mgr = vault.get_or_init(&app)?;
+    let ctx = edition_of(&mgr)?;
+    edition::require_chambers(&ctx)?;
+    let (on, scaffold) = chambers_record_only(&mgr, &case_id)?;
+    let withheld = deadline_kv(&mgr, &case_id, "chambers:g7:")?.len();
+    let filings = deadline_kv(&mgr, &case_id, "issue:filing:")?.len();
+    let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
+    let caps: serde_json::Map<String, serde_json::Value> = edition::PILOT_CAPABILITIES.iter().map(|c| (c.to_string(), serde_json::json!(edition::require_capability(&ctx, &paths.root, c).is_ok()))).collect();
+    Ok(serde_json::json!({
+        "record_only": on, "scaffold_exists": scaffold, "locked": scaffold, "withheld_total": withheld, "filings_assigned": filings, "capabilities": caps,
+        "classes": record_only::CLASSES,
+        "note": "Record-only: every statement shown is tied to the filings, the evidence and orders on the record, or installed law. Anything else is withheld.",
+    }))
+}
+
+/// Switches record-only mode on or off for a matter. Off is refused once a judgment scaffold exists.
+#[tauri::command]
+fn chambers_set_record_only(app: AppHandle, vault: State<'_, VaultState>, case_id: String, enabled: bool) -> Result<(), String> {
+    let mgr = vault.get_or_init(&app)?;
+    edition::require_chambers(&edition_of(&mgr)?)?;
+    let (_, scaffold) = chambers_record_only(&mgr, &case_id)?;
+    record_only::check_change(scaffold, enabled)?;
+    mgr.witness_kv_put(&case_id, "chambers:record_only", &serde_json::json!({"on": enabled, "at": crate::docpipe::now_rfc3339()})).map_err(|e| e.to_string())
+}
+
+/// Statements withheld by record-only mode: when, which, why, and a hash of the text (never the text).
+#[tauri::command]
+fn chambers_g7_log(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<Vec<serde_json::Value>, String> {
+    let mgr = vault.get_or_init(&app)?;
+    edition::require_chambers(&edition_of(&mgr)?)?;
+    deadline_kv(&mgr, &case_id, "chambers:g7:")
+}
+
+/// Passages of the record to offer the model for a question: paragraphs of every document in the matter that share a word
+/// with the question, best first, within what the model can take. The question itself is never a source.
+fn chambers_record_sources(mgr: &VaultManager, case_id: &str, question: &str, authorities: &[mock_court_retrieval::MockCourtAuthority]) -> Result<(Vec<proposition::SupportSource>, serde_json::Value), String> {
+    const MAX_SOURCES: usize = 40;
+    const MAX_CHARS: usize = 40_000;
+    const MAX_UNIT_CHARS: usize = 2_500;
+    let words = answer_feedback::keywords(question);
+    let mut left_sources = MAX_SOURCES.saturating_sub(authorities.len());
+    let mut left_chars = MAX_CHARS.saturating_sub(authorities.iter().map(|a| a.exact_text.chars().count()).sum::<usize>() + 2_000);
+    let docs = mgr.doc_list(case_id).map_err(|e| e.to_string())?;
+    let mut cands: Vec<(usize, usize, proposition::SupportSource)> = Vec::new();
+    let (mut considered, mut truncated) = (0usize, 0usize);
+    for d in &docs {
+        let pages = if d.type_tag == docpipe::EXTERNAL_FILING_TAG { docpipe::external_filing_pages(mgr, case_id, &d.doc_id)?.1 } else { docpipe::statement_pages(mgr, case_id, &d.doc_id)?.1 };
+        for (pi, page) in pages.iter().enumerate() {
+            let paras = opposition::paragraphs(std::slice::from_ref(page));
+            let units: Vec<(String, String)> = if paras.is_empty() {
+                if page.trim().is_empty() { vec![] } else { vec![(format!("page {}", pi + 1), page.trim().to_string())] }
+            } else {
+                paras.into_iter().map(|p| (p.id, p.text)).collect()
+            };
+            for (label, text) in units {
+                considered += 1;
+                let score = words.intersection(&answer_feedback::keywords(&text)).count();
+                if score == 0 {
+                    continue;
+                }
+                let text = if text.chars().count() > MAX_UNIT_CHARS {
+                    truncated += 1;
+                    text.chars().take(MAX_UNIT_CHARS).collect()
+                } else {
+                    text
+                };
+                let order = cands.len();
+                cands.push((score, order, proposition::SupportSource {
+                    support_id: format!("rec:{}:{}:{}", d.doc_id, pi + 1, label),
+                    kind: "MATTER_SOURCE".into(),
+                    exact_text: text,
+                    source_id: None,
+                    chunk_id: None,
+                    authority_id: None,
+                    doc_id: Some(d.doc_id.clone()),
+                    page: Some(pi as i64 + 1),
+                    paragraph: Some(label),
+                    trust_level: None,
+                    temporal_status: None,
+                    superseded_status: None,
+                    permitted: true,
+                }));
+            }
+        }
+    }
+    cands.sort_by(|a, b| b.0.cmp(&a.0).then(a.1.cmp(&b.1)));
+    let mut sources = Vec::new();
+    for (_, _, src) in cands {
+        let n = src.exact_text.chars().count();
+        if left_sources == 0 || n > left_chars {
+            continue;
+        }
+        left_sources -= 1;
+        left_chars -= n;
+        sources.push(src);
+    }
+    sources.sort_by(|a, b| a.support_id.cmp(&b.support_id));
+    let offered = sources.len();
+    let names: serde_json::Map<String, serde_json::Value> = docs.iter().map(|d| (d.doc_id.clone(), serde_json::json!(d.original_filename))).collect();
+    Ok((sources, serde_json::json!({"passages_in_record": considered, "passages_offered_to_the_model": offered, "passages_shortened": truncated, "documents": names})))
+}
+
+/// Chambers reasoning: the model reads passages of the record and installed law and sets out numbered steps; the host
+/// verifies each against its source, and the G7 classifier lets only record, law and inference from them render.
+#[tauri::command]
+fn chambers_reason(app: AppHandle, vault: State<'_, VaultState>, case_id: String, question: String, depth: Option<String>) -> Result<serde_json::Value, String> {
+    let question = question.trim().to_string();
+    if question.is_empty() || question.chars().count() > 2000 {
+        return Err("CF_REASONING_QUESTION: enter a question of up to 2000 characters".into());
+    }
+    let depth = reasoning::Depth::parse(depth.as_deref().unwrap_or("CAREFUL")).ok_or_else(|| "CF_REASONING_DEPTH: use QUICK, CAREFUL or THOROUGH".to_string())?;
+    let mgr = vault.get_or_init(&app)?;
+    let ctx = edition_of(&mgr)?;
+    edition::require_chambers(&ctx)?;
+    let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
+    edition::require_capability(&ctx, &paths.root, "reasoning")?;
+    let (record_only_on, _) = chambers_record_only(&mgr, &case_id)?;
+    let run = reasoning_core(&mgr, &case_id, &question, depth, true)?;
+    let classified = match run.result.ledger.as_ref() {
+        Some(ledger) => record_only::classify(ledger, &run.sources, record_only_on),
+        None => record_only::Classified { record_only: record_only_on, statements: vec![], withheld: vec![], rendered_text: String::new() },
+    };
+    let guarded = guardrails::check_model_output(&question, &classified.rendered_text, &run.status.model, &[]);
+    if guarded.refused {
+        return Err("CF_REASONING_OUTPUT_REFUSED: the verified reasoning still failed the safety policy".into());
+    }
+    let at = crate::docpipe::now_rfc3339();
+    for w in &classified.withheld {
+        let _ = mgr.witness_kv_put(&case_id, &format!("chambers:g7:{at}:{}", w.proposition_id), &serde_json::json!({"at": at, "proposition_id": w.proposition_id, "reason": w.reason, "text_sha256": w.text_sha256, "question_sha256": hex::encode(<sha2::Sha256 as sha2::Digest>::digest(question.as_bytes()))}));
+    }
+    let mut by_reason: std::collections::BTreeMap<&str, usize> = std::collections::BTreeMap::new();
+    for w in &classified.withheld {
+        *by_reason.entry(w.reason).or_default() += 1;
+    }
+    let cov = run.coverage.clone().unwrap_or_default();
+    Ok(serde_json::json!({
+        "schema_version": "caseforge.chambers-reason.v1", "status": run.result.status, "verified_answer": run.result.verified_answer, "record_only": classified.record_only,
+        "statements": classified.statements, "withheld_count": classified.withheld.len(), "withheld_by_reason": by_reason, "rendered_text": classified.rendered_text,
+        "candidates_run": run.result.candidates_run, "stopped_for_time": run.result.stopped_for_time, "elapsed_ms": run.elapsed_ms, "question": question,
+        "model": {"model": run.status.model, "backend": run.status.backend, "digest": run.status.model_digest},
+        "record_coverage": cov,
+        "disclaimer": "A reading aid over the record. It shows where each statement comes from; it states no finding and no conclusion on any issue.",
+    }))
 }
 
 // --- B-S4-03 rule tables / B-S4-09 Code Bridge ---
@@ -1070,6 +1275,7 @@ fn opposition_scan(
     text: Option<String>,
 ) -> Result<serde_json::Value, String> {
     let mgr = vault.get_or_init(&app)?;
+    edition::require_advocacy(&edition_of(&mgr)?)?; // opposition work is an advocacy feature
     let (doc_id, filename, pages) = match (doc_id, text) {
         (Some(id), _) => {
             let (name, pages) = crate::docpipe::external_filing_pages(&mgr, &case_id, &id)?;
@@ -1304,6 +1510,7 @@ fn impeach_finding_status(app: AppHandle, vault: State<'_, VaultState>, case_id:
 #[tauri::command]
 fn impeach_model_scan(app: AppHandle, vault: State<'_, VaultState>, case_id: String, witness_id: String) -> Result<serde_json::Value, String> {
     let mgr = vault.get_or_init(&app)?;
+    edition::require_advocacy(&edition_of(&mgr)?)?; // cross-examination work is an advocacy feature
     let us = witness::month_first(&case_jurisdiction(&mgr, &case_id)?);
     let register = witness_register(&mgr, &case_id)?;
     let decisions: Vec<witness::Decision> = witness_decisions(&mgr, &case_id)?.into_iter().filter(|d| d.2).map(|d| d.1).collect();
@@ -1763,6 +1970,7 @@ fn air_gap_set(
     enabled: bool,
 ) -> Result<licence::LicenceStatus, String> {
     let mgr = vault.get_or_init(&app)?;
+    edition::check_air_gap_change(&edition_of(&mgr)?, enabled)?; // a Judiciary licence keeps the app offline
     if enabled {
         // Kill companion session if running.
         // companion stop is separate; flag alone blocks restarts.
@@ -4098,6 +4306,11 @@ pub fn run() {
             foundation_set_type,
             foundation_link,
             pack_currency,
+            edition_status,
+            chambers_status,
+            chambers_set_record_only,
+            chambers_g7_log,
+            chambers_reason,
             treatment_lookup,
             issue_matrix_build,
             issue_matrix_set_matter_type,

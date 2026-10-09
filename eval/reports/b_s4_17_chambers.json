@@ -1,0 +1,69 @@
+{
+  "batch": "B-S4-17",
+  "fixture_sha256": "0f4ad28924e7617cba6fa14caac2199525837cd0bd88e6ac486bb692adbc2021",
+  "acs": {
+    "AC-S4-11.1": {
+      "status": "PASS",
+      "evidence": {
+        "planted": {
+          "x1": "model memory (no support)",
+          "x2": "invented quotation",
+          "x3": "custom-pack law",
+          "x4": "fact supplied in the prompt",
+          "x5": "inference resting on the prompt",
+          "x6": "inference without bases",
+          "x7": "statute passage offered as a fact",
+          "x8": "inference resting on model memory",
+          "x9": "explicit gap"
+        },
+        "golden": "ok",
+        "model_gate": true,
+        "question_never_a_source": true
+      },
+      "detail": "Planted extra-record content (model memory, an invented quotation, a custom-pack law, a fact in the prompt, inferences resting on them) never renders; it is counted and logged by hash. The model is reachable in Chambers only through the record-only path."
+    },
+    "AC-S4-11.2": {
+      "status": "PASS",
+      "evidence": {
+        "golden": "ok",
+        "screen_shows_class_and_source": true
+      },
+      "detail": "Every rendered statement carries RECORD, LAW or INFERENCE_FROM_RECORD and at least one locator (document, page and paragraph with the exact excerpt; or authority, chunk and excerpt); inferences carry their bases' locators."
+    },
+    "edition-gating": {
+      "status": "PASS",
+      "evidence": {
+        "judiciary": "ok",
+        "others": "ok",
+        "unverified": "ok",
+        "invariants": "ok",
+        "expired": "ok",
+        "generation": "ok",
+        "air_gap": "ok",
+        "pilot": "ok",
+        "canonical": "ok"
+      },
+      "detail": "A signed JUDICIARY licence enables the Chambers surface and hides advocacy-only screens; every other edition sees no Chambers screen; the host (not the menu) refuses what is hidden; the air-gap switch stays on; pilot-court constraints are configuration. The edition-to-feature map and prices stay with B-S4-22 (Q-S4-06)."
+    }
+  },
+  "static": {
+    "engine_has_no_model_or_network": true,
+    "model_gate_in_both_entry_points": true,
+    "dev_override_is_debug_only": true,
+    "permit_only_in_record_only_path": true,
+    "chambers_commands_registered": true,
+    "chambers_only_commands_guarded": true,
+    "advocacy_commands_guarded": true,
+    "air_gap_cannot_be_turned_off": true,
+    "reasoning_ends_at_the_classifier": true,
+    "question_is_never_a_source_in_chambers": true,
+    "withheld_logged_by_hash_only": true,
+    "vault_refreshes_edition_on_unlock": true,
+    "v2_licence_activation": true,
+    "screen_shows_class_and_source": true,
+    "screen_never_calls_raw_generation": true,
+    "screen_vocabulary_honest": true,
+    "menu_filtered_by_edition": true
+  },
+  "errors": []
+}

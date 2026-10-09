@@ -401,6 +401,7 @@ pub fn status() -> LlmStatus {
 }
 
 pub fn chat(req: LlmChatRequest) -> Result<LlmChatResult, String> {
+    crate::edition::check_generation()?; // B-S4-17: Chambers reaches the model only through record-only reasoning
     let mut params = json!({
         "user_text": req.user_text,
         "role": req.role.clone().unwrap_or_else(|| "counsel".into()),
@@ -475,6 +476,7 @@ pub fn chat(req: LlmChatRequest) -> Result<LlmChatResult, String> {
 }
 
 pub fn chat_with_timeout(req: LlmChatRequest, timeout_secs: u64) -> Result<LlmChatResult, String> {
+    crate::edition::check_generation()?; // B-S4-17
     let mut params = json!({
         "user_text": req.user_text,
         "role": req.role.clone().unwrap_or_else(|| "counsel".into()),

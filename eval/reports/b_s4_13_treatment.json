@@ -16,7 +16,7 @@
       "status": "PASS",
       "evidence": {
         "prohibited_phrases_found": [],
-        "files_scanned": 47
+        "files_scanned": 48
       },
       "detail": "No screen says a case is good law, valid or the like; absence of treatment reads 'no treatment found in installed corpus' and says it speaks only for the library."
     },

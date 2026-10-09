@@ -202,6 +202,17 @@ fn read_machine_guid() -> String {
     }
 }
 
+/// The trusted licence signing keys (public), by key id.
+pub fn trust_keys() -> Result<BTreeMap<String, String>, String> {
+    load_trust_keys()
+}
+
+/// A licence payload as JSON, whether raw or base64-wrapped (used for version 2 payloads, see edition.rs).
+pub fn parse_raw_json(raw: &str) -> Result<serde_json::Value, String> {
+    let text = if let Ok(decoded) = B64.decode(raw.trim()) { String::from_utf8(decoded).unwrap_or_else(|_| raw.to_string()) } else { raw.to_string() };
+    serde_json::from_str(&text).map_err(|e| format!("CF_LICENCE_ACTIVATION_FAILED: parse {e}"))
+}
+
 fn load_trust_keys() -> Result<BTreeMap<String, String>, String> {
     let v: serde_json::Value =
         serde_json::from_str(TRUST_JSON).map_err(|e| format!("CF_LICENCE_TRUST: {e}"))?;

@@ -72,8 +72,11 @@ def main() -> int:
     rs = (ROOT / "src-tauri" / "src" / "reasoning.rs").read_text(encoding="utf-8")
     engine = rs.split("#[cfg(test)]")[0]
     lib = (ROOT / "src-tauri" / "src" / "lib.rs").read_text(encoding="utf-8")
-    cmd = lib[lib.index("fn reasoning_run"):]
-    cmd = cmd[: cmd.index("\n}\n")]
+    # B-S4-17: the loop is shared with the Chambers record-only path (reasoning_core); the command and the core together are the command
+    cmd = ""
+    for fn in ("fn reasoning_core", "fn reasoning_run"):
+        part = lib[lib.index(fn):]
+        cmd += part[: part.index("\n}\n")] + "\n"
     ui = (ROOT / "src" / "components" / "ReasoningPanel.tsx").read_text(encoding="utf-8")
     static = {
         "engine_does_not_call_a_model": not LLM_TOKENS.search(engine),

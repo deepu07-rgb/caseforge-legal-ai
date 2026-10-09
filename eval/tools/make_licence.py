@@ -92,6 +92,9 @@ def main() -> int:
         action="store_true",
         help="Hash live env COMPUTERNAME/USERNAME for this machine",
     )
+    ap.add_argument("--edition", choices=["ADVOCATE", "PRO", "CHAMBERS_FIRM", "JUDICIARY"], default=None,
+                    help="Issue a version 2 licence (contracts/licence_payload_v2.schema.json). A JUDICIARY licence is institution-issued, forces air-gap on, allows no telemetry and carries the chambers feature.")
+    ap.add_argument("--features", default=None, help="v2: comma-separated feature ids (default depends on the edition)")
     ap.add_argument("-o", "--out", type=Path, default=None)
     args = ap.parse_args()
 
@@ -121,6 +124,35 @@ def main() -> int:
             "machine_guid": sha256_hex(args.machine_guid),
             "disk_root": sha256_hex(args.disk_root),
         }
+
+    if args.edition:
+        judiciary = args.edition == "JUDICIARY"
+        features = args.features.split(",") if args.features else (["digest", "audit", "retrieval", "export", "code_bridge", "currency_treatment", "deadline_watch", "chambers"] if judiciary else ["digest", "audit", "retrieval", "export"])
+        payload = {
+            "schema_version": "2.0.0",
+            "licence_id": args.licence_id,
+            "product": "CaseForge",
+            "edition": args.edition,
+            "issued_to_kind": "INSTITUTION" if judiciary else "INDIVIDUAL",
+            "issued_at_unix_ms": now,
+            "expires_at_unix_ms": exp,
+            "pack_subscription_until_unix_ms": exp,
+            "fingerprint_components": fp,
+            "features": features,
+            "air_gap_forced": judiciary,
+            "telemetry_allowed": not judiciary,
+            "seat_transfers_per_year": None,
+            "institution_key_id": None,
+            "signer_key_id": KEY_ID,
+            "notes": "Dev licence for B-S4-17 tests",
+        }
+        payload["signature_alg"] = "Ed25519"
+        payload["signature_hex"] = sk.sign(canonical_bytes(payload)).hex()
+        out = args.out or (ROOT / "packs" / "fixtures" / f"licence_dev_{args.edition.lower()}.json")
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(json.dumps(payload, indent=2) + chr(10), encoding="utf-8")
+        print(f"Wrote {out}")
+        return 0
 
     payload = {
         "schema_version": "1.0.0",

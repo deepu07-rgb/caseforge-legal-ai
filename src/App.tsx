@@ -21,6 +21,8 @@ import OppositionView from "./components/OppositionView";
 import WitnessView from "./components/WitnessView";
 import DeadlinesView from "./components/DeadlinesView";
 import IssueMatrixView from "./components/IssueMatrixView";
+import ChambersView from "./components/ChambersView";
+import { editionStatus, type EditionStatus } from "./lib/ipc";
 import { ModelTierSelector } from "./components/ModelTierSelector";
 import {
   deriveLawyerWorkflow,
@@ -158,6 +160,7 @@ type NavId =
   | "witnesses"
   | "deadlines"
   | "issues"
+  | "chambers"
   | "library"
   | "practice"
   | "settings";
@@ -187,6 +190,7 @@ const NAV: { id: NavId; label: string; section?: string; badge?: string }[] = [
   { id: "opposition", label: "Opponent's Filing" },
   { id: "witnesses", label: "Witnesses" },
   { id: "deadlines", label: "Deadlines" },
+  { id: "chambers", label: "Chambers" },
   { id: "issues", label: "Issue Matrix" },
   { id: "practice", label: "Integrity lab" },
   { id: "library", label: "Legal Authorities", section: "Library" },
@@ -195,7 +199,7 @@ const NAV: { id: NavId; label: string; section?: string; badge?: string }[] = [
   { id: "guardrails", label: "Guardrails" },
   { id: "settings", label: "System" },
 ];
-const PRIMARY_NAV_IDS:NavId[]=["home","cases","workspace","digest","library","integrity","court","opposition","witnesses","deadlines","issues"];
+const PRIMARY_NAV_IDS:NavId[]=["home","cases","workspace","digest","library","integrity","court","opposition","witnesses","deadlines","chambers","issues"];
 const ADVANCED_NAV_IDS:NavId[]=["builder","voice","experience","practice","licence","protection","guardrails","settings"];
 const PRIMARY_NAV=NAV.filter(item=>PRIMARY_NAV_IDS.includes(item.id));
 const ADVANCED_NAV=NAV.filter(item=>ADVANCED_NAV_IDS.includes(item.id));
@@ -268,6 +272,8 @@ function titleFor(nav: NavId): { title: string; sub: string } {
       return { title: "Witnesses", sub: "Statements lined up by topic · contradictions and omissions with exact quotes · impeachment kit" };
     case "deadlines":
       return { title: "Deadlines", sub: "Limitation and procedural dates computed from the rule, the start event and the court calendar · always to verify" };
+    case "chambers":
+      return { title: "Chambers", sub: "Record only · every statement tied to the record or installed law · no analysis, findings or orders" };
     case "issues":
       return { title: "Issue Matrix", sub: "Each accepted issue side by side · what is agreed, disputed and unanswered · no ranking, no scoring, no suggested answer" };
     case "library":
@@ -301,6 +307,7 @@ function formatWhen(iso?: string | null): string {
 export default function App() {
   const tauri = isTauriRuntime();
   const [nav, setNav] = useState<NavId>("home");
+  const [edition, setEdition] = useState<EditionStatus | null>(null);
   const [caseTab, setCaseTab] = useState<CaseTab>("overview");
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
@@ -1282,6 +1289,16 @@ export default function App() {
   const headings = titleFor(nav);
   const unlocked = Boolean(vault?.app_unlocked);
 
+  // B-S4-17: what the licence entitles decides which screens exist. The host refuses what is hidden; this only tidies the menu.
+  const showNav = (item: { id: NavId }) => (edition ? edition.visible_surfaces.includes(item.id) : !["chambers", "issues"].includes(item.id));
+  useEffect(() => {
+    if (!tauri) return;
+    void editionStatus().then(setEdition).catch(() => setEdition(null));
+  }, [tauri, unlocked, nav]);
+  useEffect(() => {
+    if (edition && nav !== "new-case" && !edition.visible_surfaces.includes(nav)) setNav("home");
+  }, [edition, nav]);
+
   const openWorkflowStage = (stageId:WorkflowStageId) => {
     const stage=workflowStages.find(s=>s.id===stageId);
     setError(null);
@@ -1557,7 +1574,7 @@ export default function App() {
         </div>
 
         <div className="nav-scroll">
-          {PRIMARY_NAV.map((item) => {
+          {PRIMARY_NAV.filter(showNav).map((item) => {
             // Cases stays active while the split wizard is open (Screen 3).
             const active =
               nav === item.id || (item.id === "cases" && nav === "new-case");
@@ -1578,7 +1595,7 @@ export default function App() {
           })}
           <details className="advanced-nav" data-testid="advanced-navigation">
             <summary>Advanced details</summary>
-            {ADVANCED_NAV.map(item=><button key={item.id} type="button" className={`nav-btn ${nav===item.id?"active":""}`} onClick={()=>{setNav(item.id);setError(null);}}>{item.label}</button>)}
+            {ADVANCED_NAV.filter(showNav).map(item=><button key={item.id} type="button" className={`nav-btn ${nav===item.id?"active":""}`} onClick={()=>{setNav(item.id);setError(null);}}>{item.label}</button>)}
           </details>
         </div>
 
@@ -1612,7 +1629,7 @@ export default function App() {
 
       <div className="main">
         <div className="mobile-nav">
-          {PRIMARY_NAV.map((item) => (
+          {PRIMARY_NAV.filter(showNav).map((item) => (
             <button
               key={item.id}
               type="button"
@@ -1635,6 +1652,7 @@ export default function App() {
                 {activeCase.cause_title || activeCase.label || "Active case"}
               </span>
             )}
+            {edition?.chambers && <span className="chip ok" title={edition.banner}>Chambers Edition · record only · offline</span>}
             <span className={`chip ${unlocked || !tauri ? "ok" : "warn"}`}>
               <span className={`status-dot ${unlocked || !tauri ? "on" : "off"}`} />
               {unlocked ? "Vault unlocked" : tauri ? "Vault locked" : "Preview"}
@@ -1971,6 +1989,8 @@ export default function App() {
           {nav === "deadlines" && <DeadlinesView activeCase={activeCase} />}
 
           {nav === "issues" && <IssueMatrixView activeCase={activeCase} />}
+
+          {nav === "chambers" && <ChambersView activeCase={activeCase} edition={edition} onOpenIssues={() => setNav("issues")} />}
 
           {nav === "library" && (
             <>

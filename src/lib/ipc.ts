@@ -2947,3 +2947,25 @@ export interface TreatmentEdge {
 export interface TreatmentLookup { source_id: string; state: "FOUND" | "NONE_FOUND" | "NO_DATA" | "NOT_APPLICABLE"; edges: TreatmentEdge[]; rejected_count: number; none_found_text: string }
 export async function packCurrency(): Promise<PackStamp[]> { return invoke<PackStamp[]>("pack_currency"); }
 export async function treatmentLookup(sources: { source_id: string; chunk_id: string }[]): Promise<TreatmentLookup[]> { return invoke<TreatmentLookup[]>("treatment_lookup", { sources }); }
+
+// --- B-S4-17 Chambers Edition shell ---
+export interface EditionStatus {
+  edition: "ADVOCATE" | "PRO" | "CHAMBERS_FIRM" | "JUDICIARY" | null; chambers: boolean; source: "LICENCE" | "DEV_OVERRIDE" | "NONE"; licence_state: string; features: string[];
+  air_gap_forced: boolean; telemetry_allowed: boolean; record_only_default: boolean; visible_surfaces: string[]; hidden_surfaces: string[]; problem: string | null;
+  pilot: { court: string | null; disabled_capabilities: string[]; unreadable: boolean }; banner: string;
+}
+export interface ChambersStatus {
+  record_only: boolean; scaffold_exists: boolean; locked: boolean; withheld_total: number; filings_assigned: number; capabilities: Record<string, boolean>; classes: string[]; note: string;
+}
+export interface ChambersStatement { proposition_id: string; text: string; class: "RECORD" | "LAW" | "INFERENCE_FROM_RECORD" | "EXTRA_RECORD"; locators: Record<string, unknown>[]; bases: string[] }
+export interface ChambersReasonResult {
+  schema_version: "caseforge.chambers-reason.v1"; status: string; verified_answer: boolean; record_only: boolean; statements: ChambersStatement[]; withheld_count: number;
+  withheld_by_reason: Record<string, number>; rendered_text: string; candidates_run: number; stopped_for_time: boolean; elapsed_ms: number; question: string;
+  model: { model: string; backend: string; digest: string };
+  record_coverage: { passages_in_record: number; passages_offered_to_the_model: number; passages_shortened: number; documents: Record<string, string> }; disclaimer: string;
+}
+export async function editionStatus(): Promise<EditionStatus> { return invoke<EditionStatus>("edition_status"); }
+export async function chambersStatus(caseId: string): Promise<ChambersStatus> { return invoke<ChambersStatus>("chambers_status", { caseId }); }
+export async function chambersSetRecordOnly(caseId: string, enabled: boolean): Promise<void> { return invoke<void>("chambers_set_record_only", { caseId, enabled }); }
+export async function chambersG7Log(caseId: string): Promise<Record<string, unknown>[]> { return invoke<Record<string, unknown>[]>("chambers_g7_log", { caseId }); }
+export async function chambersReason(caseId: string, question: string, depth: string): Promise<ChambersReasonResult> { return invoke<ChambersReasonResult>("chambers_reason", { caseId, question, depth }); }

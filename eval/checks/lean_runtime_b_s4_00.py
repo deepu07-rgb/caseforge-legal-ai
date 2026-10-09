@@ -40,6 +40,7 @@ DETERMINISTIC_ENGINES = [
     "src-tauri/src/foundation.rs",
     "src-tauri/src/issue_matrix.rs",
     "src-tauri/src/treatment.rs",
+    "src-tauri/src/record_only.rs",
 ]
 LLM_TOKENS = re.compile(r"infer_llm|ollama|openai|llm_chat|llama_cpp|chat_with_timeout", re.I)
 

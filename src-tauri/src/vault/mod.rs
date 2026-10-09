@@ -498,6 +498,7 @@ impl VaultManager {
         g.app_key = Some(key);
         g.app = Some(conn);
         drop(g);
+        let _ = self.refresh_edition(); // B-S4-17: a Chambers licence closes free generation as soon as the vault opens
         self.status()
     }
 
@@ -4911,12 +4912,70 @@ impl VaultManager {
         })
     }
 
+    /// B-S4-17: the stored licence (state, payload), if one has been activated.
+    pub fn licence_stored(&self) -> VaultResult<Option<(String, String)>> {
+        let mut g = self.inner.lock().map_err(|_| VaultError::LockPoisoned)?;
+        let app = g.app.as_mut().ok_or(VaultError::Locked)?;
+        sql::apply_pending_migrations(app, APP_MIGRATIONS)?;
+        let row: Option<(String, Option<String>)> = app.query_row("SELECT state, payload_json FROM licence_state WHERE id = 1", [], |r| Ok((r.get(0)?, r.get(1)?))).optional()?;
+        Ok(row.and_then(|(s, p)| p.map(|p| (s, p))))
+    }
+
+    /// B-S4-17: what the licence entitles (edition, Chambers surfaces), re-verified from the stored payload.
+    pub fn edition_context(&self) -> VaultResult<crate::edition::EditionContext> {
+        let stored = self.licence_stored()?;
+        Ok(crate::edition::context_from_stored(stored.as_ref().map(|(s, p)| (s.as_str(), p.as_str()))))
+    }
+
+    /// Recomputes the edition and tells the host's model gate (free generation is refused in Chambers).
+    pub fn refresh_edition(&self) -> VaultResult<crate::edition::EditionContext> {
+        let ctx = self.edition_context()?;
+        crate::edition::set_chambers(ctx.chambers);
+        Ok(ctx)
+    }
+
+    fn licence_activate_v2(&self, raw: serde_json::Value) -> VaultResult<crate::licence::ActivateResult> {
+        let internal = |detail: String| VaultError::Internal { detail };
+        let keys = crate::licence::trust_keys().map_err(internal)?;
+        let live = crate::licence::collect_fingerprint();
+        let (l, state) = crate::edition::verify_v2(&raw, &keys, &live, now_ms()).map_err(internal)?;
+        let bound: crate::licence::FingerprintComponents = serde_json::from_value(raw["fingerprint_components"].clone()).map_err(|e| VaultError::Internal { detail: e.to_string() })?;
+        let matches = live.match_count(&bound);
+        let payload_str = serde_json::to_string(&raw).map_err(|e| VaultError::Internal { detail: e.to_string() })?;
+        let mut g = self.inner.lock().map_err(|_| VaultError::LockPoisoned)?;
+        let app = g.app.as_mut().ok_or(VaultError::Locked)?;
+        sql::apply_pending_migrations(app, APP_MIGRATIONS)?;
+        let now = now_ms();
+        // A licence that forces the air-gap turns it on at activation.
+        let forced: i64 = if l.air_gap_forced { 1 } else { 0 };
+        app.execute(
+            "INSERT INTO licence_state (
+                id, state, licence_id, tier, payload_json, activated_at_unix_ms,
+                expires_at_unix_ms, fingerprint_match_count, air_gap_enabled, updated_at_unix_ms
+             ) VALUES (1, ?1, ?2, ?3, ?4, ?5, ?6, ?7, CASE WHEN ?8 = 1 THEN 1 ELSE COALESCE((SELECT air_gap_enabled FROM licence_state WHERE id=1), 0) END, ?5)
+             ON CONFLICT(id) DO UPDATE SET
+                state=excluded.state, licence_id=excluded.licence_id, tier=excluded.tier, payload_json=excluded.payload_json,
+                activated_at_unix_ms=excluded.activated_at_unix_ms, expires_at_unix_ms=excluded.expires_at_unix_ms,
+                fingerprint_match_count=excluded.fingerprint_match_count, air_gap_enabled=excluded.air_gap_enabled, updated_at_unix_ms=excluded.updated_at_unix_ms",
+            rusqlite::params![state.as_str(), l.licence_id, l.edition, payload_str, now, l.expires_at_unix_ms, matches as i64, forced],
+        )?;
+        drop(g);
+        let _ = self.refresh_edition();
+        let status = self.licence_status_inner()?;
+        Ok(crate::licence::ActivateResult { status, fingerprint_match_count: matches })
+    }
+
     pub fn licence_activate(
         &self,
         payload_json: &str,
     ) -> VaultResult<crate::licence::ActivateResult> {
         use crate::licence::{evaluate_payload, parse_payload_json};
         self.assert_not_ransoming()?;
+        if let Ok(raw) = crate::licence::parse_raw_json(payload_json) {
+            if raw["schema_version"] == "2.0.0" {
+                return self.licence_activate_v2(raw);
+            }
+        }
         let payload =
             parse_payload_json(payload_json).map_err(|e| VaultError::Internal { detail: e })?;
         let (state, matches) =
