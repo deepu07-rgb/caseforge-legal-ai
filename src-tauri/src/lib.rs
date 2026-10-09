@@ -28,6 +28,7 @@ mod issue_matrix;
 mod treatment;
 mod edition;
 mod record_only;
+mod chambers_lookup;
 mod opposition;
 mod reasoning;
 mod witness;
@@ -1038,6 +1039,97 @@ fn chambers_g7_log(app: AppHandle, vault: State<'_, VaultState>, case_id: String
     deadline_kv(&mgr, &case_id, "chambers:g7:")
 }
 
+/// The page texts of one document of the matter (an opponent's filing is read through its own gate).
+fn matter_pages(mgr: &VaultManager, case_id: &str, d: &vault::DocumentMeta) -> Result<Vec<String>, String> {
+    Ok(if d.type_tag == docpipe::EXTERNAL_FILING_TAG { docpipe::external_filing_pages(mgr, case_id, &d.doc_id)?.1 } else { docpipe::statement_pages(mgr, case_id, &d.doc_id)?.1 })
+}
+
+// --- B-S4-19 Both-sides citation check and record lookup ---
+
+/// One action: the Citation Audit over every filing of every party, grouped by party in the order the parties are listed.
+/// Nothing ranks the parties against each other; each filing's results stand on their own.
+#[tauri::command]
+fn chambers_audit_all(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<serde_json::Value, String> {
+    let mgr = vault.get_or_init(&app)?;
+    let ctx = edition_of(&mgr)?;
+    edition::require_chambers(&ctx)?;
+    let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
+    edition::require_capability(&ctx, &paths.root, "citation_audit")?;
+    let graph = mgr.case_graph_get(&case_id).map_err(|e| e.to_string())?.unwrap_or_else(|| serde_json::json!({}));
+    let parties = issue_parties(&graph);
+    let docs = mgr.doc_list(&case_id).map_err(|e| e.to_string())?;
+    let assigned: Vec<(String, String)> = deadline_kv(&mgr, &case_id, "issue:filing:")?.iter().filter_map(|v| Some((v["doc_id"].as_str()?.to_string(), v["party_id"].as_str()?.to_string()))).collect();
+    let store = retrieval::store::open(&paths).ok();
+    let small = retrieval::build_small_corpus(&paths, &[]).unwrap_or_default();
+    let mut warnings: Vec<String> = Vec::new();
+    if store.is_none() {
+        warnings.push("No legal packs are installed, so no citation could be checked.".into());
+    }
+    let mut out_parties = Vec::new();
+    let mut snapshots: std::collections::BTreeMap<String, audit::PackSnapshot> = std::collections::BTreeMap::new();
+    for p in &parties {
+        let mut filings = Vec::new();
+        let mut totals: std::collections::BTreeMap<String, usize> = std::collections::BTreeMap::new();
+        for d in docs.iter().filter(|d| assigned.iter().any(|(doc, party)| doc == &d.doc_id && party == &p.party_id)) {
+            let pages = matter_pages(&mgr, &case_id, d)?;
+            let report = match store.as_deref() {
+                Some(store) => audit::audit_with_store(store, &small, &opposition::filing_text(&pages), &d.original_filename, "txt", Some(case_id.clone())).ok().map(|mut r| {
+                    treatment::decorate_report(&paths, store, &mut r);
+                    r
+                }),
+                None => None,
+            };
+            if let Some(r) = &report {
+                for (k, n) in &r.counts {
+                    *totals.entry(k.clone()).or_default() += n;
+                }
+                for s in &r.pack_snapshot {
+                    snapshots.entry(s.pack_id.clone()).or_insert_with(|| s.clone());
+                }
+            }
+            filings.push(serde_json::json!({
+                "doc_id": d.doc_id, "filename": d.original_filename,
+                "counts": report.as_ref().map(|r| r.counts.clone()).unwrap_or_default(),
+                "items": report.as_ref().map(|r| r.items.clone()).unwrap_or_default(),
+                "audited": report.is_some(),
+            }));
+        }
+        out_parties.push(serde_json::json!({"party_id": p.party_id, "display_name": p.display_name, "role": p.role, "filings": filings, "totals": totals}));
+    }
+    let unassigned: Vec<String> = docs.iter().filter(|d| !assigned.iter().any(|(doc, _)| doc == &d.doc_id)).map(|d| d.original_filename.clone()).collect();
+    if out_parties.iter().all(|p| p["filings"].as_array().map(|f| f.is_empty()).unwrap_or(true)) {
+        warnings.push("No document is assigned to a party yet. Assign each party's filings in the Issue Matrix first.".into());
+    }
+    Ok(serde_json::json!({
+        "parties": out_parties, "unassigned_documents": unassigned, "warnings": warnings, "pack_snapshot": snapshots.values().collect::<Vec<_>>(),
+        "note": "The same check is run on every filing. Results are listed by party in the order the parties are named; nothing here ranks one party against another.",
+    }))
+}
+
+/// "Where in the record ...?": ranked verbatim excerpts of the matter's own documents, each with its document, page and
+/// paragraph, and nothing else - no summary, no answer, no model.
+#[tauri::command]
+fn chambers_lookup(app: AppHandle, vault: State<'_, VaultState>, case_id: String, question: String, limit: Option<usize>) -> Result<serde_json::Value, String> {
+    let question = question.trim().to_string();
+    if question.is_empty() || question.chars().count() > 500 {
+        return Err("CF_LOOKUP_QUESTION: enter a question of up to 500 characters".into());
+    }
+    let mgr = vault.get_or_init(&app)?;
+    let ctx = edition_of(&mgr)?;
+    edition::require_chambers(&ctx)?;
+    edition::require_capability(&ctx, &mgr.vault_paths().map_err(|e| e.to_string())?.root, "record_lookup")?;
+    let docs = mgr.doc_list(&case_id).map_err(|e| e.to_string())?;
+    let key = format!("{case_id}|{}", docs.iter().map(|d| format!("{}:{}:{}", d.doc_id, d.byte_size, d.ingested_at_unix_ms)).collect::<Vec<_>>().join(","));
+    let index = chambers_lookup::cached(&key, || {
+        docs.iter().map(|d| Ok(chambers_lookup::DocPages { doc_id: d.doc_id.clone(), filename: d.original_filename.clone(), pages: matter_pages(&mgr, &case_id, d)? })).collect()
+    })?;
+    let hits = chambers_lookup::lookup(&index, chambers_lookup::Synonyms::builtin(), &question, limit.unwrap_or(chambers_lookup::DEFAULT_K));
+    Ok(serde_json::json!({
+        "question": question, "hits": hits, "passages_in_record": index.passages.len(), "documents_indexed": docs.len(),
+        "note": "Passages of the record, word for word. Nothing is summarised or concluded.",
+    }))
+}
+
 /// Passages of the record to offer the model for a question: paragraphs of every document in the matter that share a word
 /// with the question, best first, within what the model can take. The question itself is never a source.
 fn chambers_record_sources(mgr: &VaultManager, case_id: &str, question: &str, authorities: &[mock_court_retrieval::MockCourtAuthority]) -> Result<(Vec<proposition::SupportSource>, serde_json::Value), String> {
@@ -1051,7 +1143,7 @@ fn chambers_record_sources(mgr: &VaultManager, case_id: &str, question: &str, au
     let mut cands: Vec<(usize, usize, proposition::SupportSource)> = Vec::new();
     let (mut considered, mut truncated) = (0usize, 0usize);
     for d in &docs {
-        let pages = if d.type_tag == docpipe::EXTERNAL_FILING_TAG { docpipe::external_filing_pages(mgr, case_id, &d.doc_id)?.1 } else { docpipe::statement_pages(mgr, case_id, &d.doc_id)?.1 };
+        let pages = matter_pages(mgr, case_id, d)?;
         for (pi, page) in pages.iter().enumerate() {
             let paras = opposition::paragraphs(std::slice::from_ref(page));
             let units: Vec<(String, String)> = if paras.is_empty() {
@@ -4311,6 +4403,8 @@ pub fn run() {
             chambers_set_record_only,
             chambers_g7_log,
             chambers_reason,
+            chambers_audit_all,
+            chambers_lookup,
             treatment_lookup,
             issue_matrix_build,
             issue_matrix_set_matter_type,

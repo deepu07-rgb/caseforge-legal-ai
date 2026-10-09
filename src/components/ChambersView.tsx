@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import type { CaseSummary, ChambersReasonResult, ChambersStatus, EditionStatus } from "../lib/ipc";
-import { chambersReason, chambersSetRecordOnly, chambersStatus } from "../lib/ipc";
+import type { ChambersAuditAll, ChambersLookupResult } from "../lib/ipc";
+import { chambersAuditAll, chambersLookup, chambersReason, chambersSetRecordOnly, chambersStatus, speechStt } from "../lib/ipc";
+import { useMicrophoneCapture } from "../lib/microphoneCapture";
+import { AUDIT_ORDER, AuditRow, RESULT_LABEL, TONE } from "./AuditPanel";
 import { CurrencyStamp } from "./CurrencyStamp";
 
 /**
@@ -46,6 +49,12 @@ export default function ChambersView({ activeCase, edition, onOpenIssues }: { ac
   const [result, setResult] = useState<ChambersReasonResult | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [audit, setAudit] = useState<ChambersAuditAll | null>(null);
+  const [find, setFind] = useState("");
+  const [found, setFound] = useState<ChambersLookupResult | null>(null);
+  const [fromVoice, setFromVoice] = useState(false);
+  const [voiceChecked, setVoiceChecked] = useState(false);
+  const microphone = useMicrophoneCapture();
 
   const refresh = useCallback(async () => {
     if (!caseId || !edition?.chambers) return;
@@ -94,6 +103,45 @@ export default function ChambersView({ activeCase, edition, onOpenIssues }: { ac
       await refresh();
     } catch (e) {
       setError(plain(e));
+    } finally {
+      setBusy(false);
+    }
+  }
+  async function runAudit() {
+    if (!caseId) return;
+    setBusy(true);
+    setError(null);
+    try {
+      setAudit(await chambersAuditAll(caseId));
+    } catch (e) {
+      setError(plain(e));
+    } finally {
+      setBusy(false);
+    }
+  }
+  async function runFind() {
+    if (!caseId) return;
+    setBusy(true);
+    setError(null);
+    try {
+      setFound(await chambersLookup(caseId, find));
+    } catch (e) {
+      setError(plain(e));
+    } finally {
+      setBusy(false);
+    }
+  }
+  async function stopAndTranscribe() {
+    try {
+      const capture = await microphone.stop();
+      setBusy(true);
+      const r = await speechStt({ audio_base64: capture.audio_base64, audio_format: capture.audio_format, transcript_stub: null, language: "English" });
+      if (!r.production_eligible || r.input_kind !== "REAL_AUDIO") throw new Error("Spoken questions need real audio from the microphone.");
+      setFind(r.staged_transcript);
+      setFromVoice(true);
+      setVoiceChecked(false);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
     } finally {
       setBusy(false);
     }
@@ -173,6 +221,79 @@ export default function ChambersView({ activeCase, edition, onOpenIssues }: { ac
           </div>
         )}
       </div>
+
+      <div className="card" style={{ gridColumn: "1 / -1" }}>
+        <h4>Find it in the record</h4>
+        <p className="muted" style={{ fontSize: "0.8rem" }}>Ask where something is in the record, for example “where did the witness say the car was red?”. The answer is the passages themselves, word for word, with the document, page and paragraph. Nothing is summarised and nothing is concluded.</p>
+        <div className="row" style={{ gap: 6 }}>
+          <input value={find} onChange={(e) => { setFind(e.target.value); setFromVoice(false); }} maxLength={500} style={{ flex: 1 }} aria-label="Where in the record" placeholder="Where in the record…" onKeyDown={(e) => { if (e.key === "Enter" && find.trim() && !busy && (!fromVoice || voiceChecked)) void runFind(); }} />
+          <button type="button" disabled={busy || !find.trim() || (fromVoice && !voiceChecked)} onClick={() => void runFind()}>Find</button>
+        </div>
+        <div className="row" style={{ gap: 6, marginTop: 6, alignItems: "center", flexWrap: "wrap" }}>
+          <button type="button" disabled={busy || microphone.state === "RECORDING" || microphone.state === "UNAVAILABLE"} onClick={() => void microphone.start()}>Speak the question</button>
+          <button type="button" disabled={busy || microphone.state !== "RECORDING"} onClick={() => void stopAndTranscribe()}>Stop and transcribe</button>
+          {microphone.state === "RECORDING" && <span className="muted" style={{ fontSize: "0.78rem" }}>Listening… the audio is deleted after transcription.</span>}
+          {microphone.state === "UNAVAILABLE" && <span className="muted" style={{ fontSize: "0.78rem" }}>No microphone is available; type the question.</span>}
+          {fromVoice && <label style={{ fontSize: "0.8rem" }}><input type="checkbox" checked={voiceChecked} onChange={(e) => setVoiceChecked(e.target.checked)} /> I checked the transcription above</label>}
+        </div>
+        {found && (
+          <div style={{ marginTop: 10 }}>
+            {found.hits.length === 0 && <div className="notice warn">Nothing in the record matches that question ({found.passages_in_record} passages in {found.documents_indexed} documents searched). Try other words from the record.</div>}
+            <ol style={{ paddingLeft: "1.2rem", margin: "6px 0" }}>
+              {found.hits.map((h) => (
+                <li key={`${h.doc_id}-${h.page}-${h.label}`} style={{ marginBottom: 10, fontSize: "0.86rem" }}>
+                  <div className="muted" style={{ fontSize: "0.74rem" }}>{h.filename}, page {h.page}, {h.label.startsWith("p") ? `paragraph ${h.label.slice(1)}` : `passage ${h.label.slice(1)}`}</div>
+                  <div style={{ whiteSpace: "pre-wrap" }}>{highlight(h.excerpt, h.matched)}</div>
+                </li>
+              ))}
+            </ol>
+            <div className="muted" style={{ fontSize: "0.72rem" }}>{found.note} {found.passages_in_record} passages in {found.documents_indexed} documents were searched.</div>
+          </div>
+        )}
+      </div>
+
+      <div className="card" style={{ gridColumn: "1 / -1" }}>
+        <div className="row" style={{ justifyContent: "space-between", alignItems: "baseline" }}>
+          <h4>Citations in every filing</h4>
+          <button type="button" disabled={busy} onClick={() => void runAudit()}>{audit ? "Check again" : "Check every filing"}</button>
+        </div>
+        <p className="muted" style={{ fontSize: "0.8rem" }}>One action checks every citation and quotation in the filings of every party against the installed law, and lists the results by party. The same check is run on each; nothing here compares or ranks the parties.</p>
+        {audit?.warnings.map((w) => <div className="notice warn" key={w}>{w}</div>)}
+        {audit?.parties.map((p) => (
+          <div key={p.party_id} style={{ marginTop: 10 }}>
+            <strong>{p.display_name}</strong> <span className="muted">({p.role})</span>
+            <div style={{ fontSize: "0.82rem" }}>
+              {AUDIT_ORDER.filter((r) => (p.totals[r] ?? 0) > 0).map((r) => <span key={r} style={{ marginRight: 12, color: TONE[RESULT_LABEL[r].tone] }}>{RESULT_LABEL[r].text}: {p.totals[r]}</span>)}
+              {p.filings.length === 0 && <span className="muted">No filing assigned to this party.</span>}
+            </div>
+            {p.filings.map((f) => (
+              <details key={f.doc_id} style={{ marginTop: 4 }}>
+                <summary style={{ fontSize: "0.85rem" }}>{f.filename} — {f.items.length} citation{f.items.length === 1 ? "" : "s"} and quotation{f.items.length === 1 ? "" : "s"}{f.audited ? "" : " (not checked)"}</summary>
+                <ul style={{ paddingLeft: "1.1rem", margin: "4px 0" }}>
+                  {[...f.items].sort((a, b) => AUDIT_ORDER.indexOf(a.result) - AUDIT_ORDER.indexOf(b.result) || a.draft_char_start - b.draft_char_start).map((item) => <AuditRow key={item.item_id} item={item} whose="the filing's" />)}
+                </ul>
+              </details>
+            ))}
+          </div>
+        ))}
+        {audit && audit.unassigned_documents.length > 0 && <div className="muted" style={{ fontSize: "0.78rem", marginTop: 8 }}>Not assigned to a party, so not checked: {audit.unassigned_documents.join(", ")}.</div>}
+        {audit && audit.pack_snapshot.length > 0 && <div className="muted" style={{ fontSize: "0.72rem", marginTop: 4 }} data-testid="currency-stamp">Checked against: {audit.pack_snapshot.map((s) => `${s.pack_id} ${s.currency_date ? `as of ${s.currency_date}` : "(no currency date stated)"}`).join("; ")}</div>}
+      </div>
     </div>
   );
+}
+
+/** The excerpt with the matched words marked. Positions are character offsets into the excerpt. */
+function highlight(text: string, ranges: [number, number][]) {
+  const chars = Array.from(text);
+  const out: (string | JSX.Element)[] = [];
+  let at = 0;
+  [...ranges].sort((a, b) => a[0] - b[0]).forEach(([s, e], i) => {
+    if (s < at) return;
+    out.push(chars.slice(at, s).join(""));
+    out.push(<mark key={i}>{chars.slice(s, e).join("")}</mark>);
+    at = e;
+  });
+  out.push(chars.slice(at).join(""));
+  return out;
 }

@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Words that mean nearly the same thing in a court record (B-S4-19 record lookup). A question word also matches the others in its group at half weight. Data, not code: edit and re-pin.",
+  "groups": [
+    ["say", "said", "state", "stated", "depose", "deposed", "testify", "testified", "tell", "told", "assert", "asserted", "claim", "claimed"],
+    ["car", "vehicle", "motorcar", "automobile", "jeep", "van", "truck", "lorry", "motorcycle", "scooter"],
+    ["pay", "paid", "payment", "amount", "sum", "consideration", "money", "rupees"],
+    ["house", "building", "premises", "dwelling", "property", "residence", "home", "flat"],
+    ["leave", "left", "depart", "departed", "vacate", "vacated"],
+    ["live", "lived", "reside", "resided", "stay", "stayed", "occupy", "occupied", "occupation", "possession"],
+    ["sell", "sold", "sale", "transfer", "conveyance", "convey", "conveyed"],
+    ["buy", "bought", "purchase", "purchased"],
+    ["sign", "signed", "execute", "executed", "attest", "attested"],
+    ["rent", "rental", "tenant", "lease", "lessee", "let"],
+    ["adjourn", "adjourned", "adjournment", "postpone", "postponed"],
+    ["request", "sought", "seek", "applied", "application", "prayer"],
+    ["notice", "intimation", "demand"],
+    ["photograph", "photo", "picture", "image"],
+    ["complain", "complaint", "report"],
+    ["fix", "fixed", "scheduled", "listed"],
+    ["register", "registered", "registration"],
+    ["receipt", "receipts", "voucher", "bill"],
+    ["give", "gave", "given", "hand", "handed", "deliver", "delivered"],
+    ["take", "took", "taken"],
+    ["come", "came", "arrive", "arrived"],
+    ["go", "went", "gone"],
+    ["see", "saw", "seen", "observe", "observed", "notice"],
+    ["deny", "denied", "refuse", "refused", "reject", "rejected"],
+    ["admit", "admitted", "accept", "accepted", "agree", "agreed"]
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "batch": "B-S4-19",
+  "fixture_sha256": "b8655d2333ef8343e23df0b0176e7fd5f17ec086c0ef78fd8d921547c7d90cdf",
+  "acs": {
+    "AC-S4-13.1": {
+      "status": "PASS",
+      "evidence": {
+        "queries": 24,
+        "measured": {
+          "hits": 24,
+          "misses": [],
+          "queries": 24,
+          "rate": 1.0
+        },
+        "threshold": "PROPOSED 90% (Q-S4-01)",
+        "test": "ok",
+        "unanswerable_return_nothing": "ok"
+      },
+      "detail": "Top-5 contains a marked answering passage for the proposed share of questions on the synthetic G-CHAMBERS record. Re-measure on real matter records; the threshold is PROPOSED and the golden synthetic."
+    },
+    "AC-S4-13.2": {
+      "status": "PASS",
+      "evidence": {
+        "verbatim_slices": "ok",
+        "no_prose": "ok",
+        "static": {
+          "engine_has_no_model_or_network": true,
+          "lookup_command_never_calls_a_model": true,
+          "index_is_the_matters_own_documents_only": true
+        }
+      },
+      "detail": "Every hit is the record's own text at the stated document, page and character range, character for character; the hit carries only stored text, positions and numbers; the engine has no model, network or generation."
+    },
+    "both-sides-audit": {
+      "status": "PASS",
+      "evidence": {
+        "audit_all_needs_the_chambers_edition": true,
+        "audit_all_runs_the_same_check_on_every_filing": true,
+        "audit_all_groups_by_party_without_ranking": true,
+        "screen_audit_is_neutral": true
+      },
+      "detail": "One action runs the Citation Audit on every filing of every party, results grouped by party in the order the parties are named; the check is the same engine as the Citation Audit and is covered by its own gate."
+    }
+  },
+  "static": {
+    "engine_has_no_model_or_network": true,
+    "lookup_command_never_calls_a_model": true,
+    "index_is_the_matters_own_documents_only": true,
+    "lookup_needs_the_chambers_edition": true,
+    "audit_all_needs_the_chambers_edition": true,
+    "audit_all_runs_the_same_check_on_every_filing": true,
+    "audit_all_groups_by_party_without_ranking": true,
+    "commands_registered": true,
+    "screen_shows_excerpt_and_place": true,
+    "screen_voice_needs_a_check": true,
+    "screen_audit_is_neutral": true,
+    "screen_vocabulary_honest": true
+  },
+  "errors": []
+}

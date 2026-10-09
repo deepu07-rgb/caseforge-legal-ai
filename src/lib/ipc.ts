@@ -2969,3 +2969,16 @@ export async function chambersStatus(caseId: string): Promise<ChambersStatus> { 
 export async function chambersSetRecordOnly(caseId: string, enabled: boolean): Promise<void> { return invoke<void>("chambers_set_record_only", { caseId, enabled }); }
 export async function chambersG7Log(caseId: string): Promise<Record<string, unknown>[]> { return invoke<Record<string, unknown>[]>("chambers_g7_log", { caseId }); }
 export async function chambersReason(caseId: string, question: string, depth: string): Promise<ChambersReasonResult> { return invoke<ChambersReasonResult>("chambers_reason", { caseId, question, depth }); }
+
+// --- B-S4-19 Both-sides citation check and record lookup ---
+export interface ChambersAuditAll {
+  parties: { party_id: string; display_name: string; role: string; totals: Record<string, number>;
+    filings: { doc_id: string; filename: string; counts: Record<string, number>; items: AuditItem[]; audited: boolean }[] }[];
+  unassigned_documents: string[]; warnings: string[]; pack_snapshot: { pack_id: string; version: string; currency_date: string | null; trust_level: string }[]; note: string;
+}
+export interface LookupHit {
+  rank: number; score: number; doc_id: string; filename: string; page: number; label: string; char_start: number; char_end: number; excerpt: string; matched: [number, number][];
+}
+export interface ChambersLookupResult { question: string; hits: LookupHit[]; passages_in_record: number; documents_indexed: number; note: string }
+export async function chambersAuditAll(caseId: string): Promise<ChambersAuditAll> { return invoke<ChambersAuditAll>("chambers_audit_all", { caseId }); }
+export async function chambersLookup(caseId: string, question: string, limit?: number): Promise<ChambersLookupResult> { return invoke<ChambersLookupResult>("chambers_lookup", { caseId, question, limit: limit ?? null }); }

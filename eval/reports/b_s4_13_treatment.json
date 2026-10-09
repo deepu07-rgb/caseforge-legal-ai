@@ -25,6 +25,7 @@
       "evidence": {
         "citation_surfaces_with_stamp": [
           "AuditPanel.tsx",
+          "ChambersView.tsx",
           "CodeBridgePanel.tsx",
           "DeadlinesView.tsx",
           "FoundationPanel.tsx",

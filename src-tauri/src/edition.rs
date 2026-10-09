@@ -41,7 +41,7 @@ const CHAMBERS_ONLY: [&str; 2] = ["chambers", "issues"];
 /// opposition work, argument scoring.
 const ADVOCACY_ONLY: [&str; 8] = ["builder", "integrity", "voice", "experience", "court", "opposition", "witnesses", "practice"];
 /// Capabilities a pilot court may switch off in `chambers_pilot.json`.
-pub const PILOT_CAPABILITIES: [&str; 4] = ["reasoning", "issue_matrix", "memo_export", "citation_audit"];
+pub const PILOT_CAPABILITIES: [&str; 5] = ["reasoning", "issue_matrix", "memo_export", "citation_audit", "record_lookup"];
 
 /// A verified v2 licence.
 #[derive(Debug, Clone)]
