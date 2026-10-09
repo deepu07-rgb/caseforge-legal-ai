@@ -2896,3 +2896,19 @@ export async function deadlinesUnassign(caseId: string, ruleId: string, eventId:
 export async function deadlinesFactSave(caseId: string, factType: string, days: number, confirmed: boolean, docId: string, excerpt: string): Promise<void> { return invoke<void>("deadlines_fact_save", { caseId, factType, days, confirmed, docId, excerpt }); }
 export async function deadlinesFactRemove(caseId: string, factType: string): Promise<void> { return invoke<void>("deadlines_fact_remove", { caseId, factType }); }
 export async function deadlinesExportIcs(caseId: string): Promise<string> { return invoke<string>("deadlines_export_ics", { caseId }); }
+
+// --- B-S4-10 Admissibility & Foundation Gaps ---
+export interface FoundationElement { element_id: string; label: string; status: "PRESENT" | "ABSENT" | "UNKNOWN"; locators: { doc_id: string; excerpt: string }[]; authority: { pack_id: string; source_id: string; chunk_id: string; provision_label?: string | null } }
+export interface FoundationCheck {
+  schema_version: "1.0.0"; check_id: string; evidence_node_id: string; evidence_type: string; evidence_type_status: "PROPOSED" | "COUNSEL_CONFIRMED";
+  rule_id: string; elements: FoundationElement[]; scorer_version: "caseforge.integrity.v1" | "caseforge.integrity.v2";
+}
+export interface FoundationResult {
+  checks: FoundationCheck[]; gaps: Record<string, unknown>[]; panel: Record<string, unknown>[];
+  evidence: { evidence_id: string; label: string; evidence_type: string | null; type_status: "PROPOSED" | "COUNSEL_CONFIRMED" | null }[];
+  types: { evidence_type: string; label: string }[]; docs: { doc_id: string; filename: string; type_tag: string }[];
+  as_of: string[]; rules_installed: number; unsigned_rules: boolean; rule_problems: string[]; rejected_tables: string[]; note: string;
+}
+export async function foundationCheck(caseId: string, v1Panel: Record<string, unknown>[]): Promise<FoundationResult> { return invoke<FoundationResult>("foundation_check", { caseId, v1Panel }); }
+export async function foundationSetType(caseId: string, evidenceId: string, evidenceType: string | null): Promise<void> { return invoke<void>("foundation_set_type", { caseId, evidenceId, evidenceType }); }
+export async function foundationLink(caseId: string, evidenceId: string, elementId: string, docId: string | null): Promise<void> { return invoke<void>("foundation_link", { caseId, evidenceId, elementId, docId }); }

@@ -495,7 +495,10 @@ impl Store {
     }
 }
 
-static CURRENT: Lazy<Mutex<Option<(String, Arc<Store>)>>> = Lazy::new(|| Mutex::new(None));
+/// Opened stores by vault and installed-pack set. Several entries (a vault and its pack set each get one), so
+/// concurrent users of different vaults never evict each other; bounded so it cannot grow without limit.
+static CURRENT: Lazy<Mutex<HashMap<String, Arc<Store>>>> = Lazy::new(|| Mutex::new(HashMap::new()));
+const MAX_OPEN_STORES: usize = 16;
 
 /// The store for the vault's installed v2 packs: opened from disk, indexes built for new or changed packs.
 pub fn open(paths: &VaultPaths) -> Result<Arc<Store>, String> {
@@ -503,14 +506,15 @@ pub fn open(paths: &VaultPaths) -> Result<Arc<Store>, String> {
     installed.sort_by(|a, b| a.pack_id.cmp(&b.pack_id));
     let key = format!("{}|{}", paths.root.display(), installed.iter().map(|p| format!("{}:{}", p.pack_id, p.content_sha256)).collect::<Vec<_>>().join(","));
     let mut current = CURRENT.lock().map_err(|_| "CF_STORE_LOCK".to_string())?;
-    if let Some((k, store)) = current.as_ref() {
-        if *k == key {
-            return Ok(store.clone());
-        }
+    if let Some(store) = current.get(&key) {
+        return Ok(store.clone());
     }
     let packs = installed.iter().map(|p| PackIndex::ensure(paths, p)).collect::<Result<Vec<_>, _>>()?;
     let store = Arc::new(Store::new(packs));
-    *current = Some((key, store.clone()));
+    if current.len() >= MAX_OPEN_STORES {
+        current.clear();
+    }
+    current.insert(key, store.clone());
     Ok(store)
 }
 
@@ -617,7 +621,7 @@ mod tests {
         let index_dir = fs::read_dir(&packs_dir).unwrap().next().unwrap().unwrap().path();
         // Tampering with a keyword file is detected on the next open and the index is rebuilt from the verified pack.
         fs::write(index_dir.join("terms.dat"), b"appeal\t0\t1\t999\n").unwrap();
-        *CURRENT.lock().unwrap() = None;
+        CURRENT.lock().unwrap().clear();
         let rebuilt = open(&paths).unwrap();
         assert_eq!(rebuilt.len(), 20);
         assert!(!rebuilt.lexical(&tokenize("appeal decree"), &india_verified(), true, 5).is_empty());
@@ -626,7 +630,7 @@ mod tests {
         let mid = docs.len() / 2;
         docs[mid] ^= 0xff;
         fs::write(index_dir.join("docs.dat"), &docs).unwrap();
-        *CURRENT.lock().unwrap() = None;
+        CURRENT.lock().unwrap().clear();
         let damaged = open(&paths).unwrap();
         let all_ok = (0..20u32).all(|d| damaged.packs[0].load(d).is_ok());
         assert!(!all_ok, "a flipped byte in docs.dat must fail a passage check");
@@ -659,7 +663,7 @@ mod tests {
         let store = open(&paths).unwrap();
         println!("BENCH passages={} first_open_build_s={:.1} rss_mb={:?}", store.len(), t.elapsed().as_secs_f64(), rss_mb());
         drop(store);
-        *CURRENT.lock().unwrap() = None;
+        CURRENT.lock().unwrap().clear();
         let t = Instant::now();
         let store = open(&paths).unwrap();
         println!("BENCH reopen_s={:.2} rss_mb={:?}", t.elapsed().as_secs_f64(), rss_mb());

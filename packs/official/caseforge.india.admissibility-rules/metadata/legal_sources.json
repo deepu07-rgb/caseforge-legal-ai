@@ -1,0 +1,248 @@
+[
+  {
+    "schema_version": "2.0.0",
+    "source_id": "cfsrc:caseforge.india.admissibility-rules:0caf5bae57db9c22",
+    "title": "The Indian Evidence Act, 1872",
+    "jurisdiction": "India",
+    "jurisdiction_path": [
+      "India",
+      "Central Law",
+      "Evidence"
+    ],
+    "authority_type": "STATUTE",
+    "issuing_authority": "Parliament of India",
+    "citation": "Act No. 1 of 1872",
+    "section": "Section 65B",
+    "effective_from": "1872-09-01",
+    "effective_to": "2024-06-30",
+    "version": "India Code official text (verbatim extract of the criminal-codes pack)",
+    "amendment": "As published on India Code on the fetch date; amendments shown in official footnotes are not reproduced",
+    "source_file": "content/evidence_law_extract.txt",
+    "page": 1,
+    "paragraph": "Section 65B",
+    "heading_path": [
+      "The Indian Evidence Act, 1872",
+      "Section 65B"
+    ],
+    "exact_text": "65B. Admissibility of electronic records.––(1) Notwithstanding anything contained in this Act, any\ninformation contained in an electronic record which is printed on a paper, stored, recorded or copied in\noptical or magnetic media produced by a computer (hereinafter referred to as the computer output) shall\nbe deemed to be also a document, if the conditions mentioned in this section are satisfied in relation to the\ninformation and computer in question and shall be admissible in any proceedings, without further proof or\nproduction of the original, as evidence or any contents of the original or of any fact stated therein of\nwhich direct evidence would be admissible.\n(2) The conditions referred to in sub-section (1) in respect of a computer output shall be the\nfollowing, namely:––\n(a) the computer output containing the information was produced by the computer during the\nperiod over which the computer was used regularly to store or process information for the\npurposes of any activities regularly carried on over that period by the person having lawful\ncontrol over the use of the computer;\n(b) during the said period, information of the kind contained in the electronic record or of the\nkind from which the information so contained is derived was regularly fed into the computer in\nthe ordinary course of the said activities;\n(c) throughout the material part of the said period, the computer was operating properly or, if\nnot, then in respect of any period in which it was not operating properly or was out of operation\nduring that part of the period, was not such as to affect the electronic record or the accuracy of its\ncontents; and\n(d) the information contained in the electronic record reproduces or is derived from such\ninformation fed into the computer in the ordinary course of the said activities.\n(3) Where over any period, the function of storing or processing information for the purposes of\nany activities regularly carried on over that period as mentioned in clause (a) of sub-section (2) was\nregularly performed by computers, whether––\n(a) by a combination of computers operating over that period; or\n(b) by different computers operating in succession over that period; or\n(c) by different combinations of computers operating in succession over that period; or\n(d) in any other manner involving the successive operation over that period, in whatever\norder, of one or more computers and one or more combinations of computers,\nall the computers used for that purpose during that period shall be treated for the purposes of this\nsection as constituting a single computer; and references in this section to a computer shall be\nconstrued accordingly.\n(4) In any proceedings where it is desired to give a statement in evidence by virtue of this section,\na certificate doing any of the following things, that is to say,––\n(a) identifying the electronic record containing the statement and describing the manner in\nwhich it was produced;\n(b) giving such particulars of any device involved in the production of that electronic record\nas may be appropriate for the purpose of showing that the electronic record was produced by a\ncomputer;\n(c) dealing with any of the matters to which the conditions mentioned in\nsub-section (2) relate,\nand purporting to be signed by a person occupying a responsible official position in relation to the\noperation of the relevant device or the management of the relevant activities (whichever is\nappropriate) shall be evidence of any matter stated in the certificate; and for the purposes of this\nsub-section it shall be sufficient for a matter to be stated to the best of the knowledge and belief of the\nperson stating it.\n(5) For the purposes of this section,––\n(a) information shall be taken to be supplied to a computer if it is supplied thereto in any\nappropriate form and whether it is so supplied directly or (with or without human intervention) by\nmeans of any appropriate equipment;\n(b) whether in the course of activities carried on by any official, information is supplied with\na view to its being stored or processed for the purposes of those activities by a computer operated\notherwise than in the course of those activities, that information, if duly supplied to that\ncomputer, shall be taken to be supplied to it in the course of those activities;\n(c) a computer output shall be taken to have been produced by a computer whether it was\nproduced by it directly or (with or without human intervention) by means of any appropriate\nequipment.\nExplanation.––For the purposes of this section any reference to information being derived from other\ninformation shall be a reference to its being derived therefrom by calculation, comparison or any other\nprocess.]",
+    "checksum": "sha256:0caf5bae57db9c22c3c30927f0b8250d89c50c3cd68d0142764e2bdc1d960e16",
+    "pack_id": "caseforge.india.admissibility-rules",
+    "trust_level": "OFFICIAL_VERIFIED",
+    "superseded_status": "SUPERSEDED",
+    "publisher": "India Code, Ministry of Law and Justice, Legislative Department",
+    "source_reference": "https://indiacode.gov.in/handle/123456789/488783",
+    "content_kind": "AUTHORITATIVE_TEXT",
+    "derived_from_source_id": null,
+    "holding_tags": [],
+    "proposition_tags": [
+      "admissibility",
+      "foundation",
+      "evidence"
+    ]
+  },
+  {
+    "schema_version": "2.0.0",
+    "source_id": "cfsrc:caseforge.india.admissibility-rules:b091e0ddb34b29f2",
+    "title": "The Bharatiya Sakshya Adhiniyam, 2023",
+    "jurisdiction": "India",
+    "jurisdiction_path": [
+      "India",
+      "Central Law",
+      "Evidence"
+    ],
+    "authority_type": "STATUTE",
+    "issuing_authority": "Parliament of India",
+    "citation": "Act No. 47 of 2023",
+    "section": "Section 63",
+    "effective_from": "2024-07-01",
+    "effective_to": "UNKNOWN",
+    "version": "India Code official text (verbatim extract of the criminal-codes pack)",
+    "amendment": "As published on India Code on the fetch date; amendments shown in official footnotes are not reproduced",
+    "source_file": "content/evidence_law_extract.txt",
+    "page": 1,
+    "paragraph": "Section 63",
+    "heading_path": [
+      "The Bharatiya Sakshya Adhiniyam, 2023",
+      "Section 63"
+    ],
+    "exact_text": "63. Admissibility of electronic records.\n(1) Notwithstanding anything contained in this Adhiniyam, any information contained in an electronic record which is printed on paper, stored, recorded or copied in optical or magnetic media or semiconductor memory which is produced by a computer or any communication device or otherwise stored, recorded or copied in any electronic form (hereinafter referred to as the computer output) shall be deemed to be also a document, if the conditions mentioned in this section are satisfied in relation to the information and computer in question and shall be admissible in any proceedings, without further proof or production of the original, as evidence or any contents of the original or of any fact stated therein of which direct evidence would be admissible.\n(2) The conditions referred to in sub-section (1) in respect of a computer output shall be the following, namely:---\n(a) the computer output containing the information was produced by the computer or communication device during the period over which the computer or Communication device was used regularly to create, store or process information for the purposes of any activity regularly carried on over that period by the person having lawful control over the use of the computer or communication device;\n(b) during the said period, information of the kind contained in the electronic record or of the kind from which the information so contained is derived was regularly fed into the computer or Communication device in the ordinary course of the said activities;\n(c) throughout the material part of the said period, the computer or communication device was operating properly or, if not, then in respect of any period in which it was not operating properly or was out of operation during that part of the period, was not such as to affect the electronic record or the accuracy of its contents; and\n(d) the information contained in the electronic record reproduces or is derived from such information fed into the computer or Communication device in the ordinary course of the said activities.\n(3) Where over any period, the function of creating, storing or processing information for the purposes of any activity regularly carried on over that period as mentioned in clause (a) of sub-section (2) was regularly performed by means of one or more computers or communication device, whether--\n(a) in standalone mode; or\n(b) on a computer system; or\n(c) on a computer network; or\n(d) on a computer resource enabling information creation or providing information processing and storage; or\n(e) through an intermediary,\nall the computers or communication devices used for that purpose during that period shall be treated for the purposes of this section as constituting a single computer or communication device; and references in this section to a computer or communication device shall be construed accordingly.\n(4) In any proceeding where it is desired to give a statement in evidence by virtue of this section, a certificate doing any of the following things shall be submitted along with the electronic record at each instance where it is being submitted for admission, namely:--\n(a) identifying the electronic record containing the statement and describing the manner in which it was produced;\n(b) giving such particulars of any device involved in the production of that electronic record as may be appropriate for the purpose of showing that the electronic record was produced by a computer or a communication device referred to in clauses (a) to (e) of sub-section (3);\n(c) dealing with any of the matters to which the conditions mentioned in sub-section (2) relate,\nand purporting to be signed by a person in charge of the computer or communication device or the management of the relevant activities (whichever is appropriate) and an expert shall be evidence of any matter stated in the certificate; and for the purposes of this sub-section it shall be sufficient for a matter to be stated to the best of the knowledge and belief of the person stating it in the certificate specified in the Schedule.\n(5) For the purposes of this section,---\n(a) information shall be taken to be supplied to a computer or communication device if it is supplied thereto in any appropriate form and whether it is so supplied directly or (with or without human intervention) by means of any appropriate equipment;\n(b) a computer output shall be taken to have been produced by a computer or communication device whether it was produced by it directly or (with or without human intervention) by means of any appropriate equipment or by other electronic means as referred to in clauses (a) to (e) of sub-section (3).",
+    "checksum": "sha256:b091e0ddb34b29f2aab81ec5fd113022fd1819f818e1b0bb30f3fc34b55428e2",
+    "pack_id": "caseforge.india.admissibility-rules",
+    "trust_level": "OFFICIAL_VERIFIED",
+    "superseded_status": "CURRENT",
+    "publisher": "India Code, Ministry of Law and Justice, Legislative Department",
+    "source_reference": "https://indiacode.gov.in/handle/123456789/496549",
+    "content_kind": "AUTHORITATIVE_TEXT",
+    "derived_from_source_id": null,
+    "holding_tags": [],
+    "proposition_tags": [
+      "admissibility",
+      "foundation",
+      "evidence"
+    ]
+  },
+  {
+    "schema_version": "2.0.0",
+    "source_id": "cfsrc:caseforge.india.admissibility-rules:52d2a9bd5c645eeb",
+    "title": "The Indian Evidence Act, 1872",
+    "jurisdiction": "India",
+    "jurisdiction_path": [
+      "India",
+      "Central Law",
+      "Evidence"
+    ],
+    "authority_type": "STATUTE",
+    "issuing_authority": "Parliament of India",
+    "citation": "Act No. 1 of 1872",
+    "section": "Section 65",
+    "effective_from": "1872-09-01",
+    "effective_to": "2024-06-30",
+    "version": "India Code official text (verbatim extract of the criminal-codes pack)",
+    "amendment": "As published on India Code on the fetch date; amendments shown in official footnotes are not reproduced",
+    "source_file": "content/evidence_law_extract.txt",
+    "page": 1,
+    "paragraph": "Section 65",
+    "heading_path": [
+      "The Indian Evidence Act, 1872",
+      "Section 65"
+    ],
+    "exact_text": "65. Cases in which secondary evidence relating to documents may be given.––Secondary\nevidence may be given of the existence, condition or contents of a document in the following cases:––\n(a) when the original is shown or appears to be in the possession or power––\nof the person against whom the document is sought to be proved, or\nof any person out of reach of, or not subject to, the process of the Court, or\nof any person legally bound to produce it,\nand when, after the notice mentioned in section 66, such person does not produce it;\n(b) when the existence, condition or contents of the original have been proved to be admitted in\nwriting by the person against whom it is proved or by his representative in interest;\n(c) when the original has been destroyed or lost, or when the party offering evidence of its\ncontents cannot, for any other reason not arising from his own default or neglect, produce it in\nreasonable time;\n(d) when the original is of such a nature as not to be easily movable;\n(e) when the original is a public document within the meaning of section 74;\n(f) when the original is a document of which a certified copy is permitted by this Act, or by any\nother law in force in [India] to be given in evidence ;\n(g) when the originals consist of numerous accounts or other documents which cannot\nconveniently be examined in Court, and the fact to be proved is the general result of the whole\ncollection.\nIn cases (a), (c) and (d), any secondary evidence of the contents of the document is admissible.\nIn case (b), the written admission is admissible.\nIn case (e) or (f), a certified copy of the document, but no other kind of secondary evidence, is\nadmissible.\nIn case (g), evidence may be given as to the general result of the documents by any person who\nhas examined them, and who is skilled in the examination of such documents.",
+    "checksum": "sha256:52d2a9bd5c645eeb3ce4daaa169e4961d32a16fb982df7e8b2fdf38168535971",
+    "pack_id": "caseforge.india.admissibility-rules",
+    "trust_level": "OFFICIAL_VERIFIED",
+    "superseded_status": "SUPERSEDED",
+    "publisher": "India Code, Ministry of Law and Justice, Legislative Department",
+    "source_reference": "https://indiacode.gov.in/handle/123456789/488783",
+    "content_kind": "AUTHORITATIVE_TEXT",
+    "derived_from_source_id": null,
+    "holding_tags": [],
+    "proposition_tags": [
+      "admissibility",
+      "foundation",
+      "evidence"
+    ]
+  },
+  {
+    "schema_version": "2.0.0",
+    "source_id": "cfsrc:caseforge.india.admissibility-rules:26a0c94e51856e3c",
+    "title": "The Bharatiya Sakshya Adhiniyam, 2023",
+    "jurisdiction": "India",
+    "jurisdiction_path": [
+      "India",
+      "Central Law",
+      "Evidence"
+    ],
+    "authority_type": "STATUTE",
+    "issuing_authority": "Parliament of India",
+    "citation": "Act No. 47 of 2023",
+    "section": "Section 60",
+    "effective_from": "2024-07-01",
+    "effective_to": "UNKNOWN",
+    "version": "India Code official text (verbatim extract of the criminal-codes pack)",
+    "amendment": "As published on India Code on the fetch date; amendments shown in official footnotes are not reproduced",
+    "source_file": "content/evidence_law_extract.txt",
+    "page": 1,
+    "paragraph": "Section 60",
+    "heading_path": [
+      "The Bharatiya Sakshya Adhiniyam, 2023",
+      "Section 60"
+    ],
+    "exact_text": "60. Cases in which secondary evidence relating to documents maybe given.\nSecondary evidence may be given of the existence, condition, or contents of a document in the following cases, namely:--\n(a) when the original is shown or appears to be in the possession or power--\n(i) of the person against whom the document is sought to be proved; or\n(ii) of any person out of reach of, or not subject to, the process of the Court; or\n(iii) of any person legally bound to produce it,\nand when, after the notice mentioned in section 64 such person does not produce it;\n(b) when the existence, condition or contents of the original have been proved to be admitted in writing by the person against whom it is proved or by his representative in interest;\n(c) when the original has been destroyed or lost, or when the party offering evidence of its contents cannot, for any other reason not arising from his own default or neglect, produce it in reasonable time;\n(d) when the original is of such a nature as not to be easily movable;\n(e) when the original is a public document within the meaning of section 74;\n(f) when the original is a document of which a certified copy is permitted by this Adhiniyam, or by any other law in force in India to be given in evidence;\n(g) when the originals consist of numerous accounts or other documents which cannot conveniently be examined in Court, and the fact to be proved is the general result of the whole collection.\nExplanation.--For the purposes of--\n(i) clauses (a), (c) and (d), any secondary evidence of the contents of the document is admissible;\n(ii) clause (b), the written admission is admissible;\n(iii) clause (e) or (f), a certified copy of the document, but no other kind of secondary evidence, is admissible;\n(iv) clause (g), evidence may be given as to the general result of the documents by any person who has examined them, and who is skilled in the examination of such document.",
+    "checksum": "sha256:26a0c94e51856e3c0ca2be99721ed1ce733bb5b0eb7b06196e76fb9d050ec041",
+    "pack_id": "caseforge.india.admissibility-rules",
+    "trust_level": "OFFICIAL_VERIFIED",
+    "superseded_status": "CURRENT",
+    "publisher": "India Code, Ministry of Law and Justice, Legislative Department",
+    "source_reference": "https://indiacode.gov.in/handle/123456789/496549",
+    "content_kind": "AUTHORITATIVE_TEXT",
+    "derived_from_source_id": null,
+    "holding_tags": [],
+    "proposition_tags": [
+      "admissibility",
+      "foundation",
+      "evidence"
+    ]
+  },
+  {
+    "schema_version": "2.0.0",
+    "source_id": "cfsrc:caseforge.india.admissibility-rules:775c6a2c414811e4",
+    "title": "The Indian Evidence Act, 1872",
+    "jurisdiction": "India",
+    "jurisdiction_path": [
+      "India",
+      "Central Law",
+      "Evidence"
+    ],
+    "authority_type": "STATUTE",
+    "issuing_authority": "Parliament of India",
+    "citation": "Act No. 1 of 1872",
+    "section": "Section 45",
+    "effective_from": "1872-09-01",
+    "effective_to": "2024-06-30",
+    "version": "India Code official text (verbatim extract of the criminal-codes pack)",
+    "amendment": "As published on India Code on the fetch date; amendments shown in official footnotes are not reproduced",
+    "source_file": "content/evidence_law_extract.txt",
+    "page": 1,
+    "paragraph": "Section 45",
+    "heading_path": [
+      "The Indian Evidence Act, 1872",
+      "Section 45"
+    ],
+    "exact_text": "45. Opinions of experts.––When the Court has to form an opinion upon a point of foreign law or of\nscience, or art, or as to identity of handwriting [or finger impressions], the opinions upon that point of\npersons specially skilled in such foreign law, science or art, [or in questions as to identity of handwriting]\n[or finger impressions] are relevant facts.\nSuch persons are called experts.\nIllustrations\n(a) The question is, whether the death of A was caused by poison.\nThe opinions of experts as to the symptoms produced by the poison by which A is supposed to have\ndied, are relevant.\n(b) The question is, whether A, at the time of doing a certain act, was, by reason of unsoundness of\nmind, incapable of knowing the nature of the act, or that he was doing what was either wrong or contrary\nto law.\nThe opinions of experts upon the question whether the symptoms exhibited by A commonly show\nunsoundness of mind, and whether such unsoundness of mind usually renders persons incapable of\nknowing the nature of the acts which they do, or of knowing that what they do is either wrong or contrary\nto law, are relevant.\n(c) The question is, whether a certain document was written by A. Another document is produced\nwhich is proved or admitted to have been written by A.\nThe opinions of experts on the question whether the two documents were written by the same person\nor by different persons, are relevant.",
+    "checksum": "sha256:775c6a2c414811e45d7f4b8c4933a538d4b0b5810918de23252e7895b0aa9676",
+    "pack_id": "caseforge.india.admissibility-rules",
+    "trust_level": "OFFICIAL_VERIFIED",
+    "superseded_status": "SUPERSEDED",
+    "publisher": "India Code, Ministry of Law and Justice, Legislative Department",
+    "source_reference": "https://indiacode.gov.in/handle/123456789/488783",
+    "content_kind": "AUTHORITATIVE_TEXT",
+    "derived_from_source_id": null,
+    "holding_tags": [],
+    "proposition_tags": [
+      "admissibility",
+      "foundation",
+      "evidence"
+    ]
+  },
+  {
+    "schema_version": "2.0.0",
+    "source_id": "cfsrc:caseforge.india.admissibility-rules:1a6fcbda2b66e730",
+    "title": "The Bharatiya Sakshya Adhiniyam, 2023",
+    "jurisdiction": "India",
+    "jurisdiction_path": [
+      "India",
+      "Central Law",
+      "Evidence"
+    ],
+    "authority_type": "STATUTE",
+    "issuing_authority": "Parliament of India",
+    "citation": "Act No. 47 of 2023",
+    "section": "Section 39",
+    "effective_from": "2024-07-01",
+    "effective_to": "UNKNOWN",
+    "version": "India Code official text (verbatim extract of the criminal-codes pack)",
+    "amendment": "As published on India Code on the fetch date; amendments shown in official footnotes are not reproduced",
+    "source_file": "content/evidence_law_extract.txt",
+    "page": 1,
+    "paragraph": "Section 39",
+    "heading_path": [
+      "The Bharatiya Sakshya Adhiniyam, 2023",
+      "Section 39"
+    ],
+    "exact_text": "39. Opinions of experts.\n(1) When the Court has to form an opinion upon a point of foreign law or of science or art, or any other field, or as to identity of handwriting or finger impressions, the opinions upon that point of persons specially skilled in such foreign law, science or art, or any other field, or in questions as to identity of handwriting or finger impressions are relevant facts and such persons are called experts.\nIllustrations.\n(a) The question is, whether the death of A was caused by poison. The opinions of experts as to the symptoms produced by the poison by which A is supposed to have died, are relevant.\n(b) The question is, whether A, at the time of doing a certain act, was, by reason of unsoundness of mind, incapable of knowing the nature of the act, or that he was doing what was either wrong or contrary to law. The opinions of experts upon the question whether the symptoms exhibited by A commonly show unsoundness of mind, and whether such unsoundness of mind usually renders persons incapable of knowing the nature of the acts which they do, or of knowing that what they do is either wrong or contrary to law, are relevant.\n(c) The question is, whether a certain document was written by A. Another document is produced which is proved or admitted to have been written by A. The opinions of experts on the question whether the two documents were written by the same person or by different persons, are relevant.\n(2) When in a proceeding, the court has to form an opinion on any matter relating to any information transmitted or stored in any computer resource or any other electronic or digital form, the opinion of the Examiner of Electronic Evidence referred to in section 79A of the Information Technology Act, 2000 (21 of 2000), is a relevant fact.\nExplanation.--For the purposes of this sub-section, an Examiner of Electronic Evidence shall be an expert.",
+    "checksum": "sha256:1a6fcbda2b66e730520bab12ee555f85bc14bc890fae0eb1d063ef6827513834",
+    "pack_id": "caseforge.india.admissibility-rules",
+    "trust_level": "OFFICIAL_VERIFIED",
+    "superseded_status": "CURRENT",
+    "publisher": "India Code, Ministry of Law and Justice, Legislative Department",
+    "source_reference": "https://indiacode.gov.in/handle/123456789/496549",
+    "content_kind": "AUTHORITATIVE_TEXT",
+    "derived_from_source_id": null,
+    "holding_tags": [],
+    "proposition_tags": [
+      "admissibility",
+      "foundation",
+      "evidence"
+    ]
+  }
+]

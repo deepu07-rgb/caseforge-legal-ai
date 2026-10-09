@@ -1,0 +1,206 @@
+{
+  "schema_version": "1.0.0",
+  "table_id": "in.admissibility.v1",
+  "table_kind": "ADMISSIBILITY_REQUIREMENT",
+  "jurisdiction": "India",
+  "pack_id": "caseforge.india.admissibility-rules",
+  "description": "Foundation elements for electronic records, copies of documents and expert opinion under the Indian Evidence Act, 1872 and the Bharatiya Sakshya Adhiniyam, 2023. DEVELOPMENT_ONLY: awaiting two legal editors (Q-S4-02). A foundation gap is a prompt for counsel, not a ruling on admissibility. Not covered: other kinds of evidence, case-law gloss (for example on when a section 65B certificate can be dispensed with), state amendments.",
+  "rows": [
+    {
+      "rule_id": "in.adm.electronic.iea",
+      "table_kind": "ADMISSIBILITY_REQUIREMENT",
+      "jurisdiction": "India",
+      "effective_from": "2000-10-17",
+      "effective_to": "2024-06-30",
+      "authorities": [
+        {
+          "pack_id": "caseforge.india.admissibility-rules",
+          "source_id": "cfsrc:caseforge.india.admissibility-rules:0caf5bae57db9c22",
+          "chunk_id": "cfchunk:caseforge.india.admissibility-rules:d77985f607aa8b53",
+          "char_start": 2774,
+          "char_end": 2838,
+          "provision_label": "Evidence Act s.65B(4)"
+        }
+      ],
+      "legal_editor_signoff": null,
+      "trust_state": "DEVELOPMENT_ONLY",
+      "payload": {
+        "evidence_type": "ELECTRONIC_RECORD",
+        "elements": [
+          {
+            "element_id": "certificate",
+            "label": "A certificate under section 65B(4) identifying the electronic record and the device, signed by a person in a responsible official position",
+            "satisfied_by_node_types": [],
+            "satisfied_by_type_tags": [
+              "CERTIFICATE_65B"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "rule_id": "in.adm.electronic.bsa",
+      "table_kind": "ADMISSIBILITY_REQUIREMENT",
+      "jurisdiction": "India",
+      "effective_from": "2024-07-01",
+      "effective_to": null,
+      "authorities": [
+        {
+          "pack_id": "caseforge.india.admissibility-rules",
+          "source_id": "cfsrc:caseforge.india.admissibility-rules:b091e0ddb34b29f2",
+          "chunk_id": "cfchunk:caseforge.india.admissibility-rules:deedeb65819f6f0d",
+          "char_start": 3011,
+          "char_end": 3169,
+          "provision_label": "Sakshya Adhiniyam s.63(4)"
+        }
+      ],
+      "legal_editor_signoff": null,
+      "trust_state": "DEVELOPMENT_ONLY",
+      "payload": {
+        "evidence_type": "ELECTRONIC_RECORD",
+        "elements": [
+          {
+            "element_id": "certificate",
+            "label": "The certificate required by section 63(4) (in the Schedule form, signed by the person in charge of the device and an expert), submitted with the electronic record each time it is offered",
+            "satisfied_by_node_types": [],
+            "satisfied_by_type_tags": [
+              "CERTIFICATE_63"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "rule_id": "in.adm.secondary-copy.iea",
+      "table_kind": "ADMISSIBILITY_REQUIREMENT",
+      "jurisdiction": "India",
+      "effective_from": "1872-09-01",
+      "effective_to": "2024-06-30",
+      "authorities": [
+        {
+          "pack_id": "caseforge.india.admissibility-rules",
+          "source_id": "cfsrc:caseforge.india.admissibility-rules:52d2a9bd5c645eeb",
+          "chunk_id": "cfchunk:caseforge.india.admissibility-rules:1f826f6ac525bd83",
+          "char_start": 85,
+          "char_end": 184,
+          "provision_label": "Evidence Act s.65"
+        }
+      ],
+      "legal_editor_signoff": null,
+      "trust_state": "DEVELOPMENT_ONLY",
+      "payload": {
+        "evidence_type": "SECONDARY_COPY",
+        "elements": [
+          {
+            "element_id": "ground",
+            "label": "One of the grounds in section 65 is shown for giving a copy instead of the original (for example the original is lost, withheld or cannot easily be moved)",
+            "satisfied_by_node_types": [],
+            "satisfied_by_type_tags": [
+              "ORIGINAL_UNAVAILABLE_NOTE"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "rule_id": "in.adm.secondary-copy.bsa",
+      "table_kind": "ADMISSIBILITY_REQUIREMENT",
+      "jurisdiction": "India",
+      "effective_from": "2024-07-01",
+      "effective_to": null,
+      "authorities": [
+        {
+          "pack_id": "caseforge.india.admissibility-rules",
+          "source_id": "cfsrc:caseforge.india.admissibility-rules:26a0c94e51856e3c",
+          "chunk_id": "cfchunk:caseforge.india.admissibility-rules:22c8d32333a4257a",
+          "char_start": 73,
+          "char_end": 182,
+          "provision_label": "Sakshya Adhiniyam s.60"
+        }
+      ],
+      "legal_editor_signoff": null,
+      "trust_state": "DEVELOPMENT_ONLY",
+      "payload": {
+        "evidence_type": "SECONDARY_COPY",
+        "elements": [
+          {
+            "element_id": "ground",
+            "label": "One of the grounds in section 60 is shown for giving a copy instead of the original (for example the original is lost, withheld or cannot easily be moved)",
+            "satisfied_by_node_types": [],
+            "satisfied_by_type_tags": [
+              "ORIGINAL_UNAVAILABLE_NOTE"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "rule_id": "in.adm.expert.iea",
+      "table_kind": "ADMISSIBILITY_REQUIREMENT",
+      "jurisdiction": "India",
+      "effective_from": "1872-09-01",
+      "effective_to": "2024-06-30",
+      "authorities": [
+        {
+          "pack_id": "caseforge.india.admissibility-rules",
+          "source_id": "cfsrc:caseforge.india.admissibility-rules:775c6a2c414811e4",
+          "chunk_id": "cfchunk:caseforge.india.admissibility-rules:29574349599ffa0b",
+          "char_start": 205,
+          "char_end": 266,
+          "provision_label": "Evidence Act s.45"
+        }
+      ],
+      "legal_editor_signoff": null,
+      "trust_state": "DEVELOPMENT_ONLY",
+      "payload": {
+        "evidence_type": "EXPERT_OPINION",
+        "elements": [
+          {
+            "element_id": "qualification",
+            "label": "It is shown that the witness is specially skilled in the field of the opinion (section 45)",
+            "satisfied_by_node_types": [
+              "witness"
+            ],
+            "satisfied_by_type_tags": [
+              "EXPERT_QUALIFICATION"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "rule_id": "in.adm.expert.bsa",
+      "table_kind": "ADMISSIBILITY_REQUIREMENT",
+      "jurisdiction": "India",
+      "effective_from": "2024-07-01",
+      "effective_to": null,
+      "authorities": [
+        {
+          "pack_id": "caseforge.india.admissibility-rules",
+          "source_id": "cfsrc:caseforge.india.admissibility-rules:1a6fcbda2b66e730",
+          "chunk_id": "cfchunk:caseforge.india.admissibility-rules:8ca4454cdbc0b38c",
+          "char_start": 225,
+          "char_end": 286,
+          "provision_label": "Sakshya Adhiniyam s.39"
+        }
+      ],
+      "legal_editor_signoff": null,
+      "trust_state": "DEVELOPMENT_ONLY",
+      "payload": {
+        "evidence_type": "EXPERT_OPINION",
+        "elements": [
+          {
+            "element_id": "qualification",
+            "label": "It is shown that the witness is specially skilled in the field of the opinion (section 39)",
+            "satisfied_by_node_types": [
+              "witness"
+            ],
+            "satisfied_by_type_tags": [
+              "EXPERT_QUALIFICATION"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

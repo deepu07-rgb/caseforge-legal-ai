@@ -409,6 +409,47 @@ mod tests {
     }
 
     #[test]
+    fn shipped_admissibility_rules_install_cite_the_right_text_and_check_a_matter() {
+        // The real development pack through the real installer, loader and store.
+        let pack = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../packs/official/caseforge.india.admissibility-rules");
+        let vault = tempfile::tempdir().unwrap();
+        let paths = crate::vault::VaultPaths::new(vault.path().to_path_buf());
+        crate::packs::install_pack_from_dir(&paths, &pack).expect("the rules pack installs");
+        let (tables, rejected) = crate::rule_tables::load_installed(&paths);
+        assert!(rejected.is_empty(), "{rejected:?}");
+        let table = tables.iter().find(|t| t.table_kind == "ADMISSIBILITY_REQUIREMENT").expect("admissibility table");
+        assert_eq!(table.rows.len(), 6);
+        assert!(table.rows.iter().all(|r| r.trust_state == "DEVELOPMENT_ONLY" && r.signed_by.is_none()));
+        let rs: Vec<Rule> = table.rows.iter().map(|r| Rule::from_row(r).unwrap()).collect();
+        // Each rule's first citation is the sentence of the section it rests on.
+        let store = crate::retrieval::store::open(&paths).unwrap();
+        let expect = [("in.adm.electronic.iea", "a certificate doing any of the following things"), ("in.adm.electronic.bsa", "submitted along with the electronic record"), ("in.adm.secondary-copy.iea", "contents of a document"), ("in.adm.secondary-copy.bsa", "contents of a document"), ("in.adm.expert.iea", "specially skilled"), ("in.adm.expert.bsa", "specially skilled")];
+        for (id, phrase) in expect {
+            let r = rs.iter().find(|r| r.rule_id == id).unwrap_or_else(|| panic!("{id}"));
+            let a = &r.authorities[0];
+            let chunk = store.get_by_chunk_id(a["chunk_id"].as_str().unwrap()).expect("cited chunk installed");
+            let (s0, e0) = (a["char_start"].as_u64().unwrap() as usize, a["char_end"].as_u64().unwrap() as usize);
+            let cited: String = chunk.text.chars().skip(s0).take(e0 - s0).collect();
+            assert!(cited.contains(phrase), "{id}: '{cited}' should contain '{phrase}'");
+        }
+        // A matter with a WhatsApp screenshot and no certificate: a gap under the Sakshya Adhiniyam today, under the Evidence Act on an earlier date.
+        let ev = vec![Evidence { evidence_id: "evidence_0001".into(), label: "Annexure P-1: WhatsApp chat screenshot".into(), kind: "annexure".into(), doc_id: None }];
+        let run = |docs: &[DocInfo], as_of: &[&str]| {
+            let dates: Vec<String> = as_of.iter().map(|d| d.to_string()).collect();
+            check_all(&Inputs { case_id: "c", evidence: &ev, docs, nodes: &[], edges: &[], links: &[], types: &[], rules: &rs, as_of: &dates, vocab: vocabulary() })
+        };
+        let today = run(&[], &["2026-10-09"]);
+        assert_eq!((today.checks.len(), today.checks[0]["rule_id"].as_str(), today.checks[0]["elements"][0]["status"].as_str()), (1, Some("in.adm.electronic.bsa"), Some("ABSENT")));
+        assert_eq!(today.gaps.len(), 1);
+        assert!(today.gaps[0]["message"].as_str().unwrap().contains("not on file") && today.gaps[0]["authority"]["provision_label"] == "Sakshya Adhiniyam s.63(4)");
+        let both = run(&[], &["2026-10-09", "2023-05-01"]);
+        assert_eq!(both.checks.iter().map(|c| c["rule_id"].as_str().unwrap()).collect::<Vec<_>>(), vec!["in.adm.electronic.bsa", "in.adm.electronic.iea"]);
+        let with_cert = run(&[DocInfo { doc_id: "d9".into(), filename: "certificate.pdf".into(), type_tag: "CERTIFICATE_63".into() }], &["2026-10-09"]);
+        assert_eq!(with_cert.checks[0]["elements"][0]["status"], "PRESENT");
+        assert!(with_cert.gaps.is_empty());
+    }
+
+    #[test]
     fn evidence_types_are_matched_on_whole_words_and_ties_go_to_the_earlier_type() {
         let v = vocabulary();
         let ev = |label: &str| Evidence { evidence_id: "e".into(), label: label.into(), kind: "exhibit".into(), doc_id: None };

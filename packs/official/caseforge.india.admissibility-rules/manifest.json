@@ -1,0 +1,61 @@
+{
+  "schema_version": "2.1.0",
+  "metadata_version": "2.0.0",
+  "pack_id": "caseforge.india.admissibility-rules",
+  "pack_kind": "official",
+  "jurisdiction": "India",
+  "jurisdiction_path": [
+    "India",
+    "Central Law",
+    "Evidence"
+  ],
+  "version": "1.0.0-beta.1",
+  "display_name": "India Admissibility Foundation Rules (Evidence Act / Sakshya Adhiniyam) - Development",
+  "description": "Verbatim IEA s.65B, s.65, s.45 and BSA s.63, s.60, s.39, with an unsigned ADMISSIBILITY_REQUIREMENT rule table for the foundation-gap checks.",
+  "content_sha256": "9e11f34dc85f946531904ddd59d04ff8e70c7b7fa2057198e2da0027e36f2dff",
+  "authoritative_content_sha256": "69d7ac621976c1d3074da9fa5334f17f4a809731d990e530dd4bcd77e9f2695f",
+  "headnotes_stripped": true,
+  "signature_alg": "Ed25519",
+  "signer_key_id": "caseforge-official-dev-2026",
+  "trust_level": "OFFICIAL_VERIFIED",
+  "controlled_beta_eligible": true,
+  "sources_file": "metadata/legal_sources.json",
+  "chunks_file": "metadata/legal_chunks.json",
+  "files": [
+    {
+      "path": "content/evidence_law_extract.txt",
+      "sha256": "89c426338a312641ee8b912deecf9f3a70575451e1fee58189585bc539e72b14",
+      "bytes": 16538,
+      "role": "AUTHORITATIVE_CONTENT"
+    },
+    {
+      "path": "metadata/legal_chunks.json",
+      "sha256": "df81f9353287a615af942aa5927484cef5a1a67ea0d67fe3b53a526cfc84d9f6",
+      "bytes": 27532,
+      "role": "LEGAL_CHUNKS"
+    },
+    {
+      "path": "metadata/legal_sources.json",
+      "sha256": "795da32196d2182eaf5d2de1826a51a0044554cd24aa3eca97161bf55fd29de4",
+      "bytes": 25708,
+      "role": "LEGAL_SOURCES"
+    },
+    {
+      "path": "metadata/rule_tables/india_admissibility.json",
+      "sha256": "bfdfc91622f5fe21de2494714f141ae37bb11ee5a0f4f854dcc567ef7c3fe5c8",
+      "bytes": 7547,
+      "role": "RULE_TABLE"
+    }
+  ],
+  "publisher": "India Code / Ministry of Law and Justice; CaseForge original matter",
+  "updated_at": "2026-10-09",
+  "source_status": "CURRENT",
+  "supersedes_version": null,
+  "superseded_by_version": null,
+  "editorial_review_status": "TWO_LEGAL_EDITORS_PENDING",
+  "rights_basis": "Copyright Act, 1957, section 52(1)(q)(ii)",
+  "rule_tables_files": [
+    "metadata/rule_tables/india_admissibility.json"
+  ],
+  "currency_date": "2026-10-09"
+}

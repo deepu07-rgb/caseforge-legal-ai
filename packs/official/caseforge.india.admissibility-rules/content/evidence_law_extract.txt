@@ -1,0 +1,159 @@
+65B. Admissibility of electronic records.––(1) Notwithstanding anything contained in this Act, any
+information contained in an electronic record which is printed on a paper, stored, recorded or copied in
+optical or magnetic media produced by a computer (hereinafter referred to as the computer output) shall
+be deemed to be also a document, if the conditions mentioned in this section are satisfied in relation to the
+information and computer in question and shall be admissible in any proceedings, without further proof or
+production of the original, as evidence or any contents of the original or of any fact stated therein of
+which direct evidence would be admissible.
+(2) The conditions referred to in sub-section (1) in respect of a computer output shall be the
+following, namely:––
+(a) the computer output containing the information was produced by the computer during the
+period over which the computer was used regularly to store or process information for the
+purposes of any activities regularly carried on over that period by the person having lawful
+control over the use of the computer;
+(b) during the said period, information of the kind contained in the electronic record or of the
+kind from which the information so contained is derived was regularly fed into the computer in
+the ordinary course of the said activities;
+(c) throughout the material part of the said period, the computer was operating properly or, if
+not, then in respect of any period in which it was not operating properly or was out of operation
+during that part of the period, was not such as to affect the electronic record or the accuracy of its
+contents; and
+(d) the information contained in the electronic record reproduces or is derived from such
+information fed into the computer in the ordinary course of the said activities.
+(3) Where over any period, the function of storing or processing information for the purposes of
+any activities regularly carried on over that period as mentioned in clause (a) of sub-section (2) was
+regularly performed by computers, whether––
+(a) by a combination of computers operating over that period; or
+(b) by different computers operating in succession over that period; or
+(c) by different combinations of computers operating in succession over that period; or
+(d) in any other manner involving the successive operation over that period, in whatever
+order, of one or more computers and one or more combinations of computers,
+all the computers used for that purpose during that period shall be treated for the purposes of this
+section as constituting a single computer; and references in this section to a computer shall be
+construed accordingly.
+(4) In any proceedings where it is desired to give a statement in evidence by virtue of this section,
+a certificate doing any of the following things, that is to say,––
+(a) identifying the electronic record containing the statement and describing the manner in
+which it was produced;
+(b) giving such particulars of any device involved in the production of that electronic record
+as may be appropriate for the purpose of showing that the electronic record was produced by a
+computer;
+(c) dealing with any of the matters to which the conditions mentioned in
+sub-section (2) relate,
+and purporting to be signed by a person occupying a responsible official position in relation to the
+operation of the relevant device or the management of the relevant activities (whichever is
+appropriate) shall be evidence of any matter stated in the certificate; and for the purposes of this
+sub-section it shall be sufficient for a matter to be stated to the best of the knowledge and belief of the
+person stating it.
+(5) For the purposes of this section,––
+(a) information shall be taken to be supplied to a computer if it is supplied thereto in any
+appropriate form and whether it is so supplied directly or (with or without human intervention) by
+means of any appropriate equipment;
+(b) whether in the course of activities carried on by any official, information is supplied with
+a view to its being stored or processed for the purposes of those activities by a computer operated
+otherwise than in the course of those activities, that information, if duly supplied to that
+computer, shall be taken to be supplied to it in the course of those activities;
+(c) a computer output shall be taken to have been produced by a computer whether it was
+produced by it directly or (with or without human intervention) by means of any appropriate
+equipment.
+Explanation.––For the purposes of this section any reference to information being derived from other
+information shall be a reference to its being derived therefrom by calculation, comparison or any other
+process.]
+
+63. Admissibility of electronic records.
+(1) Notwithstanding anything contained in this Adhiniyam, any information contained in an electronic record which is printed on paper, stored, recorded or copied in optical or magnetic media or semiconductor memory which is produced by a computer or any communication device or otherwise stored, recorded or copied in any electronic form (hereinafter referred to as the computer output) shall be deemed to be also a document, if the conditions mentioned in this section are satisfied in relation to the information and computer in question and shall be admissible in any proceedings, without further proof or production of the original, as evidence or any contents of the original or of any fact stated therein of which direct evidence would be admissible.
+(2) The conditions referred to in sub-section (1) in respect of a computer output shall be the following, namely:---
+(a) the computer output containing the information was produced by the computer or communication device during the period over which the computer or Communication device was used regularly to create, store or process information for the purposes of any activity regularly carried on over that period by the person having lawful control over the use of the computer or communication device;
+(b) during the said period, information of the kind contained in the electronic record or of the kind from which the information so contained is derived was regularly fed into the computer or Communication device in the ordinary course of the said activities;
+(c) throughout the material part of the said period, the computer or communication device was operating properly or, if not, then in respect of any period in which it was not operating properly or was out of operation during that part of the period, was not such as to affect the electronic record or the accuracy of its contents; and
+(d) the information contained in the electronic record reproduces or is derived from such information fed into the computer or Communication device in the ordinary course of the said activities.
+(3) Where over any period, the function of creating, storing or processing information for the purposes of any activity regularly carried on over that period as mentioned in clause (a) of sub-section (2) was regularly performed by means of one or more computers or communication device, whether--
+(a) in standalone mode; or
+(b) on a computer system; or
+(c) on a computer network; or
+(d) on a computer resource enabling information creation or providing information processing and storage; or
+(e) through an intermediary,
+all the computers or communication devices used for that purpose during that period shall be treated for the purposes of this section as constituting a single computer or communication device; and references in this section to a computer or communication device shall be construed accordingly.
+(4) In any proceeding where it is desired to give a statement in evidence by virtue of this section, a certificate doing any of the following things shall be submitted along with the electronic record at each instance where it is being submitted for admission, namely:--
+(a) identifying the electronic record containing the statement and describing the manner in which it was produced;
+(b) giving such particulars of any device involved in the production of that electronic record as may be appropriate for the purpose of showing that the electronic record was produced by a computer or a communication device referred to in clauses (a) to (e) of sub-section (3);
+(c) dealing with any of the matters to which the conditions mentioned in sub-section (2) relate,
+and purporting to be signed by a person in charge of the computer or communication device or the management of the relevant activities (whichever is appropriate) and an expert shall be evidence of any matter stated in the certificate; and for the purposes of this sub-section it shall be sufficient for a matter to be stated to the best of the knowledge and belief of the person stating it in the certificate specified in the Schedule.
+(5) For the purposes of this section,---
+(a) information shall be taken to be supplied to a computer or communication device if it is supplied thereto in any appropriate form and whether it is so supplied directly or (with or without human intervention) by means of any appropriate equipment;
+(b) a computer output shall be taken to have been produced by a computer or communication device whether it was produced by it directly or (with or without human intervention) by means of any appropriate equipment or by other electronic means as referred to in clauses (a) to (e) of sub-section (3).
+
+65. Cases in which secondary evidence relating to documents may be given.––Secondary
+evidence may be given of the existence, condition or contents of a document in the following cases:––
+(a) when the original is shown or appears to be in the possession or power––
+of the person against whom the document is sought to be proved, or
+of any person out of reach of, or not subject to, the process of the Court, or
+of any person legally bound to produce it,
+and when, after the notice mentioned in section 66, such person does not produce it;
+(b) when the existence, condition or contents of the original have been proved to be admitted in
+writing by the person against whom it is proved or by his representative in interest;
+(c) when the original has been destroyed or lost, or when the party offering evidence of its
+contents cannot, for any other reason not arising from his own default or neglect, produce it in
+reasonable time;
+(d) when the original is of such a nature as not to be easily movable;
+(e) when the original is a public document within the meaning of section 74;
+(f) when the original is a document of which a certified copy is permitted by this Act, or by any
+other law in force in [India] to be given in evidence ;
+(g) when the originals consist of numerous accounts or other documents which cannot
+conveniently be examined in Court, and the fact to be proved is the general result of the whole
+collection.
+In cases (a), (c) and (d), any secondary evidence of the contents of the document is admissible.
+In case (b), the written admission is admissible.
+In case (e) or (f), a certified copy of the document, but no other kind of secondary evidence, is
+admissible.
+In case (g), evidence may be given as to the general result of the documents by any person who
+has examined them, and who is skilled in the examination of such documents.
+
+60. Cases in which secondary evidence relating to documents maybe given.
+Secondary evidence may be given of the existence, condition, or contents of a document in the following cases, namely:--
+(a) when the original is shown or appears to be in the possession or power--
+(i) of the person against whom the document is sought to be proved; or
+(ii) of any person out of reach of, or not subject to, the process of the Court; or
+(iii) of any person legally bound to produce it,
+and when, after the notice mentioned in section 64 such person does not produce it;
+(b) when the existence, condition or contents of the original have been proved to be admitted in writing by the person against whom it is proved or by his representative in interest;
+(c) when the original has been destroyed or lost, or when the party offering evidence of its contents cannot, for any other reason not arising from his own default or neglect, produce it in reasonable time;
+(d) when the original is of such a nature as not to be easily movable;
+(e) when the original is a public document within the meaning of section 74;
+(f) when the original is a document of which a certified copy is permitted by this Adhiniyam, or by any other law in force in India to be given in evidence;
+(g) when the originals consist of numerous accounts or other documents which cannot conveniently be examined in Court, and the fact to be proved is the general result of the whole collection.
+Explanation.--For the purposes of--
+(i) clauses (a), (c) and (d), any secondary evidence of the contents of the document is admissible;
+(ii) clause (b), the written admission is admissible;
+(iii) clause (e) or (f), a certified copy of the document, but no other kind of secondary evidence, is admissible;
+(iv) clause (g), evidence may be given as to the general result of the documents by any person who has examined them, and who is skilled in the examination of such document.
+
+45. Opinions of experts.––When the Court has to form an opinion upon a point of foreign law or of
+science, or art, or as to identity of handwriting [or finger impressions], the opinions upon that point of
+persons specially skilled in such foreign law, science or art, [or in questions as to identity of handwriting]
+[or finger impressions] are relevant facts.
+Such persons are called experts.
+Illustrations
+(a) The question is, whether the death of A was caused by poison.
+The opinions of experts as to the symptoms produced by the poison by which A is supposed to have
+died, are relevant.
+(b) The question is, whether A, at the time of doing a certain act, was, by reason of unsoundness of
+mind, incapable of knowing the nature of the act, or that he was doing what was either wrong or contrary
+to law.
+The opinions of experts upon the question whether the symptoms exhibited by A commonly show
+unsoundness of mind, and whether such unsoundness of mind usually renders persons incapable of
+knowing the nature of the acts which they do, or of knowing that what they do is either wrong or contrary
+to law, are relevant.
+(c) The question is, whether a certain document was written by A. Another document is produced
+which is proved or admitted to have been written by A.
+The opinions of experts on the question whether the two documents were written by the same person
+or by different persons, are relevant.
+
+39. Opinions of experts.
+(1) When the Court has to form an opinion upon a point of foreign law or of science or art, or any other field, or as to identity of handwriting or finger impressions, the opinions upon that point of persons specially skilled in such foreign law, science or art, or any other field, or in questions as to identity of handwriting or finger impressions are relevant facts and such persons are called experts.
+Illustrations.
+(a) The question is, whether the death of A was caused by poison. The opinions of experts as to the symptoms produced by the poison by which A is supposed to have died, are relevant.
+(b) The question is, whether A, at the time of doing a certain act, was, by reason of unsoundness of mind, incapable of knowing the nature of the act, or that he was doing what was either wrong or contrary to law. The opinions of experts upon the question whether the symptoms exhibited by A commonly show unsoundness of mind, and whether such unsoundness of mind usually renders persons incapable of knowing the nature of the acts which they do, or of knowing that what they do is either wrong or contrary to law, are relevant.
+(c) The question is, whether a certain document was written by A. Another document is produced which is proved or admitted to have been written by A. The opinions of experts on the question whether the two documents were written by the same person or by different persons, are relevant.
+(2) When in a proceeding, the court has to form an opinion on any matter relating to any information transmitted or stored in any computer resource or any other electronic or digital form, the opinion of the Examiner of Electronic Evidence referred to in section 79A of the Information Technology Act, 2000 (21 of 2000), is a relevant fact.
+Explanation.--For the purposes of this sub-section, an Examiner of Electronic Evidence shall be an expert.

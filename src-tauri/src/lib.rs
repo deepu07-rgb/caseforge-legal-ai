@@ -313,6 +313,135 @@ fn audit_draft(
     Ok(report)
 }
 
+// --- B-S4-10 Admissibility & Foundation Gaps ---
+
+fn authority_excerpt(store: Option<&retrieval::store::Store>, a: &serde_json::Value) -> Option<String> {
+    let chunk = store?.get_by_chunk_id(a["chunk_id"].as_str()?)?;
+    match (a["char_start"].as_u64(), a["char_end"].as_u64()) {
+        (Some(s), Some(e)) if e > s => Some(chunk.text.chars().skip(s as usize).take((e - s) as usize).collect()),
+        _ => Some(chunk.text.chars().take(240).collect()),
+    }
+}
+
+fn foundation_rules(tables: &[rule_tables::RuleTable], jurisdiction: &str) -> (Vec<foundation::Rule>, Vec<String>) {
+    let (mut rules, mut problems) = (Vec::new(), Vec::new());
+    for t in tables.iter().filter(|t| t.table_kind == "ADMISSIBILITY_REQUIREMENT" && t.jurisdiction.eq_ignore_ascii_case(jurisdiction)) {
+        for row in &t.rows {
+            match foundation::Rule::from_row(row) {
+                Ok(r) => rules.push(r),
+                Err(e) => problems.push(e),
+            }
+        }
+    }
+    (rules, problems)
+}
+
+fn graph_items(graph: &serde_json::Value, key: &str) -> Vec<serde_json::Value> {
+    graph[key].as_array().cloned().unwrap_or_default()
+}
+
+fn graph_evidence(graph: &serde_json::Value) -> Vec<foundation::Evidence> {
+    graph_items(graph, "evidence")
+        .iter()
+        .filter_map(|e| Some(foundation::Evidence { evidence_id: e["evidence_id"].as_str()?.to_string(), label: e["label"].as_str().unwrap_or("").to_string(), kind: e["kind"].as_str().unwrap_or("").to_string(), doc_id: e["doc_id"].as_str().map(str::to_string) }))
+        .collect()
+}
+
+/// Admissibility foundation checks for the matter's evidence and exhibits against the installed rule rows, with the
+/// gaps (rule row, authority and its text) and the Missing Links panel with foundation gaps first.
+#[tauri::command]
+fn foundation_check(app: AppHandle, vault: State<'_, VaultState>, case_id: String, v1_panel: Option<Vec<serde_json::Value>>) -> Result<serde_json::Value, String> {
+    let mgr = vault.get_or_init(&app)?;
+    let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
+    let jurisdiction = case_jurisdiction(&mgr, &case_id)?;
+    let (tables, rejected) = rule_tables::load_installed(&paths);
+    let (rules, rule_problems) = foundation_rules(&tables, &jurisdiction);
+    let graph = mgr.case_graph_get(&case_id).map_err(|e| e.to_string())?.unwrap_or_else(|| serde_json::json!({}));
+    let evidence = graph_evidence(&graph);
+    let nodes: Vec<foundation::NodeRef> = graph_items(&graph, "nodes").iter().filter_map(|n| Some(foundation::NodeRef { node_id: n["node_id"].as_str()?.to_string(), node_type: n["node_type"].as_str()?.to_string(), label: n["label"].as_str().unwrap_or("").to_string() })).collect();
+    let edges: Vec<foundation::Edge> = graph_items(&graph, "edges").iter().filter_map(|e| Some(foundation::Edge { from: e["from_node_id"].as_str()?.to_string(), to: e["to_node_id"].as_str()?.to_string(), status: e["status"].as_str().unwrap_or("").to_string() })).collect();
+    let docs: Vec<foundation::DocInfo> = mgr.doc_list(&case_id).map_err(|e| e.to_string())?.into_iter().map(|d| foundation::DocInfo { doc_id: d.doc_id, filename: d.original_filename, type_tag: d.type_tag }).collect();
+    let types: Vec<foundation::TypeChoice> = deadline_kv(&mgr, &case_id, "foundation:type:")?
+        .iter()
+        .filter_map(|v| Some(foundation::TypeChoice { evidence_id: v["evidence_id"].as_str()?.to_string(), evidence_type: v["evidence_type"].as_str()?.to_string() }))
+        .collect();
+    let links: Vec<foundation::Link> = deadline_kv(&mgr, &case_id, "foundation:link:")?
+        .iter()
+        .filter_map(|v| Some(foundation::Link { evidence_id: v["evidence_id"].as_str()?.to_string(), element_id: v["element_id"].as_str()?.to_string(), doc_id: v["doc_id"].as_str()?.to_string() }))
+        .collect();
+    let today = crate::docpipe::now_rfc3339()[..10].to_string();
+    let mut as_of = vec![today];
+    if let Some(d) = key_dates(&mgr, &case_id)?.get("INSTITUTION_DATE") {
+        if !as_of.contains(&d.date) {
+            as_of.push(d.date.clone());
+        }
+    }
+    let out = foundation::check_all(&foundation::Inputs { case_id: &case_id, evidence: &evidence, docs: &docs, nodes: &nodes, edges: &edges, links: &links, types: &types, rules: &rules, as_of: &as_of, vocab: foundation::vocabulary() });
+    let store = retrieval::store::open(&paths).ok();
+    let mut gaps = out.gaps;
+    for g in gaps.iter_mut() {
+        g["authority_excerpt"] = serde_json::json!(authority_excerpt(store.as_deref(), &g["authority"]));
+    }
+    let panel = foundation::merge_panel(&v1_panel.unwrap_or_default(), &gaps);
+    let items: Vec<serde_json::Value> = evidence
+        .iter()
+        .map(|e| {
+            let t = foundation::classify(e, &docs, foundation::vocabulary(), &types);
+            serde_json::json!({"evidence_id": e.evidence_id, "label": e.label, "evidence_type": t.as_ref().map(|t| t.0.clone()), "type_status": t.as_ref().map(|t| t.1)})
+        })
+        .collect();
+    Ok(serde_json::json!({
+        "checks": out.checks, "gaps": gaps, "panel": panel, "evidence": items,
+        "types": foundation::vocabulary().types.iter().map(|t| serde_json::json!({"evidence_type": t.evidence_type, "label": t.label})).collect::<Vec<_>>(),
+        "docs": docs.iter().map(|d| serde_json::json!({"doc_id": d.doc_id, "filename": d.filename, "type_tag": d.type_tag})).collect::<Vec<_>>(),
+        "as_of": as_of, "rules_installed": rules.len(), "unsigned_rules": rules.iter().any(|r| r.trust_state != "SIGNED_OFF"),
+        "rule_problems": rule_problems, "rejected_tables": rejected,
+        "note": "Foundation gaps are prompts for counsel, not rulings on admissibility. They change no score.",
+    }))
+}
+
+/// Counsel sets (or clears, with None) the evidence type of one item.
+#[tauri::command]
+fn foundation_set_type(app: AppHandle, vault: State<'_, VaultState>, case_id: String, evidence_id: String, evidence_type: Option<String>) -> Result<(), String> {
+    let mgr = vault.get_or_init(&app)?;
+    let graph = mgr.case_graph_get(&case_id).map_err(|e| e.to_string())?.unwrap_or_else(|| serde_json::json!({}));
+    if !graph_evidence(&graph).iter().any(|e| e.evidence_id == evidence_id) {
+        return Err("CF_FOUNDATION_EVIDENCE_UNKNOWN: that item is not in the matter's evidence".into());
+    }
+    let key = format!("foundation:type:{evidence_id}");
+    match evidence_type {
+        None => mgr.witness_kv_delete(&case_id, &key).map_err(|e| e.to_string()),
+        Some(t) => {
+            if !foundation::vocabulary().types.iter().any(|v| v.evidence_type == t) {
+                return Err("CF_FOUNDATION_TYPE_UNKNOWN: choose one of the listed evidence types".into());
+            }
+            mgr.witness_kv_put(&case_id, &key, &serde_json::json!({"evidence_id": evidence_id, "evidence_type": t, "at": crate::docpipe::now_rfc3339()})).map_err(|e| e.to_string())
+        }
+    }
+}
+
+/// Counsel links a document to one element of one evidence item (or removes the link with None).
+#[tauri::command]
+fn foundation_link(app: AppHandle, vault: State<'_, VaultState>, case_id: String, evidence_id: String, element_id: String, doc_id: Option<String>) -> Result<(), String> {
+    let mgr = vault.get_or_init(&app)?;
+    let key = format!("foundation:link:{evidence_id}:{element_id}");
+    let Some(doc_id) = doc_id else { return mgr.witness_kv_delete(&case_id, &key).map_err(|e| e.to_string()) };
+    let graph = mgr.case_graph_get(&case_id).map_err(|e| e.to_string())?.unwrap_or_else(|| serde_json::json!({}));
+    if !graph_evidence(&graph).iter().any(|e| e.evidence_id == evidence_id) {
+        return Err("CF_FOUNDATION_EVIDENCE_UNKNOWN: that item is not in the matter's evidence".into());
+    }
+    if !mgr.doc_list(&case_id).map_err(|e| e.to_string())?.iter().any(|d| d.doc_id == doc_id) {
+        return Err("CF_FOUNDATION_DOC_UNKNOWN: that document is not in the matter".into());
+    }
+    let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
+    let (tables, _) = rule_tables::load_installed(&paths);
+    let (rules, _) = foundation_rules(&tables, &case_jurisdiction(&mgr, &case_id)?);
+    if !rules.iter().any(|r| r.elements.iter().any(|e| e.element_id == element_id)) {
+        return Err("CF_FOUNDATION_ELEMENT_UNKNOWN: no installed rule has that element".into());
+    }
+    mgr.witness_kv_put(&case_id, &key, &serde_json::json!({"evidence_id": evidence_id, "element_id": element_id, "doc_id": doc_id, "at": crate::docpipe::now_rfc3339()})).map_err(|e| e.to_string())
+}
+
 // --- B-S4-11 Deadline & Limitation Watch ---
 
 fn deadline_rules(tables: &[rule_tables::RuleTable], jurisdiction: &str) -> (std::collections::BTreeMap<String, Vec<deadlines::Rule>>, Vec<String>) {
@@ -3705,6 +3834,9 @@ pub fn run() {
             deadlines_fact_save,
             deadlines_fact_remove,
             deadlines_export_ics,
+            foundation_check,
+            foundation_set_type,
+            foundation_link,
             llm_tiers,
             llm_set_tier,
             llm_chat,

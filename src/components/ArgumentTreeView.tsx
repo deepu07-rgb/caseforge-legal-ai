@@ -16,6 +16,7 @@ import {
 } from "../lib/ipc";
 import type { ProvenanceRecord } from "../lib/provenance";
 import ProvenanceInspector from "./ProvenanceInspector";
+import { FoundationPanel } from "./FoundationPanel";
 
 type Props = {
   activeCase: CaseSummary | null;
@@ -385,6 +386,7 @@ export default function ArgumentTreeView({
                 </div>
               </div>
             </div>
+            {activeCase && <FoundationPanel caseId={activeCase.case_id} v1Panel={score.missing_links_panel} />}
             <MissingPanel rows={score.missing_links_panel} topN={2} />
           </div>
 
