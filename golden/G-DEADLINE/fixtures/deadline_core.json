@@ -1,0 +1,974 @@
+{
+  "schema_version": "1.0.0",
+  "golden": "G-DEADLINE",
+  "batch": "B-S4-11",
+  "description": "Synthetic deadline computations with hand-derived expected dates. Rows are DEVELOPMENT_ONLY: this proves the date engine's arithmetic and its refusals, not the law; AC-S4-06.1 (legal-editor answers) needs real signed rows and stays BLOCKED.",
+  "rules": {
+    "R30": [
+      {
+        "rule_id": "test.30d",
+        "effective_from": "2000-01-01",
+        "effective_to": null,
+        "authorities": [
+          {
+            "pack_id": "caseforge.test.rules",
+            "source_id": "cfsrc:test:limit",
+            "chunk_id": "cfchunk:test:limit-1",
+            "provision_label": "Test schedule, entry 1"
+          }
+        ],
+        "trust_state": "DEVELOPMENT_ONLY",
+        "payload": {
+          "deadline_label": "Appeal within 30 days",
+          "trigger_event_type": "ORDER_PASSED",
+          "period": {
+            "value": 30,
+            "unit": "DAYS"
+          },
+          "counting": {
+            "exclude_trigger_day": true,
+            "roll_forward_if_court_closed": true,
+            "calendar_table_id": "cal-test"
+          },
+          "exclusions": []
+        }
+      }
+    ],
+    "R30X": [
+      {
+        "rule_id": "test.30d.copy",
+        "effective_from": "2000-01-01",
+        "effective_to": null,
+        "authorities": [
+          {
+            "pack_id": "caseforge.test.rules",
+            "source_id": "cfsrc:test:limit",
+            "chunk_id": "cfchunk:test:limit-1",
+            "provision_label": "Test schedule, entry 1"
+          }
+        ],
+        "trust_state": "DEVELOPMENT_ONLY",
+        "payload": {
+          "deadline_label": "Appeal within 30 days (copy time excluded)",
+          "trigger_event_type": "ORDER_PASSED",
+          "period": {
+            "value": 30,
+            "unit": "DAYS"
+          },
+          "counting": {
+            "exclude_trigger_day": true,
+            "roll_forward_if_court_closed": true,
+            "calendar_table_id": "cal-test"
+          },
+          "exclusions": [
+            {
+              "exclusion_id": "copy-time",
+              "condition_fact_type": "COPY_TIME",
+              "description": "Time requisite for obtaining a copy of the order",
+              "authority_index": 0
+            }
+          ]
+        }
+      }
+    ],
+    "R90INC": [
+      {
+        "rule_id": "test.90d.inc",
+        "effective_from": "2000-01-01",
+        "effective_to": null,
+        "authorities": [
+          {
+            "pack_id": "caseforge.test.rules",
+            "source_id": "cfsrc:test:limit",
+            "chunk_id": "cfchunk:test:limit-1",
+            "provision_label": "Test schedule, entry 1"
+          }
+        ],
+        "trust_state": "DEVELOPMENT_ONLY",
+        "payload": {
+          "deadline_label": "Filing within 90 days, first day counted",
+          "trigger_event_type": "EVENT",
+          "period": {
+            "value": 90,
+            "unit": "DAYS"
+          },
+          "counting": {
+            "exclude_trigger_day": false,
+            "roll_forward_if_court_closed": true,
+            "calendar_table_id": "cal-test"
+          },
+          "exclusions": []
+        }
+      }
+    ],
+    "R1M": [
+      {
+        "rule_id": "test.1m",
+        "effective_from": "2000-01-01",
+        "effective_to": null,
+        "authorities": [
+          {
+            "pack_id": "caseforge.test.rules",
+            "source_id": "cfsrc:test:limit",
+            "chunk_id": "cfchunk:test:limit-1",
+            "provision_label": "Test schedule, entry 1"
+          }
+        ],
+        "trust_state": "DEVELOPMENT_ONLY",
+        "payload": {
+          "deadline_label": "One month",
+          "trigger_event_type": "EVENT",
+          "period": {
+            "value": 1,
+            "unit": "MONTHS"
+          },
+          "counting": {
+            "exclude_trigger_day": true,
+            "roll_forward_if_court_closed": false,
+            "calendar_table_id": null
+          },
+          "exclusions": []
+        }
+      }
+    ],
+    "R1Y": [
+      {
+        "rule_id": "test.1y",
+        "effective_from": "2000-01-01",
+        "effective_to": null,
+        "authorities": [
+          {
+            "pack_id": "caseforge.test.rules",
+            "source_id": "cfsrc:test:limit",
+            "chunk_id": "cfchunk:test:limit-1",
+            "provision_label": "Test schedule, entry 1"
+          }
+        ],
+        "trust_state": "DEVELOPMENT_ONLY",
+        "payload": {
+          "deadline_label": "One year",
+          "trigger_event_type": "EVENT",
+          "period": {
+            "value": 1,
+            "unit": "YEARS"
+          },
+          "counting": {
+            "exclude_trigger_day": true,
+            "roll_forward_if_court_closed": false,
+            "calendar_table_id": null
+          },
+          "exclusions": []
+        }
+      }
+    ],
+    "R3Y": [
+      {
+        "rule_id": "test.3y",
+        "effective_from": "2000-01-01",
+        "effective_to": null,
+        "authorities": [
+          {
+            "pack_id": "caseforge.test.rules",
+            "source_id": "cfsrc:test:limit",
+            "chunk_id": "cfchunk:test:limit-1",
+            "provision_label": "Test schedule, entry 1"
+          }
+        ],
+        "trust_state": "DEVELOPMENT_ONLY",
+        "payload": {
+          "deadline_label": "Three years",
+          "trigger_event_type": "CAUSE_OF_ACTION",
+          "period": {
+            "value": 3,
+            "unit": "YEARS"
+          },
+          "counting": {
+            "exclude_trigger_day": true,
+            "roll_forward_if_court_closed": false,
+            "calendar_table_id": null
+          },
+          "exclusions": []
+        }
+      }
+    ],
+    "R3YINC": [
+      {
+        "rule_id": "test.3y.inc",
+        "effective_from": "2000-01-01",
+        "effective_to": null,
+        "authorities": [
+          {
+            "pack_id": "caseforge.test.rules",
+            "source_id": "cfsrc:test:limit",
+            "chunk_id": "cfchunk:test:limit-1",
+            "provision_label": "Test schedule, entry 1"
+          }
+        ],
+        "trust_state": "DEVELOPMENT_ONLY",
+        "payload": {
+          "deadline_label": "Three years, first day counted",
+          "trigger_event_type": "CAUSE_OF_ACTION",
+          "period": {
+            "value": 3,
+            "unit": "YEARS"
+          },
+          "counting": {
+            "exclude_trigger_day": false,
+            "roll_forward_if_court_closed": false,
+            "calendar_table_id": null
+          },
+          "exclusions": []
+        }
+      }
+    ],
+    "RWIN": [
+      {
+        "rule_id": "test.win",
+        "effective_from": "2000-01-01",
+        "effective_to": "2022-12-31",
+        "authorities": [
+          {
+            "pack_id": "caseforge.test.rules",
+            "source_id": "cfsrc:test:limit",
+            "chunk_id": "cfchunk:test:limit-1",
+            "provision_label": "Test schedule, entry 1"
+          }
+        ],
+        "trust_state": "DEVELOPMENT_ONLY",
+        "payload": {
+          "deadline_label": "Window rule (30 days to 2022, 60 from 2023)",
+          "trigger_event_type": "EVENT",
+          "period": {
+            "value": 30,
+            "unit": "DAYS"
+          },
+          "counting": {
+            "exclude_trigger_day": true,
+            "roll_forward_if_court_closed": false,
+            "calendar_table_id": null
+          },
+          "exclusions": []
+        }
+      },
+      {
+        "rule_id": "test.win",
+        "effective_from": "2023-01-01",
+        "effective_to": null,
+        "authorities": [
+          {
+            "pack_id": "caseforge.test.rules",
+            "source_id": "cfsrc:test:limit",
+            "chunk_id": "cfchunk:test:limit-1",
+            "provision_label": "Test schedule, entry 1"
+          }
+        ],
+        "trust_state": "DEVELOPMENT_ONLY",
+        "payload": {
+          "deadline_label": "Window rule (30 days to 2022, 60 from 2023)",
+          "trigger_event_type": "EVENT",
+          "period": {
+            "value": 60,
+            "unit": "DAYS"
+          },
+          "counting": {
+            "exclude_trigger_day": true,
+            "roll_forward_if_court_closed": false,
+            "calendar_table_id": null
+          },
+          "exclusions": []
+        }
+      }
+    ],
+    "RNOAUTH": [
+      {
+        "rule_id": "test.noauth",
+        "effective_from": "2000-01-01",
+        "effective_to": null,
+        "authorities": [],
+        "trust_state": "DEVELOPMENT_ONLY",
+        "payload": {
+          "deadline_label": "No authority",
+          "trigger_event_type": "EVENT",
+          "period": {
+            "value": 30,
+            "unit": "DAYS"
+          },
+          "counting": {
+            "exclude_trigger_day": true,
+            "roll_forward_if_court_closed": false,
+            "calendar_table_id": null
+          },
+          "exclusions": []
+        }
+      }
+    ],
+    "RLATE": [
+      {
+        "rule_id": "test.late",
+        "effective_from": "2025-01-01",
+        "effective_to": null,
+        "authorities": [
+          {
+            "pack_id": "caseforge.test.rules",
+            "source_id": "cfsrc:test:limit",
+            "chunk_id": "cfchunk:test:limit-1",
+            "provision_label": "Test schedule, entry 1"
+          }
+        ],
+        "trust_state": "DEVELOPMENT_ONLY",
+        "payload": {
+          "deadline_label": "Starts 2025",
+          "trigger_event_type": "EVENT",
+          "period": {
+            "value": 30,
+            "unit": "DAYS"
+          },
+          "counting": {
+            "exclude_trigger_day": true,
+            "roll_forward_if_court_closed": false,
+            "calendar_table_id": null
+          },
+          "exclusions": []
+        }
+      }
+    ]
+  },
+  "calendars": {
+    "cal-test": [
+      {
+        "court_id": "TEST-HC",
+        "year": 2024,
+        "closed_dates": [
+          {
+            "date": "2024-03-25",
+            "label": "Holi"
+          }
+        ],
+        "closed_ranges": [
+          {
+            "from": "2024-03-29",
+            "to": "2024-03-31",
+            "label": "Easter weekend"
+          },
+          {
+            "from": "2024-12-23",
+            "to": "2024-12-31",
+            "label": "Winter vacation"
+          }
+        ]
+      },
+      {
+        "court_id": "TEST-HC",
+        "year": 2025,
+        "closed_dates": [
+          {
+            "date": "2025-01-01",
+            "label": "New Year"
+          }
+        ],
+        "closed_ranges": []
+      }
+    ]
+  },
+  "cases": [
+    {
+      "name": "thirty_days_excluding_trigger_day",
+      "rules": "R30",
+      "trigger": {
+        "event_node_id": "ev-1",
+        "event_type": "ORDER_PASSED",
+        "date": "2024-01-15",
+        "date_precision": "DAY",
+        "date_range": null,
+        "conflicting_dates": [],
+        "locator": {
+          "doc_id": "doc-order-1",
+          "excerpt": "The order was passed on the date stated."
+        },
+        "origin": "SOURCED_BY_COUNSEL"
+      },
+      "facts": [],
+      "expect": {
+        "kind": "DATE",
+        "date": "2024-02-14",
+        "range_from": null,
+        "range_to": null,
+        "reasons": [],
+        "rolled_forward_from": null,
+        "exclusion_days": []
+      },
+      "error": null
+    },
+    {
+      "name": "leap_day_plus_three_years_clamps_to_28_feb",
+      "rules": "R3Y",
+      "trigger": {
+        "event_node_id": "ev-1",
+        "event_type": "CAUSE_OF_ACTION",
+        "date": "2020-02-29",
+        "date_precision": "DAY",
+        "date_range": null,
+        "conflicting_dates": [],
+        "locator": {
+          "doc_id": "doc-order-1",
+          "excerpt": "The order was passed on the date stated."
+        },
+        "origin": "SOURCED_BY_COUNSEL"
+      },
+      "facts": [],
+      "expect": {
+        "kind": "DATE",
+        "date": "2023-02-28",
+        "range_from": null,
+        "range_to": null,
+        "reasons": [],
+        "rolled_forward_from": null,
+        "exclusion_days": []
+      },
+      "error": null
+    },
+    {
+      "name": "month_end_plus_one_month_in_a_leap_year",
+      "rules": "R1M",
+      "trigger": {
+        "event_node_id": "ev-1",
+        "event_type": "EVENT",
+        "date": "2024-01-31",
+        "date_precision": "DAY",
+        "date_range": null,
+        "conflicting_dates": [],
+        "locator": {
+          "doc_id": "doc-order-1",
+          "excerpt": "The order was passed on the date stated."
+        },
+        "origin": "SOURCED_BY_COUNSEL"
+      },
+      "facts": [],
+      "expect": {
+        "kind": "DATE",
+        "date": "2024-02-29",
+        "range_from": null,
+        "range_to": null,
+        "reasons": [],
+        "rolled_forward_from": null,
+        "exclusion_days": []
+      },
+      "error": null
+    },
+    {
+      "name": "month_end_plus_one_month_in_a_common_year",
+      "rules": "R1M",
+      "trigger": {
+        "event_node_id": "ev-1",
+        "event_type": "EVENT",
+        "date": "2023-01-31",
+        "date_precision": "DAY",
+        "date_range": null,
+        "conflicting_dates": [],
+        "locator": {
+          "doc_id": "doc-order-1",
+          "excerpt": "The order was passed on the date stated."
+        },
+        "origin": "SOURCED_BY_COUNSEL"
+      },
+      "facts": [],
+      "expect": {
+        "kind": "DATE",
+        "date": "2023-02-28",
+        "range_from": null,
+        "range_to": null,
+        "reasons": [],
+        "rolled_forward_from": null,
+        "exclusion_days": []
+      },
+      "error": null
+    },
+    {
+      "name": "leap_day_plus_one_year_clamps",
+      "rules": "R1Y",
+      "trigger": {
+        "event_node_id": "ev-1",
+        "event_type": "EVENT",
+        "date": "2024-02-29",
+        "date_precision": "DAY",
+        "date_range": null,
+        "conflicting_dates": [],
+        "locator": {
+          "doc_id": "doc-order-1",
+          "excerpt": "The order was passed on the date stated."
+        },
+        "origin": "SOURCED_BY_COUNSEL"
+      },
+      "facts": [],
+      "expect": {
+        "kind": "DATE",
+        "date": "2025-02-28",
+        "range_from": null,
+        "range_to": null,
+        "reasons": [],
+        "rolled_forward_from": null,
+        "exclusion_days": []
+      },
+      "error": null
+    },
+    {
+      "name": "three_years_excluding_trigger_day",
+      "rules": "R3Y",
+      "trigger": {
+        "event_node_id": "ev-1",
+        "event_type": "CAUSE_OF_ACTION",
+        "date": "2021-03-05",
+        "date_precision": "DAY",
+        "date_range": null,
+        "conflicting_dates": [],
+        "locator": {
+          "doc_id": "doc-order-1",
+          "excerpt": "The order was passed on the date stated."
+        },
+        "origin": "SOURCED_BY_COUNSEL"
+      },
+      "facts": [],
+      "expect": {
+        "kind": "DATE",
+        "date": "2024-03-05",
+        "range_from": null,
+        "range_to": null,
+        "reasons": [],
+        "rolled_forward_from": null,
+        "exclusion_days": []
+      },
+      "error": null
+    },
+    {
+      "name": "three_years_counting_trigger_day",
+      "rules": "R3YINC",
+      "trigger": {
+        "event_node_id": "ev-1",
+        "event_type": "CAUSE_OF_ACTION",
+        "date": "2021-03-05",
+        "date_precision": "DAY",
+        "date_range": null,
+        "conflicting_dates": [],
+        "locator": {
+          "doc_id": "doc-order-1",
+          "excerpt": "The order was passed on the date stated."
+        },
+        "origin": "SOURCED_BY_COUNSEL"
+      },
+      "facts": [],
+      "expect": {
+        "kind": "DATE",
+        "date": "2024-03-04",
+        "range_from": null,
+        "range_to": null,
+        "reasons": [],
+        "rolled_forward_from": null,
+        "exclusion_days": []
+      },
+      "error": null
+    },
+    {
+      "name": "ninety_days_counting_first_day_rolls_over_consecutive_holidays",
+      "rules": "R90INC",
+      "trigger": {
+        "event_node_id": "ev-1",
+        "event_type": "EVENT",
+        "date": "2024-01-01",
+        "date_precision": "DAY",
+        "date_range": null,
+        "conflicting_dates": [],
+        "locator": {
+          "doc_id": "doc-order-1",
+          "excerpt": "The order was passed on the date stated."
+        },
+        "origin": "SOURCED_BY_COUNSEL"
+      },
+      "facts": [],
+      "expect": {
+        "kind": "DATE",
+        "date": "2024-04-01",
+        "range_from": null,
+        "range_to": null,
+        "reasons": [],
+        "rolled_forward_from": "2024-03-30",
+        "exclusion_days": []
+      },
+      "error": null
+    },
+    {
+      "name": "rolls_across_the_year_boundary_over_vacation_and_new_year",
+      "rules": "R30",
+      "trigger": {
+        "event_node_id": "ev-1",
+        "event_type": "ORDER_PASSED",
+        "date": "2024-11-23",
+        "date_precision": "DAY",
+        "date_range": null,
+        "conflicting_dates": [],
+        "locator": {
+          "doc_id": "doc-order-1",
+          "excerpt": "The order was passed on the date stated."
+        },
+        "origin": "SOURCED_BY_COUNSEL"
+      },
+      "facts": [],
+      "expect": {
+        "kind": "DATE",
+        "date": "2025-01-02",
+        "range_from": null,
+        "range_to": null,
+        "reasons": [],
+        "rolled_forward_from": "2024-12-23",
+        "exclusion_days": []
+      },
+      "error": null
+    },
+    {
+      "name": "month_precision_trigger_gives_a_range",
+      "rules": "R30",
+      "trigger": {
+        "event_node_id": "ev-1",
+        "event_type": "ORDER_PASSED",
+        "date": null,
+        "date_precision": "MONTH",
+        "date_range": {
+          "from": "2024-03-01",
+          "to": "2024-03-31"
+        },
+        "conflicting_dates": [],
+        "locator": {
+          "doc_id": "doc-order-1",
+          "excerpt": "The order was passed on the date stated."
+        },
+        "origin": "SOURCED_BY_COUNSEL"
+      },
+      "facts": [],
+      "expect": {
+        "kind": "RANGE",
+        "date": null,
+        "range_from": "2024-04-01",
+        "range_to": "2024-04-30",
+        "reasons": [
+          "TRIGGER_DATE_IMPRECISE"
+        ],
+        "rolled_forward_from": null,
+        "exclusion_days": []
+      },
+      "error": null
+    },
+    {
+      "name": "conflicting_trigger_dates_give_a_range",
+      "rules": "R30",
+      "trigger": {
+        "event_node_id": "ev-1",
+        "event_type": "ORDER_PASSED",
+        "date": "2024-01-15",
+        "date_precision": "DAY",
+        "date_range": null,
+        "conflicting_dates": [
+          "2024-01-20"
+        ],
+        "locator": {
+          "doc_id": "doc-order-1",
+          "excerpt": "The order was passed on the date stated."
+        },
+        "origin": "SOURCED_BY_COUNSEL"
+      },
+      "facts": [],
+      "expect": {
+        "kind": "RANGE",
+        "date": null,
+        "range_from": "2024-02-14",
+        "range_to": "2024-02-19",
+        "reasons": [
+          "TRIGGER_DATE_CONFLICT"
+        ],
+        "rolled_forward_from": null,
+        "exclusion_days": []
+      },
+      "error": null
+    },
+    {
+      "name": "confirmed_exclusion_is_applied",
+      "rules": "R30X",
+      "trigger": {
+        "event_node_id": "ev-1",
+        "event_type": "ORDER_PASSED",
+        "date": "2024-01-15",
+        "date_precision": "DAY",
+        "date_range": null,
+        "conflicting_dates": [],
+        "locator": {
+          "doc_id": "doc-order-1",
+          "excerpt": "The order was passed on the date stated."
+        },
+        "origin": "SOURCED_BY_COUNSEL"
+      },
+      "facts": [
+        {
+          "fact_type": "COPY_TIME",
+          "node_id": "fact-copy",
+          "days": 12,
+          "confirmed": true,
+          "locator": {
+            "doc_id": "doc-copy-1",
+            "excerpt": "Copy applied on 2 Jan and received on 14 Jan."
+          }
+        }
+      ],
+      "expect": {
+        "kind": "DATE",
+        "date": "2024-02-26",
+        "range_from": null,
+        "range_to": null,
+        "reasons": [],
+        "rolled_forward_from": null,
+        "exclusion_days": [
+          12
+        ]
+      },
+      "error": null
+    },
+    {
+      "name": "unconfirmed_exclusion_gives_a_range",
+      "rules": "R30X",
+      "trigger": {
+        "event_node_id": "ev-1",
+        "event_type": "ORDER_PASSED",
+        "date": "2024-01-15",
+        "date_precision": "DAY",
+        "date_range": null,
+        "conflicting_dates": [],
+        "locator": {
+          "doc_id": "doc-order-1",
+          "excerpt": "The order was passed on the date stated."
+        },
+        "origin": "SOURCED_BY_COUNSEL"
+      },
+      "facts": [
+        {
+          "fact_type": "COPY_TIME",
+          "node_id": "fact-copy",
+          "days": 12,
+          "confirmed": false,
+          "locator": {
+            "doc_id": "doc-copy-1",
+            "excerpt": "Copy applied on 2 Jan and received on 14 Jan."
+          }
+        }
+      ],
+      "expect": {
+        "kind": "RANGE",
+        "date": null,
+        "range_from": "2024-02-14",
+        "range_to": "2024-02-26",
+        "reasons": [
+          "EXCLUSION_FACT_UNCONFIRMED"
+        ],
+        "rolled_forward_from": null,
+        "exclusion_days": []
+      },
+      "error": null
+    },
+    {
+      "name": "exclusion_not_applied_when_its_fact_is_absent",
+      "rules": "R30X",
+      "trigger": {
+        "event_node_id": "ev-1",
+        "event_type": "ORDER_PASSED",
+        "date": "2024-01-15",
+        "date_precision": "DAY",
+        "date_range": null,
+        "conflicting_dates": [],
+        "locator": {
+          "doc_id": "doc-order-1",
+          "excerpt": "The order was passed on the date stated."
+        },
+        "origin": "SOURCED_BY_COUNSEL"
+      },
+      "facts": [],
+      "expect": {
+        "kind": "DATE",
+        "date": "2024-02-14",
+        "range_from": null,
+        "range_to": null,
+        "reasons": [],
+        "rolled_forward_from": null,
+        "exclusion_days": []
+      },
+      "error": null
+    },
+    {
+      "name": "missing_calendar_year_gives_a_range",
+      "rules": "R30",
+      "trigger": {
+        "event_node_id": "ev-1",
+        "event_type": "ORDER_PASSED",
+        "date": "2026-03-01",
+        "date_precision": "DAY",
+        "date_range": null,
+        "conflicting_dates": [],
+        "locator": {
+          "doc_id": "doc-order-1",
+          "excerpt": "The order was passed on the date stated."
+        },
+        "origin": "SOURCED_BY_COUNSEL"
+      },
+      "facts": [],
+      "expect": {
+        "kind": "RANGE",
+        "date": null,
+        "range_from": "2026-03-31",
+        "range_to": "2026-04-14",
+        "reasons": [
+          "CALENDAR_MISSING"
+        ],
+        "rolled_forward_from": null,
+        "exclusion_days": []
+      },
+      "error": null
+    },
+    {
+      "name": "rule_window_changes_inside_the_trigger_range",
+      "rules": "RWIN",
+      "trigger": {
+        "event_node_id": "ev-1",
+        "event_type": "EVENT",
+        "date": null,
+        "date_precision": "RANGE",
+        "date_range": {
+          "from": "2022-12-25",
+          "to": "2023-01-05"
+        },
+        "conflicting_dates": [],
+        "locator": {
+          "doc_id": "doc-order-1",
+          "excerpt": "The order was passed on the date stated."
+        },
+        "origin": "SOURCED_BY_COUNSEL"
+      },
+      "facts": [],
+      "expect": {
+        "kind": "RANGE",
+        "date": null,
+        "range_from": "2023-01-24",
+        "range_to": "2023-03-06",
+        "reasons": [
+          "TRIGGER_DATE_IMPRECISE",
+          "RULE_WINDOW_AMBIGUOUS"
+        ],
+        "rolled_forward_from": null,
+        "exclusion_days": []
+      },
+      "error": null
+    },
+    {
+      "name": "rule_window_chosen_by_the_trigger_date",
+      "rules": "RWIN",
+      "trigger": {
+        "event_node_id": "ev-1",
+        "event_type": "EVENT",
+        "date": "2022-12-20",
+        "date_precision": "DAY",
+        "date_range": null,
+        "conflicting_dates": [],
+        "locator": {
+          "doc_id": "doc-order-1",
+          "excerpt": "The order was passed on the date stated."
+        },
+        "origin": "SOURCED_BY_COUNSEL"
+      },
+      "facts": [],
+      "expect": {
+        "kind": "DATE",
+        "date": "2023-01-19",
+        "range_from": null,
+        "range_to": null,
+        "reasons": [],
+        "rolled_forward_from": null,
+        "exclusion_days": []
+      },
+      "error": null
+    },
+    {
+      "name": "unknown_trigger_date_gives_no_deadline",
+      "rules": "R30",
+      "trigger": {
+        "event_node_id": "ev-1",
+        "event_type": "ORDER_PASSED",
+        "date": null,
+        "date_precision": "UNKNOWN",
+        "date_range": null,
+        "conflicting_dates": [],
+        "locator": {
+          "doc_id": "doc-order-1",
+          "excerpt": "The order was passed on the date stated."
+        },
+        "origin": "SOURCED_BY_COUNSEL"
+      },
+      "facts": [],
+      "expect": null,
+      "error": "CF_DEADLINE_TRIGGER_UNKNOWN"
+    },
+    {
+      "name": "rule_without_authority_gives_no_deadline",
+      "rules": "RNOAUTH",
+      "trigger": {
+        "event_node_id": "ev-1",
+        "event_type": "EVENT",
+        "date": "2024-01-15",
+        "date_precision": "DAY",
+        "date_range": null,
+        "conflicting_dates": [],
+        "locator": {
+          "doc_id": "doc-order-1",
+          "excerpt": "The order was passed on the date stated."
+        },
+        "origin": "SOURCED_BY_COUNSEL"
+      },
+      "facts": [],
+      "expect": null,
+      "error": "CF_DEADLINE_NO_AUTHORITY"
+    },
+    {
+      "name": "trigger_without_locator_gives_no_deadline",
+      "rules": "R30",
+      "trigger": {
+        "event_node_id": "ev-1",
+        "event_type": "ORDER_PASSED",
+        "date": "2024-01-15",
+        "date_precision": "DAY",
+        "date_range": null,
+        "conflicting_dates": [],
+        "locator": {
+          "doc_id": "",
+          "excerpt": ""
+        },
+        "origin": "SOURCED_BY_COUNSEL"
+      },
+      "facts": [],
+      "expect": null,
+      "error": "CF_DEADLINE_NO_LOCATOR"
+    },
+    {
+      "name": "no_rule_in_force_on_the_trigger_date",
+      "rules": "RLATE",
+      "trigger": {
+        "event_node_id": "ev-1",
+        "event_type": "EVENT",
+        "date": "2024-06-01",
+        "date_precision": "DAY",
+        "date_range": null,
+        "conflicting_dates": [],
+        "locator": {
+          "doc_id": "doc-order-1",
+          "excerpt": "The order was passed on the date stated."
+        },
+        "origin": "SOURCED_BY_COUNSEL"
+      },
+      "facts": [],
+      "expect": null,
+      "error": "CF_DEADLINE_NO_RULE"
+    }
+  ]
+}
