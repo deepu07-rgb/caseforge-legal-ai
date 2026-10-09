@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0.0",
+  "golden": "G-CHAMBERS",
+  "set": "issue_matrix_fallback",
+  "batch": "B-S4-18",
+  "description": "Two-party sale-suit pleadings with NO cross-references between the filings, so facts are paired by shared wording: the sale deed is stated by the plaintiff and denied by the defendant (disputed), the payment of consideration is stated by both (admitted), and the defendant's argument that the plaintiff is not in possession is never answered. Expected results come from an independent implementation of the written rules and were reviewed by hand.",
+  "parties": [
+    {
+      "party_id": "P",
+      "display_name": "Sita Devi",
+      "role": "Plaintiff"
+    },
+    {
+      "party_id": "D",
+      "display_name": "Mohan Lal",
+      "role": "Defendant"
+    }
+  ],
+  "filings": [
+    {
+      "doc_id": "d-plaint",
+      "party_id": "P",
+      "pages": [
+        "1. The defendant executed a registered sale deed in favour of the plaintiff and delivered possession of the shop to the plaintiff.\n2. The plaintiff paid the full sale consideration to the defendant before the sub-registrar.\n3. The defendant has since disturbed the possession of the plaintiff over the shop.\n"
+      ]
+    },
+    {
+      "doc_id": "d-ws",
+      "party_id": "D",
+      "pages": [
+        "1. The defendant never executed any sale deed in favour of the plaintiff and never delivered possession of the shop.\n2. The defendant received the sale consideration of the shop from the plaintiff before the sub-registrar.\n3. It is submitted that the plaintiff is not in possession of the shop and has no right to sue.\n"
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "judge:1",
+      "text": "Whether the defendant executed a registered sale deed and delivered possession of the shop to the plaintiff?",
+      "origin": "JUDGE_AUTHORED",
+      "template_rule_id": null,
+      "decision": "ACCEPTED",
+      "merged_into": null
+    },
+    {
+      "issue_id": "judge:2",
+      "text": "Whether the plaintiff paid the sale consideration before the sub-registrar?",
+      "origin": "JUDGE_AUTHORED",
+      "template_rule_id": null,
+      "decision": "ACCEPTED",
+      "merged_into": null
+    }
+  ],
+  "audited": [],
+  "templates": {
+    "matter_type": "CIVIL_SALE_SUIT",
+    "rule_id": "test.issue.sale",
+    "issue_skeletons": []
+  },
+  "graph_issues": [],
+  "thresholds": {
+    "assign_min_shared_keywords": 2,
+    "response_min_shared_keywords": 3
+  },
+  "expect": {
+    "judge:1": {
+      "decision": "ACCEPTED",
+      "positions": {
+        "P": [
+          "d-plaint:p1",
+          "d-plaint:p3"
+        ],
+        "D": [
+          "d-ws:p1",
+          "d-ws:p2",
+          "d-ws:p3"
+        ]
+      },
+      "admitted": [],
+      "disputed": [
+        "d-plaint:p1",
+        "d-ws:p1"
+      ],
+      "unanswered": [
+        [
+          "d-ws:p3",
+          "D",
+          "P"
+        ]
+      ]
+    },
+    "judge:2": {
+      "decision": "ACCEPTED",
+      "positions": {
+        "P": [
+          "d-plaint:p2"
+        ],
+        "D": [
+          "d-ws:p2"
+        ]
+      },
+      "admitted": [
+        "d-plaint:p2",
+        "d-ws:p2"
+      ],
+      "disputed": [],
+      "unanswered": []
+    }
+  },
+  "expect_proposed": []
+}
