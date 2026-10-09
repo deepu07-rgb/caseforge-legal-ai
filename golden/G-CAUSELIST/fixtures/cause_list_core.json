@@ -1,0 +1,493 @@
+{
+  "schema_version": "1.0.0",
+  "golden": "G-CAUSELIST",
+  "batch": "B-S4-20",
+  "description": "A cause list (CSV and plain lines), five synthetic matters and the briefs they must produce: a civil matter with four orders, an unfulfilled direction, an application still pending and a trap (a pleading saying the defendant 'failed to produce'); a criminal matter whose direction a later document shows done and whose application was dismissed; two matters a listing cannot tell apart; a listing with no local record; a matter with no orders on the record. Expectations are hand-authored.",
+  "list": {
+    "court_label": "Court No. 3",
+    "list_date": "2024-10-14",
+    "csv": "Sr No,Case Number,Cause Title\n1,CS 112/2023,Ravi Kumar vs Anil Kumar\n2,,State v Dev Singh\n3,,Mehta Traders v. Union Bank\n4,,Kapoor v. Kapoor\n5,CS 9/2023,Sethi v. Sethi\n6,,\"Rao, K. v. Rao, S.\"\n",
+    "text_lines": "CAUSE LIST - Court No. 3 - 14 October 2024\n1. Ravi Kumar vs Anil Kumar CS 112/2023\n2. State v Dev Singh\n3) Mehta Traders v. Union Bank\n"
+  },
+  "expect_import": {
+    "csv": [
+      {
+        "serial": "1",
+        "title": "Ravi Kumar vs Anil Kumar",
+        "case_number": "CS 112/2023"
+      },
+      {
+        "serial": "2",
+        "title": "State v Dev Singh",
+        "case_number": null
+      },
+      {
+        "serial": "3",
+        "title": "Mehta Traders v. Union Bank",
+        "case_number": null
+      },
+      {
+        "serial": "4",
+        "title": "Kapoor v. Kapoor",
+        "case_number": null
+      },
+      {
+        "serial": "5",
+        "title": "Sethi v. Sethi",
+        "case_number": "CS 9/2023"
+      },
+      {
+        "serial": "6",
+        "title": "Rao, K. v. Rao, S.",
+        "case_number": null
+      }
+    ],
+    "text": [
+      {
+        "serial": "1",
+        "title": "Ravi Kumar vs Anil Kumar",
+        "case_number": "CS 112/2023"
+      },
+      {
+        "serial": "2",
+        "title": "State v Dev Singh",
+        "case_number": null
+      },
+      {
+        "serial": "3",
+        "title": "Mehta Traders v. Union Bank",
+        "case_number": null
+      }
+    ]
+  },
+  "matters": [
+    {
+      "case_id": "m1",
+      "label": "CS 112/2023",
+      "cause_title": "Ravi Kumar v. Anil Kumar",
+      "jurisdiction": "India",
+      "parties": [
+        {
+          "party_id": "m1-p",
+          "display_name": "Ravi Kumar",
+          "role": "Plaintiff"
+        },
+        {
+          "party_id": "m1-d",
+          "display_name": "Anil Kumar",
+          "role": "Defendant"
+        }
+      ],
+      "docs": [
+        {
+          "doc_id": "m1-orders",
+          "filename": "Order sheet.pdf",
+          "type_tag": "OTHER",
+          "pages": [
+            "Order dated 12 March 2024. Written statement filed. Case adjourned to 18 April 2024 for framing of issues at the request of the defendant.\n\nOrder dated 18 April 2024. Issues were not framed as counsel for the plaintiff was absent. The plaintiff shall file the list of witnesses within two weeks. Adjourned to 2 May 2024 at the request of the plaintiff.\n\nOrder dated 2 May 2024. Issues framed. The plaintiff has filed the list of witnesses. IA No. 45/2024 filed by the defendant for production of documents is taken on record. Plaintiff's evidence fixed for 20 May 2024.\n\nOrder dated 20 May 2024. Evidence of PW1 recorded. The defendant shall produce the municipal tax receipts on the next date. Adjourned to 10 June 2024.\n"
+          ]
+        },
+        {
+          "doc_id": "m1-plaint",
+          "filename": "Plaint.pdf",
+          "type_tag": "OTHER",
+          "pages": [
+            "1. The plaintiff and the defendant are brothers.\n2. On 15 June 2024 the defendant failed to produce the municipal tax receipts as directed.\n"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "m2",
+      "label": "SC 41/2024",
+      "cause_title": "State v. Dev Singh",
+      "jurisdiction": "India",
+      "parties": [
+        {
+          "party_id": "m2-s",
+          "display_name": "State",
+          "role": "Prosecution"
+        },
+        {
+          "party_id": "m2-a",
+          "display_name": "Dev Singh",
+          "role": "Accused"
+        }
+      ],
+      "docs": [
+        {
+          "doc_id": "m2-orders",
+          "filename": "Order sheet.pdf",
+          "type_tag": "ORDER_SHEET",
+          "pages": [
+            "Order of 05 July 2024. Charge framed. Accused pleaded not guilty. Adjourned to 12 August 2024 for prosecution evidence on the application of the prosecution.\n\nOrder of 12 August 2024. PW1 examined in chief. Adjourned to 3 September 2024 on the prayer of the accused. IA 7/2024 under section 311 filed by the accused is pending.\n\nOrder of 3 September 2024. PW1 cross-examined. The accused shall deposit the fine amount of Rs 5,000 within one week as costs for the adjournment. Application IA 7/2024 is dismissed. Adjourned to 1 October 2024.\n"
+          ]
+        },
+        {
+          "doc_id": "m2-report",
+          "filename": "Compliance report.pdf",
+          "type_tag": "OTHER",
+          "pages": [
+            "Compliance report filed by the accused.\n\nOn 6 September 2024 the accused deposited the fine amount of Rs 5,000 in the court registry. The receipt is annexed.\n"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "m3",
+      "label": "CS 77/2022",
+      "cause_title": "Mehta Traders v. Union Bank of India",
+      "jurisdiction": "India",
+      "parties": [
+        {
+          "party_id": "m3-p",
+          "display_name": "Mehta Traders",
+          "role": "Plaintiff"
+        },
+        {
+          "party_id": "m3-d",
+          "display_name": "Union Bank of India",
+          "role": "Defendant"
+        }
+      ],
+      "docs": [
+        {
+          "doc_id": "m3-orders",
+          "filename": "Order sheet.pdf",
+          "type_tag": "OTHER",
+          "pages": [
+            "Order dated 9 January 2024. Summons issued to the defendant bank. Matter listed for appearance.\n"
+          ]
+        },
+        {
+          "doc_id": "m3-plaint",
+          "filename": "Plaint.pdf",
+          "type_tag": "OTHER",
+          "pages": [
+            "1. The plaintiff supplied goods to the defendant bank.\n"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "m4",
+      "label": "CS 78/2022",
+      "cause_title": "Mehta Traders v. Union Bank of India Ltd",
+      "jurisdiction": "India",
+      "parties": [
+        {
+          "party_id": "m4-p",
+          "display_name": "Mehta Traders",
+          "role": "Plaintiff"
+        },
+        {
+          "party_id": "m4-d",
+          "display_name": "Union Bank of India Ltd",
+          "role": "Defendant"
+        }
+      ],
+      "docs": [
+        {
+          "doc_id": "m4-plaint",
+          "filename": "Plaint.pdf",
+          "type_tag": "OTHER",
+          "pages": [
+            "1. The plaintiff supplied goods to the defendant bank and its subsidiary.\n"
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "m5",
+      "label": "CS 9/2023",
+      "cause_title": "Sethi v. Sethi",
+      "jurisdiction": "India",
+      "parties": [
+        {
+          "party_id": "m5-p",
+          "display_name": "A. Sethi",
+          "role": "Plaintiff"
+        },
+        {
+          "party_id": "m5-d",
+          "display_name": "B. Sethi",
+          "role": "Defendant"
+        }
+      ],
+      "docs": [
+        {
+          "doc_id": "m5-plaint",
+          "filename": "Plaint.pdf",
+          "type_tag": "OTHER",
+          "pages": [
+            "1. The plaintiffs are siblings who dispute a shop.\n"
+          ]
+        }
+      ]
+    }
+  ],
+  "confirmations": {
+    "3": "m3"
+  },
+  "expect": {
+    "1": {
+      "status": "MATCHED",
+      "case_id": "m1",
+      "brief": {
+        "stage": {
+          "state": "FOUND",
+          "value": "Evidence of prosecution or plaintiff witnesses (PW)",
+          "locator": {
+            "doc_id": "m1-orders",
+            "page": 1,
+            "excerpt": "Order dated 20 May 2024. Evidence of PW1 recorded. The defendant shall produce the municipal tax receipts on the next date. Adjourned to 10 June 2024.",
+            "start": 571
+          }
+        },
+        "last_order": {
+          "state": "FOUND",
+          "value": "Order dated 20 May 2024. Evidence of PW1 recorded. The defendant shall produce the municipal tax receipts on the next date. Adjourned to 10 June 2024.",
+          "locator": {
+            "doc_id": "m1-orders",
+            "page": 1,
+            "excerpt": "Order dated 20 May 2024. Evidence of PW1 recorded. The defendant shall produce the municipal tax receipts on the next date. Adjourned to 10 June 2024.",
+            "start": 571
+          }
+        },
+        "last_order_date": {
+          "state": "FOUND",
+          "value": "2024-05-20",
+          "locator": {
+            "doc_id": "m1-orders",
+            "page": 1,
+            "excerpt": "Order dated 20 May 2024. Evidence of PW1 recorded. The defendant shall produce the municipal tax receipts on the next date. Adjourned to 10 June 2024.",
+            "start": 571
+          }
+        },
+        "compliance": [
+          {
+            "directed": {
+              "state": "FOUND",
+              "value": "The defendant shall produce the municipal tax receipts on the next date.",
+              "locator": {
+                "doc_id": "m1-orders",
+                "page": 1,
+                "excerpt": "The defendant shall produce the municipal tax receipts on the next date.",
+                "start": 622
+              }
+            },
+            "record_status": "NOT_SHOWN_ON_RECORD",
+            "done": null
+          }
+        ],
+        "adjournments": {
+          "count": 3,
+          "entries": [
+            {
+              "order_date": "2024-03-12",
+              "sought_by_party_id": "m1-d",
+              "excerpt": "Order dated 12 March 2024. Written statement filed. Case adjourned to 18 April 2024 for framing of issues at the request of the defendant."
+            },
+            {
+              "order_date": "2024-04-18",
+              "sought_by_party_id": "m1-p",
+              "excerpt": "Order dated 18 April 2024. Issues were not framed as counsel for the plaintiff was absent. The plaintiff shall file the list of witnesses within two weeks. Adjourned to 2 May 2024 at the request of the plaintiff."
+            },
+            {
+              "order_date": "2024-05-20",
+              "sought_by_party_id": null,
+              "excerpt": "Order dated 20 May 2024. Evidence of PW1 recorded. The defendant shall produce the municipal tax receipts on the next date. Adjourned to 10 June 2024."
+            }
+          ]
+        },
+        "pending_applications": [
+          {
+            "state": "FOUND",
+            "value": "IA No. 45/2024 filed by the defendant for production of documents is taken on record.",
+            "locator": {
+              "doc_id": "m1-orders",
+              "page": 1,
+              "excerpt": "IA No. 45/2024 filed by the defendant for production of documents is taken on record.",
+              "start": 440
+            }
+          }
+        ]
+      }
+    },
+    "2": {
+      "status": "MATCHED",
+      "case_id": "m2",
+      "brief": {
+        "stage": {
+          "state": "FOUND",
+          "value": "Evidence of prosecution or plaintiff witnesses (PW)",
+          "locator": {
+            "doc_id": "m2-orders",
+            "page": 1,
+            "excerpt": "Order of 3 September 2024. PW1 cross-examined. The accused shall deposit the fine amount of Rs 5,000 within one week as costs for the adjournment. Application IA 7/2024 is dismissed. Adjourned to 1 October 2024.",
+            "start": 329
+          }
+        },
+        "last_order": {
+          "state": "FOUND",
+          "value": "Order of 3 September 2024. PW1 cross-examined. The accused shall deposit the fine amount of Rs 5,000 within one week as costs for the adjournment. Application IA 7/2024 is dismissed. Adjourned to 1 October 2024.",
+          "locator": {
+            "doc_id": "m2-orders",
+            "page": 1,
+            "excerpt": "Order of 3 September 2024. PW1 cross-examined. The accused shall deposit the fine amount of Rs 5,000 within one week as costs for the adjournment. Application IA 7/2024 is dismissed. Adjourned to 1 October 2024.",
+            "start": 329
+          }
+        },
+        "last_order_date": {
+          "state": "FOUND",
+          "value": "2024-09-03",
+          "locator": {
+            "doc_id": "m2-orders",
+            "page": 1,
+            "excerpt": "Order of 3 September 2024. PW1 cross-examined. The accused shall deposit the fine amount of Rs 5,000 within one week as costs for the adjournment. Application IA 7/2024 is dismissed. Adjourned to 1 October 2024.",
+            "start": 329
+          }
+        },
+        "compliance": [
+          {
+            "directed": {
+              "state": "FOUND",
+              "value": "The accused shall deposit the fine amount of Rs 5,000 within one week as costs for the adjournment.",
+              "locator": {
+                "doc_id": "m2-orders",
+                "page": 1,
+                "excerpt": "The accused shall deposit the fine amount of Rs 5,000 within one week as costs for the adjournment.",
+                "start": 376
+              }
+            },
+            "record_status": "DONE_ON_RECORD",
+            "done": {
+              "doc_id": "m2-report",
+              "page": 1,
+              "excerpt": "On 6 September 2024 the accused deposited the fine amount of Rs 5,000 in the court registry.",
+              "start": 41
+            }
+          }
+        ],
+        "adjournments": {
+          "count": 3,
+          "entries": [
+            {
+              "order_date": "2024-07-05",
+              "sought_by_party_id": "m2-s",
+              "excerpt": "Order of 05 July 2024. Charge framed. Accused pleaded not guilty. Adjourned to 12 August 2024 for prosecution evidence on the application of the prosecution."
+            },
+            {
+              "order_date": "2024-08-12",
+              "sought_by_party_id": "m2-a",
+              "excerpt": "Order of 12 August 2024. PW1 examined in chief. Adjourned to 3 September 2024 on the prayer of the accused. IA 7/2024 under section 311 filed by the accused is pending."
+            },
+            {
+              "order_date": "2024-09-03",
+              "sought_by_party_id": null,
+              "excerpt": "Order of 3 September 2024. PW1 cross-examined. The accused shall deposit the fine amount of Rs 5,000 within one week as costs for the adjournment. Application IA 7/2024 is dismissed. Adjourned to 1 October 2024."
+            }
+          ]
+        },
+        "pending_applications": []
+      }
+    },
+    "3": {
+      "status": "AMBIGUOUS_UNCONFIRMED",
+      "case_id": null,
+      "candidates": [
+        "m3",
+        "m4"
+      ],
+      "brief": null
+    },
+    "4": {
+      "status": "NO_LOCAL_RECORD",
+      "case_id": null,
+      "brief": null
+    },
+    "5": {
+      "status": "MATCHED",
+      "case_id": "m5",
+      "brief": {
+        "stage": {
+          "state": "NOT_FOUND_IN_RECORD",
+          "value": null,
+          "locator": null
+        },
+        "last_order": {
+          "state": "NOT_FOUND_IN_RECORD",
+          "value": null,
+          "locator": null
+        },
+        "last_order_date": {
+          "state": "NOT_FOUND_IN_RECORD",
+          "value": null,
+          "locator": null
+        },
+        "compliance": [],
+        "adjournments": {
+          "count": 0,
+          "entries": []
+        },
+        "pending_applications": []
+      }
+    },
+    "6": {
+      "status": "NO_LOCAL_RECORD",
+      "case_id": null,
+      "brief": null
+    }
+  },
+  "expect_confirmed_3": {
+    "status": "AMBIGUOUS_CONFIRMED",
+    "case_id": "m3",
+    "brief": {
+      "stage": {
+        "state": "FOUND",
+        "value": "Summons or notice issued",
+        "locator": {
+          "doc_id": "m3-orders",
+          "page": 1,
+          "excerpt": "Order dated 9 January 2024. Summons issued to the defendant bank. Matter listed for appearance.",
+          "start": 0
+        }
+      },
+      "last_order": {
+        "state": "FOUND",
+        "value": "Order dated 9 January 2024. Summons issued to the defendant bank. Matter listed for appearance.",
+        "locator": {
+          "doc_id": "m3-orders",
+          "page": 1,
+          "excerpt": "Order dated 9 January 2024. Summons issued to the defendant bank. Matter listed for appearance.",
+          "start": 0
+        }
+      },
+      "last_order_date": {
+        "state": "FOUND",
+        "value": "2024-01-09",
+        "locator": {
+          "doc_id": "m3-orders",
+          "page": 1,
+          "excerpt": "Order dated 9 January 2024. Summons issued to the defendant bank. Matter listed for appearance.",
+          "start": 0
+        }
+      },
+      "compliance": [],
+      "adjournments": {
+        "count": 0,
+        "entries": []
+      },
+      "pending_applications": []
+    }
+  },
+  "stage_labels": {
+    "pw": "Evidence of prosecution or plaintiff witnesses (PW)",
+    "summons": "Summons or notice issued"
+  },
+  "budget": {
+    "id": "S4.chambers.cause_list_100_render_max_s",
+    "entries": 100,
+    "max_seconds": 60
+  }
+}
