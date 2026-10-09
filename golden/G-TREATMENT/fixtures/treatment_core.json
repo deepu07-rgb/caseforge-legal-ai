@@ -1,0 +1,745 @@
+{
+  "schema_version": "1.0.0",
+  "golden": "G-TREATMENT",
+  "batch": "B-S4-13",
+  "description": "Treatment wording (nine planted treatments and nine traps: arguments, negations, 'followed by', 'no doubt'...) and a pack scenario with good and bad treatment edges. Expectations are hand-authored from the written rules.",
+  "sentences": [
+    {
+      "id": "s-overruled",
+      "text": "The view taken in Alpha v. Beta (2001) 1 SCC 100 is hereby overruled.",
+      "expect": {
+        "treatment": "OVERRULED",
+        "pattern_id": "overruled.v2"
+      }
+    },
+    {
+      "id": "s-overruled-we",
+      "text": "We overrule the decision in Alpha v. Beta (2001) 1 SCC 100 to that extent.",
+      "expect": {
+        "treatment": "OVERRULED",
+        "pattern_id": "overruled.v2"
+      }
+    },
+    {
+      "id": "s-per-incuriam",
+      "text": "We hold that the decision in Gamma v. Delta (1990) 2 SCC 50 was rendered per incuriam, as it ignored binding precedent.",
+      "expect": {
+        "treatment": "PER_INCURIAM",
+        "pattern_id": "per-incuriam.v2"
+      }
+    },
+    {
+      "id": "s-larger-bench",
+      "text": "The question is referred to a larger Bench for an authoritative pronouncement on Eta v. Theta (1985) 3 SCC 7.",
+      "expect": {
+        "treatment": "REFERRED_TO_LARGER_BENCH",
+        "pattern_id": "larger-bench.v2"
+      }
+    },
+    {
+      "id": "s-doubted",
+      "text": "With respect, we doubt the correctness of the view in Iota v. Kappa (1999) 4 SCC 88.",
+      "expect": {
+        "treatment": "DOUBTED",
+        "pattern_id": "doubted.v2"
+      }
+    },
+    {
+      "id": "s-doubted-passive",
+      "text": "The ratio of Iota v. Kappa (1999) 4 SCC 88 has since been doubted by two Benches of this Court.",
+      "expect": {
+        "treatment": "DOUBTED",
+        "pattern_id": "doubted.v2"
+      }
+    },
+    {
+      "id": "s-distinguished",
+      "text": "The decision in Lambda v. Mu (2005) 6 SCC 12 is clearly distinguished on facts, since there the lease had expired.",
+      "expect": {
+        "treatment": "DISTINGUISHED",
+        "pattern_id": "distinguished.v2"
+      }
+    },
+    {
+      "id": "s-followed",
+      "text": "We follow the decision in Nu v. Xi (2010) 1 SCC 1 and hold accordingly.",
+      "expect": {
+        "treatment": "FOLLOWED",
+        "pattern_id": "followed.v2"
+      }
+    },
+    {
+      "id": "s-reversed",
+      "text": "The decision of the High Court in Omicron v. Pi (1995) 1 SCC 9 was reversed in appeal by this Court.",
+      "expect": {
+        "treatment": "REVERSED",
+        "pattern_id": "reversed.v2"
+      }
+    },
+    {
+      "id": "t-argued",
+      "text": "It was submitted that the decision in Alpha v. Beta (2001) 1 SCC 100 ought to be overruled.",
+      "expect": null,
+      "why": "a party's submission, not the Court's treatment"
+    },
+    {
+      "id": "t-negated",
+      "text": "The decision in Alpha v. Beta (2001) 1 SCC 100 has not been overruled by any Bench of this Court.",
+      "expect": null,
+      "why": "negated"
+    },
+    {
+      "id": "t-urged-follow",
+      "text": "Learned counsel urged that we follow the decision in Nu v. Xi (2010) 1 SCC 1.",
+      "expect": null,
+      "why": "urged by counsel"
+    },
+    {
+      "id": "t-followed-by",
+      "text": "The appellant relied on Nu v. Xi (2010) 1 SCC 1, followed by the decision in another case.",
+      "expect": null,
+      "why": "relying on a case, and 'followed by', are not treatment"
+    },
+    {
+      "id": "t-no-doubt",
+      "text": "There is no doubt that the decision in Iota v. Kappa (1999) 4 SCC 88 applies to these facts.",
+      "expect": null,
+      "why": "'no doubt' is not doubting the case"
+    },
+    {
+      "id": "t-not-distinguishable",
+      "text": "The two cases are not distinguishable on facts, and Lambda v. Mu (2005) 6 SCC 12 governs.",
+      "expect": null,
+      "why": "negated"
+    },
+    {
+      "id": "t-whether",
+      "text": "Whether Alpha v. Beta (2001) 1 SCC 100 should be overruled does not arise on these facts.",
+      "expect": null,
+      "why": "a question not decided"
+    },
+    {
+      "id": "t-reversed-elsewhere",
+      "text": "The judgment of the trial court was reversed by the High Court in the present case.",
+      "expect": null,
+      "why": "history of this case, not treatment of a cited decision"
+    },
+    {
+      "id": "t-relied",
+      "text": "Reliance is placed on Nu v. Xi (2010) 1 SCC 1 by the respondent.",
+      "expect": null,
+      "why": "citing is not treatment"
+    }
+  ],
+  "scenario": {
+    "pack": {
+      "pack_id": "test.treatment",
+      "currency_date": "2026-03-31"
+    },
+    "sources": [
+      {
+        "source_id": "S-A",
+        "title": "Alpha v. Beta",
+        "citation": "(2001) 1 SCC 100",
+        "decision_date": "2001-02-01"
+      },
+      {
+        "source_id": "S-B",
+        "title": "Rho v. Sigma",
+        "citation": "(2012) 5 SCC 200",
+        "decision_date": "2012-05-01"
+      },
+      {
+        "source_id": "S-C",
+        "title": "Tau v. Upsilon",
+        "citation": "(2014) 2 SCC 300",
+        "decision_date": "2014-03-01"
+      },
+      {
+        "source_id": "S-D",
+        "title": "Phi v. Chi",
+        "citation": "(2016) 1 SCC 400",
+        "decision_date": "2016-01-01"
+      },
+      {
+        "source_id": "S-E",
+        "title": "Psi v. Omega",
+        "citation": "(2017) 3 SCC 500",
+        "decision_date": "2017-04-01"
+      },
+      {
+        "source_id": "S-F",
+        "title": "Iota v. Kappa",
+        "citation": "(1999) 4 SCC 88",
+        "decision_date": "1999-08-01"
+      },
+      {
+        "source_id": "S-I",
+        "title": "Gamma v. Delta",
+        "citation": "(1990) 2 SCC 50",
+        "decision_date": "1990-02-01"
+      },
+      {
+        "source_id": "S-J",
+        "title": "Nu v. Xi",
+        "citation": "(2010) 1 SCC 1",
+        "decision_date": "2010-01-01"
+      },
+      {
+        "source_id": "S-K",
+        "title": "Zeta v. Eta",
+        "citation": "(2003) 7 SCC 70",
+        "decision_date": "2003-07-01"
+      },
+      {
+        "source_id": "S-L",
+        "title": "Lambda v. Mu",
+        "citation": "(2005) 6 SCC 12",
+        "decision_date": "2005-06-01"
+      }
+    ],
+    "known_sources": [
+      "S-A",
+      "S-B",
+      "S-C",
+      "S-D",
+      "S-E",
+      "S-F",
+      "S-I",
+      "S-J",
+      "S-K",
+      "S-L"
+    ],
+    "chunks": [
+      {
+        "chunk_id": "c-B-12",
+        "source_id": "S-B",
+        "paragraph": "para 12",
+        "text": "We have considered the submissions. The view taken in Alpha v. Beta (2001) 1 SCC 100 is hereby overruled. Accordingly the appeal is allowed."
+      },
+      {
+        "chunk_id": "c-B-15",
+        "source_id": "S-B",
+        "paragraph": "para 15",
+        "text": "On the second point: With respect, we doubt the correctness of the view in Iota v. Kappa (1999) 4 SCC 88. The matter does not need to go further."
+      },
+      {
+        "chunk_id": "c-B-20",
+        "source_id": "S-B",
+        "paragraph": "para 20",
+        "text": "Here We overrule the decision in Alpha v. Beta (2001) 1 SCC 100 to that extent. That is the end of the matter."
+      },
+      {
+        "chunk_id": "c-C-3",
+        "source_id": "S-C",
+        "paragraph": "para 3",
+        "text": "The learned Judge observed: We follow the decision in Nu v. Xi (2010) 1 SCC 1 and hold accordingly. The reasoning is sound."
+      },
+      {
+        "chunk_id": "c-C-4",
+        "source_id": "S-C",
+        "paragraph": "para 4",
+        "text": "Next: The ratio of Iota v. Kappa (1999) 4 SCC 88 has since been doubted by two Benches of this Court. We keep that in mind."
+      },
+      {
+        "chunk_id": "c-C-5",
+        "source_id": "S-C",
+        "paragraph": "para 5",
+        "text": "It is argued otherwise but We follow the decision in Nu v. Xi (2010) 1 SCC 1 and hold accordingly. Nothing more is needed."
+      },
+      {
+        "chunk_id": "c-C-9",
+        "source_id": "S-C",
+        "paragraph": "para 9",
+        "text": "Looking at the record: We hold that the decision in Gamma v. Delta (1990) 2 SCC 50 was rendered per incuriam, as it ignored binding precedent. We say no more."
+      },
+      {
+        "chunk_id": "c-D-7",
+        "source_id": "S-D",
+        "paragraph": "para 7",
+        "text": "The respondent says so. It was submitted that the decision in Alpha v. Beta (2001) 1 SCC 100 ought to be overruled. We do not accept that."
+      },
+      {
+        "chunk_id": "c-E-2",
+        "source_id": "S-E",
+        "paragraph": "para 2",
+        "text": "Mr. Counsel is right in this: The decision in Alpha v. Beta (2001) 1 SCC 100 has not been overruled by any Bench of this Court. It stays on the books."
+      },
+      {
+        "chunk_id": "c-C-6",
+        "source_id": "S-C",
+        "paragraph": "para 6",
+        "text": "Distinguishing now: The decision in Lambda v. Mu (2005) 6 SCC 12 is clearly distinguished on facts, since there the lease had expired. The present lease is still running."
+      }
+    ],
+    "edges": [
+      {
+        "schema_version": "1.0.0",
+        "edge_id": "e01",
+        "citing": {
+          "source_id": "S-B",
+          "chunk_id": "c-B-12",
+          "paragraph": "para",
+          "char_start": 36,
+          "char_end": 105,
+          "excerpt": "The view taken in Alpha v. Beta (2001) 1 SCC 100 is hereby overruled."
+        },
+        "cited_source_id": "S-A",
+        "treatment": "OVERRULED",
+        "detection": {
+          "method": "PATTERN_PLUS_VERIFIER",
+          "pattern_id": "overruled.v1"
+        },
+        "content_kind": "DERIVED",
+        "affects_supersession": false,
+        "pack_build": {
+          "pack_id": "test.treatment",
+          "version": "1.0.0",
+          "built_at": "2026-04-01T00:00:00Z"
+        }
+      },
+      {
+        "schema_version": "1.0.0",
+        "edge_id": "e02",
+        "citing": {
+          "source_id": "S-C",
+          "chunk_id": "c-C-3",
+          "paragraph": "para",
+          "char_start": 28,
+          "char_end": 99,
+          "excerpt": "We follow the decision in Nu v. Xi (2010) 1 SCC 1 and hold accordingly."
+        },
+        "cited_source_id": "S-A",
+        "treatment": "FOLLOWED",
+        "detection": {
+          "method": "PATTERN_PLUS_VERIFIER",
+          "pattern_id": "followed.v1"
+        },
+        "content_kind": "DERIVED",
+        "affects_supersession": false,
+        "pack_build": {
+          "pack_id": "test.treatment",
+          "version": "1.0.0",
+          "built_at": "2026-04-01T00:00:00Z"
+        }
+      },
+      {
+        "schema_version": "1.0.0",
+        "edge_id": "e03",
+        "citing": {
+          "source_id": "S-D",
+          "chunk_id": "c-D-7",
+          "paragraph": "para",
+          "char_start": 24,
+          "char_end": 115,
+          "excerpt": "It was submitted that the decision in Alpha v. Beta (2001) 1 SCC 100 ought to be overruled."
+        },
+        "cited_source_id": "S-A",
+        "treatment": "OVERRULED",
+        "detection": {
+          "method": "PATTERN_PLUS_VERIFIER",
+          "pattern_id": "overruled.v1"
+        },
+        "content_kind": "DERIVED",
+        "affects_supersession": false,
+        "pack_build": {
+          "pack_id": "test.treatment",
+          "version": "1.0.0",
+          "built_at": "2026-04-01T00:00:00Z"
+        }
+      },
+      {
+        "schema_version": "1.0.0",
+        "edge_id": "e04",
+        "citing": {
+          "source_id": "S-E",
+          "chunk_id": "c-E-2",
+          "paragraph": "para",
+          "char_start": 30,
+          "char_end": 127,
+          "excerpt": "The decision in Alpha v. Beta (2001) 1 SCC 100 has not been overruled by any Bench of this Court."
+        },
+        "cited_source_id": "S-A",
+        "treatment": "OVERRULED",
+        "detection": {
+          "method": "PATTERN_PLUS_VERIFIER",
+          "pattern_id": "overruled.v1"
+        },
+        "content_kind": "DERIVED",
+        "affects_supersession": false,
+        "pack_build": {
+          "pack_id": "test.treatment",
+          "version": "1.0.0",
+          "built_at": "2026-04-01T00:00:00Z"
+        }
+      },
+      {
+        "schema_version": "1.0.0",
+        "edge_id": "e05",
+        "citing": {
+          "source_id": "S-B",
+          "chunk_id": "c-B-15",
+          "paragraph": "para",
+          "char_start": 22,
+          "char_end": 106,
+          "excerpt": "With respect, we doubt the correctness of the view in Iota v. Kappa (1999) 4 SCC 88."
+        },
+        "cited_source_id": "S-F",
+        "treatment": "DOUBTED",
+        "detection": {
+          "method": "PATTERN_PLUS_VERIFIER",
+          "pattern_id": "doubted.v1"
+        },
+        "content_kind": "DERIVED",
+        "affects_supersession": false,
+        "pack_build": {
+          "pack_id": "test.treatment",
+          "version": "1.0.0",
+          "built_at": "2026-04-01T00:00:00Z"
+        }
+      },
+      {
+        "schema_version": "1.0.0",
+        "edge_id": "e06",
+        "citing": {
+          "source_id": "S-B",
+          "chunk_id": "c-B-12",
+          "paragraph": "para",
+          "char_start": 36,
+          "char_end": 105,
+          "excerpt": "The view taken in Alpha v. Beta (2001) 1 SCC 100 is hereby overruled."
+        },
+        "cited_source_id": "S-A",
+        "treatment": "DISTINGUISHED",
+        "detection": {
+          "method": "PATTERN_PLUS_VERIFIER",
+          "pattern_id": "distinguished.v1"
+        },
+        "content_kind": "DERIVED",
+        "affects_supersession": false,
+        "pack_build": {
+          "pack_id": "test.treatment",
+          "version": "1.0.0",
+          "built_at": "2026-04-01T00:00:00Z"
+        }
+      },
+      {
+        "schema_version": "1.0.0",
+        "edge_id": "e07",
+        "citing": {
+          "source_id": "S-B",
+          "chunk_id": "c-B-20",
+          "paragraph": "para",
+          "char_start": 5,
+          "char_end": 79,
+          "excerpt": "We overrule the decision in Alpha v. Beta (2001) 1 SCC 100 to that extent."
+        },
+        "cited_source_id": "S-B",
+        "treatment": "OVERRULED",
+        "detection": {
+          "method": "PATTERN_PLUS_VERIFIER",
+          "pattern_id": "overruled.v1"
+        },
+        "content_kind": "DERIVED",
+        "affects_supersession": false,
+        "pack_build": {
+          "pack_id": "test.treatment",
+          "version": "1.0.0",
+          "built_at": "2026-04-01T00:00:00Z"
+        }
+      },
+      {
+        "schema_version": "1.0.0",
+        "edge_id": "e08",
+        "citing": {
+          "source_id": "S-G",
+          "chunk_id": "c-G-1",
+          "paragraph": "para",
+          "char_start": 0,
+          "char_end": 69,
+          "excerpt": "The view taken in Alpha v. Beta (2001) 1 SCC 100 is hereby overruled."
+        },
+        "cited_source_id": "S-A",
+        "treatment": "OVERRULED",
+        "detection": {
+          "method": "PATTERN_PLUS_VERIFIER",
+          "pattern_id": "overruled.v1"
+        },
+        "content_kind": "DERIVED",
+        "affects_supersession": false,
+        "pack_build": {
+          "pack_id": "test.treatment",
+          "version": "1.0.0",
+          "built_at": "2026-04-01T00:00:00Z"
+        }
+      },
+      {
+        "schema_version": "1.0.0",
+        "edge_id": "e09",
+        "citing": {
+          "source_id": "S-C",
+          "chunk_id": "c-C-9",
+          "paragraph": "para",
+          "char_start": 23,
+          "char_end": 142,
+          "excerpt": "We hold that the decision in Gamma v. Delta (1990) 2 SCC 50 was rendered per incuriam, as it ignored binding precedent."
+        },
+        "cited_source_id": "S-Z",
+        "treatment": "PER_INCURIAM",
+        "detection": {
+          "method": "PATTERN_PLUS_VERIFIER",
+          "pattern_id": "per-incuriam.v1"
+        },
+        "content_kind": "DERIVED",
+        "affects_supersession": false,
+        "pack_build": {
+          "pack_id": "test.treatment",
+          "version": "1.0.0",
+          "built_at": "2026-04-01T00:00:00Z"
+        }
+      },
+      {
+        "schema_version": "1.0.0",
+        "edge_id": "e10",
+        "citing": {
+          "source_id": "S-C",
+          "chunk_id": "c-C-4",
+          "paragraph": "para",
+          "char_start": 6,
+          "char_end": 101,
+          "excerpt": "The ratio of Iota v. Kappa (1999) 4 SCC 88 has since been doubted by two Benches of this Court."
+        },
+        "cited_source_id": "S-F",
+        "treatment": "DOUBTED",
+        "detection": {
+          "method": "PATTERN_PLUS_VERIFIER",
+          "pattern_id": "doubted.v1"
+        },
+        "content_kind": "DERIVED",
+        "affects_supersession": false,
+        "pack_build": {
+          "pack_id": "test.treatment",
+          "version": "1.0.0",
+          "built_at": "2026-04-01T00:00:00Z"
+        }
+      },
+      {
+        "schema_version": "1.0.0",
+        "edge_id": "e11",
+        "citing": {
+          "source_id": "S-B",
+          "chunk_id": "c-B-20",
+          "paragraph": "para",
+          "char_start": 5,
+          "char_end": 79,
+          "excerpt": "We overrule the decision in Alpha v. Beta (2001) 1 SCC 100 to that extent."
+        },
+        "cited_source_id": "S-A",
+        "treatment": "OVERRULED",
+        "detection": {
+          "method": "PATTERN_PLUS_VERIFIER",
+          "pattern_id": "overruled.v1"
+        },
+        "content_kind": "DERIVED",
+        "affects_supersession": true,
+        "pack_build": {
+          "pack_id": "test.treatment",
+          "version": "1.0.0",
+          "built_at": "2026-04-01T00:00:00Z"
+        }
+      },
+      {
+        "schema_version": "1.0.0",
+        "edge_id": "e12",
+        "citing": {
+          "source_id": "S-C",
+          "chunk_id": "c-C-9",
+          "paragraph": "para",
+          "char_start": 23,
+          "char_end": 142,
+          "excerpt": "We hold that the decision in Gamma v. Delta (1990) 2 SCC 50 was rendered per incuriam, as it ignored binding precedent."
+        },
+        "cited_source_id": "S-I",
+        "treatment": "PER_INCURIAM",
+        "detection": {
+          "method": "PATTERN_PLUS_VERIFIER",
+          "pattern_id": "per-incuriam.v1"
+        },
+        "content_kind": "DERIVED",
+        "affects_supersession": false,
+        "pack_build": {
+          "pack_id": "test.treatment",
+          "version": "1.0.0",
+          "built_at": "2026-04-01T00:00:00Z"
+        }
+      },
+      {
+        "schema_version": "1.0.0",
+        "edge_id": "e13",
+        "citing": {
+          "source_id": "S-C",
+          "chunk_id": "c-C-5",
+          "paragraph": "para",
+          "char_start": 27,
+          "char_end": 98,
+          "excerpt": "We follow the decision in Nu v. Xi (2010) 1 SCC 1 and hold accordingly."
+        },
+        "cited_source_id": "S-J",
+        "treatment": "FOLLOWED",
+        "detection": {
+          "method": "PATTERN_PLUS_VERIFIER",
+          "pattern_id": "followed.v1"
+        },
+        "content_kind": "DERIVED",
+        "affects_supersession": false,
+        "pack_build": {
+          "pack_id": "test.treatment",
+          "version": "1.0.0",
+          "built_at": "2026-04-01T00:00:00Z"
+        }
+      },
+      {
+        "schema_version": "1.0.0",
+        "edge_id": "e14",
+        "citing": {
+          "source_id": "S-C",
+          "chunk_id": "c-C-6",
+          "paragraph": "para",
+          "char_start": 20,
+          "char_end": 134,
+          "excerpt": "The decision in Lambda v. Mu (2005) 6 SCC 12 is clearly distinguished on facts, since there the lease had expired."
+        },
+        "cited_source_id": "S-L",
+        "treatment": "DISTINGUISHED",
+        "detection": {
+          "method": "PATTERN_PLUS_VERIFIER",
+          "pattern_id": "distinguished.v1"
+        },
+        "content_kind": "DERIVED",
+        "affects_supersession": false,
+        "pack_build": {
+          "pack_id": "test.treatment",
+          "version": "1.0.0",
+          "built_at": "2026-04-01T00:00:00Z"
+        }
+      }
+    ],
+    "expect": {
+      "verified": {
+        "S-A": [
+          "e01",
+          "e02"
+        ],
+        "S-F": [
+          "e10"
+        ],
+        "S-I": [
+          "e12"
+        ],
+        "S-J": [
+          "e13"
+        ],
+        "S-L": [
+          "e14"
+        ]
+      },
+      "rejected": {
+        "e03": "NEGATED_OR_ARGUED",
+        "e04": "NEGATED_OR_ARGUED",
+        "e05": "EXCERPT_MISMATCH",
+        "e06": "CUE_NOT_FOUND",
+        "e07": "SELF_REFERENCE",
+        "e08": "CHUNK_NOT_INSTALLED",
+        "e09": "CITED_NOT_INSTALLED",
+        "e11": "BAD_SHAPE"
+      },
+      "audit": [
+        {
+          "item": "i1",
+          "source_id": "S-A",
+          "result": "VERIFIED",
+          "expect_result": "VERIFIED_WITH_NOTE",
+          "expect_notes": [
+            {
+              "kind": "TREATMENT",
+              "ref_id": "e01",
+              "treatment": "OVERRULED"
+            }
+          ]
+        },
+        {
+          "item": "i2",
+          "source_id": "S-F",
+          "result": "VERIFIED",
+          "expect_result": "VERIFIED_WITH_NOTE",
+          "expect_notes": [
+            {
+              "kind": "TREATMENT",
+              "ref_id": "e10",
+              "treatment": "DOUBTED"
+            }
+          ]
+        },
+        {
+          "item": "i3",
+          "source_id": "S-J",
+          "result": "VERIFIED",
+          "expect_result": "VERIFIED",
+          "expect_notes": []
+        },
+        {
+          "item": "i4",
+          "source_id": "S-K",
+          "result": "VERIFIED",
+          "expect_result": "VERIFIED",
+          "expect_notes": []
+        },
+        {
+          "item": "i5",
+          "source_id": "S-A",
+          "result": "SUPERSEDED",
+          "expect_result": "SUPERSEDED",
+          "expect_notes": [
+            {
+              "kind": "TREATMENT",
+              "ref_id": "e01",
+              "treatment": "OVERRULED"
+            }
+          ]
+        },
+        {
+          "item": "i6",
+          "source_id": "S-A",
+          "result": "MISQUOTED",
+          "expect_result": "MISQUOTED",
+          "expect_notes": [
+            {
+              "kind": "TREATMENT",
+              "ref_id": "e01",
+              "treatment": "OVERRULED"
+            }
+          ]
+        }
+      ],
+      "lookup": {
+        "S-A": {
+          "edges": [
+            "e01",
+            "e02"
+          ],
+          "state": "FOUND"
+        },
+        "S-J": {
+          "edges": [
+            "e13"
+          ],
+          "state": "FOUND"
+        },
+        "S-K": {
+          "edges": [],
+          "state": "NONE_FOUND"
+        }
+      }
+    }
+  }
+}
