@@ -29,6 +29,7 @@ mod treatment;
 mod edition;
 mod record_only;
 mod chambers_lookup;
+mod cause_list;
 mod opposition;
 mod reasoning;
 mod witness;
@@ -1042,6 +1043,90 @@ fn chambers_g7_log(app: AppHandle, vault: State<'_, VaultState>, case_id: String
 /// The page texts of one document of the matter (an opponent's filing is read through its own gate).
 fn matter_pages(mgr: &VaultManager, case_id: &str, d: &vault::DocumentMeta) -> Result<Vec<String>, String> {
     Ok(if d.type_tag == docpipe::EXTERNAL_FILING_TAG { docpipe::external_filing_pages(mgr, case_id, &d.doc_id)?.1 } else { docpipe::statement_pages(mgr, case_id, &d.doc_id)?.1 })
+}
+
+// --- B-S4-20 Daily Cause-List Brief ---
+
+#[derive(Deserialize)]
+struct CauseListFile {
+    /// CSV, PDF or MANUAL (typed lines).
+    format: String,
+    file_name: Option<String>,
+    content_base64: Option<String>,
+    text: Option<String>,
+}
+
+/// Reads a cause list from a file (CSV, PDF, text) or typed lines into listed matters. Nothing is sent anywhere.
+#[tauri::command]
+fn cause_list_import(app: AppHandle, vault: State<'_, VaultState>, request: CauseListFile) -> Result<serde_json::Value, String> {
+    let mgr = vault.get_or_init(&app)?;
+    let ctx = edition_of(&mgr)?;
+    edition::require_chambers(&ctx)?;
+    edition::require_capability(&ctx, &mgr.vault_paths().map_err(|e| e.to_string())?.root, "cause_list")?;
+    use base64::Engine as _;
+    let bytes = match (&request.content_base64, &request.text) {
+        (Some(b), _) => Some(base64::engine::general_purpose::STANDARD.decode(b).map_err(|_| "CF_CAUSELIST_FILE: the file could not be read".to_string())?),
+        _ => None,
+    };
+    let name = request.file_name.clone().unwrap_or_else(|| "cause_list".into());
+    let (format, entries, sha) = match request.format.as_str() {
+        "CSV" => {
+            let b = bytes.ok_or("CF_CAUSELIST_FILE: choose the CSV file")?;
+            ("CSV", cause_list::parse_csv(&String::from_utf8_lossy(&b))?, Some(cause_list::sha256_hex(&b)))
+        }
+        "PDF" => {
+            let b = bytes.ok_or("CF_CAUSELIST_FILE: choose the file")?;
+            let lower = name.to_ascii_lowercase();
+            let text = if lower.ends_with(".txt") || lower.ends_with(".csv") { String::from_utf8_lossy(&b).to_string() } else { docpipe::bytes_page_texts(&b, if lower.ends_with(".pdf") { "pdf" } else { "docx" }, &name)?.join("\n") };
+            let entries = if lower.ends_with(".csv") { cause_list::parse_csv(&text)? } else { cause_list::parse_lines(&text) };
+            ("PDF", entries, Some(cause_list::sha256_hex(&b)))
+        }
+        "MANUAL" => ("MANUAL", cause_list::parse_lines(request.text.as_deref().unwrap_or("")), None),
+        _ => return Err("CF_CAUSELIST_FILE: choose CSV, PDF or typed lines".into()),
+    };
+    if entries.is_empty() {
+        return Err("CF_CAUSELIST_EMPTY: no listed matter was found. Each matter should be on its own line starting with its serial number, e.g. \"1. Ravi Kumar v. Anil Kumar CS 112/2023\"".into());
+    }
+    Ok(serde_json::json!({"format": format, "sha256": sha, "entries": entries}))
+}
+
+/// One brief per listed matter. A listing that cannot be told between matters waits for the judge's choice
+/// (`confirmations`: serial -> matter). Matters whose vault is not open cannot be read; they are named so they can be opened.
+#[tauri::command]
+fn cause_list_briefs(app: AppHandle, vault: State<'_, VaultState>, court_label: String, list_date: String, format: String, sha256: Option<String>, entries: Vec<cause_list::ListEntry>, confirmations: Option<std::collections::BTreeMap<String, String>>) -> Result<serde_json::Value, String> {
+    let mgr = vault.get_or_init(&app)?;
+    let ctx = edition_of(&mgr)?;
+    edition::require_chambers(&ctx)?;
+    edition::require_capability(&ctx, &mgr.vault_paths().map_err(|e| e.to_string())?.root, "cause_list")?;
+    let format: &'static str = match format.as_str() { "CSV" => "CSV", "PDF" => "PDF", _ => "MANUAL" };
+    let mut matters = Vec::new();
+    let mut locked = Vec::new();
+    for c in mgr.list_cases().map_err(|e| e.to_string())? {
+        let mut docs = Vec::new();
+        let mut parties = Vec::new();
+        if c.is_open {
+            if let Ok(list) = mgr.doc_list(&c.case_id) {
+                for d in &list {
+                    docs.push(cause_list::MatterDoc { doc_id: d.doc_id.clone(), filename: d.original_filename.clone(), type_tag: d.type_tag.clone(), pages: matter_pages(&mgr, &c.case_id, d).unwrap_or_default() });
+                }
+            }
+            parties = issue_parties(&mgr.case_graph_get(&c.case_id).map_err(|e| e.to_string())?.unwrap_or_else(|| serde_json::json!({})));
+        } else {
+            locked.push(c.case_id.clone());
+        }
+        matters.push(cause_list::Matter { case_id: c.case_id, label: c.label, cause_title: c.cause_title, jurisdiction: c.jurisdiction, parties, docs });
+    }
+    let info = cause_list::ImportInfo { format, sha256 };
+    let (doc, candidates) = cause_list::render(&court_label, &list_date, &info, &entries, &matters, &confirmations.unwrap_or_default(), &crate::docpipe::now_rfc3339());
+    let titles: serde_json::Map<String, serde_json::Value> = matters.iter().map(|m| (m.case_id.clone(), serde_json::json!(if m.cause_title.is_empty() { &m.label } else { &m.cause_title }))).collect();
+    // matters named by a brief that could not be read
+    let unreadable: Vec<&String> = doc["entries"].as_array().into_iter().flatten().filter_map(|e| e["match"]["case_id"].as_str()).filter_map(|id| locked.iter().find(|l| l.as_str() == id)).collect();
+    let documents: serde_json::Map<String, serde_json::Value> = matters.iter().flat_map(|m| m.docs.iter()).map(|d| (d.doc_id.clone(), serde_json::json!(d.filename))).collect();
+    let party_names: serde_json::Map<String, serde_json::Value> = matters.iter().flat_map(|m| m.parties.iter()).map(|p| (p.party_id.clone(), serde_json::json!(format!("{} ({})", p.display_name, p.role)))).collect();
+    Ok(serde_json::json!({
+        "brief_list": doc, "candidates": candidates, "matter_titles": titles, "matters_not_open": unreadable, "documents": documents, "parties": party_names,
+        "note": "Every line of a brief cites the order or document it comes from, or says it was not found in the record.",
+    }))
 }
 
 // --- B-S4-19 Both-sides citation check and record lookup ---
@@ -4405,6 +4490,8 @@ pub fn run() {
             chambers_reason,
             chambers_audit_all,
             chambers_lookup,
+            cause_list_import,
+            cause_list_briefs,
             treatment_lookup,
             issue_matrix_build,
             issue_matrix_set_matter_type,

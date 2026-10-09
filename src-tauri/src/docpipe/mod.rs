@@ -1497,6 +1497,11 @@ pub(crate) fn external_filing_pages(
     Ok((meta.original_filename, pages))
 }
 
+/// B-S4-20: the page texts of a file given as bytes (a cause list in PDF form), without storing it in a matter.
+pub(crate) fn bytes_page_texts(bytes: &[u8], source_format: &str, filename: &str) -> Result<Vec<String>, String> {
+    Ok(triage::document_page_texts(bytes, source_format, filename)?.into_iter().map(|(_, text, _)| text).collect())
+}
+
 /// B-S4-07: page texts of a witness statement. Uses the document's own text; for a scanned document, the reviewed
 /// (trusted) OCR layer. A text file with form feeds is split into its pages (deposition transcripts).
 pub(crate) fn statement_pages(

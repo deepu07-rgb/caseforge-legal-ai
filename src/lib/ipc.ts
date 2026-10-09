@@ -2982,3 +2982,23 @@ export interface LookupHit {
 export interface ChambersLookupResult { question: string; hits: LookupHit[]; passages_in_record: number; documents_indexed: number; note: string }
 export async function chambersAuditAll(caseId: string): Promise<ChambersAuditAll> { return invoke<ChambersAuditAll>("chambers_audit_all", { caseId }); }
 export async function chambersLookup(caseId: string, question: string, limit?: number): Promise<ChambersLookupResult> { return invoke<ChambersLookupResult>("chambers_lookup", { caseId, question, limit: limit ?? null }); }
+
+// --- B-S4-20 Daily Cause-List Brief ---
+export interface CauseListEntryIn { serial: string; title: string; case_number: string | null }
+export interface CauseListLocator { doc_id: string; page: number; char_start: number; char_end: number; excerpt: string }
+export interface CauseListField { state: "FOUND" | "NOT_FOUND_IN_RECORD"; value: string | null; locator: CauseListLocator | null }
+export interface CauseListBrief {
+  stage: CauseListField; last_order: CauseListField; last_order_date: CauseListField;
+  compliance: { directed: CauseListField; record_status: "DONE_ON_RECORD" | "NOT_SHOWN_ON_RECORD"; done_locator: CauseListLocator | null }[];
+  adjournments: { count: number; entries: { order_date: string; sought_by_party_id: string | null; locator: CauseListLocator }[] };
+  pending_applications: CauseListField[];
+}
+export interface CauseListBriefs {
+  brief_list: { schema_version: "1.0.0"; list_id: string; court_label: string; list_date: string; import: { format: string; sha256: string | null }; generated_at: string;
+    entries: { serial: string; listed_title: string; match: { status: "MATCHED" | "AMBIGUOUS_CONFIRMED" | "AMBIGUOUS_UNCONFIRMED" | "NO_LOCAL_RECORD"; case_id: string | null }; brief: CauseListBrief | null }[] };
+  candidates: Record<string, string[]>; matter_titles: Record<string, string>; matters_not_open: string[]; documents: Record<string, string>; parties: Record<string, string>; note: string;
+}
+export async function causeListImport(request: { format: string; file_name?: string; content_base64?: string; text?: string }): Promise<{ format: string; sha256: string | null; entries: CauseListEntryIn[] }> { return invoke("cause_list_import", { request }); }
+export async function causeListBriefs(courtLabel: string, listDate: string, format: string, sha256: string | null, entries: CauseListEntryIn[], confirmations: Record<string, string>): Promise<CauseListBriefs> {
+  return invoke<CauseListBriefs>("cause_list_briefs", { courtLabel, listDate, format, sha256, entries, confirmations });
+}

@@ -1,0 +1,48 @@
+{
+  "batch": "B-S4-20",
+  "fixture_sha256": "75b2630d218e78e9dae035bd7a3718825f181c5d67bd4ba959330140df22205d",
+  "acs": {
+    "AC-S4-14.1": {
+      "status": "PASS",
+      "evidence": {
+        "matches": [
+          "AMBIGUOUS_CONFIRMED",
+          "AMBIGUOUS_UNCONFIRMED",
+          "MATCHED",
+          "NO_LOCAL_RECORD"
+        ],
+        "compliance_states": [
+          "DONE_ON_RECORD",
+          "NOT_SHOWN_ON_RECORD"
+        ],
+        "schema_validated": true,
+        "briefs_test": "ok",
+        "every_field_cites_test": "ok"
+      },
+      "detail": "Every field of every brief is either FOUND with a locator that is the exact record text at the stated document, page and character range, or NOT_FOUND_IN_RECORD with nothing; a direction is shown done only by a later dated, non-negated sentence that shares at least three content words with it; who sought an adjournment appears only where the order says."
+    },
+    "AC-S4-14.2": {
+      "status": "PASS",
+      "evidence": {
+        "entries": 100,
+        "measured_seconds": 0.5845944,
+        "threshold_seconds": "PROPOSED 60 (Q-S4-01)",
+        "machine": "the machine the tests ran on, not the Full reference machine"
+      },
+      "detail": "100 listed matters, each with an order sheet, matched and briefed within the proposed 60 s. Re-measure on the Full reference machine."
+    }
+  },
+  "static": {
+    "engine_has_no_model_or_network": true,
+    "commands_registered": true,
+    "commands_need_the_chambers_edition": true,
+    "import_sends_nothing_anywhere": true,
+    "orders_only_from_the_record": true,
+    "screen_cites_the_source_of_every_line": true,
+    "screen_prints_one_page_per_matter": true,
+    "screen_carries_the_export_footer": true,
+    "screen_asks_the_judge_to_choose_when_unsure": true,
+    "screen_vocabulary_honest": true
+  },
+  "errors": []
+}

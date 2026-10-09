@@ -31,17 +31,17 @@ pub const KNOWN_FEATURES: [&str; 18] = [
     "deadline_watch", "timed_rehearsal", "currency_treatment", "indic_ingestion", "bundle_exchange", "chambers",
 ];
 /// Every screen the app has, by navigation id.
-pub const ALL_SURFACES: [&str; 21] = [
-    "home", "cases", "new-case", "workspace", "builder", "integrity", "digest", "voice", "experience", "court", "opposition", "witnesses", "deadlines", "issues", "chambers", "practice",
+pub const ALL_SURFACES: [&str; 22] = [
+    "home", "cases", "new-case", "workspace", "builder", "integrity", "digest", "voice", "experience", "court", "opposition", "witnesses", "deadlines", "issues", "chambers", "causelist", "practice",
     "library", "licence", "protection", "guardrails", "settings",
 ];
 /// Screens that exist for the Chambers Edition only (PRD §6 F11-F15).
-const CHAMBERS_ONLY: [&str; 2] = ["chambers", "issues"];
+const CHAMBERS_ONLY: [&str; 3] = ["chambers", "causelist", "issues"];
 /// Advocacy-only screens, hidden in the Chambers Edition: persuasion coaching, mock court, cross-examination and
 /// opposition work, argument scoring.
 const ADVOCACY_ONLY: [&str; 8] = ["builder", "integrity", "voice", "experience", "court", "opposition", "witnesses", "practice"];
 /// Capabilities a pilot court may switch off in `chambers_pilot.json`.
-pub const PILOT_CAPABILITIES: [&str; 5] = ["reasoning", "issue_matrix", "memo_export", "citation_audit", "record_lookup"];
+pub const PILOT_CAPABILITIES: [&str; 6] = ["reasoning", "issue_matrix", "memo_export", "citation_audit", "record_lookup", "cause_list"];
 
 /// A verified v2 licence.
 #[derive(Debug, Clone)]
@@ -432,7 +432,7 @@ mod tests {
         assert_eq!((l.edition.as_str(), state), ("JUDICIARY", LicenceState::Active));
         let ctx = context_for(&l, state);
         assert!(ctx.chambers && ctx.air_gap_forced && !ctx.telemetry_allowed && ctx.record_only_default);
-        for s in ["chambers", "issues", "workspace", "digest", "library", "deadlines"] {
+        for s in ["chambers", "causelist", "issues", "workspace", "digest", "library", "deadlines"] {
             assert!(ctx.visible_surfaces.contains(&s), "{s} visible");
         }
         for s in ADVOCACY_ONLY {

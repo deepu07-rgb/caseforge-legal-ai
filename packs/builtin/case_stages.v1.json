@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "description": "Wording in an order that shows the stage a matter has reached (B-S4-20). The newest order that matches any pattern names the stage; within one order the first listed pattern wins, so list later stages first. Data, not code: a court's own wording belongs here. The stage shown always cites the order it came from.",
+  "stages": [
+    { "label": "Disposed of", "pattern": "(?i)\\b(?:disposed\\s+of|decreed|suit\\s+is\\s+(?:decreed|dismissed)|appeal\\s+is\\s+(?:allowed|dismissed)|petition\\s+is\\s+(?:allowed|dismissed)|acquitted|convicted)\\b" },
+    { "label": "Judgment reserved", "pattern": "(?i)\\b(?:judgment\\s+reserved|reserved\\s+for\\s+(?:judgment|orders)|orders?\\s+reserved)\\b" },
+    { "label": "Final arguments", "pattern": "(?i)\\b(?:final\\s+arguments?|arguments?\\s+(?:heard|concluded|on\\s+the\\s+(?:main|final))|part[- ]heard\\s+arguments?)\\b" },
+    { "label": "Evidence of defence witnesses (DW)", "pattern": "(?i)\\b(?:DW\\s?-?\\d+|evidence\\s+of\\s+(?:the\\s+)?(?:defendant|defence|accused)|defence\\s+evidence|defendant'?s\\s+evidence)\\b" },
+    { "label": "Evidence of prosecution or plaintiff witnesses (PW)", "pattern": "(?i)\\b(?:PW\\s?-?\\d+|evidence\\s+of\\s+(?:the\\s+)?(?:plaintiff|prosecution|petitioner)|prosecution\\s+evidence|plaintiff'?s\\s+evidence)\\b" },
+    { "label": "Issues framed", "pattern": "(?i)\\bissues\\s+(?:are\\s+|were\\s+|have\\s+been\\s+)?framed\\b" },
+    { "label": "Charge framed", "pattern": "(?i)\\bcharges?\\s+(?:is\\s+|are\\s+|was\\s+|were\\s+)?framed\\b" },
+    { "label": "Framing of issues", "pattern": "(?i)\\bframing\\s+of\\s+issues\\b" },
+    { "label": "Written statement or reply", "pattern": "(?i)\\b(?:written\\s+statement|reply)\\s+(?:is\\s+|was\\s+)?(?:filed|received|taken\\s+on\\s+record)\\b" },
+    { "label": "Summons or notice issued", "pattern": "(?i)\\b(?:summons|notice)\\s+(?:is\\s+|was\\s+|were\\s+)?(?:issued|served|returned)\\b" }
+  ]
+}

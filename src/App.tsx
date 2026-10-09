@@ -22,6 +22,7 @@ import WitnessView from "./components/WitnessView";
 import DeadlinesView from "./components/DeadlinesView";
 import IssueMatrixView from "./components/IssueMatrixView";
 import ChambersView from "./components/ChambersView";
+import CauseListView from "./components/CauseListView";
 import { editionStatus, type EditionStatus } from "./lib/ipc";
 import { ModelTierSelector } from "./components/ModelTierSelector";
 import {
@@ -161,6 +162,7 @@ type NavId =
   | "deadlines"
   | "issues"
   | "chambers"
+  | "causelist"
   | "library"
   | "practice"
   | "settings";
@@ -191,6 +193,7 @@ const NAV: { id: NavId; label: string; section?: string; badge?: string }[] = [
   { id: "witnesses", label: "Witnesses" },
   { id: "deadlines", label: "Deadlines" },
   { id: "chambers", label: "Chambers" },
+  { id: "causelist", label: "Cause List" },
   { id: "issues", label: "Issue Matrix" },
   { id: "practice", label: "Integrity lab" },
   { id: "library", label: "Legal Authorities", section: "Library" },
@@ -199,7 +202,7 @@ const NAV: { id: NavId; label: string; section?: string; badge?: string }[] = [
   { id: "guardrails", label: "Guardrails" },
   { id: "settings", label: "System" },
 ];
-const PRIMARY_NAV_IDS:NavId[]=["home","cases","workspace","digest","library","integrity","court","opposition","witnesses","deadlines","chambers","issues"];
+const PRIMARY_NAV_IDS:NavId[]=["home","cases","workspace","digest","library","integrity","court","opposition","witnesses","deadlines","chambers","causelist","issues"];
 const ADVANCED_NAV_IDS:NavId[]=["builder","voice","experience","practice","licence","protection","guardrails","settings"];
 const PRIMARY_NAV=NAV.filter(item=>PRIMARY_NAV_IDS.includes(item.id));
 const ADVANCED_NAV=NAV.filter(item=>ADVANCED_NAV_IDS.includes(item.id));
@@ -272,6 +275,8 @@ function titleFor(nav: NavId): { title: string; sub: string } {
       return { title: "Witnesses", sub: "Statements lined up by topic · contradictions and omissions with exact quotes · impeachment kit" };
     case "deadlines":
       return { title: "Deadlines", sub: "Limitation and procedural dates computed from the rule, the start event and the court calendar · always to verify" };
+    case "causelist":
+      return { title: "Cause List", sub: "One page per listed matter · every line cites an order or document, or says it was not found in the record" };
     case "chambers":
       return { title: "Chambers", sub: "Record only · every statement tied to the record or installed law · no analysis, findings or orders" };
     case "issues":
@@ -1290,7 +1295,7 @@ export default function App() {
   const unlocked = Boolean(vault?.app_unlocked);
 
   // B-S4-17: what the licence entitles decides which screens exist. The host refuses what is hidden; this only tidies the menu.
-  const showNav = (item: { id: NavId }) => (edition ? edition.visible_surfaces.includes(item.id) : !["chambers", "issues"].includes(item.id));
+  const showNav = (item: { id: NavId }) => (edition ? edition.visible_surfaces.includes(item.id) : !["chambers", "causelist", "issues"].includes(item.id));
   useEffect(() => {
     if (!tauri) return;
     void editionStatus().then(setEdition).catch(() => setEdition(null));
@@ -1989,6 +1994,8 @@ export default function App() {
           {nav === "deadlines" && <DeadlinesView activeCase={activeCase} />}
 
           {nav === "issues" && <IssueMatrixView activeCase={activeCase} />}
+
+          {nav === "causelist" && <CauseListView activeCase={activeCase} />}
 
           {nav === "chambers" && <ChambersView activeCase={activeCase} edition={edition} onOpenIssues={() => setNav("issues")} />}
 
