@@ -1,0 +1,1946 @@
+{
+  "schema_version": "1.0.0",
+  "golden": "G-ADMISS",
+  "batch": "B-S4-10",
+  "description": "Synthetic admissibility-foundation cases with hand-derived element statuses. Rows are DEVELOPMENT_ONLY: this proves the matching, the statuses and the panel ordering, not the law; AC-S4-05.1 with legal-editor rows stays BLOCKED.",
+  "cases": [
+    {
+      "name": "electronic_record_without_certificate",
+      "evidence": [
+        {
+          "evidence_id": "evidence_0003",
+          "label": "Annexure P-3: WhatsApp chat screenshot of 12 March 2023",
+          "kind": "annexure",
+          "doc_id": "d3"
+        }
+      ],
+      "docs": [
+        {
+          "doc_id": "d3",
+          "filename": "annexure_p3.pdf",
+          "type_tag": "annexure"
+        }
+      ],
+      "rules": [
+        {
+          "rule_id": "test.adm.electronic.bsa",
+          "effective_from": "2024-07-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.electronic.bsa",
+              "provision_label": "test.adm.electronic.bsa"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "ELECTRONIC_RECORD",
+            "elements": [
+              {
+                "element_id": "certificate",
+                "label": "Certificate for the electronic record (BSA s.63(4))",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "CERTIFICATE_63"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.electronic.iea",
+          "effective_from": "2000-01-01",
+          "effective_to": "2024-06-30",
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.electronic.iea",
+              "provision_label": "test.adm.electronic.iea"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "ELECTRONIC_RECORD",
+            "elements": [
+              {
+                "element_id": "certificate",
+                "label": "Certificate for the electronic record (IEA s.65B(4))",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "CERTIFICATE_65B"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.copy",
+          "effective_from": "2000-01-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.copy",
+              "provision_label": "test.adm.copy"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "SECONDARY_COPY",
+            "elements": [
+              {
+                "element_id": "ground",
+                "label": "Ground for giving secondary evidence (the original is lost, withheld or not movable)",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "ORIGINAL_UNAVAILABLE_NOTE"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.expert",
+          "effective_from": "2000-01-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:exp1",
+              "provision_label": "Evidence law, expert opinion"
+            },
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:exp2",
+              "provision_label": "Evidence law, expert report"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "EXPERT_OPINION",
+            "elements": [
+              {
+                "element_id": "qualification",
+                "label": "Expert's special skill is shown",
+                "satisfied_by_node_types": [
+                  "witness"
+                ],
+                "satisfied_by_type_tags": [
+                  "EXPERT_QUALIFICATION"
+                ]
+              },
+              {
+                "element_id": "report",
+                "label": "The expert's report is on file",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "EXPERT_REPORT"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "as_of": [
+        "2026-10-09"
+      ],
+      "links": [],
+      "types": [],
+      "nodes": [],
+      "edges": [],
+      "expect": [
+        {
+          "evidence_id": "evidence_0003",
+          "evidence_type": "ELECTRONIC_RECORD",
+          "evidence_type_status": "PROPOSED",
+          "rule_id": "test.adm.electronic.bsa",
+          "elements": {
+            "certificate": "ABSENT"
+          }
+        }
+      ]
+    },
+    {
+      "name": "certificate_linked_by_counsel",
+      "evidence": [
+        {
+          "evidence_id": "evidence_0003",
+          "label": "Annexure P-3: WhatsApp chat screenshot of 12 March 2023",
+          "kind": "annexure",
+          "doc_id": "d3"
+        },
+        {
+          "evidence_id": "evidence_0004",
+          "label": "Annexure P-4: e-mail to the manager dated 5 April 2023",
+          "kind": "annexure",
+          "doc_id": "d4"
+        }
+      ],
+      "docs": [
+        {
+          "doc_id": "d3",
+          "filename": "annexure_p3.pdf",
+          "type_tag": "annexure"
+        },
+        {
+          "doc_id": "d4",
+          "filename": "annexure_p4.pdf",
+          "type_tag": "annexure"
+        },
+        {
+          "doc_id": "d9",
+          "filename": "certificate_under_section_63.pdf",
+          "type_tag": "CERTIFICATE_63"
+        }
+      ],
+      "rules": [
+        {
+          "rule_id": "test.adm.electronic.bsa",
+          "effective_from": "2024-07-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.electronic.bsa",
+              "provision_label": "test.adm.electronic.bsa"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "ELECTRONIC_RECORD",
+            "elements": [
+              {
+                "element_id": "certificate",
+                "label": "Certificate for the electronic record (BSA s.63(4))",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "CERTIFICATE_63"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.electronic.iea",
+          "effective_from": "2000-01-01",
+          "effective_to": "2024-06-30",
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.electronic.iea",
+              "provision_label": "test.adm.electronic.iea"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "ELECTRONIC_RECORD",
+            "elements": [
+              {
+                "element_id": "certificate",
+                "label": "Certificate for the electronic record (IEA s.65B(4))",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "CERTIFICATE_65B"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.copy",
+          "effective_from": "2000-01-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.copy",
+              "provision_label": "test.adm.copy"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "SECONDARY_COPY",
+            "elements": [
+              {
+                "element_id": "ground",
+                "label": "Ground for giving secondary evidence (the original is lost, withheld or not movable)",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "ORIGINAL_UNAVAILABLE_NOTE"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.expert",
+          "effective_from": "2000-01-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:exp1",
+              "provision_label": "Evidence law, expert opinion"
+            },
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:exp2",
+              "provision_label": "Evidence law, expert report"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "EXPERT_OPINION",
+            "elements": [
+              {
+                "element_id": "qualification",
+                "label": "Expert's special skill is shown",
+                "satisfied_by_node_types": [
+                  "witness"
+                ],
+                "satisfied_by_type_tags": [
+                  "EXPERT_QUALIFICATION"
+                ]
+              },
+              {
+                "element_id": "report",
+                "label": "The expert's report is on file",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "EXPERT_REPORT"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "as_of": [
+        "2026-10-09"
+      ],
+      "links": [
+        {
+          "evidence_id": "evidence_0003",
+          "element_id": "certificate",
+          "doc_id": "d9"
+        }
+      ],
+      "types": [],
+      "nodes": [],
+      "edges": [],
+      "expect": [
+        {
+          "evidence_id": "evidence_0003",
+          "evidence_type": "ELECTRONIC_RECORD",
+          "evidence_type_status": "PROPOSED",
+          "rule_id": "test.adm.electronic.bsa",
+          "elements": {
+            "certificate": "PRESENT"
+          }
+        },
+        {
+          "evidence_id": "evidence_0004",
+          "evidence_type": "ELECTRONIC_RECORD",
+          "evidence_type_status": "PROPOSED",
+          "rule_id": "test.adm.electronic.bsa",
+          "elements": {
+            "certificate": "UNKNOWN"
+          }
+        }
+      ]
+    },
+    {
+      "name": "single_record_and_single_tagged_certificate_attach",
+      "evidence": [
+        {
+          "evidence_id": "evidence_0003",
+          "label": "Annexure P-3: WhatsApp chat screenshot of 12 March 2023",
+          "kind": "annexure",
+          "doc_id": "d3"
+        }
+      ],
+      "docs": [
+        {
+          "doc_id": "d3",
+          "filename": "annexure_p3.pdf",
+          "type_tag": "annexure"
+        },
+        {
+          "doc_id": "d9",
+          "filename": "certificate_under_section_63.pdf",
+          "type_tag": "CERTIFICATE_63"
+        }
+      ],
+      "rules": [
+        {
+          "rule_id": "test.adm.electronic.bsa",
+          "effective_from": "2024-07-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.electronic.bsa",
+              "provision_label": "test.adm.electronic.bsa"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "ELECTRONIC_RECORD",
+            "elements": [
+              {
+                "element_id": "certificate",
+                "label": "Certificate for the electronic record (BSA s.63(4))",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "CERTIFICATE_63"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.electronic.iea",
+          "effective_from": "2000-01-01",
+          "effective_to": "2024-06-30",
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.electronic.iea",
+              "provision_label": "test.adm.electronic.iea"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "ELECTRONIC_RECORD",
+            "elements": [
+              {
+                "element_id": "certificate",
+                "label": "Certificate for the electronic record (IEA s.65B(4))",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "CERTIFICATE_65B"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.copy",
+          "effective_from": "2000-01-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.copy",
+              "provision_label": "test.adm.copy"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "SECONDARY_COPY",
+            "elements": [
+              {
+                "element_id": "ground",
+                "label": "Ground for giving secondary evidence (the original is lost, withheld or not movable)",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "ORIGINAL_UNAVAILABLE_NOTE"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.expert",
+          "effective_from": "2000-01-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:exp1",
+              "provision_label": "Evidence law, expert opinion"
+            },
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:exp2",
+              "provision_label": "Evidence law, expert report"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "EXPERT_OPINION",
+            "elements": [
+              {
+                "element_id": "qualification",
+                "label": "Expert's special skill is shown",
+                "satisfied_by_node_types": [
+                  "witness"
+                ],
+                "satisfied_by_type_tags": [
+                  "EXPERT_QUALIFICATION"
+                ]
+              },
+              {
+                "element_id": "report",
+                "label": "The expert's report is on file",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "EXPERT_REPORT"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "as_of": [
+        "2026-10-09"
+      ],
+      "links": [],
+      "types": [],
+      "nodes": [],
+      "edges": [],
+      "expect": [
+        {
+          "evidence_id": "evidence_0003",
+          "evidence_type": "ELECTRONIC_RECORD",
+          "evidence_type_status": "PROPOSED",
+          "rule_id": "test.adm.electronic.bsa",
+          "elements": {
+            "certificate": "PRESENT"
+          }
+        }
+      ]
+    },
+    {
+      "name": "two_records_one_certificate_need_a_link",
+      "evidence": [
+        {
+          "evidence_id": "evidence_0003",
+          "label": "Annexure P-3: WhatsApp chat screenshot of 12 March 2023",
+          "kind": "annexure",
+          "doc_id": "d3"
+        },
+        {
+          "evidence_id": "evidence_0004",
+          "label": "Annexure P-4: e-mail to the manager dated 5 April 2023",
+          "kind": "annexure",
+          "doc_id": "d4"
+        }
+      ],
+      "docs": [
+        {
+          "doc_id": "d3",
+          "filename": "annexure_p3.pdf",
+          "type_tag": "annexure"
+        },
+        {
+          "doc_id": "d4",
+          "filename": "annexure_p4.pdf",
+          "type_tag": "annexure"
+        },
+        {
+          "doc_id": "d9",
+          "filename": "certificate_under_section_63.pdf",
+          "type_tag": "CERTIFICATE_63"
+        }
+      ],
+      "rules": [
+        {
+          "rule_id": "test.adm.electronic.bsa",
+          "effective_from": "2024-07-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.electronic.bsa",
+              "provision_label": "test.adm.electronic.bsa"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "ELECTRONIC_RECORD",
+            "elements": [
+              {
+                "element_id": "certificate",
+                "label": "Certificate for the electronic record (BSA s.63(4))",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "CERTIFICATE_63"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.electronic.iea",
+          "effective_from": "2000-01-01",
+          "effective_to": "2024-06-30",
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.electronic.iea",
+              "provision_label": "test.adm.electronic.iea"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "ELECTRONIC_RECORD",
+            "elements": [
+              {
+                "element_id": "certificate",
+                "label": "Certificate for the electronic record (IEA s.65B(4))",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "CERTIFICATE_65B"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.copy",
+          "effective_from": "2000-01-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.copy",
+              "provision_label": "test.adm.copy"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "SECONDARY_COPY",
+            "elements": [
+              {
+                "element_id": "ground",
+                "label": "Ground for giving secondary evidence (the original is lost, withheld or not movable)",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "ORIGINAL_UNAVAILABLE_NOTE"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.expert",
+          "effective_from": "2000-01-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:exp1",
+              "provision_label": "Evidence law, expert opinion"
+            },
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:exp2",
+              "provision_label": "Evidence law, expert report"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "EXPERT_OPINION",
+            "elements": [
+              {
+                "element_id": "qualification",
+                "label": "Expert's special skill is shown",
+                "satisfied_by_node_types": [
+                  "witness"
+                ],
+                "satisfied_by_type_tags": [
+                  "EXPERT_QUALIFICATION"
+                ]
+              },
+              {
+                "element_id": "report",
+                "label": "The expert's report is on file",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "EXPERT_REPORT"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "as_of": [
+        "2026-10-09"
+      ],
+      "links": [],
+      "types": [],
+      "nodes": [],
+      "edges": [],
+      "expect": [
+        {
+          "evidence_id": "evidence_0003",
+          "evidence_type": "ELECTRONIC_RECORD",
+          "evidence_type_status": "PROPOSED",
+          "rule_id": "test.adm.electronic.bsa",
+          "elements": {
+            "certificate": "UNKNOWN"
+          }
+        },
+        {
+          "evidence_id": "evidence_0004",
+          "evidence_type": "ELECTRONIC_RECORD",
+          "evidence_type_status": "PROPOSED",
+          "rule_id": "test.adm.electronic.bsa",
+          "elements": {
+            "certificate": "UNKNOWN"
+          }
+        }
+      ]
+    },
+    {
+      "name": "counsel_confirmed_type_overrides_the_words",
+      "evidence": [
+        {
+          "evidence_id": "evidence_0005",
+          "label": "Annexure P-5: letter dated 2 May 2022",
+          "kind": "annexure",
+          "doc_id": null
+        }
+      ],
+      "docs": [],
+      "rules": [
+        {
+          "rule_id": "test.adm.electronic.bsa",
+          "effective_from": "2024-07-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.electronic.bsa",
+              "provision_label": "test.adm.electronic.bsa"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "ELECTRONIC_RECORD",
+            "elements": [
+              {
+                "element_id": "certificate",
+                "label": "Certificate for the electronic record (BSA s.63(4))",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "CERTIFICATE_63"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.electronic.iea",
+          "effective_from": "2000-01-01",
+          "effective_to": "2024-06-30",
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.electronic.iea",
+              "provision_label": "test.adm.electronic.iea"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "ELECTRONIC_RECORD",
+            "elements": [
+              {
+                "element_id": "certificate",
+                "label": "Certificate for the electronic record (IEA s.65B(4))",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "CERTIFICATE_65B"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.copy",
+          "effective_from": "2000-01-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.copy",
+              "provision_label": "test.adm.copy"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "SECONDARY_COPY",
+            "elements": [
+              {
+                "element_id": "ground",
+                "label": "Ground for giving secondary evidence (the original is lost, withheld or not movable)",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "ORIGINAL_UNAVAILABLE_NOTE"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.expert",
+          "effective_from": "2000-01-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:exp1",
+              "provision_label": "Evidence law, expert opinion"
+            },
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:exp2",
+              "provision_label": "Evidence law, expert report"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "EXPERT_OPINION",
+            "elements": [
+              {
+                "element_id": "qualification",
+                "label": "Expert's special skill is shown",
+                "satisfied_by_node_types": [
+                  "witness"
+                ],
+                "satisfied_by_type_tags": [
+                  "EXPERT_QUALIFICATION"
+                ]
+              },
+              {
+                "element_id": "report",
+                "label": "The expert's report is on file",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "EXPERT_REPORT"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "as_of": [
+        "2026-10-09"
+      ],
+      "links": [],
+      "types": [
+        {
+          "evidence_id": "evidence_0005",
+          "evidence_type": "ELECTRONIC_RECORD"
+        }
+      ],
+      "nodes": [],
+      "edges": [],
+      "expect": [
+        {
+          "evidence_id": "evidence_0005",
+          "evidence_type": "ELECTRONIC_RECORD",
+          "evidence_type_status": "COUNSEL_CONFIRMED",
+          "rule_id": "test.adm.electronic.bsa",
+          "elements": {
+            "certificate": "ABSENT"
+          }
+        }
+      ]
+    },
+    {
+      "name": "no_rule_applies_to_an_unclassified_item",
+      "evidence": [
+        {
+          "evidence_id": "evidence_0006",
+          "label": "Exhibit P-6: registered sale deed",
+          "kind": "exhibit",
+          "doc_id": null
+        }
+      ],
+      "docs": [],
+      "rules": [
+        {
+          "rule_id": "test.adm.electronic.bsa",
+          "effective_from": "2024-07-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.electronic.bsa",
+              "provision_label": "test.adm.electronic.bsa"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "ELECTRONIC_RECORD",
+            "elements": [
+              {
+                "element_id": "certificate",
+                "label": "Certificate for the electronic record (BSA s.63(4))",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "CERTIFICATE_63"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.electronic.iea",
+          "effective_from": "2000-01-01",
+          "effective_to": "2024-06-30",
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.electronic.iea",
+              "provision_label": "test.adm.electronic.iea"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "ELECTRONIC_RECORD",
+            "elements": [
+              {
+                "element_id": "certificate",
+                "label": "Certificate for the electronic record (IEA s.65B(4))",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "CERTIFICATE_65B"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.copy",
+          "effective_from": "2000-01-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.copy",
+              "provision_label": "test.adm.copy"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "SECONDARY_COPY",
+            "elements": [
+              {
+                "element_id": "ground",
+                "label": "Ground for giving secondary evidence (the original is lost, withheld or not movable)",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "ORIGINAL_UNAVAILABLE_NOTE"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.expert",
+          "effective_from": "2000-01-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:exp1",
+              "provision_label": "Evidence law, expert opinion"
+            },
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:exp2",
+              "provision_label": "Evidence law, expert report"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "EXPERT_OPINION",
+            "elements": [
+              {
+                "element_id": "qualification",
+                "label": "Expert's special skill is shown",
+                "satisfied_by_node_types": [
+                  "witness"
+                ],
+                "satisfied_by_type_tags": [
+                  "EXPERT_QUALIFICATION"
+                ]
+              },
+              {
+                "element_id": "report",
+                "label": "The expert's report is on file",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "EXPERT_REPORT"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "as_of": [
+        "2026-10-09"
+      ],
+      "links": [],
+      "types": [],
+      "nodes": [],
+      "edges": [],
+      "expect": []
+    },
+    {
+      "name": "photocopy_without_a_ground_for_secondary_evidence",
+      "evidence": [
+        {
+          "evidence_id": "evidence_0007",
+          "label": "Annexure R-2: photocopy of the agreement dated 3 June 2021",
+          "kind": "annexure",
+          "doc_id": null
+        }
+      ],
+      "docs": [],
+      "rules": [
+        {
+          "rule_id": "test.adm.electronic.bsa",
+          "effective_from": "2024-07-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.electronic.bsa",
+              "provision_label": "test.adm.electronic.bsa"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "ELECTRONIC_RECORD",
+            "elements": [
+              {
+                "element_id": "certificate",
+                "label": "Certificate for the electronic record (BSA s.63(4))",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "CERTIFICATE_63"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.electronic.iea",
+          "effective_from": "2000-01-01",
+          "effective_to": "2024-06-30",
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.electronic.iea",
+              "provision_label": "test.adm.electronic.iea"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "ELECTRONIC_RECORD",
+            "elements": [
+              {
+                "element_id": "certificate",
+                "label": "Certificate for the electronic record (IEA s.65B(4))",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "CERTIFICATE_65B"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.copy",
+          "effective_from": "2000-01-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.copy",
+              "provision_label": "test.adm.copy"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "SECONDARY_COPY",
+            "elements": [
+              {
+                "element_id": "ground",
+                "label": "Ground for giving secondary evidence (the original is lost, withheld or not movable)",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "ORIGINAL_UNAVAILABLE_NOTE"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.expert",
+          "effective_from": "2000-01-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:exp1",
+              "provision_label": "Evidence law, expert opinion"
+            },
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:exp2",
+              "provision_label": "Evidence law, expert report"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "EXPERT_OPINION",
+            "elements": [
+              {
+                "element_id": "qualification",
+                "label": "Expert's special skill is shown",
+                "satisfied_by_node_types": [
+                  "witness"
+                ],
+                "satisfied_by_type_tags": [
+                  "EXPERT_QUALIFICATION"
+                ]
+              },
+              {
+                "element_id": "report",
+                "label": "The expert's report is on file",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "EXPERT_REPORT"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "as_of": [
+        "2026-10-09"
+      ],
+      "links": [],
+      "types": [],
+      "nodes": [],
+      "edges": [],
+      "expect": [
+        {
+          "evidence_id": "evidence_0007",
+          "evidence_type": "SECONDARY_COPY",
+          "evidence_type_status": "PROPOSED",
+          "rule_id": "test.adm.copy",
+          "elements": {
+            "ground": "ABSENT"
+          }
+        }
+      ]
+    },
+    {
+      "name": "expert_report_partly_founded_through_the_graph",
+      "evidence": [
+        {
+          "evidence_id": "evidence_0008",
+          "label": "Exhibit P-8: FSL report on handwriting by expert Dr. X",
+          "kind": "exhibit",
+          "doc_id": null
+        }
+      ],
+      "docs": [],
+      "rules": [
+        {
+          "rule_id": "test.adm.electronic.bsa",
+          "effective_from": "2024-07-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.electronic.bsa",
+              "provision_label": "test.adm.electronic.bsa"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "ELECTRONIC_RECORD",
+            "elements": [
+              {
+                "element_id": "certificate",
+                "label": "Certificate for the electronic record (BSA s.63(4))",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "CERTIFICATE_63"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.electronic.iea",
+          "effective_from": "2000-01-01",
+          "effective_to": "2024-06-30",
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.electronic.iea",
+              "provision_label": "test.adm.electronic.iea"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "ELECTRONIC_RECORD",
+            "elements": [
+              {
+                "element_id": "certificate",
+                "label": "Certificate for the electronic record (IEA s.65B(4))",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "CERTIFICATE_65B"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.copy",
+          "effective_from": "2000-01-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.copy",
+              "provision_label": "test.adm.copy"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "SECONDARY_COPY",
+            "elements": [
+              {
+                "element_id": "ground",
+                "label": "Ground for giving secondary evidence (the original is lost, withheld or not movable)",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "ORIGINAL_UNAVAILABLE_NOTE"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.expert",
+          "effective_from": "2000-01-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:exp1",
+              "provision_label": "Evidence law, expert opinion"
+            },
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:exp2",
+              "provision_label": "Evidence law, expert report"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "EXPERT_OPINION",
+            "elements": [
+              {
+                "element_id": "qualification",
+                "label": "Expert's special skill is shown",
+                "satisfied_by_node_types": [
+                  "witness"
+                ],
+                "satisfied_by_type_tags": [
+                  "EXPERT_QUALIFICATION"
+                ]
+              },
+              {
+                "element_id": "report",
+                "label": "The expert's report is on file",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "EXPERT_REPORT"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "as_of": [
+        "2026-10-09"
+      ],
+      "links": [],
+      "types": [],
+      "nodes": [
+        {
+          "node_id": "witness_0001",
+          "node_type": "witness",
+          "label": "Dr. X (handwriting expert)"
+        },
+        {
+          "node_id": "evidence_0008",
+          "node_type": "exhibit",
+          "label": "FSL report"
+        }
+      ],
+      "edges": [
+        {
+          "edge_id": "e1",
+          "edge_type": "mentions",
+          "from_node_id": "witness_0001",
+          "to_node_id": "evidence_0008",
+          "status": "extracted"
+        }
+      ],
+      "expect": [
+        {
+          "evidence_id": "evidence_0008",
+          "evidence_type": "EXPERT_OPINION",
+          "evidence_type_status": "PROPOSED",
+          "rule_id": "test.adm.expert",
+          "elements": {
+            "qualification": "PRESENT",
+            "report": "ABSENT"
+          }
+        }
+      ]
+    },
+    {
+      "name": "rejected_graph_edge_does_not_found_an_element",
+      "evidence": [
+        {
+          "evidence_id": "evidence_0008",
+          "label": "Exhibit P-8: FSL report on handwriting by expert Dr. X",
+          "kind": "exhibit",
+          "doc_id": null
+        }
+      ],
+      "docs": [],
+      "rules": [
+        {
+          "rule_id": "test.adm.electronic.bsa",
+          "effective_from": "2024-07-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.electronic.bsa",
+              "provision_label": "test.adm.electronic.bsa"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "ELECTRONIC_RECORD",
+            "elements": [
+              {
+                "element_id": "certificate",
+                "label": "Certificate for the electronic record (BSA s.63(4))",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "CERTIFICATE_63"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.electronic.iea",
+          "effective_from": "2000-01-01",
+          "effective_to": "2024-06-30",
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.electronic.iea",
+              "provision_label": "test.adm.electronic.iea"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "ELECTRONIC_RECORD",
+            "elements": [
+              {
+                "element_id": "certificate",
+                "label": "Certificate for the electronic record (IEA s.65B(4))",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "CERTIFICATE_65B"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.copy",
+          "effective_from": "2000-01-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.copy",
+              "provision_label": "test.adm.copy"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "SECONDARY_COPY",
+            "elements": [
+              {
+                "element_id": "ground",
+                "label": "Ground for giving secondary evidence (the original is lost, withheld or not movable)",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "ORIGINAL_UNAVAILABLE_NOTE"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.expert",
+          "effective_from": "2000-01-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:exp1",
+              "provision_label": "Evidence law, expert opinion"
+            },
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:exp2",
+              "provision_label": "Evidence law, expert report"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "EXPERT_OPINION",
+            "elements": [
+              {
+                "element_id": "qualification",
+                "label": "Expert's special skill is shown",
+                "satisfied_by_node_types": [
+                  "witness"
+                ],
+                "satisfied_by_type_tags": [
+                  "EXPERT_QUALIFICATION"
+                ]
+              },
+              {
+                "element_id": "report",
+                "label": "The expert's report is on file",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "EXPERT_REPORT"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "as_of": [
+        "2026-10-09"
+      ],
+      "links": [],
+      "types": [],
+      "nodes": [
+        {
+          "node_id": "witness_0001",
+          "node_type": "witness",
+          "label": "Dr. X (handwriting expert)"
+        },
+        {
+          "node_id": "evidence_0008",
+          "node_type": "exhibit",
+          "label": "FSL report"
+        }
+      ],
+      "edges": [
+        {
+          "edge_id": "e1",
+          "edge_type": "mentions",
+          "from_node_id": "witness_0001",
+          "to_node_id": "evidence_0008",
+          "status": "rejected"
+        }
+      ],
+      "expect": [
+        {
+          "evidence_id": "evidence_0008",
+          "evidence_type": "EXPERT_OPINION",
+          "evidence_type_status": "PROPOSED",
+          "rule_id": "test.adm.expert",
+          "elements": {
+            "qualification": "ABSENT",
+            "report": "ABSENT"
+          }
+        }
+      ]
+    },
+    {
+      "name": "earlier_code_applies_on_an_earlier_date",
+      "evidence": [
+        {
+          "evidence_id": "evidence_0003",
+          "label": "Annexure P-3: WhatsApp chat screenshot of 12 March 2023",
+          "kind": "annexure",
+          "doc_id": "d3"
+        }
+      ],
+      "docs": [
+        {
+          "doc_id": "d3",
+          "filename": "annexure_p3.pdf",
+          "type_tag": "annexure"
+        },
+        {
+          "doc_id": "d9",
+          "filename": "certificate_under_section_63.pdf",
+          "type_tag": "CERTIFICATE_63"
+        }
+      ],
+      "rules": [
+        {
+          "rule_id": "test.adm.electronic.bsa",
+          "effective_from": "2024-07-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.electronic.bsa",
+              "provision_label": "test.adm.electronic.bsa"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "ELECTRONIC_RECORD",
+            "elements": [
+              {
+                "element_id": "certificate",
+                "label": "Certificate for the electronic record (BSA s.63(4))",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "CERTIFICATE_63"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.electronic.iea",
+          "effective_from": "2000-01-01",
+          "effective_to": "2024-06-30",
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.electronic.iea",
+              "provision_label": "test.adm.electronic.iea"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "ELECTRONIC_RECORD",
+            "elements": [
+              {
+                "element_id": "certificate",
+                "label": "Certificate for the electronic record (IEA s.65B(4))",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "CERTIFICATE_65B"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.copy",
+          "effective_from": "2000-01-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.copy",
+              "provision_label": "test.adm.copy"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "SECONDARY_COPY",
+            "elements": [
+              {
+                "element_id": "ground",
+                "label": "Ground for giving secondary evidence (the original is lost, withheld or not movable)",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "ORIGINAL_UNAVAILABLE_NOTE"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.expert",
+          "effective_from": "2000-01-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:exp1",
+              "provision_label": "Evidence law, expert opinion"
+            },
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:exp2",
+              "provision_label": "Evidence law, expert report"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "EXPERT_OPINION",
+            "elements": [
+              {
+                "element_id": "qualification",
+                "label": "Expert's special skill is shown",
+                "satisfied_by_node_types": [
+                  "witness"
+                ],
+                "satisfied_by_type_tags": [
+                  "EXPERT_QUALIFICATION"
+                ]
+              },
+              {
+                "element_id": "report",
+                "label": "The expert's report is on file",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "EXPERT_REPORT"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "as_of": [
+        "2024-03-01"
+      ],
+      "links": [],
+      "types": [],
+      "nodes": [],
+      "edges": [],
+      "expect": [
+        {
+          "evidence_id": "evidence_0003",
+          "evidence_type": "ELECTRONIC_RECORD",
+          "evidence_type_status": "PROPOSED",
+          "rule_id": "test.adm.electronic.iea",
+          "elements": {
+            "certificate": "ABSENT"
+          }
+        }
+      ]
+    },
+    {
+      "name": "both_codes_are_checked_when_both_dates_are_given",
+      "evidence": [
+        {
+          "evidence_id": "evidence_0003",
+          "label": "Annexure P-3: WhatsApp chat screenshot of 12 March 2023",
+          "kind": "annexure",
+          "doc_id": "d3"
+        }
+      ],
+      "docs": [
+        {
+          "doc_id": "d3",
+          "filename": "annexure_p3.pdf",
+          "type_tag": "annexure"
+        }
+      ],
+      "rules": [
+        {
+          "rule_id": "test.adm.electronic.bsa",
+          "effective_from": "2024-07-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.electronic.bsa",
+              "provision_label": "test.adm.electronic.bsa"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "ELECTRONIC_RECORD",
+            "elements": [
+              {
+                "element_id": "certificate",
+                "label": "Certificate for the electronic record (BSA s.63(4))",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "CERTIFICATE_63"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.electronic.iea",
+          "effective_from": "2000-01-01",
+          "effective_to": "2024-06-30",
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.electronic.iea",
+              "provision_label": "test.adm.electronic.iea"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "ELECTRONIC_RECORD",
+            "elements": [
+              {
+                "element_id": "certificate",
+                "label": "Certificate for the electronic record (IEA s.65B(4))",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "CERTIFICATE_65B"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.copy",
+          "effective_from": "2000-01-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:test.adm.copy",
+              "provision_label": "test.adm.copy"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "SECONDARY_COPY",
+            "elements": [
+              {
+                "element_id": "ground",
+                "label": "Ground for giving secondary evidence (the original is lost, withheld or not movable)",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "ORIGINAL_UNAVAILABLE_NOTE"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "rule_id": "test.adm.expert",
+          "effective_from": "2000-01-01",
+          "effective_to": null,
+          "authorities": [
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:exp1",
+              "provision_label": "Evidence law, expert opinion"
+            },
+            {
+              "pack_id": "test.rules",
+              "source_id": "cfsrc:test.rules:aaaa",
+              "chunk_id": "cfchunk:test.rules:exp2",
+              "provision_label": "Evidence law, expert report"
+            }
+          ],
+          "trust_state": "DEVELOPMENT_ONLY",
+          "payload": {
+            "evidence_type": "EXPERT_OPINION",
+            "elements": [
+              {
+                "element_id": "qualification",
+                "label": "Expert's special skill is shown",
+                "satisfied_by_node_types": [
+                  "witness"
+                ],
+                "satisfied_by_type_tags": [
+                  "EXPERT_QUALIFICATION"
+                ]
+              },
+              {
+                "element_id": "report",
+                "label": "The expert's report is on file",
+                "satisfied_by_node_types": [],
+                "satisfied_by_type_tags": [
+                  "EXPERT_REPORT"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "as_of": [
+        "2026-10-09",
+        "2023-05-01"
+      ],
+      "links": [],
+      "types": [],
+      "nodes": [],
+      "edges": [],
+      "expect": [
+        {
+          "evidence_id": "evidence_0003",
+          "evidence_type": "ELECTRONIC_RECORD",
+          "evidence_type_status": "PROPOSED",
+          "rule_id": "test.adm.electronic.bsa",
+          "elements": {
+            "certificate": "ABSENT"
+          }
+        },
+        {
+          "evidence_id": "evidence_0003",
+          "evidence_type": "ELECTRONIC_RECORD",
+          "evidence_type_status": "PROPOSED",
+          "rule_id": "test.adm.electronic.iea",
+          "elements": {
+            "certificate": "ABSENT"
+          }
+        }
+      ]
+    }
+  ],
+  "merge": {
+    "name": "foundation_gaps_lead_the_missing_links_panel",
+    "v1_panel": [
+      {
+        "rank": 1,
+        "limb_id": "limb_1",
+        "link": "Law",
+        "score": 20,
+        "kind": "LINK"
+      },
+      {
+        "rank": 2,
+        "limb_id": "limb_2",
+        "link": "Law",
+        "score": 25,
+        "kind": "LINK"
+      },
+      {
+        "rank": 3,
+        "limb_id": "limb_3",
+        "link": "Law",
+        "score": 30,
+        "kind": "LINK"
+      },
+      {
+        "rank": 4,
+        "limb_id": "limb_4",
+        "link": "Law",
+        "score": 35,
+        "kind": "LINK"
+      },
+      {
+        "rank": 5,
+        "limb_id": "limb_5",
+        "link": "Law",
+        "score": 40,
+        "kind": "LINK"
+      }
+    ],
+    "gaps": [
+      {
+        "gap_id": "g-proposed",
+        "evidence_node_id": "evidence_0004",
+        "evidence_type_status": "PROPOSED",
+        "status": "ABSENT",
+        "rule_id": "test.adm.electronic.bsa",
+        "element_id": "certificate"
+      },
+      {
+        "gap_id": "g-confirmed",
+        "evidence_node_id": "evidence_0005",
+        "evidence_type_status": "COUNSEL_CONFIRMED",
+        "status": "ABSENT",
+        "rule_id": "test.adm.electronic.bsa",
+        "element_id": "certificate"
+      },
+      {
+        "gap_id": "g-unknown",
+        "evidence_node_id": "evidence_0006",
+        "evidence_type_status": "COUNSEL_CONFIRMED",
+        "status": "UNKNOWN",
+        "rule_id": "test.adm.electronic.bsa",
+        "element_id": "certificate"
+      }
+    ],
+    "expect_order": [
+      "g-confirmed",
+      "g-proposed",
+      "limb_1:Law",
+      "limb_2:Law",
+      "limb_3:Law",
+      "limb_4:Law",
+      "limb_5:Law"
+    ]
+  }
+}

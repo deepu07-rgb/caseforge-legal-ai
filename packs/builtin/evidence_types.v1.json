@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "caseforge.builtin",
+  "table_id": "evidence_types.v1",
+  "description": "Evidence-type vocabulary for Admissibility & Foundation Gaps (PRD v4.0 §7.5). Data, not code. A type is PROPOSED from the words in an evidence item's label, kind and document name; counsel confirms or changes it. 'keywords' are matched case-insensitively on word boundaries; the type with most distinct keyword hits wins, ties go to the earlier type. The names here are the 'evidence_type' values ADMISSIBILITY_REQUIREMENT rows refer to.",
+  "types": [
+    {
+      "evidence_type": "ELECTRONIC_RECORD",
+      "label": "Electronic record (message, e-mail, recording, printout, device data)",
+      "keywords": [
+        "electronic record",
+        "email",
+        "e-mail",
+        "whatsapp",
+        "sms",
+        "text message",
+        "cctv",
+        "video recording",
+        "audio recording",
+        "call detail record",
+        "cdr",
+        "screenshot",
+        "pen drive",
+        "hard disk",
+        "digital",
+        "computer output",
+        "chat"
+      ]
+    },
+    {
+      "evidence_type": "SECONDARY_COPY",
+      "label": "Copy of a document offered in place of the original",
+      "keywords": [
+        "photocopy",
+        "xerox",
+        "photostat",
+        "copy of the"
+      ]
+    },
+    {
+      "evidence_type": "EXPERT_OPINION",
+      "label": "Expert opinion or report",
+      "keywords": [
+        "expert",
+        "forensic",
+        "fsl",
+        "handwriting",
+        "ballistic",
+        "opinion of"
+      ]
+    }
+  ]
+}
