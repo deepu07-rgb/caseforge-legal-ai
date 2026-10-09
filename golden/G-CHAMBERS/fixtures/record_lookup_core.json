@@ -1,0 +1,394 @@
+{
+  "schema_version": "1.0.0",
+  "golden": "G-CHAMBERS",
+  "set": "record_lookup",
+  "batch": "B-S4-19",
+  "description": "A small synthetic record (pleadings, two depositions, an order sheet, an exhibit list) and 24 questions a judge might ask, each with the passages that answer it. Two questions the record cannot answer must return nothing.",
+  "documents": [
+    {
+      "doc_id": "d-plaint",
+      "filename": "Plaint.pdf",
+      "pages": [
+        "1. The plaintiff and the defendant are brothers and co-owners of the house at 12 Gandhi Road, each holding an equal half share under the registered sale deed dated 4 June 1998.\n2. The defendant has been in exclusive possession of the entire house since 2020 and has refused the plaintiff entry.\n3. The plaintiff paid Rs 85,000 towards repair of the roof in March 2021, as shown in Exhibit P-2.\n",
+        "4. The ground floor is let to a tenant, Mr. Sharma, at a monthly rent of Rs 12,000, which the defendant collects.\n5. The plaintiff issued a legal notice on 15 January 2024 demanding partition, which the defendant did not answer.\n"
+      ]
+    },
+    {
+      "doc_id": "d-ws",
+      "filename": "Written statement.pdf",
+      "pages": [
+        "1. It is admitted that the parties are brothers and that the house stands in their joint names.\n2. The defendant denies that he excluded the plaintiff; the plaintiff left the house of his own will in 2019 after a quarrel with their mother.\n3. The defendant has paid the municipal tax of the house every year from his own funds.\n4. The defendant states that the suit is barred by limitation because the plaintiff has known of the defendant's occupation since 2012.\n"
+      ]
+    },
+    {
+      "doc_id": "d-pw1",
+      "filename": "Deposition PW1.pdf",
+      "pages": [
+        "PW1 Ravi Kumar, examination-in-chief, sworn on 20 May 2024.\n\nI am the plaintiff. My brother Anil changed the lock of the house in February 2020.\n\nOn the evening of 3 February 2020 I went to the house and saw Anil's friend Mohan drive away in a red car. Anil told me I could not enter.\n\nI never received any rent from the ground floor tenant.\n",
+        "Cross-examination: I did not file any complaint with the police about the lock.\n\nIt is true that I stayed with my mother in Lucknow during 2019. I returned to Delhi in January 2020.\n\nI cannot say when the sale deed was registered; I have only a certified copy.\n"
+      ]
+    },
+    {
+      "doc_id": "d-dw1",
+      "filename": "Deposition DW1.pdf",
+      "pages": [
+        "DW1 Anil Kumar, examination-in-chief, sworn on 12 June 2024.\n\nI have lived in the house since 1998 along with my mother. The plaintiff left on his own in 2019.\n\nThe car seen that day was white, not red; it belonged to my neighbour.\n\nI deposit the rent receipts of Mr. Sharma into the joint account of the family.\n"
+      ]
+    },
+    {
+      "doc_id": "d-orders",
+      "filename": "Order sheet.pdf",
+      "pages": [
+        "Order dated 12 March 2024. Written statement filed. Case adjourned to 18 April 2024 for framing of issues at the request of the defendant.\n\nOrder dated 18 April 2024. Issues were not framed as counsel for the plaintiff was absent. Adjourned to 2 May 2024 at the request of the plaintiff.\n\nOrder dated 2 May 2024. Issues framed. Plaintiff's evidence fixed for 20 May 2024.\n"
+      ]
+    },
+    {
+      "doc_id": "d-exh",
+      "filename": "Exhibit list.pdf",
+      "pages": [
+        "Exhibit P-1: Certified copy of the registered sale deed dated 4 June 1998.\n\nExhibit P-2: Receipt of the roofing contractor for Rs 85,000 dated 21 March 2021.\n\nExhibit D-1: Municipal tax receipts for the years 2015 to 2023.\n\nExhibit D-2: Photograph of the white car of the neighbour taken on 3 February 2020.\n"
+      ]
+    }
+  ],
+  "queries": [
+    {
+      "id": "q01",
+      "q": "where did the witness say the car was red",
+      "expect": [
+        {
+          "doc_id": "d-pw1",
+          "page": 1,
+          "label": "b3"
+        }
+      ]
+    },
+    {
+      "id": "q02",
+      "q": "who said the car was white",
+      "expect": [
+        {
+          "doc_id": "d-dw1",
+          "page": 1,
+          "label": "b3"
+        },
+        {
+          "doc_id": "d-exh",
+          "page": 1,
+          "label": "b4"
+        }
+      ]
+    },
+    {
+      "id": "q03",
+      "q": "when was the sale deed registered",
+      "expect": [
+        {
+          "doc_id": "d-plaint",
+          "page": 1,
+          "label": "p1"
+        },
+        {
+          "doc_id": "d-exh",
+          "page": 1,
+          "label": "b1"
+        },
+        {
+          "doc_id": "d-pw1",
+          "page": 2,
+          "label": "b3"
+        }
+      ]
+    },
+    {
+      "id": "q04",
+      "q": "how much did the plaintiff pay for the roof repair",
+      "expect": [
+        {
+          "doc_id": "d-plaint",
+          "page": 1,
+          "label": "p3"
+        },
+        {
+          "doc_id": "d-exh",
+          "page": 1,
+          "label": "b2"
+        }
+      ]
+    },
+    {
+      "id": "q05",
+      "q": "what rent does the tenant pay",
+      "expect": [
+        {
+          "doc_id": "d-plaint",
+          "page": 2,
+          "label": "p4"
+        }
+      ]
+    },
+    {
+      "id": "q06",
+      "q": "did the defendant answer the legal notice",
+      "expect": [
+        {
+          "doc_id": "d-plaint",
+          "page": 2,
+          "label": "p5"
+        }
+      ]
+    },
+    {
+      "id": "q07",
+      "q": "why does the defendant say the suit is barred",
+      "expect": [
+        {
+          "doc_id": "d-ws",
+          "page": 1,
+          "label": "p4"
+        }
+      ]
+    },
+    {
+      "id": "q08",
+      "q": "who paid the municipal tax",
+      "expect": [
+        {
+          "doc_id": "d-ws",
+          "page": 1,
+          "label": "p3"
+        },
+        {
+          "doc_id": "d-exh",
+          "page": 1,
+          "label": "b3"
+        }
+      ]
+    },
+    {
+      "id": "q09",
+      "q": "when did the plaintiff leave the house",
+      "expect": [
+        {
+          "doc_id": "d-ws",
+          "page": 1,
+          "label": "p2"
+        },
+        {
+          "doc_id": "d-dw1",
+          "page": 1,
+          "label": "b2"
+        },
+        {
+          "doc_id": "d-pw1",
+          "page": 2,
+          "label": "b2"
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "q": "adjournment sought by the defendant",
+      "expect": [
+        {
+          "doc_id": "d-orders",
+          "page": 1,
+          "label": "b1"
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "q": "why were issues not framed on 18 April",
+      "expect": [
+        {
+          "doc_id": "d-orders",
+          "page": 1,
+          "label": "b2"
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "q": "when was the plaintiff's evidence fixed",
+      "expect": [
+        {
+          "doc_id": "d-orders",
+          "page": 1,
+          "label": "b3"
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "q": "who changed the lock",
+      "expect": [
+        {
+          "doc_id": "d-pw1",
+          "page": 1,
+          "label": "b2"
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "q": "did the plaintiff complain to the police",
+      "expect": [
+        {
+          "doc_id": "d-pw1",
+          "page": 2,
+          "label": "b1"
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "q": "where was the plaintiff living in 2019",
+      "expect": [
+        {
+          "doc_id": "d-pw1",
+          "page": 2,
+          "label": "b2"
+        },
+        {
+          "doc_id": "d-ws",
+          "page": 1,
+          "label": "p2"
+        },
+        {
+          "doc_id": "d-dw1",
+          "page": 1,
+          "label": "b2"
+        }
+      ]
+    },
+    {
+      "id": "q16",
+      "q": "photograph of the neighbour's car",
+      "expect": [
+        {
+          "doc_id": "d-exh",
+          "page": 1,
+          "label": "b4"
+        },
+        {
+          "doc_id": "d-dw1",
+          "page": 1,
+          "label": "b3"
+        }
+      ]
+    },
+    {
+      "id": "q17",
+      "q": "certified copy of the sale deed",
+      "expect": [
+        {
+          "doc_id": "d-exh",
+          "page": 1,
+          "label": "b1"
+        },
+        {
+          "doc_id": "d-pw1",
+          "page": 2,
+          "label": "b3"
+        }
+      ]
+    },
+    {
+      "id": "q18",
+      "q": "since when has the defendant lived in the house",
+      "expect": [
+        {
+          "doc_id": "d-dw1",
+          "page": 1,
+          "label": "b2"
+        }
+      ]
+    },
+    {
+      "id": "q19",
+      "q": "exclusive possession",
+      "expect": [
+        {
+          "doc_id": "d-plaint",
+          "page": 1,
+          "label": "p2"
+        }
+      ]
+    },
+    {
+      "id": "q20",
+      "q": "rent receipts",
+      "expect": [
+        {
+          "doc_id": "d-dw1",
+          "page": 1,
+          "label": "b4"
+        }
+      ]
+    },
+    {
+      "id": "q21",
+      "q": "Mohan",
+      "expect": [
+        {
+          "doc_id": "d-pw1",
+          "page": 1,
+          "label": "b3"
+        }
+      ]
+    },
+    {
+      "id": "q22",
+      "q": "roof contractor",
+      "expect": [
+        {
+          "doc_id": "d-exh",
+          "page": 1,
+          "label": "b2"
+        }
+      ]
+    },
+    {
+      "id": "q23",
+      "q": "monthly rent collected by the defendant",
+      "expect": [
+        {
+          "doc_id": "d-plaint",
+          "page": 2,
+          "label": "p4"
+        }
+      ]
+    },
+    {
+      "id": "q24",
+      "q": "who is Mr. Sharma",
+      "expect": [
+        {
+          "doc_id": "d-plaint",
+          "page": 2,
+          "label": "p4"
+        },
+        {
+          "doc_id": "d-dw1",
+          "page": 1,
+          "label": "b4"
+        }
+      ]
+    }
+  ],
+  "no_answer": [
+    {
+      "id": "n01",
+      "q": "nuclear submarine reactor"
+    },
+    {
+      "id": "n02",
+      "q": "arbitration award in Singapore"
+    }
+  ],
+  "threshold": {
+    "id": "S4.chambers.lookup_top5_hit_rate_min",
+    "top_k": 5,
+    "proposed": 0.9
+  }
+}
