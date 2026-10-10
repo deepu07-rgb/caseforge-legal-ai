@@ -48,18 +48,26 @@ export function graphProvenance(
   stableId: string,
   title: string,
   provenance?: GraphProvenance | null,
+  /** Why this item is held for review (low confidence, a failed check). A held item has a source but is not verified, so it is never GREEN. */
+  held?: string | null,
 ): ProvenanceRecord {
   const source = firstSource(provenance);
   const counsel = Boolean(provenance?.counsel_confirmed) || ["SOURCED_BY_COUNSEL", "USER_EDIT"].includes(provenance?.origin || "");
   const inferred = provenance?.origin === "INFERRED";
   const hasPointer = Boolean(source?.doc_id) && source?.page_index != null;
+  const translated = (provenance?.origin as string | undefined) === "TRANSLATED";
+  const heldBack = !counsel && (translated || Boolean(held));
   return {
     stableId,
     propositionClass: counsel ? "COUNSEL_INPUT" : inferred ? "INFERENCE" : hasPointer ? "FACTUAL_BASIS" : "UNSUPPORTED_OR_GAP",
     origin: counsel ? "COUNSEL_INPUT" : inferred ? "MODEL_INFERENCE" : hasPointer ? "MATTER_EVIDENCE" : "UNSUPPORTED_GAP",
-    supportState: counsel || inferred ? "AMBER" : hasPointer ? "GREEN" : "UNSUPPORTED",
+    supportState: counsel || inferred || (heldBack && hasPointer) ? "AMBER" : hasPointer ? "GREEN" : "UNSUPPORTED",
     title,
-    verification: counsel
+    verification: heldBack && hasPointer
+      ? translated
+        ? "Read from a machine translation - wording not verified. A page pointer is recorded; check the original."
+        : `Held for review: ${held}. A page pointer is recorded, but this value is not verified.`
+      : counsel
       ? "Counsel-authored or counsel-confirmed; distinct from documentary evidence."
       : inferred
         ? "Model/extractor inference; inspect its stated bases before use."

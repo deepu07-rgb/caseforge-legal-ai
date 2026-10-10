@@ -30,6 +30,7 @@
     "resources": [
       "../sidecars/**/*",
       "../contracts/**/*",
+      "../eval/calibration/**/*",
       "../packs/official/**/*",
       "../runtime-python/**/*",
       "../scripts/verify_certificate.py"

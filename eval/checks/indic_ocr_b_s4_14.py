@@ -340,6 +340,13 @@ def main() -> int:
     rs = (ROOT / "src-tauri" / "src" / "docpipe" / "mod.rs").read_text(encoding="utf-8")
     if rs.count("calibration_id_for(&p.recognizer_id)") != 2 or "tesseract-hin-eng.synthetic-isotonic.v1" not in rs:
         errors.append("the host does not record the Hindi calibration id for Hindi pages")
+    # Found by running the real app (2026-10-11): the calibration maps are read at run time, and the packaged app did not ship them, so English
+    # recognition failed outright and every Hindi word was held. They must be bundled.
+    conf = json.loads((ROOT / "src-tauri" / "tauri.conf.json").read_text(encoding="utf-8"))
+    if "../eval/calibration/**/*" not in conf["bundle"]["resources"]:
+        errors.append("the confidence calibration maps (eval/calibration) are not bundled with the app")
+    if "confidence calibration shipped" not in (ROOT / "scripts" / "smoke_installed_layout.ps1").read_text(encoding="utf-8"):
+        errors.append("the installed-layout smoke test does not check that the calibration maps shipped")
     ui = (ROOT / "src" / "components" / "ReviewView.tsx").read_text(encoding="utf-8")
     if "pageScriptLabel(sourceLayer)" not in ui:
         errors.append("the review screen does not show the page script")

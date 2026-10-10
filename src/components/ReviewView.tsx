@@ -280,12 +280,19 @@ export default function ReviewView({
                 </span>
               </div>
               <ProvenanceInspector
-                record={graphProvenance(selected.key, selected.label, {
-                  source: selected.source ?? undefined,
-                  confidence: selected.confidence,
-                  counsel_confirmed: selected.counselConfirmed,
-                  origin: selected.counselConfirmed ? "USER_EDIT" : "EXTRACTED",
-                })}
+                record={graphProvenance(
+                  selected.key,
+                  selected.label,
+                  {
+                    source: selected.source ?? undefined,
+                    confidence: selected.confidence,
+                    counsel_confirmed: selected.counselConfirmed,
+                    origin: selected.counselConfirmed ? "USER_EDIT" : "EXTRACTED",
+                  },
+                  selected.lowConfidence && !selected.counselConfirmed
+                    ? selected.validationReasons?.join("; ") || "the engine is not confident of this reading"
+                    : null,
+                )}
               />
               {selected.bbox ? (
                 <p className="mono muted" style={{ fontSize: "0.72rem" }}>

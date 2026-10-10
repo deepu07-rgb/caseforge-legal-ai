@@ -2935,7 +2935,7 @@ function WorkspaceView({
                 >
                   {recognizeBusy ? "Recognizing…" : "Run recognition on case"}
                 </button>
-                <span className="chip muted">recognizer: caseforge.recognize.provisional.v1</span>
+                <span className="chip muted">recognizers: caseforge.ocr.tesseract-eng-fast.v1 · caseforge.ocr.tesseract-hin-eng-best.v1</span>
               </div>
             )}
 
@@ -3185,7 +3185,7 @@ function WorkspaceView({
                 </div>
                 <h3>Text layer</h3>
                 <p className="muted" style={{ fontSize: "0.85rem", marginBottom: "0.35rem" }}>
-                  Offline English OCR · engine confidence · positioned words · B-S3-04
+                  Offline OCR (English, and Hindi with English) · engine confidence · positioned words · B-S3-04, B-S4-14
                 </p>
                 <div className="meter" aria-hidden>
                   <span

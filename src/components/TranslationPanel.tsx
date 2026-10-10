@@ -273,7 +273,7 @@ export default function TranslationPanel({ caseId }: { caseId: string }) {
       {facts && (
         <section className="card" style={{ marginTop: "0.75rem" }} data-testid="translation-facts">
           <h4>Facts read from this translation</h4>
-          <p className="chip warn">from a translation — not confirmed, and not part of your case understanding until you confirm them</p>
+          <p className="chip warn">from a translation — not confirmed, and not part of your case understanding; check each one against the Hindi original</p>
           <ul>
             {factNodes.map((n) => (
               <li key={n.node_id}>
