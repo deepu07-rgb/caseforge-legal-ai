@@ -6,6 +6,7 @@
 import { CurrencyStamp } from "./CurrencyStamp";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnswerFeedbackPanel } from "./AnswerFeedbackPanel";
+import TimedRehearsalPanel, { RehearsalTimelineView } from "./TimedRehearsalPanel";
 import {
   COURT_FORMATS,
   COURT_ROLES,
@@ -25,6 +26,7 @@ import {
   mockCourtPolicy,
   mockCourtRetrievalReadiness,
   mockCourtTurnForCase,
+  rehearsalResponse,
   voiceCourtGate,
   voiceCourtTurnForCase,
   type ArchetypeMeta,
@@ -47,6 +49,7 @@ import {
   type MockCourtReadiness,
   type PrepSessionReport,
   type SpeechStatus,
+  type RehearsalRecord,
   type SttResult,
   type TtsResult,
   type PropositionLedger,
@@ -116,6 +119,9 @@ export default function MockCourtView({
   const [inputMode, setInputMode] = useState<"text" | "voice">("text");
   const [voiceGate, setVoiceGate] = useState<VoiceGate | null>(null);
   const [debriefV2, setDebriefV2] = useState<MockCourtDebriefV2 | null>(null);
+  // B-S4-12: timed rehearsal. While the clock runs, answers go to the host's timer instead of the grounded model turn.
+  const [timedActive, setTimedActive] = useState(false);
+  const [rehearsalRecord, setRehearsalRecord] = useState<RehearsalRecord | null>(null);
   const [sessionTurns, setSessionTurns] = useState<DebriefTurnInput[]>([]);
   // B-S4-00b: answer check per counsel message id.
   const [answerFeedback, setAnswerFeedback] = useState<Record<string, AnswerFeedback>>({});
@@ -291,6 +297,30 @@ export default function MockCourtView({
     }
   };
 
+  const sendTimed = async (text: string, via: "text" | "voice") => {
+    if (!text || busy) return;
+    try {
+      const r = await rehearsalResponse(sessionId, text);
+      setMessages((m) => [...m, { id: `u-t-${r.turn_id}`, role: "user", text: via === "voice" ? `[Voice STT] ${text}` : text }]);
+      if (via === "text") setDraft("");
+      else {
+        setVoiceRaw("");
+        setVoiceStaging("");
+        setVoiceSttResult(null);
+        setVoiceReviewed(false);
+      }
+      if (r.interruption) {
+        setMessages((m) => [...m, { id: `i-${r.turn_id}`, role: "assistant", speaker: "Bench interrupts", text: r.interruption!.text, meta: `from your Missing Links · ${r.interruption!.grounding_ref} · rests on ${r.interruption!.inputs_cited.length} input(s) from your argument tree` }]);
+      } else {
+        setMessages((m) => [...m, { id: `c-${r.turn_id}`, role: "system", text: "Counsel may continue." }]);
+      }
+      setLastMeta(`Timed · ${Math.round(r.remaining_ms / 1000)} s left`);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      setMessages((m) => [...m, { id: `err-t-${Date.now()}`, role: "system", text: msg.includes("CF_REHEARSAL_TIME_UP") ? "Time is up. That answer was not sent; it is still in the box. Your timeline is in the Debrief tab." : `Timed rehearsal: ${msg.replace(/^CF_[A-Z_]+:\s*/, "")}` }]);
+    }
+  };
+
   const sendVoice = async () => {
     const text = voiceStaging.trim();
     if (!text || busy) return;
@@ -322,6 +352,10 @@ export default function MockCourtView({
         },
       ]);
       setLastMeta(voiceGate.refuse_code || "CF_VOICE_COURT_LITE_REFUSE");
+      return;
+    }
+    if (timedActive) {
+      await sendTimed(text, "voice");
       return;
     }
     setBusy(true);
@@ -530,6 +564,10 @@ export default function MockCourtView({
     }
     if (role === "bench_prep") {
       await sendBenchPrep();
+      return;
+    }
+    if (timedActive) {
+      await sendTimed(draft.trim(), "text");
       return;
     }
     const text = draft.trim();
@@ -865,6 +903,21 @@ export default function MockCourtView({
             </button>
           </div>
 
+          {activeCase && (
+            <TimedRehearsalPanel
+              caseId={activeCase.case_id}
+              sessionId={sessionId}
+              archetypeId={archetypeId}
+              interruptionSlider={sliders.interruption}
+              onActive={setTimedActive}
+              onRecord={(rec) => {
+                setRehearsalRecord(rec);
+                if (rec) setInsightTab("debrief");
+              }}
+              onNotice={(text) => setMessages((m) => [...m, { id: `timer-${Date.now()}`, role: "system", text }])}
+            />
+          )}
+
           <div className="chamber-log" ref={logRef}>
             {messages.map((m) => (
               <div key={m.id} className={`transcript-block ${m.role}`}>
@@ -1153,6 +1206,7 @@ export default function MockCourtView({
 
           {insightTab === "debrief" && (
             <div data-testid="debrief-v2-panel">
+              {rehearsalRecord && <RehearsalTimelineView record={rehearsalRecord} />}
               <div className="stat-label">Source-specific Debrief v2</div>
               {!debriefV2 ? <p className="muted">Complete a grounded turn, then generate Debrief v2. Existing accepted tasks remain below.</p> : <>
                 <div className="notice" data-testid="session-comparison">

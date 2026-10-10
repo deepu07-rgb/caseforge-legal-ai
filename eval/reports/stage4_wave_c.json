@@ -1,6 +1,6 @@
 {
   "checkpoint": "Stage 4 Wave C",
-  "generated_at": "2026-10-10T09:54:04Z",
+  "generated_at": "2026-10-10T10:44:58Z",
   "verdict": {
     "wave_c_batches_17_to_21": "GREEN",
     "ci_gates": "GREEN",
@@ -82,7 +82,7 @@
     {
       "gate": "treatment_b_s4_13.py",
       "exit": 0,
-      "seconds": 1.0
+      "seconds": 0.9
     },
     {
       "gate": "chambers_record_only_b_s4_17.py",
@@ -108,10 +108,15 @@
       "gate": "editions_b_s4_22.py",
       "exit": 0,
       "seconds": 0.3
+    },
+    {
+      "gate": "timed_rehearsal_b_s4_12.py",
+      "exit": 0,
+      "seconds": 0.3
     }
   ],
   "rust_tests": {
-    "passed": 234,
+    "passed": 245,
     "failed": 0,
     "ignored": 1
   },
@@ -164,18 +169,18 @@
   },
   "acceptance_counts": {
     "measured": {
-      "PASS": 47,
+      "PASS": 50,
       "WAIVED": 1,
       "BLOCKED": 7,
       "FAIL": 1,
-      "NOT_BUILT": 10
+      "NOT_BUILT": 7
     },
     "formal": {
-      "PASS": 40,
+      "PASS": 42,
       "WAIVED": 1,
-      "BLOCKED": 14,
+      "BLOCKED": 15,
       "FAIL": 1,
-      "NOT_BUILT": 10
+      "NOT_BUILT": 7
     },
     "total": 66
   },
@@ -682,32 +687,38 @@
       "ac": "AC-S4-07.1",
       "batch": "B-S4-12",
       "description": "Timer accuracy; graceful end at limit.",
-      "measured": "NOT_BUILT",
-      "formal": "NOT_BUILT",
+      "measured": "PASS",
+      "formal": "BLOCKED",
       "blocked_by": [
         "threshold not approved by the owner: S4.rehearsal.timer_accuracy_max_s, S4.rehearsal.slot_presets_min (Q-S4-01)"
       ],
-      "reports": [],
+      "reports": [
+        "b_s4_12_timed_rehearsal.json"
+      ],
       "detail": {}
     },
     {
       "ac": "AC-S4-07.2",
       "batch": "B-S4-12",
       "description": "Debrief timeline lists every limb reached/not reached.",
-      "measured": "NOT_BUILT",
-      "formal": "NOT_BUILT",
+      "measured": "PASS",
+      "formal": "PASS",
       "blocked_by": [],
-      "reports": [],
+      "reports": [
+        "b_s4_12_timed_rehearsal.json"
+      ],
       "detail": {}
     },
     {
       "ac": "AC-S4-07.3",
       "batch": "B-S4-12",
       "description": "All interruptions grounded per B-S3-16.",
-      "measured": "NOT_BUILT",
-      "formal": "NOT_BUILT",
+      "measured": "PASS",
+      "formal": "PASS",
       "blocked_by": [],
-      "reports": [],
+      "reports": [
+        "b_s4_12_timed_rehearsal.json"
+      ],
       "detail": {}
     },
     {
@@ -1032,7 +1043,6 @@
   ],
   "not_built": {
     "B-S4-02": "twelve golden sets with legal-editor protocol (needs legal editors, Q-S4-02)",
-    "B-S4-12": "Timed Oral Rehearsal (Wave B)",
     "B-S4-14": "Devanagari triage + OCR (Wave B; needs the OCR bake-off, Q-S4-04)",
     "B-S4-15": "Aligned offline translation + G10 (Wave B)",
     "B-S4-16": "Encrypted Bundle Exchange (Wave B)"

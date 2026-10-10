@@ -89,8 +89,8 @@ and who signs a release is the owner's decision. With `CASEFORGE_RELEASE_KEY_PEM
 
 ## Why the verdict is NOT READY today
 
-See `reasons` in the report. In short: five batches are not built (B-S4-02 golden sets and editor protocol, B-S4-12 timed rehearsal,
-B-S4-14 Devanagari OCR, B-S4-15 translation, B-S4-16 bundle exchange); AC-S4-00.7 (prompt injection on the default model) fails; seven
+See `reasons` in the report. In short: four batches are not built (B-S4-02 golden sets and editor protocol,
+B-S4-14 Devanagari OCR, B-S4-15 translation, B-S4-16 bundle exchange; B-S4-12 timed rehearsal has since been built); AC-S4-00.7 (prompt injection on the default model) fails; seven
 criteria could not be measured here; no legal-editor sign-off exists; one Rust test is ignored without a recorded reason; the controlled
 matters are not end to end; no packet capture has been made.
 

@@ -31,6 +31,7 @@ mod entitlements;
 mod seat;
 mod subscription;
 mod ship_gate;
+mod timed_rehearsal;
 mod record_only;
 mod chambers_lookup;
 mod cause_list;
@@ -2331,6 +2332,119 @@ fn seat_status(app: AppHandle, vault: State<'_, VaultState>) -> Result<serde_jso
 fn seat_deactivate(app: AppHandle, vault: State<'_, VaultState>) -> Result<serde_json::Value, String> {
     let mgr = vault.get_or_init(&app)?;
     mgr.seat_deactivate().map_err(Into::into)
+}
+
+// --- B-S4-12 Timed Oral Rehearsal ---
+
+/// Slot presets, rates and the rules the timer follows (data from contracts/rehearsal_policy.json).
+#[tauri::command]
+fn rehearsal_policy() -> serde_json::Value {
+    timed_rehearsal::policy_json()
+}
+
+fn rehearsal_sessions() -> Result<std::sync::MutexGuard<'static, std::collections::HashMap<String, timed_rehearsal::Live>>, String> {
+    timed_rehearsal::SESSIONS.lock().map_err(|_| "CF_REHEARSAL_STATE: the rehearsal timer state could not be read".to_string())
+}
+
+fn rehearsal_events(ev: &[timed_rehearsal::Event]) -> Vec<serde_json::Value> {
+    ev.iter().map(|e| serde_json::json!(e)).collect()
+}
+
+/// Starts a timed session on the matter's argument tree. The host keeps the clock from this moment.
+#[tauri::command]
+fn rehearsal_start(
+    app: AppHandle,
+    vault: State<'_, VaultState>,
+    case_id: String,
+    session_id: String,
+    slot_seconds: i64,
+    rate: Option<String>,
+    interruption_slider: Option<i64>,
+    archetype_id: Option<String>,
+) -> Result<serde_json::Value, String> {
+    edition::require_feature("timed_rehearsal")?;
+    let mgr = vault.get_or_init(&app)?;
+    let tree = mgr
+        .argument_tree_get(&case_id)
+        .map_err(|e| e.to_string())?
+        .ok_or_else(|| "CF_REHEARSAL_NO_TREE: build the argument tree first (Argument Integrity), so the bench has limbs and Missing Links to press on".to_string())?;
+    let report = integrity::score_tree(&tree)?;
+    let limbs = timed_rehearsal::limbs_of(&tree, &report);
+    let targets = timed_rehearsal::targets_of(&report, &limbs);
+    let archetype = archetype_id.unwrap_or_else(|| "procedure_first".into());
+    let setting = interruption_slider.unwrap_or_else(|| adaptive_bench::merge_sliders(&archetype, None).interruption as i64);
+    let rate = rate.unwrap_or_else(|| timed_rehearsal::default_rate(setting).to_string());
+    let session = timed_rehearsal::Session::start(&session_id, &case_id, slot_seconds, &rate, Some(&archetype), limbs.clone(), targets.clone())?;
+    let out = serde_json::json!({
+        "session_id": session_id, "slot_ms": session.slot_ms, "rate": session.rate, "interval_ms": timed_rehearsal::interval_ms(session.rate),
+        "archetype_id": archetype, "limbs": limbs.iter().map(|l| serde_json::json!({"node_id": l.node_id, "label": l.label})).collect::<Vec<_>>(),
+        "targets": targets.len(),
+    });
+    rehearsal_sessions()?.insert(session_id, timed_rehearsal::Live { session, started: std::time::Instant::now() });
+    Ok(out)
+}
+
+/// What the screen polls: time left, and any warning or expiry that became due (stamped at its own moment).
+#[tauri::command]
+fn rehearsal_state(session_id: String) -> Result<serde_json::Value, String> {
+    edition::require_feature("timed_rehearsal")?;
+    let mut all = rehearsal_sessions()?;
+    let live = all.get_mut(&session_id).ok_or_else(|| "CF_REHEARSAL_NO_SESSION: start a timed session first".to_string())?;
+    let now = live.now_ms();
+    let ev = live.session.observe(now);
+    Ok(serde_json::json!({"elapsed_ms": now.min(live.session.slot_ms), "remaining_ms": live.session.remaining_ms(now), "ended_by": live.session.ended_by, "new_events": rehearsal_events(&ev)}))
+}
+
+/// Counsel's response (typed, or a confirmed voice transcript), timed by the host. Refused once the slot has ended.
+#[tauri::command]
+fn rehearsal_response(session_id: String, text: String) -> Result<serde_json::Value, String> {
+    edition::require_feature("timed_rehearsal")?;
+    if text.trim().is_empty() {
+        return Err("CF_REHEARSAL_EMPTY: there is nothing to send".into());
+    }
+    let mut all = rehearsal_sessions()?;
+    let live = all.get_mut(&session_id).ok_or_else(|| "CF_REHEARSAL_NO_SESSION: start a timed session first".to_string())?;
+    let now = live.now_ms();
+    let r = live.session.respond(now, &text)?;
+    Ok(serde_json::json!(r))
+}
+
+/// Ends the session (if it has not already ended), keeps its timeline with the matter, and returns the timeline and what the
+/// debrief says about it. Calling it again returns the same record.
+#[tauri::command]
+fn rehearsal_end(app: AppHandle, vault: State<'_, VaultState>, case_id: String, session_id: String, debrief_id: Option<String>) -> Result<serde_json::Value, String> {
+    edition::require_feature("timed_rehearsal")?;
+    let mgr = vault.get_or_init(&app)?;
+    let (timeline, findings, labels) = {
+        let mut all = rehearsal_sessions()?;
+        let live = all.get_mut(&session_id).ok_or_else(|| "CF_REHEARSAL_NO_SESSION: start a timed session first".to_string())?;
+        let now = live.now_ms();
+        live.session.end_early(now);
+        let findings: Vec<serde_json::Value> = live.session.findings().iter().map(|f| serde_json::json!(f)).collect();
+        (live.session.timeline(debrief_id.as_deref())?, findings, live.session.limb_labels())
+    };
+    let record = serde_json::json!({"timeline": timeline, "findings": findings, "limb_labels": labels, "saved_at": docpipe::now_rfc3339()});
+    mgr.witness_kv_put(&case_id, &format!("rehearsal:{session_id}"), &record).map_err(|e| e.to_string())?;
+    rehearsal_sessions()?.remove(&session_id);
+    Ok(record)
+}
+
+/// A kept timeline and its findings.
+#[tauri::command]
+fn rehearsal_get(app: AppHandle, vault: State<'_, VaultState>, case_id: String, session_id: String) -> Result<Option<serde_json::Value>, String> {
+    edition::require_feature("timed_rehearsal")?;
+    let mgr = vault.get_or_init(&app)?;
+    Ok(mgr.witness_kv_list(&case_id, &format!("rehearsal:{session_id}")).map_err(|e| e.to_string())?.into_iter().find(|(k, _)| k == &format!("rehearsal:{session_id}")).map(|(_, v)| v))
+}
+
+/// The kept timelines of a matter, newest first.
+#[tauri::command]
+fn rehearsal_list(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<Vec<serde_json::Value>, String> {
+    edition::require_feature("timed_rehearsal")?;
+    let mgr = vault.get_or_init(&app)?;
+    let mut v: Vec<serde_json::Value> = mgr.witness_kv_list(&case_id, "rehearsal:").map_err(|e| e.to_string())?.into_iter().map(|(_, v)| v).collect();
+    v.sort_by(|a, b| b["saved_at"].as_str().cmp(&a["saved_at"].as_str()));
+    Ok(v)
 }
 
 #[tauri::command]
@@ -4738,6 +4852,13 @@ pub fn run() {
             licence_activate,
             licence_mark_expired,
             seat_status,
+            rehearsal_policy,
+            rehearsal_start,
+            rehearsal_state,
+            rehearsal_response,
+            rehearsal_end,
+            rehearsal_get,
+            rehearsal_list,
             seat_deactivate,
             air_gap_set,
             network_audit,

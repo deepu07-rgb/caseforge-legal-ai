@@ -1,0 +1,76 @@
+{
+  "batch": "B-S4-12",
+  "golden_sha256": "2579e4b7786abe06dcebdb76f2c9d4a6c05157b8ad301f1954de6d2b7cd5ec25",
+  "policy_sha256": "47218694b4de9cba2dedd375d29b9385f64297a16f7d04efa473ee907b4102b7",
+  "acs": {
+    "AC-S4-07.1": {
+      "status": "PASS",
+      "evidence": {
+        "slot_presets_seconds": [
+          120,
+          300,
+          600,
+          900,
+          1800
+        ],
+        "threshold": "PROPOSED 1 s and presets [2, 5, 10, 15, 30] min (Q-S4-01)",
+        "warnings_before_end_s": [
+          60,
+          30
+        ],
+        "how": "the expiry is stamped at the limit itself on a monotonic clock; how soon the screen learns of it is how often it asks (every 0.5 s)"
+      },
+      "detail": "Scripted and real-clock tests: warnings at their marks, the expiry exactly at the limit, later responses refused with the unsent text kept, and counsel can end early."
+    },
+    "AC-S4-07.2": {
+      "status": "PASS",
+      "evidence": {
+        "timeline": {
+          "limbs": 4,
+          "never_reached": [
+            "L3"
+          ],
+          "interruptions": 2,
+          "ended_by": "TIME_EXPIRED"
+        },
+        "schema_validated": true,
+        "findings_sourced": true,
+        "reached_by": "label, theory and every anchor's text and ref of the limb; tokens are lower-case runs of letters and digits"
+      },
+      "detail": "Every limb of the tree is listed with reached / not reached, when it was first reached and the time spent; limbs never reached are named; each debrief statement points at the part of the timeline it comes from. 'Reached' is detected from wording and can miss a point made in other words."
+    },
+    "AC-S4-07.3": {
+      "status": "PASS",
+      "evidence": {
+        "interruption_source": "Missing Links of the matter's argument tree in the scorer's rank order, then its weakest limbs",
+        "wording": "built by the host from the scorer's record (label, link, score, threshold, cited inputs)",
+        "model_involved": false
+      },
+      "detail": "Every interruption carries the id of the Missing Link it came from and the inputs it cites; its wording is the host's. Model-worded interruptions through the B-S3-16 prompt path are not built."
+    },
+    "AC-3.3": {
+      "status": "PASS",
+      "detail": "The untimed grounded Mock Court turn is unchanged; a timed response makes no model call, so it adds microseconds, not seconds."
+    }
+  },
+  "static": {
+    "policy_presets_are_the_proposed_ones": true,
+    "policy_accuracy_is_the_proposed_one": true,
+    "policy_is_marked_proposed": true,
+    "no_model_or_network_in_the_engine": true,
+    "engine_reads_a_monotonic_clock": true,
+    "commands_exist_and_are_mapped_to_the_edition": true,
+    "commands_check_the_feature_first": true,
+    "policy_command_registered": true,
+    "timed_response_does_not_call_the_model_turn": true,
+    "untimed_grounded_turn_untouched": true,
+    "text_and_voice_both_use_the_timer": true,
+    "unsent_text_kept_when_time_is_up": true,
+    "bench_text_comes_from_the_host_only": true,
+    "panel_says_where_interruptions_come_from": true,
+    "panel_says_how_reached_is_decided": true,
+    "panel_vocabulary_honest": true,
+    "timeline_view_lists_never_reached": true
+  },
+  "errors": []
+}

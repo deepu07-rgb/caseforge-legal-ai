@@ -60,7 +60,13 @@
     "voice_court_turn": "voice",
     "voice_court_turn_for_case": "voice",
     "voice_court_run_script": "voice",
-    "voice_court_debrief": "voice"
+    "voice_court_debrief": "voice",
+    "rehearsal_start": "timed_rehearsal",
+    "rehearsal_state": "timed_rehearsal",
+    "rehearsal_response": "timed_rehearsal",
+    "rehearsal_end": "timed_rehearsal",
+    "rehearsal_get": "timed_rehearsal",
+    "rehearsal_list": "timed_rehearsal"
   },
   "never_blocked_by_expiry": ["case_open", "case_list", "doc_list", "doc_text_preview", "pack_list", "pack_currency", "licence_status", "edition_status", "seat_status"]
 }

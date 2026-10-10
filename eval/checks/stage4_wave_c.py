@@ -29,7 +29,6 @@ WAVE_C = ["B-S4-17", "B-S4-18", "B-S4-19", "B-S4-20", "B-S4-21"]
 # Batches the playbook places before Wave C that are not built (nothing in the repo implements them).
 NOT_BUILT = {
     "B-S4-02": "twelve golden sets with legal-editor protocol (needs legal editors, Q-S4-02)",
-    "B-S4-12": "Timed Oral Rehearsal (Wave B)",
     "B-S4-14": "Devanagari triage + OCR (Wave B; needs the OCR bake-off, Q-S4-04)",
     "B-S4-15": "Aligned offline translation + G10 (Wave B)",
     "B-S4-16": "Encrypted Bundle Exchange (Wave B)",

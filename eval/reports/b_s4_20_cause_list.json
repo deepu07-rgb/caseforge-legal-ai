@@ -25,7 +25,7 @@
       "status": "PASS",
       "evidence": {
         "entries": 100,
-        "measured_seconds": 0.2664464,
+        "measured_seconds": 0.2540583,
         "threshold_seconds": "PROPOSED 60 (Q-S4-01)",
         "machine": "the machine the tests ran on, not the Full reference machine"
       },

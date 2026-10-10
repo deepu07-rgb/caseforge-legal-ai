@@ -2948,6 +2948,24 @@ export interface TreatmentLookup { source_id: string; state: "FOUND" | "NONE_FOU
 export async function packCurrency(): Promise<PackStamp[]> { return invoke<PackStamp[]>("pack_currency"); }
 export async function treatmentLookup(sources: { source_id: string; chunk_id: string }[]): Promise<TreatmentLookup[]> { return invoke<TreatmentLookup[]>("treatment_lookup", { sources }); }
 
+// --- B-S4-12 Timed Oral Rehearsal ---
+export interface RehearsalPolicy { batch: string; status: string; presets_seconds: number[]; min_seconds: number; max_seconds: number; rates: string[]; interval_ms: Record<string, number | null>; warnings_remaining_seconds: number[]; reached_by: string }
+export interface RehearsalEvent { t_ms: number; kind: "SESSION_START" | "LIMB_REACHED" | "INTERRUPTION" | "USER_RESPONSE" | "TIME_WARNING" | "TIME_EXPIRED" | "SESSION_END"; limb_node_id: string | null; turn_id: string | null; grounding_ref: string | null }
+export interface RehearsalStart { session_id: string; slot_ms: number; rate: string; interval_ms: number | null; archetype_id: string; limbs: { node_id: string; label: string }[]; targets: number }
+export interface RehearsalState { elapsed_ms: number; remaining_ms: number; ended_by: string | null; new_events: RehearsalEvent[] }
+export interface RehearsalInterruption { grounding_ref: string; limb_node_id: string; kind: "MISSING_LINK" | "WEAK_LIMB"; text: string; inputs_cited: string[]; t_ms: number }
+export interface RehearsalResponse { t_ms: number; remaining_ms: number; turn_id: string; limbs_reached_now: string[]; newly_reached: string[]; interruption: RehearsalInterruption | null; new_events: RehearsalEvent[] }
+export interface RehearsalTimeline { schema_version: string; timeline_id: string; session_id: string; debrief_id: string | null; slot_seconds: number; interruption_rate: string; bench_archetype_id: string | null; ended_by: "TIME_EXPIRED" | "USER_ENDED" | "ERROR"; events: RehearsalEvent[]; limbs: { limb_node_id: string; reached: boolean; first_reached_ms: number | null; time_spent_ms: number; interruptions: number }[] }
+export interface RehearsalFinding { text: string; source_kind: "TIMELINE_LIMB" | "TIMELINE_EVENT"; limb_node_id: string | null; event_index: number | null }
+export interface RehearsalRecord { timeline: RehearsalTimeline; findings: RehearsalFinding[]; limb_labels: Record<string, string>; saved_at: string }
+export async function rehearsalPolicy(): Promise<RehearsalPolicy> { return invoke<RehearsalPolicy>("rehearsal_policy"); }
+export async function rehearsalStart(a: { caseId: string; sessionId: string; slotSeconds: number; rate?: string; interruptionSlider?: number; archetypeId?: string }): Promise<RehearsalStart> { return invoke<RehearsalStart>("rehearsal_start", a); }
+export async function rehearsalState(sessionId: string): Promise<RehearsalState> { return invoke<RehearsalState>("rehearsal_state", { sessionId }); }
+export async function rehearsalResponse(sessionId: string, text: string): Promise<RehearsalResponse> { return invoke<RehearsalResponse>("rehearsal_response", { sessionId, text }); }
+export async function rehearsalEnd(caseId: string, sessionId: string, debriefId?: string): Promise<RehearsalRecord> { return invoke<RehearsalRecord>("rehearsal_end", { caseId, sessionId, debriefId }); }
+export async function rehearsalGet(caseId: string, sessionId: string): Promise<RehearsalRecord | null> { return invoke<RehearsalRecord | null>("rehearsal_get", { caseId, sessionId }); }
+export async function rehearsalList(caseId: string): Promise<RehearsalRecord[]> { return invoke<RehearsalRecord[]>("rehearsal_list", { caseId }); }
+
 // --- B-S4-22 Editions, pack subscription, seat transfer ---
 export interface PackSubscription { state: "SUBSCRIBED" | "UPDATES_EXPIRED" | "NOT_APPLICABLE"; until_unix_ms: number | null; until_date: string | null; notice: string | null }
 export interface SeatStatus { enabled: boolean; limit_per_year: number | null; used_in_window: number; remaining: number | null; window_days: number; can_deactivate: boolean; reason: string | null }
