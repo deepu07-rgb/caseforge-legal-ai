@@ -102,6 +102,7 @@ jobs:
           python eval/checks/chambers_lookup_b_s4_19.py --cargo-log cargo-test.log --evidence-dir evidence
           python eval/checks/cause_list_b_s4_20.py --cargo-log cargo-test.log --evidence-dir evidence
           python eval/checks/judgment_scaffold_b_s4_21.py --cargo-log cargo-test.log --evidence-dir evidence
+          python eval/checks/editions_b_s4_22.py --cargo-log cargo-test.log --evidence-dir evidence
           python eval/checks/stage4_wave_c.py --cargo-log cargo-test.log --evidence-dir evidence --no-run
 
       - name: Upload gate reports

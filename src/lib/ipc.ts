@@ -2938,7 +2938,7 @@ export async function issueMatrixSetFiling(caseId: string, docId: string, partyI
 export async function issueMatrixMemo(caseId: string): Promise<string> { return invoke<string>("issue_matrix_memo", { caseId }); }
 
 // --- B-S4-13 Law Currency Stamp and Treatment Graph ---
-export interface PackStamp { pack_id: string; version: string; display_name: string; currency_date: string | null; updated_at: string | null; scanned_for_treatment: boolean }
+export interface PackStamp { pack_id: string; version: string; display_name: string; currency_date: string | null; updated_at: string | null; scanned_for_treatment: boolean; updates_expired: boolean; updates_notice: string | null; updates_expired_on: string | null }
 export interface TreatmentEdge {
   edge_id: string; treatment: "OVERRULED" | "REVERSED" | "PER_INCURIAM" | "REFERRED_TO_LARGER_BENCH" | "DOUBTED" | "DISTINGUISHED" | "FOLLOWED"; pattern_id: string;
   cited_source_id: string; citing_pack_id: string; citing_source_id: string; citing_chunk_id: string; citing_title: string; citing_citation: string;
@@ -2948,9 +2948,18 @@ export interface TreatmentLookup { source_id: string; state: "FOUND" | "NONE_FOU
 export async function packCurrency(): Promise<PackStamp[]> { return invoke<PackStamp[]>("pack_currency"); }
 export async function treatmentLookup(sources: { source_id: string; chunk_id: string }[]): Promise<TreatmentLookup[]> { return invoke<TreatmentLookup[]>("treatment_lookup", { sources }); }
 
+// --- B-S4-22 Editions, pack subscription, seat transfer ---
+export interface PackSubscription { state: "SUBSCRIBED" | "UPDATES_EXPIRED" | "NOT_APPLICABLE"; until_unix_ms: number | null; until_date: string | null; notice: string | null }
+export interface SeatStatus { enabled: boolean; limit_per_year: number | null; used_in_window: number; remaining: number | null; window_days: number; can_deactivate: boolean; reason: string | null }
+export interface SeatReleased { licence_id: string; released_ordinal: number; released_at_unix_ms: number; receipt: Record<string, unknown> }
+export interface SeatInfo { status: SeatStatus | null; released: SeatReleased | null }
+export async function seatStatus(): Promise<SeatInfo> { return invoke<SeatInfo>("seat_status"); }
+export async function seatDeactivate(): Promise<Record<string, unknown>> { return invoke<Record<string, unknown>>("seat_deactivate"); }
+
 // --- B-S4-17 Chambers Edition shell ---
 export interface EditionStatus {
   edition: "ADVOCATE" | "PRO" | "CHAMBERS_FIRM" | "JUDICIARY" | null; chambers: boolean; source: "LICENCE" | "DEV_OVERRIDE" | "NONE"; licence_state: string; features: string[];
+  ignored_features: string[]; entitlement_map: string; licence_expires_at_unix_ms: number | null; pack_subscription: PackSubscription; seat: SeatStatus | null;
   air_gap_forced: boolean; telemetry_allowed: boolean; record_only_default: boolean; visible_surfaces: string[]; hidden_surfaces: string[]; problem: string | null;
   pilot: { court: string | null; disabled_capabilities: string[]; unreadable: boolean }; banner: string;
 }

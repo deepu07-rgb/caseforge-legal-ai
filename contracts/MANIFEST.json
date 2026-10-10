@@ -375,6 +375,15 @@
       "notes": "B-S4-01: coexists with licence v1.0.0 (unchanged); editions, pack subscription, Judiciary air-gap/no telemetry."
     },
     {
+      "id": "edition_entitlements",
+      "path": "edition_entitlements.json",
+      "prd_refs": [
+        "PRD v4.0 §10"
+      ],
+      "status": "DEVELOPMENT_ONLY",
+      "notes": "B-S4-22: the single edition entitlement map (features per edition, screens, host commands). Placeholder until the owner decides Q-S4-06."
+    },
+    {
       "id": "guardrails_stage4",
       "path": "guardrails_stage4.json",
       "prd_refs": [

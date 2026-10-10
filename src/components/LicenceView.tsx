@@ -4,6 +4,7 @@
  */
 
 import { useCallback, useEffect, useState } from "react";
+import EditionPanel from "./EditionPanel";
 import type {
   FingerprintComponents,
   LicenceStatus,
@@ -211,6 +212,8 @@ export default function LicenceView({
           </p>
         </div>
       </div>
+
+      <EditionPanel vaultUnlocked={vaultUnlocked} onError={onError} onNotice={onNotice} onChanged={() => void refresh()} />
 
       <div className="card">
         <span className="eyebrow">Activation · offline</span>

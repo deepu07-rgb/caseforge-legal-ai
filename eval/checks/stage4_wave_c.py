@@ -33,7 +33,6 @@ NOT_BUILT = {
     "B-S4-14": "Devanagari triage + OCR (Wave B; needs the OCR bake-off, Q-S4-04)",
     "B-S4-15": "Aligned offline translation + G10 (Wave B)",
     "B-S4-16": "Encrypted Bundle Exchange (Wave B)",
-    "B-S4-22": "Editions, pack subscription, seat transfer (Ship; prices and edition map are owner decisions, Q-S4-06/07)",
     "B-S4-23": "Cumulative ship report and full red-team (Ship)",
 }
 ORDER = {"FAIL": 0, "BLOCKED": 1, "WAIVED": 2, "SKIP": 3, "PASS": 4}

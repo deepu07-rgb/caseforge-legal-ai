@@ -29,19 +29,24 @@ export function usePackStamps(): PackStamp[] | null {
 }
 
 /** The wording, kept in one place. Same as treatment::stamp_text on the host. */
-export function stampText(name: string, currencyDate: string | null | undefined): string {
-  return currencyDate ? `verified against ${name} as of ${currencyDate}` : `verified against ${name}; this pack does not state a currency date`;
+export function stampText(name: string, currencyDate: string | null | undefined, updatesExpiredOn?: string | null): string {
+  const base = currencyDate ? `verified against ${name} as of ${currencyDate}` : `verified against ${name}; this pack does not state a currency date`;
+  return updatesExpiredOn ? base + updatesSuffix(updatesExpiredOn) : base;
+}
+/** Same as subscription::stamp_suffix on the host: once the pack subscription has ended, the older date stays and says why. */
+export function updatesSuffix(endedOn: string): string {
+  return ` \u2014 updates expired: the pack subscription ended on ${endedOn}, so newer law may not be reflected`;
 }
 
 export function CurrencyStamp({ packId, currencyDate, name }: { packId: string | null | undefined; currencyDate?: string | null; name?: string }) {
   const stamps = usePackStamps();
   const pack = packId ? stamps?.find((p) => p.pack_id === packId) : undefined;
   let text: string;
-  if (currencyDate !== undefined || name) text = stampText(name ?? packId ?? "its pack", currencyDate);
+  if (currencyDate !== undefined || name) text = stampText(name ?? packId ?? "its pack", currencyDate, pack?.updates_expired_on);
   else if (!packId) text = "pack not stated for this citation";
   else if (!stamps) text = "checking the pack’s currency date…";
   else if (!pack) text = `pack ${packId} is no longer installed`;
-  else text = stampText(pack.display_name || pack.pack_id, pack.currency_date);
+  else text = stampText(pack.display_name || pack.pack_id, pack.currency_date, pack.updates_expired_on);
   return (
     <div className="muted" style={{ fontSize: "0.72rem" }} data-testid="currency-stamp">
       {text}
@@ -56,7 +61,7 @@ export function PackCurrencyList() {
   if (stamps.length === 0) return <div className="muted" style={{ fontSize: "0.72rem" }} data-testid="currency-stamp">No legal packs are installed.</div>;
   return (
     <div className="muted" style={{ fontSize: "0.72rem" }} data-testid="currency-stamp">
-      Law available here: {stamps.map((p) => `${p.display_name || p.pack_id} ${p.currency_date ? `as of ${p.currency_date}` : "(no currency date stated)"}`).join("; ")}
+      Law available here: {stamps.map((p) => `${p.display_name || p.pack_id} ${p.currency_date ? `as of ${p.currency_date}` : "(no currency date stated)"}${p.updates_expired_on ? updatesSuffix(p.updates_expired_on) : ""}`).join("; ")}
     </div>
   );
 }

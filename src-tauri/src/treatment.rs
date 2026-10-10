@@ -370,6 +370,11 @@ pub struct PackStamp {
     pub currency_date: Option<String>,
     pub updated_at: Option<String>,
     pub scanned_for_treatment: bool,
+    /// B-S4-22: the pack subscription has ended, so this stamp keeps the older date and the screen says updates have expired.
+    pub updates_expired: bool,
+    pub updates_notice: Option<String>,
+    /// The last day of the pack subscription, when it has ended.
+    pub updates_expired_on: Option<String>,
 }
 
 pub fn pack_stamps(paths: &VaultPaths) -> Vec<PackStamp> {
@@ -377,7 +382,7 @@ pub fn pack_stamps(paths: &VaultPaths) -> Vec<PackStamp> {
         .into_iter()
         .filter_map(|p| {
             let man = read_manifest(Path::new(&p.install_path)).ok()?;
-            Some(PackStamp { pack_id: p.pack_id, version: p.version, display_name: p.display_name, currency_date: man.currency_date.clone(), updated_at: man.updated_at.clone(), scanned_for_treatment: man.treatment_edges_file.is_some() })
+            Some(PackStamp { pack_id: p.pack_id, version: p.version, display_name: p.display_name, currency_date: man.currency_date.clone(), updated_at: man.updated_at.clone(), scanned_for_treatment: man.treatment_edges_file.is_some(), updates_expired: false, updates_notice: None, updates_expired_on: None })
         })
         .collect();
     v.sort_by(|a, b| a.pack_id.cmp(&b.pack_id));
@@ -600,8 +605,8 @@ mod tests {
     #[test]
     fn currency_is_stamped_from_the_pack_and_missing_dates_are_stated() {
         let stamps = vec![
-            PackStamp { pack_id: "a".into(), version: "1".into(), display_name: "Pack A".into(), currency_date: Some("2026-03-31".into()), updated_at: None, scanned_for_treatment: false },
-            PackStamp { pack_id: "b".into(), version: "1".into(), display_name: "Pack B".into(), currency_date: None, updated_at: Some("2026-01-01".into()), scanned_for_treatment: false },
+            PackStamp { pack_id: "a".into(), version: "1".into(), display_name: "Pack A".into(), currency_date: Some("2026-03-31".into()), updated_at: None, scanned_for_treatment: false, updates_expired: false, updates_notice: None, updates_expired_on: None },
+            PackStamp { pack_id: "b".into(), version: "1".into(), display_name: "Pack B".into(), currency_date: None, updated_at: Some("2026-01-01".into()), scanned_for_treatment: false, updates_expired: false, updates_notice: None, updates_expired_on: None },
         ];
         let snap = |id: &str| PackSnapshot { pack_id: id.into(), version: "1".into(), currency_date: None, trust_level: "OFFICIAL_VERIFIED".into() };
         let mut s = vec![snap("a"), snap("b"), snap("c")];

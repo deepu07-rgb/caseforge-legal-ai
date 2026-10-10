@@ -1,6 +1,6 @@
 {
   "checkpoint": "Stage 4 Wave C",
-  "generated_at": "2026-10-10T08:38:23Z",
+  "generated_at": "2026-10-10T09:30:38Z",
   "verdict": {
     "wave_c_batches_17_to_21": "GREEN",
     "ci_gates": "GREEN",
@@ -12,7 +12,7 @@
     {
       "gate": "contracts_b_s4_01.py",
       "exit": 0,
-      "seconds": 0.6
+      "seconds": 0.7
     },
     {
       "gate": "injection_guard_b_s4_00.py",
@@ -32,7 +32,7 @@
     {
       "gate": "certificate_b_s4_05.py",
       "exit": 0,
-      "seconds": 0.4
+      "seconds": 0.3
     },
     {
       "gate": "opposing_scan_b_s4_06.py",
@@ -72,17 +72,17 @@
     {
       "gate": "foundation_b_s4_10.py",
       "exit": 0,
-      "seconds": 0.4
+      "seconds": 0.3
     },
     {
       "gate": "issue_matrix_b_s4_18.py",
       "exit": 0,
-      "seconds": 0.4
+      "seconds": 0.3
     },
     {
       "gate": "treatment_b_s4_13.py",
       "exit": 0,
-      "seconds": 1.1
+      "seconds": 0.9
     },
     {
       "gate": "chambers_record_only_b_s4_17.py",
@@ -92,21 +92,26 @@
     {
       "gate": "chambers_lookup_b_s4_19.py",
       "exit": 0,
-      "seconds": 0.2
+      "seconds": 0.1
     },
     {
       "gate": "cause_list_b_s4_20.py",
       "exit": 0,
-      "seconds": 0.4
+      "seconds": 0.3
     },
     {
       "gate": "judgment_scaffold_b_s4_21.py",
       "exit": 0,
-      "seconds": 0.5
+      "seconds": 0.4
+    },
+    {
+      "gate": "editions_b_s4_22.py",
+      "exit": 0,
+      "seconds": 0.3
     }
   ],
   "rust_tests": {
-    "passed": 210,
+    "passed": 232,
     "failed": 0,
     "ignored": 1
   },
@@ -159,18 +164,18 @@
   },
   "acceptance_counts": {
     "measured": {
-      "PASS": 44,
+      "PASS": 46,
       "WAIVED": 1,
       "BLOCKED": 7,
       "FAIL": 1,
-      "NOT_BUILT": 13
+      "NOT_BUILT": 11
     },
     "formal": {
-      "PASS": 39,
+      "PASS": 40,
       "WAIVED": 1,
-      "BLOCKED": 12,
+      "BLOCKED": 13,
       "FAIL": 1,
-      "NOT_BUILT": 13
+      "NOT_BUILT": 11
     },
     "total": 66
   },
@@ -974,23 +979,27 @@
       "ac": "AC-S4-16.1",
       "batch": "B-S4-22",
       "description": "Each edition exposes exactly its entitled surfaces offline.",
-      "measured": "NOT_BUILT",
-      "formal": "NOT_BUILT",
+      "measured": "PASS",
+      "formal": "BLOCKED",
       "blocked_by": [
         "threshold not approved by the owner: S4.licence.seat_transfers_per_year (Q-S4-01)",
         "open owner questions: Q-S4-06, Q-S4-07"
       ],
-      "reports": [],
+      "reports": [
+        "b_s4_22_editions.json"
+      ],
       "detail": {}
     },
     {
       "ac": "AC-S4-16.2",
       "batch": "B-S4-22",
       "description": "Pack-subscription expiry never blocks reading/exporting.",
-      "measured": "NOT_BUILT",
-      "formal": "NOT_BUILT",
+      "measured": "PASS",
+      "formal": "PASS",
       "blocked_by": [],
-      "reports": [],
+      "reports": [
+        "b_s4_22_editions.json"
+      ],
       "detail": {}
     },
     {
@@ -1025,7 +1034,6 @@
     "B-S4-14": "Devanagari triage + OCR (Wave B; needs the OCR bake-off, Q-S4-04)",
     "B-S4-15": "Aligned offline translation + G10 (Wave B)",
     "B-S4-16": "Encrypted Bundle Exchange (Wave B)",
-    "B-S4-22": "Editions, pack subscription, seat transfer (Ship; prices and edition map are owner decisions, Q-S4-06/07)",
     "B-S4-23": "Cumulative ship report and full red-team (Ship)"
   },
   "owner_decisions_needed": {

@@ -4931,7 +4931,63 @@ impl VaultManager {
     pub fn refresh_edition(&self) -> VaultResult<crate::edition::EditionContext> {
         let ctx = self.edition_context()?;
         crate::edition::set_chambers(ctx.chambers);
+        crate::edition::set_current(&ctx); // B-S4-22: host commands check their feature against this
         Ok(ctx)
+    }
+
+    /// B-S4-22: the seat record this vault keeps in licence_meta once it has given a seat away.
+    fn seat_released_record(&self) -> VaultResult<Option<serde_json::Value>> {
+        let mut g = self.inner.lock().map_err(|_| VaultError::LockPoisoned)?;
+        let app = g.app.as_mut().ok_or(VaultError::Locked)?;
+        sql::apply_pending_migrations(app, APP_MIGRATIONS)?;
+        let raw: Option<String> = app.query_row("SELECT value FROM licence_meta WHERE key = 'seat_released_v1'", [], |r| r.get(0)).optional()?;
+        Ok(raw.and_then(|v| serde_json::from_str(&v).ok()))
+    }
+
+    /// B-S4-22: seat-transfer status for the licence screen: the yearly count, and the receipt of a seat this machine has
+    /// given away (so it can be saved again).
+    pub fn seat_status(&self) -> VaultResult<serde_json::Value> {
+        let ctx = self.edition_context()?;
+        Ok(serde_json::json!({ "status": ctx.seat, "released": self.seat_released_record()? }))
+    }
+
+    /// B-S4-22: gives this machine's seat away. Writes the signed release receipt, forgets the licence and remembers the
+    /// release so the old licence file cannot take the seat back. Touches nothing the user made: cases, documents and
+    /// exports stay readable and exportable.
+    pub fn seat_deactivate(&self) -> VaultResult<serde_json::Value> {
+        let internal = |detail: String| VaultError::Internal { detail };
+        let (_, payload) = self.licence_stored()?.ok_or_else(|| internal("CF_SEAT_NO_LICENCE: there is no activated licence to transfer".into()))?;
+        let raw: serde_json::Value = serde_json::from_str(&payload).map_err(|e| internal(e.to_string()))?;
+        if raw["schema_version"] != "2.0.0" {
+            return Err(internal("CF_SEAT_NOT_TRANSFERABLE: only a version 2 licence can be transferred; ask the issuer for one".into()));
+        }
+        let keys = crate::licence::trust_keys().map_err(internal)?;
+        let live = crate::licence::collect_fingerprint();
+        let now = now_ms();
+        let (l, state) = crate::edition::verify_v2(&raw, &keys, &live, now).map_err(internal)?;
+        if state == crate::licence::LicenceState::Expired {
+            return Err(internal("CF_SEAT_LICENCE_EXPIRED: this licence has expired; renew it before transferring the seat".into()));
+        }
+        let st = crate::seat::status(l.seat_transfers_per_year, &l.seat_transfers, now);
+        if !st.can_deactivate {
+            return Err(internal(format!("{}: {}", crate::seat::LIMIT_CODE, st.reason.unwrap_or_default())));
+        }
+        let seed = self.audit_signing_seed()?;
+        let ordinal = l.seat_transfers.len() + 1;
+        let receipt = crate::seat::issue_receipt(&l.licence_id, &l.edition, ordinal, &live, &seed, now, &uuid::Uuid::new_v4().to_string());
+        let record = serde_json::json!({ "licence_id": l.licence_id, "released_ordinal": ordinal, "released_at_unix_ms": now, "receipt": receipt });
+        let mut g = self.inner.lock().map_err(|_| VaultError::LockPoisoned)?;
+        let app = g.app.as_mut().ok_or(VaultError::Locked)?;
+        sql::apply_pending_migrations(app, APP_MIGRATIONS)?;
+        app.execute("INSERT OR REPLACE INTO licence_meta (key, value) VALUES ('seat_released_v1', ?1)", [record.to_string()])?;
+        app.execute(
+            "UPDATE licence_state SET state = 'UNLICENSED', licence_id = NULL, tier = NULL, payload_json = NULL, activated_at_unix_ms = NULL,
+                    expires_at_unix_ms = NULL, fingerprint_match_count = 0, updated_at_unix_ms = ?1 WHERE id = 1",
+            [now],
+        )?;
+        drop(g);
+        let _ = self.refresh_edition();
+        Ok(receipt)
     }
 
     fn licence_activate_v2(&self, raw: serde_json::Value) -> VaultResult<crate::licence::ActivateResult> {
@@ -4941,6 +4997,9 @@ impl VaultManager {
         let (l, state) = crate::edition::verify_v2(&raw, &keys, &live, now_ms()).map_err(internal)?;
         let bound: crate::licence::FingerprintComponents = serde_json::from_value(raw["fingerprint_components"].clone()).map_err(|e| VaultError::Internal { detail: e.to_string() })?;
         let matches = live.match_count(&bound);
+        // B-S4-22: a licence file this machine gave away cannot take the seat back
+        let released = self.seat_released_record()?.filter(|r| r["licence_id"] == l.licence_id.as_str()).and_then(|r| r["released_ordinal"].as_u64()).map(|v| v as usize);
+        crate::seat::check_not_released(released, l.seat_transfers.len()).map_err(internal)?;
         let payload_str = serde_json::to_string(&raw).map_err(|e| VaultError::Internal { detail: e.to_string() })?;
         let mut g = self.inner.lock().map_err(|_| VaultError::LockPoisoned)?;
         let app = g.app.as_mut().ok_or(VaultError::Locked)?;
@@ -5783,6 +5842,124 @@ mod tests {
         );
         assert!(bad.is_err());
         mgr.lock().unwrap();
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    // --- B-S4-22 ---
+
+    fn signed_v2(sk: &ed25519_dalek::SigningKey, edit: impl Fn(&mut serde_json::Value)) -> String {
+        use ed25519_dalek::Signer;
+        let live = crate::licence::collect_fingerprint();
+        let mut v = serde_json::json!({
+            "schema_version": "2.0.0", "licence_id": "L-vault-seat", "product": "CaseForge", "edition": "PRO", "issued_to_kind": "INDIVIDUAL", "issued_at_unix_ms": 1,
+            "expires_at_unix_ms": null, "pack_subscription_until_unix_ms": null, "fingerprint_components": live,
+            "features": ["digest", "audit", "witness_matrix"], "air_gap_forced": false, "telemetry_allowed": true, "seat_transfers_per_year": 2,
+            "signer_key_id": "test-key", "signature_alg": "Ed25519",
+        });
+        edit(&mut v);
+        let sig = sk.sign(&crate::edition::canonical_v2(&v).unwrap());
+        v["signature_hex"] = serde_json::json!(hex::encode(sig.to_bytes()));
+        v.to_string()
+    }
+
+    #[test]
+    fn b_s4_22_giving_a_seat_away_keeps_the_users_work_and_the_old_licence_file_cannot_take_it_back() {
+        let dir = std::env::temp_dir().join(format!("caseforge-seat-test-{}", Uuid::new_v4()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let pass = "seat test passphrase";
+        let sk = ed25519_dalek::SigningKey::from_bytes(&[5u8; 32]);
+        crate::licence::test_trust::set(Some(std::collections::BTreeMap::from([("test-key".to_string(), hex::encode(sk.verifying_key().to_bytes()))])));
+        let mgr = VaultManager::new(dir.clone());
+        mgr.init_and_unlock(pass).unwrap();
+        let wizard = |title: &str| CaseWizardInput { cause_title: title.into(), court: "High Court".into(), jurisdiction: "India".into(), matter_type: "Property partition civil appeal".into(), user_side: "Appellant".into(), code_era: None, language: None };
+        mgr.create_case_with_wizard(pass, wizard("Kept v Kept")).unwrap();
+
+        let first = signed_v2(&sk, |_| {});
+        let r = mgr.licence_activate(&first).unwrap();
+        assert_eq!(r.status.state, "ACTIVE");
+        let ctx = mgr.edition_context().unwrap();
+        assert_eq!((ctx.edition.as_deref(), ctx.source), (Some("PRO"), "LICENCE"));
+        assert_eq!(ctx.features, vec!["digest", "audit", "witness_matrix"]);
+        let info = mgr.seat_status().unwrap();
+        assert_eq!(info["status"]["remaining"], 2);
+        assert!(info["released"].is_null());
+
+        // give the seat away: a receipt that verifies, the licence forgotten, the work untouched
+        let receipt = mgr.seat_deactivate().unwrap();
+        crate::seat::verify_receipt(&receipt).unwrap();
+        assert_eq!((receipt["licence_id"].as_str(), receipt["transfer_ordinal"].as_u64()), (Some("L-vault-seat"), Some(1)));
+        assert_eq!(mgr.edition_context().unwrap().source, "NONE");
+        assert!(mgr.licence_stored().unwrap().is_none());
+        assert_eq!(mgr.list_cases().unwrap().iter().filter(|c| c.cause_title == "Kept v Kept").count(), 1, "the matter is still here");
+        assert!(mgr.licence_status().unwrap().vault_writable && !mgr.licence_status().unwrap().user_data_may_be_ransomed);
+        assert!(mgr.seat_status().unwrap()["released"]["receipt"]["receipt_id"] == receipt["receipt_id"], "the receipt can be saved again");
+
+        // the licence file this machine gave away cannot take the seat back
+        let err = mgr.licence_activate(&first).unwrap_err().to_string();
+        assert!(err.contains("CF_SEAT_RELEASED"), "{err}");
+
+        // the re-issued licence (one transfer recorded) is accepted
+        let t = |ms: i64, id: &str| serde_json::json!({"transferred_at_unix_ms": ms, "receipt_id": id});
+        let now = now_ms();
+        let second = signed_v2(&sk, |v| v["seat_transfers"] = serde_json::json!([t(receipt["deactivated_at_unix_ms"].as_i64().unwrap(), receipt["receipt_id"].as_str().unwrap())]));
+        assert_eq!(mgr.licence_activate(&second).unwrap().status.state, "ACTIVE");
+        assert_eq!(mgr.seat_status().unwrap()["status"]["remaining"], 1);
+
+        // a second and then a third transfer: the limit of two is held
+        let receipt2 = mgr.seat_deactivate().unwrap();
+        assert_eq!(receipt2["transfer_ordinal"], 2);
+        let third = signed_v2(&sk, |v| v["seat_transfers"] = serde_json::json!([t(now - 5000, "a"), t(receipt2["deactivated_at_unix_ms"].as_i64().unwrap(), receipt2["receipt_id"].as_str().unwrap())]));
+        mgr.licence_activate(&third).unwrap();
+        assert_eq!(mgr.seat_status().unwrap()["status"]["remaining"], 0);
+        let err = mgr.seat_deactivate().unwrap_err().to_string();
+        assert!(err.contains("CF_SEAT_TRANSFER_LIMIT"), "{err}");
+        assert_eq!(mgr.edition_context().unwrap().source, "LICENCE", "a refused transfer leaves the licence in place");
+
+        // a licence over its own limit is refused at activation
+        let over = signed_v2(&sk, |v| v["seat_transfers"] = serde_json::json!([t(now - 1000, "x"), t(now - 2000, "y"), t(now - 3000, "z")]));
+        assert!(mgr.licence_activate(&over).unwrap_err().to_string().contains("CF_SEAT_TRANSFER_LIMIT"));
+
+        mgr.lock().unwrap();
+        crate::licence::test_trust::set(None);
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn b_s4_22_when_the_licence_and_the_pack_subscription_have_both_ended_the_users_work_is_still_theirs() {
+        // AC-S4-16.2 and Stage 3 AC-S3-22.8 at the vault
+        let dir = std::env::temp_dir().join(format!("caseforge-expiry-test-{}", Uuid::new_v4()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let pass = "expiry test passphrase";
+        let sk = ed25519_dalek::SigningKey::from_bytes(&[6u8; 32]);
+        crate::licence::test_trust::set(Some(std::collections::BTreeMap::from([("test-key".to_string(), hex::encode(sk.verifying_key().to_bytes()))])));
+        let mgr = VaultManager::new(dir.clone());
+        mgr.init_and_unlock(pass).unwrap();
+        mgr.create_case_with_wizard(pass, CaseWizardInput { cause_title: "Mine v Yours".into(), court: "High Court".into(), jurisdiction: "India".into(), matter_type: "Property partition civil appeal".into(), user_side: "Appellant".into(), code_era: None, language: None }).unwrap();
+        let day = 86_400_000i64;
+        let now = now_ms();
+        let lic = signed_v2(&sk, |v| {
+            v["expires_at_unix_ms"] = serde_json::json!(now - 30 * day);
+            v["pack_subscription_until_unix_ms"] = serde_json::json!(now - 60 * day);
+        });
+        let r = mgr.licence_activate(&lic).unwrap();
+        assert_eq!(r.status.state, "EXPIRED");
+        assert!(!r.status.vault_writable && !r.status.user_data_may_be_ransomed);
+        let ctx = mgr.edition_context().unwrap();
+        assert_eq!(ctx.licence_state, "EXPIRED");
+        assert_eq!(ctx.pack_subscription.state, "UPDATES_EXPIRED");
+        // what the licence paid for is still entitled, so nothing already made is hidden or refused
+        assert_eq!(ctx.features, vec!["digest", "audit", "witness_matrix"]);
+        assert!(crate::edition::require_feature_in(crate::entitlements::Entitlements::builtin(), &ctx, "witness_matrix").is_ok());
+        // reading works; writing is refused with the read-only code; a seat cannot be given away on an expired licence
+        assert_eq!(mgr.list_cases().unwrap().len(), 1);
+        mgr.open_case(&mgr.list_cases().unwrap()[0].case_id, pass).unwrap();
+        let err = mgr.create_case_with_wizard(pass, CaseWizardInput { cause_title: "New".into(), court: "High Court".into(), jurisdiction: "India".into(), matter_type: "Property partition civil appeal".into(), user_side: "Appellant".into(), code_era: None, language: None }).unwrap_err().to_string();
+        assert!(err.contains("CF_VAULT_READ_ONLY"), "{err}");
+        assert!(mgr.seat_deactivate().unwrap_err().to_string().contains("CF_SEAT_LICENCE_EXPIRED"));
+        assert_eq!(mgr.list_cases().unwrap().len(), 1, "still there");
+
+        mgr.lock().unwrap();
+        crate::licence::test_trust::set(None);
         let _ = std::fs::remove_dir_all(&dir);
     }
 }

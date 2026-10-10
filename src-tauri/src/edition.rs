@@ -1,8 +1,9 @@
 //! Editions and the Chambers Edition shell (B-S4-17, PRD v4.0 §9 and §10).
 //!
-//! The Chambers Edition is the same application with a `JUDICIARY` licence. What a licence entitles comes only from its
-//! signed `features[]` (the edition-to-feature map and prices are owner decisions Q-S4-06, authored in B-S4-22); this
-//! module only recognises the `chambers` feature and the invariants the frozen contract gives the JUDICIARY edition:
+//! The Chambers Edition is the same application with a `JUDICIARY` licence. What a licence entitles is its signed
+//! `features[]` narrowed to what its edition includes in the single entitlement map (entitlements.rs,
+//! contracts/edition_entitlements.json; the map is DEVELOPMENT_ONLY until the owner decides Q-S4-06). This module applies the
+//! map to screens and host commands, and keeps the invariants the frozen contract gives the JUDICIARY edition:
 //! institution-issued, air-gap forced on, no telemetry.
 //!
 //! Enforcement is in the host, not the screen:
@@ -16,7 +17,10 @@
 //!
 //! Pilot court constraints (Q-S4-10) are configuration: `<vault>/chambers_pilot.json` lists capabilities to switch off.
 
+use crate::entitlements::Entitlements;
 use crate::licence::{self, FingerprintComponents, LicenceState, FINGERPRINT_REQUIRED};
+use crate::seat::{self, SeatStatus, SeatTransfer};
+use crate::subscription::{self, PackSubscription};
 use ed25519_dalek::{Signature, Verifier, VerifyingKey};
 use serde::Serialize;
 use serde_json::{json, Value};
@@ -35,8 +39,6 @@ pub const ALL_SURFACES: [&str; 23] = [
     "home", "cases", "new-case", "workspace", "builder", "integrity", "digest", "voice", "experience", "court", "opposition", "witnesses", "deadlines", "issues", "chambers", "causelist", "scaffold", "practice",
     "library", "licence", "protection", "guardrails", "settings",
 ];
-/// Screens that exist for the Chambers Edition only (PRD §6 F11-F15).
-const CHAMBERS_ONLY: [&str; 4] = ["chambers", "causelist", "scaffold", "issues"];
 /// Advocacy-only screens, hidden in the Chambers Edition: persuasion coaching, mock court, cross-examination and
 /// opposition work, argument scoring.
 const ADVOCACY_ONLY: [&str; 8] = ["builder", "integrity", "voice", "experience", "court", "opposition", "witnesses", "practice"];
@@ -53,6 +55,8 @@ pub struct V2Licence {
     pub telemetry_allowed: bool,
     pub expires_at_unix_ms: Option<i64>,
     pub pack_subscription_until_unix_ms: Option<i64>,
+    pub seat_transfers_per_year: Option<i64>,
+    pub seat_transfers: Vec<SeatTransfer>,
 }
 
 /// What the rest of the app needs to know about the edition.
@@ -63,36 +67,85 @@ pub struct EditionContext {
     /// LICENCE (a verified v2 licence), DEV_OVERRIDE (debug builds only) or NONE.
     pub source: &'static str,
     pub licence_state: &'static str,
+    /// What the licence entitles: its signed features narrowed to its edition (empty without a verified licence).
     pub features: Vec<String>,
+    /// Signed features the edition does not include. They grant nothing.
+    pub ignored_features: Vec<String>,
     pub air_gap_forced: bool,
     pub telemetry_allowed: bool,
     pub record_only_default: bool,
     pub visible_surfaces: Vec<&'static str>,
     pub hidden_surfaces: Vec<&'static str>,
+    /// DEVELOPMENT_ONLY until the owner approves the entitlement map (Q-S4-06).
+    pub entitlement_map: String,
+    pub licence_expires_at_unix_ms: Option<i64>,
+    pub pack_subscription: PackSubscription,
+    pub seat: Option<SeatStatus>,
     pub problem: Option<String>,
 }
 
-pub fn surfaces(chambers: bool) -> (Vec<&'static str>, Vec<&'static str>) {
-    let hidden: Vec<&'static str> = ALL_SURFACES.iter().copied().filter(|s| if chambers { ADVOCACY_ONLY.contains(s) } else { CHAMBERS_ONLY.contains(s) }).collect();
+/// (visible, hidden) screens. `effective` is None without a verified licence; a JUDICIARY licence hides the advocacy screens
+/// whatever else it carries.
+pub fn surfaces_for(map: &Entitlements, effective: Option<&[String]>, judiciary: bool) -> (Vec<&'static str>, Vec<&'static str>) {
+    let hidden: Vec<&'static str> = ALL_SURFACES.iter().copied().filter(|s| map.surface_hidden(s, effective) || (judiciary && ADVOCACY_ONLY.contains(s))).collect();
     let visible = ALL_SURFACES.iter().copied().filter(|s| !hidden.contains(s)).collect();
     (visible, hidden)
 }
 
-fn base(chambers: bool, edition: Option<String>, source: &'static str, state: LicenceState, features: Vec<String>, air_gap_forced: bool, telemetry_allowed: bool, problem: Option<String>) -> EditionContext {
-    let (visible_surfaces, hidden_surfaces) = surfaces(chambers);
-    EditionContext { edition, chambers, source, licence_state: state.as_str(), features, air_gap_forced, telemetry_allowed, record_only_default: chambers, visible_surfaces, hidden_surfaces, problem }
-}
-
 /// The context when there is no licence that grants Stage 4 surfaces (no licence, a v1 licence, or one that does not verify).
 pub fn none_context(problem: Option<String>) -> EditionContext {
-    base(false, None, "NONE", LicenceState::Unlicensed, vec![], false, true, problem)
+    let map = Entitlements::builtin();
+    let (visible_surfaces, hidden_surfaces) = surfaces_for(map, None, false);
+    EditionContext {
+        edition: None,
+        chambers: false,
+        source: "NONE",
+        licence_state: LicenceState::Unlicensed.as_str(),
+        features: vec![],
+        ignored_features: vec![],
+        air_gap_forced: false,
+        telemetry_allowed: true,
+        record_only_default: false,
+        visible_surfaces,
+        hidden_surfaces,
+        entitlement_map: map.status.clone(),
+        licence_expires_at_unix_ms: None,
+        pack_subscription: subscription::not_applicable(),
+        seat: None,
+        problem,
+    }
 }
 
 pub fn context_for(l: &V2Licence, state: LicenceState) -> EditionContext {
-    let chambers = l.edition == "JUDICIARY" && l.features.iter().any(|f| f == "chambers");
+    context_at(Entitlements::builtin(), l, state, now_ms())
+}
+
+/// The context a verified licence gives, under an entitlement map, at a time.
+pub fn context_at(map: &Entitlements, l: &V2Licence, state: LicenceState, now: i64) -> EditionContext {
+    let (features, ignored_features) = map.effective(&l.edition, &l.features);
+    let judiciary = l.edition == "JUDICIARY";
+    let chambers = judiciary && features.iter().any(|f| f == "chambers");
     // Judiciary licences: air-gap forced, no telemetry (the contract makes these constants for JUDICIARY).
-    let (forced, telemetry) = if l.edition == "JUDICIARY" { (true, false) } else { (l.air_gap_forced, l.telemetry_allowed) };
-    base(chambers, Some(l.edition.clone()), "LICENCE", state, l.features.clone(), forced, telemetry, None)
+    let (air_gap_forced, telemetry_allowed) = if judiciary { (true, false) } else { (l.air_gap_forced, l.telemetry_allowed) };
+    let (visible_surfaces, hidden_surfaces) = surfaces_for(map, Some(&features), judiciary);
+    EditionContext {
+        edition: Some(l.edition.clone()),
+        chambers,
+        source: "LICENCE",
+        licence_state: state.as_str(),
+        features,
+        ignored_features,
+        air_gap_forced,
+        telemetry_allowed,
+        record_only_default: chambers,
+        visible_surfaces,
+        hidden_surfaces,
+        entitlement_map: map.status.clone(),
+        licence_expires_at_unix_ms: l.expires_at_unix_ms,
+        pack_subscription: subscription::evaluate(l.pack_subscription_until_unix_ms, now),
+        seat: Some(seat::status(l.seat_transfers_per_year, &l.seat_transfers, now)),
+        problem: None,
+    }
 }
 
 /// Canonical signing bytes of a v2 payload: every key but `signature_hex` and `signature_alg`, keys sorted, compact JSON,
@@ -205,6 +258,13 @@ pub fn verify_v2(raw: &Value, keys: &BTreeMap<String, String>, live: &Fingerprin
     if matches < FINGERPRINT_REQUIRED {
         return Err(format!("CF_LICENCE_FINGERPRINT_MISMATCH: matched {matches}/4 (need {FINGERPRINT_REQUIRED})"));
     }
+    // seat transfers: the yearly limit is checked on every activation, whatever the issuer's tool did
+    let seat_transfers: Vec<SeatTransfer> = match raw.get("seat_transfers") {
+        None | Some(Value::Null) => vec![],
+        Some(v) => serde_json::from_value(v.clone()).map_err(|_| "CF_LICENCE_ACTIVATION_FAILED: seat_transfers is malformed".to_string())?,
+    };
+    let seat_transfers_per_year = raw.get("seat_transfers_per_year").and_then(Value::as_i64);
+    seat::check_licence(seat_transfers_per_year, &seat_transfers, now_ms)?;
     let expires = raw.get("expires_at_unix_ms").and_then(Value::as_i64);
     let state = match expires {
         Some(e) if e > 0 && now_ms > e => LicenceState::Expired,
@@ -219,6 +279,8 @@ pub fn verify_v2(raw: &Value, keys: &BTreeMap<String, String>, live: &Fingerprin
             telemetry_allowed,
             expires_at_unix_ms: expires,
             pack_subscription_until_unix_ms: raw.get("pack_subscription_until_unix_ms").and_then(Value::as_i64),
+            seat_transfers_per_year,
+            seat_transfers,
         },
         state,
     ))
@@ -258,19 +320,32 @@ fn live_fingerprint() -> FingerprintComponents {
     LIVE.clone()
 }
 
-/// Debug builds only: CASEFORGE_DEV_EDITION=JUDICIARY previews the Chambers Edition without a licence. Release builds
-/// never read it, so it cannot be used to grant or remove an entitlement in the field.
+/// Debug builds only: CASEFORGE_DEV_EDITION=<ADVOCATE|PRO|CHAMBERS_FIRM|JUDICIARY> previews an edition without a licence,
+/// with every feature the entitlement map gives it. Release builds never read it, so it cannot be used to grant or remove an
+/// entitlement in the field.
 fn dev_override() -> Option<EditionContext> {
     if !cfg!(debug_assertions) {
         return None;
     }
-    let e = std::env::var("CASEFORGE_DEV_EDITION").ok()?;
-    if e != "JUDICIARY" {
+    let edition = std::env::var("CASEFORGE_DEV_EDITION").ok()?;
+    if !EDITIONS.contains(&edition.as_str()) {
         return None;
     }
-    let l = V2Licence { licence_id: "dev-preview".into(), edition: "JUDICIARY".into(), features: vec!["chambers".into()], air_gap_forced: true, telemetry_allowed: false, expires_at_unix_ms: None, pack_subscription_until_unix_ms: None };
+    let judiciary = edition == "JUDICIARY";
+    let l = V2Licence {
+        licence_id: "dev-preview".into(),
+        features: Entitlements::builtin().edition_features(&edition).to_vec(),
+        edition,
+        air_gap_forced: judiciary,
+        telemetry_allowed: !judiciary,
+        expires_at_unix_ms: None,
+        pack_subscription_until_unix_ms: None,
+        seat_transfers_per_year: None,
+        seat_transfers: vec![],
+    };
     let mut c = context_for(&l, LicenceState::Active);
     c.source = "DEV_OVERRIDE";
+    c.seat = None;
     Some(c)
 }
 
@@ -330,6 +405,55 @@ pub fn require_advocacy(ctx: &EditionContext) -> Result<(), String> {
     }
 }
 
+/// May a context use a feature? An install without a verified v2 licence follows the map's `unlicensed_stage4_policy`.
+pub fn require_feature_in(map: &Entitlements, ctx: &EditionContext, feature: &str) -> Result<(), String> {
+    let licensed = ctx.source != "NONE";
+    if map.feature_allowed(licensed.then_some(ctx.features.as_slice()), feature) {
+        return Ok(());
+    }
+    Err(not_entitled(map, feature, licensed.then_some(ctx.edition.as_deref()).flatten()))
+}
+
+fn not_entitled(map: &Entitlements, feature: &str, edition: Option<&str>) -> String {
+    let label = map.label(feature);
+    match edition {
+        Some(e) => format!("CF_EDITION_NOT_ENTITLED: {label} is not part of this licence ({e} edition)"),
+        None => format!("CF_EDITION_NOT_ENTITLED: {label} needs a licence for an edition that includes it"),
+    }
+}
+
+struct Current {
+    licensed: bool,
+    edition: Option<String>,
+    features: Vec<String>,
+}
+static CURRENT: std::sync::RwLock<Option<Current>> = std::sync::RwLock::new(None);
+
+/// Called with the context whenever the vault learns its licence (unlock, activation, deactivation, refresh), so that host
+/// commands can check their feature without each one opening the vault.
+pub fn set_current(ctx: &EditionContext) {
+    if let Ok(mut g) = CURRENT.write() {
+        *g = Some(Current { licensed: ctx.source != "NONE", edition: ctx.edition.clone(), features: ctx.features.clone() });
+    }
+}
+
+/// At the top of each host command the entitlement map lists: refused unless the current licence entitles the feature.
+/// Reading and exporting what already exists never goes through here with a licence that has merely expired, because expiry
+/// does not change what a licence entitles.
+pub fn require_feature(feature: &str) -> Result<(), String> {
+    let map = Entitlements::builtin();
+    let g = CURRENT.read().map_err(|_| "CF_EDITION_NOT_ENTITLED: the licence could not be read".to_string())?;
+    let (licensed, edition, features): (bool, Option<&str>, &[String]) = match g.as_ref() {
+        Some(c) => (c.licensed, c.edition.as_deref(), c.features.as_slice()),
+        None => (false, None, &[]),
+    };
+    if map.feature_allowed(licensed.then_some(features), feature) {
+        Ok(())
+    } else {
+        Err(not_entitled(map, feature, licensed.then_some(edition).flatten()))
+    }
+}
+
 /// The air-gap switch cannot be turned off under a JUDICIARY licence.
 pub fn check_air_gap_change(ctx: &EditionContext, enable: bool) -> Result<(), String> {
     if !enable && ctx.air_gap_forced {
@@ -382,6 +506,7 @@ pub fn require_capability(ctx: &EditionContext, root: &Path, capability: &str) -
 pub fn status_json(ctx: &EditionContext, root: &Path) -> Value {
     let mut v = serde_json::to_value(ctx).unwrap_or(Value::Null);
     v["pilot"] = serde_json::to_value(pilot_config(root)).unwrap_or(Value::Null);
+    v["feature_labels"] = json!(Entitlements::builtin().feature_labels);
     v["banner"] = json!(if ctx.chambers { "Chambers Edition \u{2014} record only. Everything shown comes from the filings, the evidence and orders on the record, and installed law. This tool never writes analysis, findings or orders." } else { "" });
     v
 }
@@ -407,7 +532,7 @@ mod tests {
             "schema_version": "2.0.0", "licence_id": "L-1", "product": "CaseForge", "edition": "JUDICIARY", "issued_to_kind": "INSTITUTION", "issued_at_unix_ms": 1,
             "expires_at_unix_ms": null, "pack_subscription_until_unix_ms": null,
             "fingerprint_components": {"hostname": "court-host-1", "username": "registrar-1", "machine_guid": "guid-12345678", "disk_root": "C:\\root-disk"},
-            "features": ["digest", "audit", "chambers"], "air_gap_forced": true, "telemetry_allowed": false, "seat_transfers_per_year": null,
+            "features": ["digest", "retrieval", "export", "audit", "deadline_watch", "currency_treatment", "code_bridge", "indic_ingestion", "bundle_exchange", "chambers"], "air_gap_forced": true, "telemetry_allowed": false, "seat_transfers_per_year": null,
             "signer_key_id": "test-key", "signature_alg": "Ed25519", "notes": "Chambers pilot \u{2014} \u{0939}\u{093f}\u{0902}\u{0926}\u{0940} \u{1f600}",
         });
         edit(&mut v);
@@ -448,7 +573,7 @@ mod tests {
             let p = payload(&sk, |v| {
                 v["edition"] = json!(e);
                 v["issued_to_kind"] = json!("FIRM");
-                v["features"] = json!(["digest", "audit"]);
+                v["features"] = json!(Entitlements::builtin().edition_features(e));
                 v["air_gap_forced"] = json!(false);
                 v["telemetry_allowed"] = json!(true);
             });
@@ -456,8 +581,13 @@ mod tests {
             let ctx = context_for(&l, st);
             assert!(!ctx.chambers, "{e}");
             assert!(ctx.hidden_surfaces.contains(&"chambers") && ctx.hidden_surfaces.contains(&"issues"), "{e}");
+            // an advocacy screen is shown exactly when the edition's map includes the feature it needs
+            let map = Entitlements::builtin();
             for s in ADVOCACY_ONLY {
-                assert!(ctx.visible_surfaces.contains(&s), "{e}: {s}");
+                assert_eq!(ctx.visible_surfaces.contains(&s), !map.surface_hidden(s, Some(&ctx.features)), "{e}: {s}");
+                if map.surfaces[s].is_none() {
+                    assert!(ctx.visible_surfaces.contains(&s), "{e}: {s} needs no feature");
+                }
             }
             assert!(require_chambers(&ctx).is_err() && require_advocacy(&ctx).is_ok());
         }
@@ -566,5 +696,183 @@ mod tests {
         for c in PILOT_CAPABILITIES {
             assert!(require_capability(&ctx, dir.path(), c).is_err(), "an unreadable policy file switches everything off: {c}");
         }
+    }
+
+    // --- B-S4-22: golden/G-EDITIONS (pinned before this code) ---
+
+    use crate::entitlements::tests::{fixture, golden_map, strs};
+
+    fn licence_of(edition: &str, features: Vec<String>) -> V2Licence {
+        let judiciary = edition == "JUDICIARY";
+        V2Licence {
+            licence_id: "L-golden".into(),
+            edition: edition.into(),
+            features,
+            air_gap_forced: judiciary,
+            telemetry_allowed: !judiciary,
+            expires_at_unix_ms: None,
+            pack_subscription_until_unix_ms: None,
+            seat_transfers_per_year: None,
+            seat_transfers: vec![],
+        }
+    }
+
+    #[test]
+    fn golden_each_edition_shows_exactly_what_it_is_entitled_to() {
+        let g = fixture();
+        let map = golden_map();
+        let always = strs(&g["always_visible"]);
+        for c in g["surface_cases"].as_array().unwrap() {
+            let name = c["name"].as_str().unwrap();
+            let ctx = context_at(&map, &licence_of(c["edition"].as_str().unwrap(), strs(&c["licence_features"])), LicenceState::Active, 1);
+            assert_eq!(ctx.features, strs(&c["expect_effective"]), "{name}");
+            assert_eq!(ctx.ignored_features, strs(&c["expect_ignored"]), "{name}");
+            assert_eq!(ctx.chambers, c["expect_chambers"].as_bool().unwrap(), "{name}");
+            let mut hidden: Vec<String> = ctx.hidden_surfaces.iter().map(|s| s.to_string()).collect();
+            let mut want = strs(&c["expect_hidden"]);
+            hidden.sort();
+            want.sort();
+            assert_eq!(hidden, want, "{name}: hidden screens");
+            for s in &always {
+                assert!(ctx.visible_surfaces.contains(&s.as_str()), "{name}: {s} is shown in every edition");
+            }
+            assert_eq!(ctx.visible_surfaces.len() + ctx.hidden_surfaces.len(), ALL_SURFACES.len(), "{name}: every screen is either shown or hidden");
+            assert_eq!(ctx.entitlement_map, "DEVELOPMENT_ONLY");
+        }
+    }
+
+    #[test]
+    fn golden_a_host_command_is_refused_without_its_feature() {
+        let g = fixture();
+        let map = golden_map();
+        for c in g["command_cases"].as_array().unwrap() {
+            let ctx = context_at(&map, &licence_of(c["edition"].as_str().unwrap(), strs(&c["licence_features"])), LicenceState::Active, 1);
+            let r = require_feature_in(&map, &ctx, c["feature"].as_str().unwrap());
+            match c["expect"].as_str().unwrap() {
+                "ok" => assert!(r.is_ok(), "{c}: {r:?}"),
+                _ => assert!(r.unwrap_err().starts_with("CF_EDITION_NOT_ENTITLED"), "{c}"),
+            }
+        }
+    }
+
+    #[test]
+    fn golden_an_install_without_a_licence_follows_the_policy_in_the_map() {
+        let g = fixture();
+        for c in g["unlicensed_cases"].as_array().unwrap() {
+            let mut map = golden_map();
+            map.unlicensed_stage4_policy = c["policy"].as_str().unwrap().to_string();
+            let ctx = none_context(None);
+            let r = require_feature_in(&map, &ctx, c["feature"].as_str().unwrap());
+            assert_eq!(r.is_ok(), c["expect"] == "ok", "{c}");
+        }
+    }
+
+    #[test]
+    fn golden_when_everything_has_expired_work_stays_readable_and_only_updates_and_new_writes_are_refused() {
+        // AC-S4-16.2 and Stage 3 AC-S3-22.8
+        let g = fixture();
+        let e = &g["expired_everything_case"];
+        let now = g["now_ms"].as_i64().unwrap();
+        let map = golden_map();
+        let mut l = licence_of(e["edition"].as_str().unwrap(), strs(&e["licence_features"]));
+        l.expires_at_unix_ms = e["expires_ms"].as_i64();
+        l.pack_subscription_until_unix_ms = e["pack_until_ms"].as_i64();
+        let state = if now > l.expires_at_unix_ms.unwrap() { LicenceState::Expired } else { LicenceState::Active };
+        let want = &e["expect"];
+        assert_eq!(state.as_str(), want["licence_state"].as_str().unwrap());
+        assert_eq!(state.vault_writable(), want["vault_writable"].as_bool().unwrap(), "expiry makes the vault read-only");
+        let ctx = context_at(&map, &l, state, now);
+        // entitlement does not change with expiry: everything the licence paid for can still be opened and exported
+        assert_eq!(ctx.features, strs(&e["licence_features"]));
+        for f in strs(&want["feature_checks_ok"]) {
+            assert!(require_feature_in(&map, &ctx, &f).is_ok(), "{f} stays usable");
+        }
+        assert_eq!(ctx.pack_subscription.state, want["subscription_state"].as_str().unwrap());
+        let r = crate::subscription::check_install(&ctx.pack_subscription, "official", true, Some("2027-01-01"), None);
+        assert!(r.unwrap_err().starts_with("CF_PACK_UPDATES_EXPIRED"), "new official updates are refused");
+        let stamp = format!("{}{}", crate::treatment::stamp_text("Indian Law Pack", Some("2026-11-30")), crate::subscription::stamp_suffix(&ctx.pack_subscription));
+        assert!(stamp.contains("2026-11-30") && stamp.contains(want["stamp_says"].as_str().unwrap()), "{stamp}");
+    }
+
+    #[test]
+    fn the_shipped_map_gives_the_judiciary_edition_the_chambers_feature_and_nobody_else() {
+        let m = Entitlements::builtin();
+        for (name, e) in &m.editions {
+            assert_eq!(e.features.iter().any(|f| f == "chambers"), name == "JUDICIARY", "{name}");
+            assert!(e.features.iter().all(|f| KNOWN_FEATURES.contains(&f.as_str())), "{name} lists only known features");
+        }
+        let judiciary = m.edition_features("JUDICIARY");
+        for need in ["mock_court", "voice", "opposition_scan", "witness_matrix", "impeachment_kit"] {
+            assert!(!judiciary.iter().any(|f| f == need), "Chambers carries no advocacy feature: {need}");
+        }
+        assert!(m.surfaces.keys().all(|s| ALL_SURFACES.contains(&s.as_str())) && ALL_SURFACES.iter().all(|s| m.surfaces.contains_key(*s)), "the map lists every screen the app has");
+        assert!(m.surfaces.values().flatten().chain(m.commands.values()).all(|f| KNOWN_FEATURES.contains(&f.as_str())), "the map names only known features");
+    }
+
+    #[test]
+    fn a_v2_licence_carrying_too_many_transfers_does_not_verify() {
+        let (sk, keys) = keypair();
+        let now = 1_800_000_000_000i64;
+        let day = 86_400_000i64;
+        let t = |d: i64, i: usize| json!({"transferred_at_unix_ms": now - d * day, "receipt_id": format!("r{i}")});
+        let ok = payload(&sk, |v| {
+            v["seat_transfers_per_year"] = json!(2);
+            v["seat_transfers"] = json!([t(10, 0), t(100, 1), t(500, 2)]);
+        });
+        let (l, _) = verify_v2(&ok, &keys, &fp(), now).unwrap();
+        assert_eq!(l.seat_transfers.len(), 3);
+        assert_eq!(context_at(Entitlements::builtin(), &l, LicenceState::Active, now).seat.unwrap().remaining, Some(0));
+        let over = payload(&sk, |v| {
+            v["seat_transfers_per_year"] = json!(2);
+            v["seat_transfers"] = json!([t(10, 0), t(100, 1), t(200, 2)]);
+        });
+        assert!(verify_v2(&over, &keys, &fp(), now).unwrap_err().starts_with("CF_SEAT_TRANSFER_LIMIT"));
+        let malformed = payload(&sk, |v| v["seat_transfers"] = json!([{"when": "yesterday"}]));
+        assert!(verify_v2(&malformed, &keys, &fp(), now).is_err());
+    }
+
+    const VECTORS: &str = include_str!("../../golden/G-EDITIONS/fixtures/python_issued_licences.json");
+
+    #[test]
+    fn licences_issued_by_the_python_tool_verify_here() {
+        // The licence tool (eval/tools/make_licence.py) and this host agree on the signing bytes, the editions, the separate
+        // pack-subscription end, the seat transfers and the release receipt - checked against a committed file the tool made.
+        let v: Value = serde_json::from_str(VECTORS).unwrap();
+        let now = v["now_ms"].as_i64().unwrap();
+        let day = 86_400_000i64;
+        let keys = BTreeMap::from([(v["signer_key_id"].as_str().unwrap().to_string(), v["test_public_key_hex"].as_str().unwrap().to_string())]);
+        let live: FingerprintComponents = serde_json::from_value(v["fingerprint"].clone()).unwrap();
+        let map = Entitlements::builtin();
+        for e in EDITIONS {
+            let raw = &v["licences"][e];
+            let (l, state) = verify_v2(raw, &keys, &live, now).unwrap_or_else(|err| panic!("{e}: {err}"));
+            assert_eq!(state, LicenceState::Active, "{e}");
+            let ctx = context_at(map, &l, state, now);
+            assert_eq!(ctx.features, map.edition_features(e), "{e} gets exactly the features the map gives it");
+            assert!(ctx.ignored_features.is_empty(), "{e}");
+            assert_eq!(ctx.chambers, e == "JUDICIARY", "{e}");
+            assert_eq!(ctx.air_gap_forced, e == "JUDICIARY", "{e}");
+            assert_eq!(ctx.pack_subscription.state, "SUBSCRIBED", "{e}");
+            // the pack subscription ends before the app licence does, and they are judged separately
+            let later = context_at(map, &l, state, now + 200 * day);
+            assert_eq!((later.pack_subscription.state, later.licence_state), ("UPDATES_EXPIRED", "ACTIVE"), "{e}");
+            let (_, after) = verify_v2(raw, &keys, &live, now + 400 * day).unwrap();
+            assert_eq!(after, LicenceState::Expired, "{e}");
+        }
+        let (n, _) = verify_v2(&v["narrowed"], &keys, &live, now).unwrap();
+        assert_eq!(context_at(map, &n, LicenceState::Active, now).features, vec!["digest", "witness_matrix"]);
+        // a receipt the tool's test holder made verifies here, and a licence re-issued from it carries the transfer
+        crate::seat::verify_receipt(&v["receipt"]).unwrap();
+        let new_live: FingerprintComponents = serde_json::from_value(v["new_fingerprint"].clone()).unwrap();
+        let (r, st) = verify_v2(&v["reissued"], &keys, &new_live, now).unwrap();
+        assert_eq!(r.seat_transfers.len(), 1);
+        assert_eq!(r.seat_transfers[0].receipt_id, v["receipt"]["receipt_id"].as_str().unwrap());
+        let seat = context_at(map, &r, st, now).seat.unwrap();
+        assert_eq!((seat.used_in_window, seat.remaining), (1, Some(1)));
+        // it is bound to the new machine, not the old one, and any change to it breaks the signature
+        assert!(verify_v2(&v["reissued"], &keys, &live, now).unwrap_err().starts_with("CF_LICENCE_FINGERPRINT_MISMATCH"));
+        let mut forged = v["reissued"].clone();
+        forged["seat_transfers"] = json!([]);
+        assert!(verify_v2(&forged, &keys, &new_live, now).unwrap_err().starts_with("CF_LICENCE_INVALID_SIGNATURE"));
     }
 }

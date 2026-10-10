@@ -1,0 +1,120 @@
+{
+  "batch": "B-S4-22",
+  "golden_sha256": "5cb48b57708aaad5de5e29c732c713a95d53003f7cb3560a91e2efb40402f601",
+  "acs": {
+    "AC-S4-16.1": {
+      "status": "PASS",
+      "evidence": {
+        "entitlement_map": {
+          "status": "DEVELOPMENT_ONLY",
+          "question": "Q-S4-06",
+          "unlicensed_policy": "OPEN_DEVELOPMENT",
+          "editions": {
+            "ADVOCATE": 9,
+            "PRO": 17,
+            "CHAMBERS_FIRM": 17,
+            "JUDICIARY": 10
+          }
+        },
+        "golden_cases": {
+          "surfaces": 9,
+          "commands": 9,
+          "unlicensed": 8,
+          "seat": 17
+        },
+        "host_commands_gated": 34,
+        "seat_transfers_per_year": "PROPOSED 2 (Q-S4-07); the licence carries its own limit, null = transfer disabled"
+      },
+      "detail": "Each edition shows exactly the screens and runs exactly the host commands its licence entitles, from one map; a licence can only narrow its edition. The map in contracts is a DEVELOPMENT_ONLY placeholder (Q-S4-06) - the rules are pinned, the contents are the owner's to decide. Seat transfers are counted over a rolling year and every licence is re-checked at activation."
+    },
+    "AC-S4-16.2": {
+      "status": "PASS",
+      "evidence": {
+        "subscription_checked_in": [
+          "lib.rs::pack_install"
+        ],
+        "reading_commands_checked_for_a_block": [
+          "case_list",
+          "case_open",
+          "doc_list",
+          "doc_text_preview",
+          "edition_status",
+          "licence_status",
+          "pack_currency",
+          "pack_list",
+          "seat_status"
+        ]
+      },
+      "detail": "The pack subscription is consulted in exactly one place, installing a pack. An expired subscription leaves installed packs usable and every citation shows the older date with an updates-expired notice; only newer official content is refused. The user's own custom packs, reading and exporting are never blocked."
+    },
+    "AC-S3-22.8": {
+      "status": "PASS",
+      "detail": "An expired licence leaves cases readable and listed, refuses writes with the read-only code, and ransoms nothing - re-checked here with an expired v2 licence and an expired pack subscription together."
+    }
+  },
+  "map_invariants": {
+    "known_features_match_the_schema": true,
+    "map_has_the_four_editions": true,
+    "development_only_or_approved_with_record": true,
+    "every_edition_feature_is_known": true,
+    "no_duplicate_features": true,
+    "only_judiciary_has_chambers": true,
+    "judiciary_has_no_advocacy_feature": true,
+    "every_screen_is_listed": true,
+    "screen_features_are_known_and_offered": true,
+    "chambers_screens_need_the_chambers_feature": true,
+    "command_features_are_known_and_offered": true,
+    "every_mapped_command_exists": true,
+    "stage4_features_are_known": true,
+    "unlicensed_policy_is_stated": true,
+    "every_feature_has_a_label": true,
+    "never_blocked_commands_exist": true
+  },
+  "host_enforcement": {
+    "every_mapped_command_requires_its_feature": true,
+    "no_other_command_gates_on_a_feature": true,
+    "require_feature_called_nowhere_else": true
+  },
+  "pack_subscription": {
+    "check_install_only_in_pack_install": true,
+    "pack_install_checks_before_installing": true,
+    "reading_commands_never_block": true,
+    "subscription_state_is_not_in_the_vault": true,
+    "packs_module_never_reads_the_subscription": true,
+    "export_and_audit_paths_do_not_check_it": true,
+    "stamp_suffix_wording_matches_the_screen": true
+  },
+  "ui": {
+    "licence_screen_shows_the_edition_panel": true,
+    "panel_says_what_expiry_leaves_alone": true,
+    "panel_says_the_map_is_a_placeholder": true,
+    "panel_explains_the_transfer_steps": true,
+    "panel_confirms_before_giving_up_the_seat": true,
+    "ipc_has_the_commands": true,
+    "panel_vocabulary_honest": true,
+    "commands_registered": true
+  },
+  "licence_tool": {
+    "each_edition_gets_its_map_features": true,
+    "signatures_verify": true,
+    "judiciary_invariants": true,
+    "other_editions_have_no_chambers": true,
+    "pack_subscription_separate_from_the_app_licence": true,
+    "no_end_dates_are_null": true,
+    "a_licence_cannot_exceed_its_edition": true,
+    "a_licence_can_be_narrowed": true,
+    "rebind_binds_to_the_new_machine_and_records_the_transfer": true,
+    "rebind_refuses_beyond_the_yearly_limit": true,
+    "transfers_older_than_a_year_do_not_count": true,
+    "rebind_refuses_when_transfer_is_disabled": true,
+    "rebind_refuses_a_tampered_receipt": true,
+    "rebind_refuses_another_licences_receipt": true,
+    "rebind_refuses_the_wrong_ordinal": true,
+    "rebind_refuses_a_receipt_from_another_machine": true,
+    "rebind_refuses_a_replayed_receipt": true,
+    "rebind_refuses_an_unsigned_prior_licence": true,
+    "committed_vectors_match_the_tool": true,
+    "a_receipt_written_by_the_rust_host_verifies_and_re_issues": true
+  },
+  "errors": []
+}

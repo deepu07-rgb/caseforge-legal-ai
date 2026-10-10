@@ -204,7 +204,28 @@ fn read_machine_guid() -> String {
 
 /// The trusted licence signing keys (public), by key id.
 pub fn trust_keys() -> Result<BTreeMap<String, String>, String> {
+    #[cfg(test)]
+    if let Some(k) = test_trust::get() {
+        return Ok(k);
+    }
     load_trust_keys()
+}
+
+/// Tests only: lets a test sign licences with a throwaway key (the shipped trust file holds only the public half of a
+/// development key whose private half is not in the repository). Per thread, so tests do not disturb one another.
+#[cfg(test)]
+pub mod test_trust {
+    use std::cell::RefCell;
+    use std::collections::BTreeMap;
+    thread_local! {
+        static KEYS: RefCell<Option<BTreeMap<String, String>>> = const { RefCell::new(None) };
+    }
+    pub fn set(keys: Option<BTreeMap<String, String>>) {
+        KEYS.with(|k| *k.borrow_mut() = keys);
+    }
+    pub fn get() -> Option<BTreeMap<String, String>> {
+        KEYS.with(|k| k.borrow().clone())
+    }
 }
 
 /// A licence payload as JSON, whether raw or base64-wrapped (used for version 2 payloads, see edition.rs).

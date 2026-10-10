@@ -31,6 +31,15 @@
     "air_gap_forced": { "type": "boolean" },
     "telemetry_allowed": { "type": "boolean" },
     "seat_transfers_per_year": { "type": ["integer", "null"], "minimum": 0, "description": "Owner decision Q-S4-07; null = not yet decided (transfer disabled)." },
+    "seat_transfers": {
+      "type": "array",
+      "description": "B-S4-22 (additive, optional): seat transfers this licence has already used, signed by the issuer when it re-issues the licence for a new machine. Counted over a rolling 365 days against seat_transfers_per_year; more in the window than the limit, or any when the limit is null, makes the licence invalid.",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["transferred_at_unix_ms", "receipt_id"],
+        "properties": { "transferred_at_unix_ms": { "type": "integer", "minimum": 0 }, "receipt_id": { "type": "string", "minLength": 1 } }
+      }
+    },
     "institution_key_id": { "type": ["string", "null"], "description": "Institution-issued certificate signing key (Q-S4-09); null = per-install key only." },
     "signer_key_id": { "type": "string", "minLength": 1 },
     "signature_alg": { "const": "Ed25519" },
@@ -56,7 +65,8 @@
     "state_machine": ["UNLICENSED", "ACTIVE", "EXPIRED"],
     "pack_subscription_states": ["SUBSCRIBED", "UPDATES_EXPIRED"],
     "inherits": "fingerprint 3-of-4, canonical signing bytes, trust file, EXPIRED=read_only_vault and user_data_may_be_ransomed=false from v1 apply unchanged.",
-    "edition_to_feature_map": "Not frozen here. Edition boundaries and prices are owner decision Q-S4-06; the entitlement map is authored in B-S4-22. Until then features[] in each signed payload is the only source of entitlement.",
+    "edition_to_feature_map": "contracts/edition_entitlements.json (B-S4-22), DEVELOPMENT_ONLY until the owner decides Q-S4-06. A licence's features[] can only narrow what its edition includes in that map.",
+    "amendments": ["B-S4-22: optional seat_transfers added (additive; every licence valid before stays valid and means the same)."],
     "v1_compatibility": "A valid v1 payload stays ACTIVE/EXPIRED under v1 rules and grants none of the Stage 4 feature ids."
   }
 }

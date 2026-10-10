@@ -1,0 +1,272 @@
+{
+  "description": "Licences and a receipt made by eval/tools/make_licence.py with a throwaway test key (seed 07 x32), verified by the Rust host in edition::tests::licences_issued_by_the_python_tool_verify_here. Regenerate with `python eval/checks/editions_b_s4_22.py --write-vectors`; the gate fails if this file differs from what the tool makes.",
+  "fingerprint": {
+    "disk_root": "C:\\root-disk",
+    "hostname": "court-host-1",
+    "machine_guid": "guid-12345678",
+    "username": "registrar-1"
+  },
+  "licences": {
+    "ADVOCATE": {
+      "air_gap_forced": false,
+      "edition": "ADVOCATE",
+      "expires_at_unix_ms": 1831536000000,
+      "features": [
+        "digest",
+        "voice",
+        "retrieval",
+        "export",
+        "mock_court",
+        "audit",
+        "deadline_watch",
+        "currency_treatment",
+        "code_bridge"
+      ],
+      "fingerprint_components": {
+        "disk_root": "C:\\root-disk",
+        "hostname": "court-host-1",
+        "machine_guid": "guid-12345678",
+        "username": "registrar-1"
+      },
+      "institution_key_id": null,
+      "issued_at_unix_ms": 1800000000000,
+      "issued_to_kind": "INDIVIDUAL",
+      "licence_id": "L-vec-advocate",
+      "notes": "cross-language vector",
+      "pack_subscription_until_unix_ms": 1815552000000,
+      "product": "CaseForge",
+      "schema_version": "2.0.0",
+      "seat_transfers_per_year": 2,
+      "signature_alg": "Ed25519",
+      "signature_hex": "0995fc299ae9b129205d2d39381540b78b90aadb730786ad29f443d05955f03e2d1fb3fb1e2638b44013d6e88f1e1148141e5c6f0e0b316e38167bff7cc1840a",
+      "signer_key_id": "caseforge-licence-dev-2026",
+      "telemetry_allowed": true
+    },
+    "CHAMBERS_FIRM": {
+      "air_gap_forced": false,
+      "edition": "CHAMBERS_FIRM",
+      "expires_at_unix_ms": 1831536000000,
+      "features": [
+        "digest",
+        "voice",
+        "retrieval",
+        "export",
+        "mock_court",
+        "audit",
+        "deadline_watch",
+        "currency_treatment",
+        "code_bridge",
+        "audit_certificate",
+        "opposition_scan",
+        "witness_matrix",
+        "impeachment_kit",
+        "foundation_gaps",
+        "timed_rehearsal",
+        "indic_ingestion",
+        "bundle_exchange"
+      ],
+      "fingerprint_components": {
+        "disk_root": "C:\\root-disk",
+        "hostname": "court-host-1",
+        "machine_guid": "guid-12345678",
+        "username": "registrar-1"
+      },
+      "institution_key_id": null,
+      "issued_at_unix_ms": 1800000000000,
+      "issued_to_kind": "INDIVIDUAL",
+      "licence_id": "L-vec-chambers_firm",
+      "notes": "cross-language vector",
+      "pack_subscription_until_unix_ms": 1815552000000,
+      "product": "CaseForge",
+      "schema_version": "2.0.0",
+      "seat_transfers_per_year": 2,
+      "signature_alg": "Ed25519",
+      "signature_hex": "6c2d584541ae78d2664dc1130905caba47a5624ea9caf3d890e592a4a04480e218d1ce81b215750f8ade91d3d52a8bd9a3137300cb25c9b7a0ddfc6209606009",
+      "signer_key_id": "caseforge-licence-dev-2026",
+      "telemetry_allowed": true
+    },
+    "JUDICIARY": {
+      "air_gap_forced": true,
+      "edition": "JUDICIARY",
+      "expires_at_unix_ms": 1831536000000,
+      "features": [
+        "digest",
+        "retrieval",
+        "export",
+        "audit",
+        "deadline_watch",
+        "currency_treatment",
+        "code_bridge",
+        "indic_ingestion",
+        "bundle_exchange",
+        "chambers"
+      ],
+      "fingerprint_components": {
+        "disk_root": "C:\\root-disk",
+        "hostname": "court-host-1",
+        "machine_guid": "guid-12345678",
+        "username": "registrar-1"
+      },
+      "institution_key_id": null,
+      "issued_at_unix_ms": 1800000000000,
+      "issued_to_kind": "INSTITUTION",
+      "licence_id": "L-vec-judiciary",
+      "notes": "cross-language vector",
+      "pack_subscription_until_unix_ms": 1815552000000,
+      "product": "CaseForge",
+      "schema_version": "2.0.0",
+      "seat_transfers_per_year": null,
+      "signature_alg": "Ed25519",
+      "signature_hex": "6f573385964e82c171518586c8bf02ce23092a9c5917bd474d662744628aab5b81fb11b215fe6d3788633e424dbaf28991bbd7c0e117cb350f4b82ba457bd001",
+      "signer_key_id": "caseforge-licence-dev-2026",
+      "telemetry_allowed": false
+    },
+    "PRO": {
+      "air_gap_forced": false,
+      "edition": "PRO",
+      "expires_at_unix_ms": 1831536000000,
+      "features": [
+        "digest",
+        "voice",
+        "retrieval",
+        "export",
+        "mock_court",
+        "audit",
+        "deadline_watch",
+        "currency_treatment",
+        "code_bridge",
+        "audit_certificate",
+        "opposition_scan",
+        "witness_matrix",
+        "impeachment_kit",
+        "foundation_gaps",
+        "timed_rehearsal",
+        "indic_ingestion",
+        "bundle_exchange"
+      ],
+      "fingerprint_components": {
+        "disk_root": "C:\\root-disk",
+        "hostname": "court-host-1",
+        "machine_guid": "guid-12345678",
+        "username": "registrar-1"
+      },
+      "institution_key_id": null,
+      "issued_at_unix_ms": 1800000000000,
+      "issued_to_kind": "INDIVIDUAL",
+      "licence_id": "L-vec-pro",
+      "notes": "cross-language vector",
+      "pack_subscription_until_unix_ms": 1815552000000,
+      "product": "CaseForge",
+      "schema_version": "2.0.0",
+      "seat_transfers_per_year": 2,
+      "signature_alg": "Ed25519",
+      "signature_hex": "3ab94f6c2686f78fb449e64dd905afcfb3c218bff0c8fc0b4ce2d4ff6088fb0593c59b8cbc8fce4367b4c49d77018108cd3a271ebb5832c3c4bdbd76c94a0605",
+      "signer_key_id": "caseforge-licence-dev-2026",
+      "telemetry_allowed": true
+    }
+  },
+  "narrowed": {
+    "air_gap_forced": false,
+    "edition": "PRO",
+    "expires_at_unix_ms": 1831536000000,
+    "features": [
+      "digest",
+      "witness_matrix"
+    ],
+    "fingerprint_components": {
+      "disk_root": "C:\\root-disk",
+      "hostname": "court-host-1",
+      "machine_guid": "guid-12345678",
+      "username": "registrar-1"
+    },
+    "institution_key_id": null,
+    "issued_at_unix_ms": 1800000000000,
+    "issued_to_kind": "INDIVIDUAL",
+    "licence_id": "L-vec-narrow",
+    "notes": "cross-language vector",
+    "pack_subscription_until_unix_ms": 1831536000000,
+    "product": "CaseForge",
+    "schema_version": "2.0.0",
+    "seat_transfers_per_year": null,
+    "signature_alg": "Ed25519",
+    "signature_hex": "dac834020aed1792d3ad374c9aec95a629baf89e727f02de1c0cf0dcd24ea64668e3e994269a84cbc480d3ca8b30972d70134b8c39181bcfe22a23a53b5e9d0a",
+    "signer_key_id": "caseforge-licence-dev-2026",
+    "telemetry_allowed": true
+  },
+  "new_fingerprint": {
+    "disk_root": "C:\\root-disk",
+    "hostname": "court-host-2",
+    "machine_guid": "guid-87654321",
+    "username": "registrar-1"
+  },
+  "now_ms": 1800000000000,
+  "receipt": {
+    "deactivated_at_unix_ms": 1799136000000,
+    "edition": "PRO",
+    "fingerprint_components": {
+      "disk_root": "C:\\root-disk",
+      "hostname": "court-host-1",
+      "machine_guid": "guid-12345678",
+      "username": "registrar-1"
+    },
+    "kind": "CASEFORGE_SEAT_RELEASE",
+    "licence_id": "L-vec-pro",
+    "public_key_hex": "fd1724385aa0c75b64fb78cd602fa1d991fdebf76b13c58ed702eac835e9f618",
+    "receipt_id": "rcpt-vec-1",
+    "schema_version": "1.0.0",
+    "signature_alg": "Ed25519",
+    "signature_hex": "656eb1c5209626a19cfe9ab905ad4c6c3e02c471f76346b2293c1ba1280f5cba98089bc120b74f8231a1df44b134e6b4abbe4caef1c76824063397bf0a10b505",
+    "transfer_ordinal": 1
+  },
+  "reissued": {
+    "air_gap_forced": false,
+    "edition": "PRO",
+    "expires_at_unix_ms": 1831536000000,
+    "features": [
+      "digest",
+      "voice",
+      "retrieval",
+      "export",
+      "mock_court",
+      "audit",
+      "deadline_watch",
+      "currency_treatment",
+      "code_bridge",
+      "audit_certificate",
+      "opposition_scan",
+      "witness_matrix",
+      "impeachment_kit",
+      "foundation_gaps",
+      "timed_rehearsal",
+      "indic_ingestion",
+      "bundle_exchange"
+    ],
+    "fingerprint_components": {
+      "disk_root": "C:\\root-disk",
+      "hostname": "court-host-2",
+      "machine_guid": "guid-87654321",
+      "username": "registrar-1"
+    },
+    "institution_key_id": null,
+    "issued_at_unix_ms": 1800000000000,
+    "issued_to_kind": "INDIVIDUAL",
+    "licence_id": "L-vec-pro",
+    "notes": "cross-language vector",
+    "pack_subscription_until_unix_ms": 1815552000000,
+    "product": "CaseForge",
+    "schema_version": "2.0.0",
+    "seat_transfers": [
+      {
+        "receipt_id": "rcpt-vec-1",
+        "transferred_at_unix_ms": 1799136000000
+      }
+    ],
+    "seat_transfers_per_year": 2,
+    "signature_alg": "Ed25519",
+    "signature_hex": "83ddc64ad45e9b206428ab1ad75d56fe00cc708484730b464ab7067764a388737fc2fcf0767e7ffc7263fcf3443df0aa9fe39bd4f3515106d0475463d5509503",
+    "signer_key_id": "caseforge-licence-dev-2026",
+    "telemetry_allowed": true
+  },
+  "signer_key_id": "caseforge-licence-dev-2026",
+  "test_public_key_hex": "ea4a6c63e29c520abef5507b132ec5f9954776aebebe7b92421eea691446d22c"
+}

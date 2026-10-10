@@ -27,6 +27,9 @@ mod foundation;
 mod issue_matrix;
 mod treatment;
 mod edition;
+mod entitlements;
+mod seat;
+mod subscription;
 mod record_only;
 mod chambers_lookup;
 mod cause_list;
@@ -301,6 +304,7 @@ fn audit_draft(
     filename: Option<String>,
     case_id: Option<String>,
 ) -> Result<audit::AuditReport, String> {
+    edition::require_feature("audit")?;
     if text.trim().is_empty() {
         return Err("CF_AUDIT_EXTRACTION_FAILED: the draft is empty".into());
     }
@@ -362,6 +366,7 @@ fn graph_evidence(graph: &serde_json::Value) -> Vec<foundation::Evidence> {
 /// gaps (rule row, authority and its text) and the Missing Links panel with foundation gaps first.
 #[tauri::command]
 fn foundation_check(app: AppHandle, vault: State<'_, VaultState>, case_id: String, v1_panel: Option<Vec<serde_json::Value>>) -> Result<serde_json::Value, String> {
+    edition::require_feature("foundation_gaps")?;
     let mgr = vault.get_or_init(&app)?;
     let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
     let jurisdiction = case_jurisdiction(&mgr, &case_id)?;
@@ -414,6 +419,7 @@ fn foundation_check(app: AppHandle, vault: State<'_, VaultState>, case_id: Strin
 /// Counsel sets (or clears, with None) the evidence type of one item.
 #[tauri::command]
 fn foundation_set_type(app: AppHandle, vault: State<'_, VaultState>, case_id: String, evidence_id: String, evidence_type: Option<String>) -> Result<(), String> {
+    edition::require_feature("foundation_gaps")?;
     let mgr = vault.get_or_init(&app)?;
     let graph = mgr.case_graph_get(&case_id).map_err(|e| e.to_string())?.unwrap_or_else(|| serde_json::json!({}));
     if !graph_evidence(&graph).iter().any(|e| e.evidence_id == evidence_id) {
@@ -434,6 +440,7 @@ fn foundation_set_type(app: AppHandle, vault: State<'_, VaultState>, case_id: St
 /// Counsel links a document to one element of one evidence item (or removes the link with None).
 #[tauri::command]
 fn foundation_link(app: AppHandle, vault: State<'_, VaultState>, case_id: String, evidence_id: String, element_id: String, doc_id: Option<String>) -> Result<(), String> {
+    edition::require_feature("foundation_gaps")?;
     let mgr = vault.get_or_init(&app)?;
     let key = format!("foundation:link:{evidence_id}:{element_id}");
     let Some(doc_id) = doc_id else { return mgr.witness_kv_delete(&case_id, &key).map_err(|e| e.to_string()) };
@@ -460,7 +467,15 @@ fn foundation_link(app: AppHandle, vault: State<'_, VaultState>, case_id: String
 fn pack_currency(app: AppHandle, vault: State<'_, VaultState>) -> Result<Vec<treatment::PackStamp>, String> {
     let mgr = vault.get_or_init(&app)?;
     let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
-    Ok(treatment::pack_stamps(&paths))
+    let mut stamps = treatment::pack_stamps(&paths);
+    // B-S4-22: once the pack subscription has ended every stamp keeps its older date and says updates have expired
+    let sub = edition_of(&mgr)?.pack_subscription;
+    for s in &mut stamps {
+        s.updates_expired = sub.expired();
+        s.updates_notice = sub.notice.clone();
+        s.updates_expired_on = sub.until_date.clone().filter(|_| sub.expired());
+    }
+    Ok(stamps)
 }
 
 #[derive(Deserialize)]
@@ -474,6 +489,7 @@ struct TreatmentQuery {
 /// about the library, never about the law.
 #[tauri::command]
 fn treatment_lookup(app: AppHandle, vault: State<'_, VaultState>, sources: Vec<TreatmentQuery>) -> Result<Vec<serde_json::Value>, String> {
+    edition::require_feature("currency_treatment")?;
     let mgr = vault.get_or_init(&app)?;
     let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
     let store = retrieval::store::open(&paths)?;
@@ -752,6 +768,7 @@ fn deadline_kv(mgr: &VaultManager, case_id: &str, prefix: &str) -> Result<Vec<se
 /// triggers, counsel's assignments and exclusion facts, and the computed records (or the reason one cannot be made).
 #[tauri::command]
 fn deadlines_compute(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<serde_json::Value, String> {
+    edition::require_feature("deadline_watch")?;
     let mgr = vault.get_or_init(&app)?;
     let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
     let jurisdiction = case_jurisdiction(&mgr, &case_id)?;
@@ -822,6 +839,7 @@ fn deadlines_compute(app: AppHandle, vault: State<'_, VaultState>, case_id: Stri
 /// Counsel chooses which chronology event starts a rule's period.
 #[tauri::command]
 fn deadlines_assign(app: AppHandle, vault: State<'_, VaultState>, case_id: String, rule_id: String, event_id: String) -> Result<(), String> {
+    edition::require_feature("deadline_watch")?;
     let mgr = vault.get_or_init(&app)?;
     let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
     let (tables, _) = rule_tables::load_installed(&paths);
@@ -838,6 +856,7 @@ fn deadlines_assign(app: AppHandle, vault: State<'_, VaultState>, case_id: Strin
 
 #[tauri::command]
 fn deadlines_unassign(app: AppHandle, vault: State<'_, VaultState>, case_id: String, rule_id: String, event_id: String) -> Result<(), String> {
+    edition::require_feature("deadline_watch")?;
     vault.get_or_init(&app)?.witness_kv_delete(&case_id, &format!("deadline:assign:{rule_id}:{event_id}")).map_err(|e| e.to_string())
 }
 
@@ -845,6 +864,7 @@ fn deadlines_unassign(app: AppHandle, vault: State<'_, VaultState>, case_id: Str
 /// confirmed, and where it is recorded. Applied only when confirmed; an unconfirmed fact turns the result into a range.
 #[tauri::command]
 fn deadlines_fact_save(app: AppHandle, vault: State<'_, VaultState>, case_id: String, fact_type: String, days: u32, confirmed: bool, doc_id: String, excerpt: String) -> Result<(), String> {
+    edition::require_feature("deadline_watch")?;
     let mgr = vault.get_or_init(&app)?;
     let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
     let (tables, _) = rule_tables::load_installed(&paths);
@@ -860,12 +880,14 @@ fn deadlines_fact_save(app: AppHandle, vault: State<'_, VaultState>, case_id: St
 
 #[tauri::command]
 fn deadlines_fact_remove(app: AppHandle, vault: State<'_, VaultState>, case_id: String, fact_type: String) -> Result<(), String> {
+    edition::require_feature("deadline_watch")?;
     vault.get_or_init(&app)?.witness_kv_delete(&case_id, &format!("deadline:fact:{fact_type}")).map_err(|e| e.to_string())
 }
 
 /// The computed deadlines as an iCalendar file (local; nothing is sent anywhere).
 #[tauri::command]
 fn deadlines_export_ics(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<String, String> {
+    edition::require_feature("deadline_watch")?;
     let all = deadlines_compute(app, vault, case_id)?;
     let records = all["records"].as_array().cloned().unwrap_or_default();
     if records.is_empty() {
@@ -1493,6 +1515,7 @@ fn rule_tables_status(app: AppHandle, vault: State<'_, VaultState>) -> Result<se
 
 #[tauri::command]
 fn code_bridge_key_dates(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<Vec<code_bridge::KeyDate>, String> {
+    edition::require_feature("code_bridge")?;
     let mgr = vault.get_or_init(&app)?;
     Ok(key_dates(&mgr, &case_id)?.into_values().collect())
 }
@@ -1500,6 +1523,7 @@ fn code_bridge_key_dates(app: AppHandle, vault: State<'_, VaultState>, case_id: 
 /// Counsel enters (or clears) a key date. Stored as a counsel-input record, the basis locator of every routing.
 #[tauri::command]
 fn code_bridge_set_key_date(app: AppHandle, vault: State<'_, VaultState>, case_id: String, kind: String, date: Option<String>, note: Option<String>) -> Result<(), String> {
+    edition::require_feature("code_bridge")?;
     let mgr = vault.get_or_init(&app)?;
     if !code_bridge::DATE_KINDS.contains(&kind.as_str()) {
         return Err(format!("CF_CODE_BRIDGE_DATE_KIND: {kind}"));
@@ -1523,6 +1547,7 @@ fn code_bridge_set_key_date(app: AppHandle, vault: State<'_, VaultState>, case_i
 /// statutes. Values come only from installed STATUTE_SUCCESSION rows; with none installed every reference is UNKNOWN.
 #[tauri::command]
 fn code_bridge_annotate(app: AppHandle, vault: State<'_, VaultState>, case_id: String, text: Option<String>, context: Option<String>) -> Result<serde_json::Value, String> {
+    edition::require_feature("code_bridge")?;
     let mgr = vault.get_or_init(&app)?;
     let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
     let (tables, rejected) = rule_tables::load_installed(&paths);
@@ -1566,6 +1591,7 @@ fn audit_certificate_issue(
     disclosure_text: Option<String>,
     disclosure_confirmed: Option<bool>,
 ) -> Result<serde_json::Value, String> {
+    edition::require_feature("audit_certificate")?;
     let mgr = vault.get_or_init(&app)?;
     let seed = mgr.audit_signing_seed().map_err(|e| e.to_string())?;
     let disclosure = disclosure_text.map(|text| certificate::Disclosure { text, template_id: None, confirmed: disclosure_confirmed.unwrap_or(false) });
@@ -1591,6 +1617,7 @@ fn opposition_scan(
     doc_id: Option<String>,
     text: Option<String>,
 ) -> Result<serde_json::Value, String> {
+    edition::require_feature("opposition_scan")?;
     let mgr = vault.get_or_init(&app)?;
     edition::require_advocacy(&edition_of(&mgr)?)?; // opposition work is an advocacy feature
     let (doc_id, filename, pages) = match (doc_id, text) {
@@ -1663,6 +1690,7 @@ fn witness_decisions(mgr: &VaultManager, case_id: &str) -> Result<Vec<(String, w
 /// Proposes register rows from statement headers. Counsel-confirmed rows are never overwritten (survive rerun).
 #[tauri::command]
 fn witness_propose(app: AppHandle, vault: State<'_, VaultState>, case_id: String, doc_ids: Option<Vec<String>>) -> Result<Vec<witness::RegisterEntry>, String> {
+    edition::require_feature("witness_matrix")?;
     let mgr = vault.get_or_init(&app)?;
     let jurisdiction = case_jurisdiction(&mgr, &case_id)?;
     let existing: HashMap<String, witness::RegisterEntry> = witness_register(&mgr, &case_id)?.into_iter().map(|e| (e.doc_id.clone(), e)).collect();
@@ -1697,6 +1725,7 @@ fn witness_propose(app: AppHandle, vault: State<'_, VaultState>, case_id: String
 
 #[tauri::command]
 fn witness_register_list(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<serde_json::Value, String> {
+    edition::require_feature("witness_matrix")?;
     let mgr = vault.get_or_init(&app)?;
     let jurisdiction = case_jurisdiction(&mgr, &case_id)?;
     let kinds: Vec<serde_json::Value> = witness::VOCAB
@@ -1712,6 +1741,7 @@ fn witness_register_list(app: AppHandle, vault: State<'_, VaultState>, case_id: 
 /// Counsel edits or confirms a register row (origin becomes COUNSEL_CONFIRMED).
 #[tauri::command]
 fn witness_register_save(app: AppHandle, vault: State<'_, VaultState>, case_id: String, mut entry: witness::RegisterEntry) -> Result<witness::RegisterEntry, String> {
+    edition::require_feature("witness_matrix")?;
     let mgr = vault.get_or_init(&app)?;
     if entry.witness_name.trim().is_empty() {
         return Err("CF_WITNESS_NAME_REQUIRED: enter the witness's name".into());
@@ -1729,12 +1759,14 @@ fn witness_register_save(app: AppHandle, vault: State<'_, VaultState>, case_id: 
 
 #[tauri::command]
 fn witness_register_remove(app: AppHandle, vault: State<'_, VaultState>, case_id: String, doc_id: String) -> Result<(), String> {
+    edition::require_feature("witness_matrix")?;
     vault.get_or_init(&app)?.witness_kv_delete(&case_id, &format!("register:{doc_id}")).map_err(|e| e.to_string())
 }
 
 /// Counsel merge/split. Append-only: a decision is revoked (kept in history), never deleted.
 #[tauri::command]
 fn witness_decision_add(app: AppHandle, vault: State<'_, VaultState>, case_id: String, decision: witness::Decision) -> Result<String, String> {
+    edition::require_feature("witness_matrix")?;
     let mgr = vault.get_or_init(&app)?;
     let n = mgr.witness_kv_list(&case_id, "decision:").map_err(|e| e.to_string())?.len();
     let key = format!("decision:{n:06}");
@@ -1744,6 +1776,7 @@ fn witness_decision_add(app: AppHandle, vault: State<'_, VaultState>, case_id: S
 
 #[tauri::command]
 fn witness_decision_revoke(app: AppHandle, vault: State<'_, VaultState>, case_id: String, key: String) -> Result<(), String> {
+    edition::require_feature("witness_matrix")?;
     let mgr = vault.get_or_init(&app)?;
     let (_, mut value) = mgr
         .witness_kv_list(&case_id, &key)
@@ -1760,6 +1793,7 @@ fn witness_decision_revoke(app: AppHandle, vault: State<'_, VaultState>, case_id
 /// counsel finding status and any stored (re-verified) model candidates. Deterministic.
 #[tauri::command]
 fn witness_matrix_build(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<serde_json::Value, String> {
+    edition::require_feature("witness_matrix")?;
     let mgr = vault.get_or_init(&app)?;
     let us = witness::month_first(&case_jurisdiction(&mgr, &case_id)?);
     let register = witness_register(&mgr, &case_id)?;
@@ -1813,6 +1847,7 @@ fn witness_matrix_build(app: AppHandle, vault: State<'_, VaultState>, case_id: S
 
 #[tauri::command]
 fn impeach_finding_status(app: AppHandle, vault: State<'_, VaultState>, case_id: String, finding_id: String, status: String) -> Result<(), String> {
+    edition::require_feature("impeachment_kit")?;
     if !matches!(status.as_str(), "PROPOSED" | "COUNSEL_ACCEPTED" | "COUNSEL_REJECTED") {
         return Err("CF_IMPEACH_STATUS: PROPOSED, COUNSEL_ACCEPTED or COUNSEL_REJECTED".into());
     }
@@ -1826,6 +1861,7 @@ fn impeach_finding_status(app: AppHandle, vault: State<'_, VaultState>, case_id:
 /// exactly against two different statements render; the rest are counted and discarded (AC-S4-03.3).
 #[tauri::command]
 fn impeach_model_scan(app: AppHandle, vault: State<'_, VaultState>, case_id: String, witness_id: String) -> Result<serde_json::Value, String> {
+    edition::require_feature("impeachment_kit")?;
     let mgr = vault.get_or_init(&app)?;
     edition::require_advocacy(&edition_of(&mgr)?)?; // cross-examination work is an advocacy feature
     let us = witness::month_first(&case_jurisdiction(&mgr, &case_id)?);
@@ -2278,6 +2314,22 @@ fn licence_mark_expired(
 ) -> Result<licence::LicenceStatus, String> {
     let mgr = vault.get_or_init(&app)?;
     mgr.licence_mark_expired().map_err(Into::into)
+}
+
+/// B-S4-22: how many seat transfers this licence has used and has left, and the receipt of a seat this machine gave away.
+#[tauri::command]
+fn seat_status(app: AppHandle, vault: State<'_, VaultState>) -> Result<serde_json::Value, String> {
+    let mgr = vault.get_or_init(&app)?;
+    edition_of(&mgr)?;
+    mgr.seat_status().map_err(Into::into)
+}
+
+/// B-S4-22: gives this machine's seat away and returns the signed release receipt for the issuer. Never touches the user's
+/// cases, documents or exports.
+#[tauri::command]
+fn seat_deactivate(app: AppHandle, vault: State<'_, VaultState>) -> Result<serde_json::Value, String> {
+    let mgr = vault.get_or_init(&app)?;
+    mgr.seat_deactivate().map_err(Into::into)
 }
 
 #[tauri::command]
@@ -3344,10 +3396,14 @@ fn pack_install(
     vault: State<'_, VaultState>,
     source_dir: String,
 ) -> Result<packs::PackInstallResult, String> {
-    let paths = vault
-        .get_or_init(&app)?
-        .vault_paths()
-        .map_err(|e| e.to_string())?;
+    let mgr = vault.get_or_init(&app)?;
+    let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
+    // B-S4-22: after the pack subscription ends, newer official content cannot be installed; nothing else is affected
+    let sub = edition_of(&mgr)?.pack_subscription;
+    if sub.expired() {
+        let man = packs::read_manifest(Path::new(&source_dir))?;
+        subscription::check_install(&sub, &man.pack_kind, man.delta.as_ref().is_some_and(|d| !d.is_null()), man.currency_date.as_deref(), man.updated_at.as_deref())?;
+    }
     packs::install_pack_from_dir(&paths, Path::new(&source_dir))
 }
 
@@ -3558,6 +3614,7 @@ fn retrieval_query(
     vault: State<'_, VaultState>,
     args: RetrievalQueryArgs,
 ) -> Result<retrieval::RetrievalResult, String> {
+    edition::require_feature("retrieval")?;
     let mgr = vault.get_or_init(&app)?;
     let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
     let extra: Vec<std::path::PathBuf> = args
@@ -3787,6 +3844,7 @@ fn voice_court_gate(force_tier: Option<String>) -> voice_court::VoiceGate {
 fn voice_court_turn(
     request: voice_court::VoiceTurnRequest,
 ) -> Result<voice_court::VoiceTurnResult, String> {
+    edition::require_feature("voice")?;
     voice_court::run_voice_turn(request)
 }
 
@@ -3805,6 +3863,7 @@ struct VoiceCourtScriptArgs {
 fn voice_court_run_script(
     args: VoiceCourtScriptArgs,
 ) -> Result<voice_court::ScriptedVoiceReport, String> {
+    edition::require_feature("voice")?;
     let case_id = args.case_id.unwrap_or_else(|| "voice-scripted".into());
     let graph = args
         .case_graph
@@ -3843,6 +3902,7 @@ fn voice_court_turn_for_case(
     force_tier: Option<String>,
     language: Option<String>,
 ) -> Result<serde_json::Value, String> {
+    edition::require_feature("voice")?;
     // Lite / hardware gate first
     let g = voice_court::gate(force_tier.as_deref());
     if !g.allowed {
@@ -4053,6 +4113,7 @@ fn voice_court_debrief(
     turns_json: String,
     force_tier: Option<String>,
 ) -> Result<voice_court::DebriefReport, String> {
+    edition::require_feature("voice")?;
     let turns: Vec<voice_court::VoiceTurnResult> =
         serde_json::from_str(&turns_json).map_err(|e| format!("CF_VOICE_DEBRIEF_BAD_JSON: {e}"))?;
     let g = voice_court::gate(force_tier.as_deref());
@@ -4126,6 +4187,7 @@ fn mock_court_formats() -> Vec<mock_court::CourtFormatMeta> {
 
 #[tauri::command]
 fn mock_court_turn(request: mock_court::TurnRequest) -> Result<mock_court::SessionTurn, String> {
+    edition::require_feature("mock_court")?;
     // Stage 2 path: never inject raw document text here.
     mock_court::run_turn(request)
 }
@@ -4145,6 +4207,7 @@ struct MockCourtScriptArgs {
 fn mock_court_run_script(
     args: MockCourtScriptArgs,
 ) -> Result<mock_court::ScriptedSessionReport, String> {
+    edition::require_feature("mock_court")?;
     let case_id = args.case_id.unwrap_or_else(|| "scripted".into());
     let graph = args
         .case_graph
@@ -4193,6 +4256,7 @@ fn mock_court_turn_for_case(
     vault: State<'_, VaultState>,
     request: mock_court_retrieval::GroundedTurnRequest,
 ) -> Result<mock_court_retrieval::GroundedTurnResponse, String> {
+    edition::require_feature("mock_court")?;
     let mgr = vault.get_or_init(&app)?;
     let profile = mgr
         .list_cases()
@@ -4337,6 +4401,7 @@ fn mock_court_debrief_v2_generate(
     vault: State<'_, VaultState>,
     request: debrief_v2::GenerateRequest,
 ) -> Result<debrief_v2::DebriefReportV2, String> {
+    edition::require_feature("mock_court")?;
     let mgr = vault.get_or_init(&app)?;
     let previous = mgr
         .debrief_v2_latest(&request.case_id)
@@ -4671,6 +4736,8 @@ pub fn run() {
             licence_fingerprint,
             licence_activate,
             licence_mark_expired,
+            seat_status,
+            seat_deactivate,
             air_gap_set,
             network_audit,
             protection_policy,

@@ -45,8 +45,10 @@ but this is a real result, not a pending one.
   Hindi translation (B-S4-15) and Encrypted Bundle Exchange (B-S4-16) are not built. For a court that files in Hindi, B-S4-14/15 matter.
 - **No signed rules.** Limitation, admissibility and code-succession tables are development-only; no legal editor has signed one.
   The Deadlines and Foundation Gaps screens say so. Issue-framing templates are not shipped (they need the text of Order XIV rule 1 CPC and editor sign-off).
-- **Editions and licences (B-S4-22)** are not built: the Chambers licence is recognised, but the edition map, prices, seat transfer
-  and a production licence-signing ceremony are not. Today only development keys exist; a pilot install needs a licence issued
+- **Editions and licences (B-S4-22)** — updated after the Wave C checkpoint: the mechanism is now built (an edition entitlement
+  map, a pack subscription separate from the app licence, offline seat transfer; see `docs/B-S4-22_editions.md`), but what each
+  edition includes and its price are still undecided (Q-S4-06), so the map is marked development-only, and a production
+  licence-signing ceremony has not happened. Today only development keys exist; a pilot install needs a licence issued
   with `eval/tools/make_licence.py --edition JUDICIARY`, signed by a key that must not be the development key before any real use.
 - **Real formats unknown.** The importer reads a CSV or numbered lines, and orders headed "Order dated <date>" / "Order of <date>".
   The court's real cause list and order sheet will need their patterns added (a data/regex change, then re-test).
