@@ -1,0 +1,361 @@
+{
+  "batch": "B-S4-02",
+  "acs": {},
+  "sets": [
+    {
+      "set": "G-AUDIT",
+      "readme": true,
+      "fixtures": 2,
+      "hash_ok": 2,
+      "problems": []
+    },
+    {
+      "set": "G-OPPOSING",
+      "readme": true,
+      "fixtures": 1,
+      "hash_ok": 1,
+      "problems": []
+    },
+    {
+      "set": "G-IMPEACH",
+      "readme": true,
+      "fixtures": 1,
+      "hash_ok": 1,
+      "problems": []
+    },
+    {
+      "set": "G-CODEBRIDGE",
+      "readme": true,
+      "fixtures": 1,
+      "hash_ok": 1,
+      "problems": []
+    },
+    {
+      "set": "G-ADMISS",
+      "readme": true,
+      "fixtures": 1,
+      "hash_ok": 1,
+      "problems": []
+    },
+    {
+      "set": "G-DEADLINE",
+      "readme": true,
+      "fixtures": 1,
+      "hash_ok": 1,
+      "problems": []
+    },
+    {
+      "set": "G-TREATMENT",
+      "readme": true,
+      "fixtures": 1,
+      "hash_ok": 1,
+      "problems": []
+    },
+    {
+      "set": "G-INDIC",
+      "readme": true,
+      "fixtures": 1,
+      "hash_ok": 1,
+      "problems": []
+    },
+    {
+      "set": "G-BUNDLE",
+      "readme": true,
+      "fixtures": 1,
+      "hash_ok": 1,
+      "problems": []
+    },
+    {
+      "set": "G-CHAMBERS",
+      "readme": true,
+      "fixtures": 5,
+      "hash_ok": 5,
+      "problems": []
+    },
+    {
+      "set": "G-CAUSELIST",
+      "readme": true,
+      "fixtures": 1,
+      "hash_ok": 1,
+      "problems": []
+    },
+    {
+      "set": "G-REDTEAM-S4",
+      "readme": true,
+      "fixtures": 3,
+      "hash_ok": 3,
+      "problems": []
+    }
+  ],
+  "planted_cases": [
+    {
+      "id": "fabricated_citations",
+      "prd": "\u00a77.1",
+      "applies_to": [
+        "IN",
+        "US"
+      ],
+      "fixtures": [
+        "G-AUDIT/fixtures/audit_core.json"
+      ],
+      "detected_jurisdictions": [
+        "IN",
+        "US"
+      ],
+      "status": "COVERED"
+    },
+    {
+      "id": "single_word_misquotes",
+      "prd": "\u00a77.1",
+      "applies_to": [
+        "IN",
+        "US"
+      ],
+      "fixtures": [
+        "G-AUDIT/fixtures/audit_core.json"
+      ],
+      "detected_jurisdictions": [
+        "IN",
+        "US"
+      ],
+      "status": "COVERED"
+    },
+    {
+      "id": "wrong_pinpoints",
+      "prd": "\u00a77.1",
+      "applies_to": [
+        "IN",
+        "US"
+      ],
+      "fixtures": [
+        "G-AUDIT/fixtures/audit_core.json"
+      ],
+      "detected_jurisdictions": [
+        "IN",
+        "US"
+      ],
+      "status": "COVERED"
+    },
+    {
+      "id": "opponent_record_conflicts",
+      "prd": "\u00a77.2",
+      "applies_to": [
+        "IN",
+        "US"
+      ],
+      "fixtures": [
+        "G-OPPOSING/fixtures/respondent_reply.json"
+      ],
+      "detected_jurisdictions": [
+        "IN"
+      ],
+      "status": "PARTIAL",
+      "missing_jurisdictions": [
+        "US"
+      ]
+    },
+    {
+      "id": "injection_inside_external_filings",
+      "prd": "\u00a77.2",
+      "applies_to": [
+        "IN",
+        "US"
+      ],
+      "fixtures": [
+        "G-OPPOSING/fixtures/respondent_reply.json"
+      ],
+      "detected_jurisdictions": [
+        "IN"
+      ],
+      "status": "PARTIAL",
+      "missing_jurisdictions": [
+        "US"
+      ]
+    },
+    {
+      "id": "witness_contradictions",
+      "prd": "\u00a77.3",
+      "applies_to": [
+        "IN",
+        "US"
+      ],
+      "fixtures": [
+        "G-IMPEACH/fixtures/impeach_core.json"
+      ],
+      "detected_jurisdictions": [
+        "IN",
+        "US"
+      ],
+      "status": "COVERED"
+    },
+    {
+      "id": "witness_omissions",
+      "prd": "\u00a77.3",
+      "applies_to": [
+        "IN",
+        "US"
+      ],
+      "fixtures": [
+        "G-IMPEACH/fixtures/impeach_core.json"
+      ],
+      "detected_jurisdictions": [
+        "IN",
+        "US"
+      ],
+      "status": "COVERED"
+    },
+    {
+      "id": "missing_key_dates",
+      "prd": "\u00a77.4",
+      "applies_to": [
+        "IN"
+      ],
+      "fixtures": [
+        "G-CODEBRIDGE/fixtures/code_bridge_core.json"
+      ],
+      "detected_jurisdictions": [],
+      "status": "SYNTHETIC_ONLY",
+      "missing_jurisdictions": [
+        "IN"
+      ]
+    },
+    {
+      "id": "missing_foundation_certificates",
+      "prd": "\u00a77.5",
+      "applies_to": [
+        "IN",
+        "US"
+      ],
+      "fixtures": [
+        "G-ADMISS/fixtures/foundation_core.json"
+      ],
+      "detected_jurisdictions": [],
+      "status": "SYNTHETIC_ONLY",
+      "missing_jurisdictions": [
+        "IN",
+        "US"
+      ]
+    },
+    {
+      "id": "holiday_rollovers",
+      "prd": "\u00a77.6",
+      "applies_to": [
+        "IN",
+        "US"
+      ],
+      "fixtures": [
+        "G-DEADLINE/fixtures/deadline_core.json"
+      ],
+      "detected_jurisdictions": [],
+      "status": "SYNTHETIC_ONLY",
+      "missing_jurisdictions": [
+        "IN",
+        "US"
+      ]
+    },
+    {
+      "id": "overruled_authority",
+      "prd": "\u00a77.8",
+      "applies_to": [
+        "IN",
+        "US"
+      ],
+      "fixtures": [
+        "G-TREATMENT/fixtures/treatment_core.json"
+      ],
+      "detected_jurisdictions": [
+        "IN"
+      ],
+      "status": "PARTIAL",
+      "missing_jurisdictions": [
+        "US"
+      ]
+    },
+    {
+      "id": "devanagari_scans",
+      "prd": "\u00a77.9",
+      "applies_to": [
+        "IN"
+      ],
+      "fixtures": [],
+      "detected_jurisdictions": [],
+      "status": "BLOCKED",
+      "blocked_by": [
+        "B-S4-14",
+        "B-S4-15",
+        "Q-S4-04"
+      ]
+    },
+    {
+      "id": "unanswered_argument",
+      "prd": "\u00a79.2",
+      "applies_to": [],
+      "fixtures": [
+        "G-CHAMBERS/fixtures/issue_matrix_core.json"
+      ],
+      "detected_jurisdictions": [],
+      "status": "COVERED",
+      "note": "a structural property of the record, not a rule of any jurisdiction"
+    },
+    {
+      "id": "extra_record_bait",
+      "prd": "\u00a79.1",
+      "applies_to": [],
+      "fixtures": [
+        "G-CHAMBERS/fixtures/record_only_core.json",
+        "G-REDTEAM-S4/fixtures/chambers_extra_record.json"
+      ],
+      "detected_jurisdictions": [],
+      "status": "COVERED",
+      "note": "a structural property of the record, not a rule of any jurisdiction"
+    },
+    {
+      "id": "decision_solicitation_prompts",
+      "prd": "\u00a79.5",
+      "applies_to": [],
+      "fixtures": [
+        "G-REDTEAM-S4/fixtures/chambers_decision_zone.json"
+      ],
+      "detected_jurisdictions": [],
+      "status": "COVERED",
+      "note": "a refusal rule that holds in every court"
+    }
+  ],
+  "planted_counts": {
+    "COVERED": 8,
+    "PARTIAL": 3,
+    "SYNTHETIC_ONLY": 3,
+    "BLOCKED": 1,
+    "MISSING": 0
+  },
+  "legal_answers": [
+    {
+      "fixture": "G-CODEBRIDGE/fixtures/code_bridge_core.json",
+      "ac": "AC-S4-04.1",
+      "status": "BLOCKED",
+      "jurisdictions_signed": [],
+      "reason": "no legal editor has signed (Q-S4-02)"
+    },
+    {
+      "fixture": "G-ADMISS/fixtures/foundation_core.json",
+      "ac": "AC-S4-05.1",
+      "status": "BLOCKED",
+      "jurisdictions_signed": [],
+      "reason": "no legal editor has signed (Q-S4-02)"
+    },
+    {
+      "fixture": "G-DEADLINE/fixtures/deadline_core.json",
+      "ac": "AC-S4-06.1",
+      "status": "BLOCKED",
+      "jurisdictions_signed": [],
+      "reason": "no legal editor has signed (Q-S4-02)"
+    }
+  ],
+  "fixture_status": {
+    "GOLDEN": 0,
+    "DRAFT_UNREVIEWED": 18,
+    "PLACEHOLDER": 1
+  },
+  "reading": "Every fixture is a draft written by a coding agent; none has had the independent review that locks it GOLDEN. They are sound regression tests of the software. The legal answers are BLOCKED until two named legal editors sign them per jurisdiction. Several features that apply to both India and the United States are carried only by synthetic-jurisdiction fixtures (SYNTHETIC_ONLY / PARTIAL): real-jurisdiction coverage needs editor-supplied sources. The Devanagari set is a scaffold (BLOCKED).",
+  "errors": []
+}

@@ -186,9 +186,9 @@ def main() -> int:
     # ---- legal-editor sign-off ----
     need_editors = [a["id"] for a in inv["acceptance_criteria"] if a.get("legal_editor_required")]
     signoff_path = ROOT / "eval" / "signoffs" / "legal_editors.json"
-    signed = []
-    if signoff_path.is_file():
-        signed = [e["ac"] for e in json.loads(signoff_path.read_text(encoding="utf-8")).get("signoffs", []) if len(e.get("editors", [])) >= 2]
+    # a record counts only if it names the fixture's current hash, a jurisdiction and two different APPROVED editors (docs/STAGE4_LEGAL_EDITOR_PROTOCOL.md)
+    goldens = load(ROOT / "eval" / "checks" / "goldens_b_s4_02.py")
+    signed = sorted(goldens.valid_signoffs(json.loads((ROOT / "golden" / "STAGE4_MANIFEST.json").read_text(encoding="utf-8"))))
     unsigned = [a for a in need_editors if a not in signed]
     checks.append(check("signoff", "Two legal editors' sign-off for every legal-answer criterion", "PASS" if not unsigned else "BLOCKED", "all present" if not unsigned else f"no sign-off record for {unsigned}; the rule tables, limitation windows and code-succession mappings are development-only" + ("" if signoff_path.is_file() else " (eval/signoffs/legal_editors.json does not exist)"), evidence={"required": need_editors, "present": signed}))
 

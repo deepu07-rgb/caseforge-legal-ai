@@ -38,6 +38,7 @@
     "test:s3:19": "python eval/checks/lawyer_workflow_b_s3_19.py",
     "test:s3:20": "python eval/checks/voice_b_s3_20.py",
     "test:s4:01": "python eval/checks/contracts_b_s4_01.py",
+    "test:s4:02": "python eval/checks/goldens_b_s4_02.py",
     "test:s4:12": "python eval/checks/timed_rehearsal_b_s4_12.py",
     "test:s4:16": "python eval/checks/bundle_b_s4_16.py",
     "test:s4:22": "python eval/checks/editions_b_s4_22.py",

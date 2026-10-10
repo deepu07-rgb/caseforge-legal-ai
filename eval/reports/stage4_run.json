@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-10-10T11:13:19Z",
+  "generated_at": "2026-10-10T16:08:44Z",
   "steps": [
     {
       "name": "production_build",
       "exit": 0,
-      "seconds": 8.9
+      "seconds": 9.6
     },
     {
       "name": "rust_tests",
@@ -16,12 +16,12 @@
     {
       "name": "ci_gates",
       "exit": 0,
-      "seconds": 9.0,
+      "seconds": 9.2,
       "gates": [
         {
           "gate": "contracts_b_s4_01.py",
           "exit": 0,
-          "seconds": 0.8
+          "seconds": 0.7
         },
         {
           "gate": "injection_guard_b_s4_00.py",
@@ -125,6 +125,11 @@
         },
         {
           "gate": "bundle_b_s4_16.py",
+          "exit": 0,
+          "seconds": 0.4
+        },
+        {
+          "gate": "goldens_b_s4_02.py",
           "exit": 0,
           "seconds": 0.4
         }

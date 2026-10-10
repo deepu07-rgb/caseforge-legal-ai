@@ -1,11 +1,11 @@
 {
   "batch": "B-S4-23",
   "release": "Stage 4 (v4.0) - not a release",
-  "generated_at": "2026-10-10T11:13:19Z",
+  "generated_at": "2026-10-10T16:08:44Z",
   "verdict": "NOT READY",
-  "answer_to_the_question": "No, not yet. Blocking: 3 batch(es) not built: B-S4-02, B-S4-14, B-S4-15 | 1 criterion(s) failing (AC-S4-00.7); 3 not built or unreported | 8 criterion(s) could not be measured here: AC-S4-00.4, AC-S4-01.3, AC-S4-02.2, AC-S4-03.1, AC-S4-04.1, AC-S4-05.1, AC-S4-06.1, AC-S4-10.3 | no legal-editor sign-off for AC-S4-04.1, AC-S4-05.1, AC-S4-06.1. What does hold, and is tested, is that no decision is made by the machine.",
+  "answer_to_the_question": "No, not yet. Blocking: 2 batch(es) not built: B-S4-14, B-S4-15 | 1 criterion(s) failing (AC-S4-00.7); 3 not built or unreported | 8 criterion(s) could not be measured here: AC-S4-00.4, AC-S4-01.3, AC-S4-02.2, AC-S4-03.1, AC-S4-04.1, AC-S4-05.1, AC-S4-06.1, AC-S4-10.3 | no legal-editor sign-off for AC-S4-04.1, AC-S4-05.1, AC-S4-06.1. What does hold, and is tested, is that no decision is made by the machine.",
   "reasons": [
-    "3 batch(es) not built: B-S4-02, B-S4-14, B-S4-15",
+    "2 batch(es) not built: B-S4-14, B-S4-15",
     "1 criterion(s) failing (AC-S4-00.7); 3 not built or unreported",
     "8 criterion(s) could not be measured here: AC-S4-00.4, AC-S4-01.3, AC-S4-02.2, AC-S4-03.1, AC-S4-04.1, AC-S4-05.1, AC-S4-06.1, AC-S4-10.3",
     "no legal-editor sign-off for AC-S4-04.1, AC-S4-05.1, AC-S4-06.1"
@@ -82,16 +82,16 @@
       "title": "Production build (tsc -b && vite build)",
       "status": "PASS",
       "hard": false,
-      "detail": "exit 0 in 8.9 s"
+      "detail": "exit 0 in 9.6 s"
     },
     {
       "id": "ci_gates",
       "title": "Every Stage 1-4 gate in the CI workflow",
       "status": "PASS",
       "hard": false,
-      "detail": "22 gates, all exit 0",
+      "detail": "23 gates, all exit 0",
       "evidence": {
-        "gates": 22
+        "gates": 23
       }
     },
     {
@@ -178,12 +178,13 @@
       "title": "Every Stage 4 batch built",
       "status": "BLOCKED",
       "hard": false,
-      "detail": "22 of 25 built; not built: B-S4-02 (twelve golden sets with legal-editor protocol (needs legal editors, Q-S4-02)), B-S4-14 (Devanagari triage + OCR (Wave B; needs the OCR bake-off, Q-S4-04)), B-S4-15 (Aligned offline translation + G10 (Wave B))",
+      "detail": "23 of 25 built; not built: B-S4-14 (Devanagari triage + OCR (Wave B; needs the OCR bake-off, Q-S4-04)), B-S4-15 (Aligned offline translation + G10 (Wave B))",
       "evidence": {
         "built": [
           "B-S4-00",
           "B-S4-00b",
           "B-S4-01",
+          "B-S4-02",
           "B-S4-03",
           "B-S4-04",
           "B-S4-05",
@@ -205,7 +206,6 @@
           "B-S4-23"
         ],
         "not_built": [
-          "B-S4-02",
           "B-S4-14",
           "B-S4-15"
         ]
@@ -216,7 +216,7 @@
       "title": "Two legal editors' sign-off for every legal-answer criterion",
       "status": "BLOCKED",
       "hard": false,
-      "detail": "no sign-off record for ['AC-S4-04.1', 'AC-S4-05.1', 'AC-S4-06.1']; the rule tables, limitation windows and code-succession mappings are development-only (eval/signoffs/legal_editors.json does not exist)",
+      "detail": "no sign-off record for ['AC-S4-04.1', 'AC-S4-05.1', 'AC-S4-06.1']; the rule tables, limitation windows and code-succession mappings are development-only",
       "evidence": {
         "required": [
           "AC-S4-04.1",
@@ -428,7 +428,6 @@
       "B-S4-23"
     ],
     "not_built": [
-      "B-S4-02",
       "B-S4-14",
       "B-S4-15"
     ]
@@ -487,9 +486,9 @@
   },
   "run": {
     "source": "eval/run_stage4.py",
-    "generated_at": "2026-10-10T11:13:19Z"
+    "generated_at": "2026-10-10T16:08:44Z"
   },
-  "report_sha256": "886e83b3d045d24fdc0ac8f3a2f9b1baa455b4578c3f8e7a2343f78db8d0b95e",
+  "report_sha256": "41330b06c1bc0336c8d2527eaf77b6f04f19dcd54e5621a0b5452064a4ade3de",
   "signature": {
     "status": "UNSIGNED",
     "reason": "no release signing key exists; the owner decides who signs a release (set CASEFORGE_RELEASE_KEY_PEM to sign). The report_sha256 above fixes the content."

@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.0.0-dev] — 2026-10-10 (golden sets and legal-editor protocol, B-S4-02)
+
+All twelve Stage 4 golden sets are now under one manifest with hashes and provenance (`golden/STAGE4_MANIFEST.json`); the missing `G-INDIC` set exists as a blocked scaffold; `docs/STAGE4_LEGAL_EDITOR_PROTOCOL.md` says who signs the legal answers and how a sign-off is recorded and counted. No legal editor has signed, so the code-bridge, foundation and deadline criteria stay blocked, and no fixture is locked GOLDEN. See `docs/B-S4-02_goldens.md`.
+
 ## [4.0.0-dev] — 2026-10-10 (Encrypted Bundle Exchange, B-S4-16)
 
 `.cfbundle`: a case-work bundle encrypted to a colleague's key (X25519 + AES-256-GCM), signed by the sender, with irreversible byte-level redaction, hand-off on a USB stick or once across the local network, and import with attribution that never overwrites the recipient's own corrections. New *Share with colleagues* tab in the matter. The LAN-only packet capture has not been made, so that criterion stays blocked. See `docs/B-S4-16_bundles.md`. The Stage 4 ship gate is still NOT READY.
@@ -17,7 +21,7 @@ Not a release. The Stage 4 cumulative gate now exists and says so plainly.
 - `npm run ship:stage4` (`eval/run_stage4.py`): production build, Rust tests, every CI gate, then the ship gate.
 - Full red-team suite run against the real filters: 487 attack probes across G1, G2, G3, G7, G8 (lawyer and Chambers), zero violations.
 - Report: `eval/reports/stage4_ship_gate.json` (hash-fixed, unsigned: no release key exists). Checklist: `docs/RELEASE_CHECKLIST_v4.0.md`.
-- Why NOT READY: three batches not built (B-S4-02, 14, 15), AC-S4-00.7 fails, no legal-editor sign-off, no network capture,
+- Why NOT READY: two batches not built (B-S4-14, 15), AC-S4-00.7 fails, no legal-editor sign-off, no network capture,
   controlled matters not end to end. See `docs/B-S4-23_ship_gate.md`.
 
 ### Stage 4 — editions (B-S4-22)

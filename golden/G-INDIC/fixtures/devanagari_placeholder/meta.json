@@ -1,0 +1,16 @@
+{
+  "fixture_id": "G-INDIC/devanagari_placeholder",
+  "status": "SYNTHETIC_PLACEHOLDER",
+  "reason": "golden_not_authored",
+  "blocked_by": [
+    "B-S4-14",
+    "B-S4-15",
+    "Q-S4-04"
+  ],
+  "note": "No scans exist. Required before AC-S4-09.1 to 09.3 can be measured: Devanagari pages (rights-cleared or synthetic), their transcriptions, their English translations with segment alignment, and the critical fields (dates, amounts, names, section numbers) with counsel-confirmed values.",
+  "primary_acs": [
+    "AC-S4-09.1",
+    "AC-S4-09.2",
+    "AC-S4-09.3"
+  ]
+}

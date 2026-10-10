@@ -1,6 +1,6 @@
 {
   "checkpoint": "Stage 4 Wave C",
-  "generated_at": "2026-10-10T11:13:40Z",
+  "generated_at": "2026-10-10T16:08:54Z",
   "verdict": {
     "wave_c_batches_17_to_21": "GREEN",
     "ci_gates": "GREEN",
@@ -12,17 +12,17 @@
     {
       "gate": "contracts_b_s4_01.py",
       "exit": 0,
-      "seconds": 0.6
+      "seconds": 0.7
     },
     {
       "gate": "injection_guard_b_s4_00.py",
       "exit": 0,
-      "seconds": 0.2
+      "seconds": 0.3
     },
     {
       "gate": "answer_feedback_b_s4_00b.py",
       "exit": 0,
-      "seconds": 0.3
+      "seconds": 0.4
     },
     {
       "gate": "citation_audit_b_s4_04.py",
@@ -37,27 +37,27 @@
     {
       "gate": "opposing_scan_b_s4_06.py",
       "exit": 0,
-      "seconds": 0.3
+      "seconds": 0.4
     },
     {
       "gate": "witness_matrix_b_s4_07.py",
       "exit": 0,
-      "seconds": 0.3
+      "seconds": 0.4
     },
     {
       "gate": "impeachment_b_s4_08.py",
       "exit": 0,
-      "seconds": 0.3
+      "seconds": 0.4
     },
     {
       "gate": "rule_tables_b_s4_03.py",
       "exit": 0,
-      "seconds": 0.1
+      "seconds": 0.2
     },
     {
       "gate": "code_bridge_b_s4_09.py",
       "exit": 0,
-      "seconds": 0.3
+      "seconds": 0.4
     },
     {
       "gate": "reasoning_b_s4_28.py",
@@ -82,7 +82,7 @@
     {
       "gate": "treatment_b_s4_13.py",
       "exit": 0,
-      "seconds": 1.0
+      "seconds": 1.2
     },
     {
       "gate": "chambers_record_only_b_s4_17.py",
@@ -116,6 +116,11 @@
     },
     {
       "gate": "bundle_b_s4_16.py",
+      "exit": 0,
+      "seconds": 0.4
+    },
+    {
+      "gate": "goldens_b_s4_02.py",
       "exit": 0,
       "seconds": 0.4
     }
@@ -1057,7 +1062,6 @@
     }
   ],
   "not_built": {
-    "B-S4-02": "twelve golden sets with legal-editor protocol (needs legal editors, Q-S4-02)",
     "B-S4-14": "Devanagari triage + OCR (Wave B; needs the OCR bake-off, Q-S4-04)",
     "B-S4-15": "Aligned offline translation + G10 (Wave B)"
   },

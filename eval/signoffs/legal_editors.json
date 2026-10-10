@@ -1,0 +1,6 @@
+{
+  "schema_version": "1.0.0",
+  "status": "NO_SIGNOFFS",
+  "note": "No legal editor has been named (Q-S4-02), so there is no sign-off. See docs/STAGE4_LEGAL_EDITOR_PROTOCOL.md for what a record must contain; a record counts only if it names the current hash of a fixture the manifest says needs it, two different editors with decision APPROVED, and a jurisdiction.",
+  "signoffs": []
+}

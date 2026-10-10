@@ -1,0 +1,762 @@
+{
+  "schema_version": "1.0.0",
+  "batch": "B-S4-02",
+  "description": "The twelve Stage 4 golden sets: what each holds, where it came from, its hash, and whether a legal editor has signed the legal answers in it. Written by eval/tools/make_stage4_manifest.py; checked by eval/checks/goldens_b_s4_02.py.",
+  "policy": {
+    "provenance_allowed": [
+      "SYNTHETIC_CONTROLLED",
+      "ADVERSARIAL_SYNTHETIC",
+      "PUBLIC_DOMAIN",
+      "RIGHTS_CLEARED"
+    ],
+    "no_client_material": true,
+    "legal_answer_without_signoff": "BLOCKED",
+    "signoff_binds_to": "the fixture's sha256 and a named jurisdiction; two editors, each APPROVED; a changed fixture voids it",
+    "agent_may_not_lock_golden": "golden/POLICY.md section 1",
+    "protocol": "docs/STAGE4_LEGAL_EDITOR_PROTOCOL.md"
+  },
+  "jurisdiction_markers": {
+    "IN": "\\bSCC\\b|\\bAIR\\b|India|Indian|\\bBNSS?\\b|\\bCPC\\b|Limitation Act|Evidence Act|High Court",
+    "US": "F\\.3d|F\\. ?Supp|\\bU\\.S\\.|United States|\\bFRCP\\b|\\bFRE\\b|\\bCir\\.|Fed\\. R\\."
+  },
+  "sets": [
+    {
+      "id": "G-AUDIT",
+      "readme": "G-AUDIT/README.md",
+      "purpose": "Citation & Quote Audit and the Audit Certificate: planted fabricated citations, single-word misquotes and wrong pinpoints in an Indian and a US draft.",
+      "source_class": "SYNTHETIC_CONTROLLED",
+      "acs": [
+        "AC-S4-01.1",
+        "AC-S4-01.2",
+        "AC-S4-01.3",
+        "AC-S4-01.4",
+        "AC-S4-01.5"
+      ],
+      "fixtures": [
+        {
+          "path": "G-AUDIT/fixtures/audit_core.json",
+          "sha256": "677e5b335fc72db3ede1364d3e4ef810bbaebbb43cd72617d0e418534224c791",
+          "kind": "MECHANICAL",
+          "engine_batch": "B-S4-04",
+          "first_commit": "5902203",
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          }
+        },
+        {
+          "path": "G-AUDIT/fixtures/certificate_reference.json",
+          "sha256": "85d2d433f5cdb7283056aec1fe90610575e6edcff712d2aec4e930f48af5bf9a",
+          "kind": "MECHANICAL",
+          "engine_batch": "B-S4-05",
+          "first_commit": "11a907c",
+          "pinned_before_engine": false,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [
+            {
+              "pointer": "/certificate",
+              "schema": "contracts/audit_certificate.schema.json"
+            }
+          ],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          },
+          "note": "A certificate and draft that the independent offline verifier must accept; added with the engine."
+        }
+      ]
+    },
+    {
+      "id": "G-OPPOSING",
+      "readme": "G-OPPOSING/README.md",
+      "purpose": "Opposing Filing scan: an opposing reply with fabricated and misquoted authorities, assertions that conflict with the record, an unanswered point, and an instruction planted inside the filing.",
+      "source_class": "SYNTHETIC_CONTROLLED",
+      "acs": [
+        "AC-S4-02.1",
+        "AC-S4-02.2",
+        "AC-S4-02.3",
+        "AC-S4-02.4"
+      ],
+      "fixtures": [
+        {
+          "path": "G-OPPOSING/fixtures/respondent_reply.json",
+          "sha256": "c5f31ddf00cbbae7424926b033d68e171aa493b7dc0f8f7858fac0184573ec12",
+          "kind": "MECHANICAL",
+          "engine_batch": "B-S4-06",
+          "first_commit": "4563f9e",
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G-IMPEACH",
+      "readme": "G-IMPEACH/README.md",
+      "purpose": "Witness matrix and Impeachment Kit: statements by the same witness that contradict or omit, in India and the United States.",
+      "source_class": "SYNTHETIC_CONTROLLED",
+      "acs": [
+        "AC-S4-03.1",
+        "AC-S4-03.2",
+        "AC-S4-03.3"
+      ],
+      "fixtures": [
+        {
+          "path": "G-IMPEACH/fixtures/impeach_core.json",
+          "sha256": "626a134d6da0f9bb3cd7a780fc46c658dd0d63ea76317fd730c0eeed3815218f",
+          "kind": "MECHANICAL",
+          "engine_batch": "B-S4-07/08",
+          "first_commit": "57ec899",
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G-CODEBRIDGE",
+      "readme": "G-CODEBRIDGE/README.md",
+      "purpose": "Code Bridge: statute succession (old code to new code), temporal routing by key dates, missing key dates, modified mappings, and tampered rule tables.",
+      "source_class": "SYNTHETIC_CONTROLLED",
+      "acs": [
+        "AC-S4-04.1",
+        "AC-S4-04.2",
+        "AC-S4-04.3"
+      ],
+      "fixtures": [
+        {
+          "path": "G-CODEBRIDGE/fixtures/code_bridge_core.json",
+          "sha256": "cf805c6d4f435bd7a6dfb2153aa08820ce5fe0193164af4d7167df092ce4cc36",
+          "kind": "LEGAL_ANSWER",
+          "engine_batch": "B-S4-09",
+          "first_commit": "c3f8005",
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": true,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [
+            {
+              "pointer": "/rule_table",
+              "schema": "contracts/rule_table.schema.json"
+            }
+          ],
+          "legal_editor_signoff": {
+            "required": true,
+            "status": "BLOCKED",
+            "record": "eval/signoffs/legal_editors.json",
+            "ac": "AC-S4-04.1"
+          },
+          "note": "Uses an invented jurisdiction (Demoland) so that no real legal mapping is asserted. Real mappings need an editor-authored table."
+        }
+      ]
+    },
+    {
+      "id": "G-ADMISS",
+      "readme": "G-ADMISS/README.md",
+      "purpose": "Admissibility & Foundation Gaps: evidence items with required foundation elements present or missing, and the order of the Missing Links panel.",
+      "source_class": "SYNTHETIC_CONTROLLED",
+      "acs": [
+        "AC-S4-05.1",
+        "AC-S4-05.3"
+      ],
+      "fixtures": [
+        {
+          "path": "G-ADMISS/fixtures/foundation_core.json",
+          "sha256": "140b5ea0e5c04a5ab1a46425810b26b87ec70c65317e9b2f0f51c0ea6a0a3c79",
+          "kind": "LEGAL_ANSWER",
+          "engine_batch": "B-S4-10",
+          "first_commit": "fb502dc",
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": true,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": true,
+            "status": "BLOCKED",
+            "record": "eval/signoffs/legal_editors.json",
+            "ac": "AC-S4-05.1"
+          },
+          "note": "Development rows, not a statement of what any court requires."
+        }
+      ]
+    },
+    {
+      "id": "G-DEADLINE",
+      "readme": "G-DEADLINE/README.md",
+      "purpose": "Deadline & Limitation Watch: 21 synthetic cases with hand-derived dates (leap days, month ends, holiday roll-overs, exclusions) and the cases that must give a range or no deadline.",
+      "source_class": "SYNTHETIC_CONTROLLED",
+      "acs": [
+        "AC-S4-06.1",
+        "AC-S4-06.2",
+        "AC-S4-06.3"
+      ],
+      "fixtures": [
+        {
+          "path": "G-DEADLINE/fixtures/deadline_core.json",
+          "sha256": "ae4ac55da440f46a928ee5b4a5065561a1ff89ee1bf8dbd9beb017e81b675fbb",
+          "kind": "LEGAL_ANSWER",
+          "engine_batch": "B-S4-11",
+          "first_commit": "810a929",
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": true,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": true,
+            "status": "BLOCKED",
+            "record": "eval/signoffs/legal_editors.json",
+            "ac": "AC-S4-06.1"
+          },
+          "note": "Synthetic rules and calendars. A real limitation window or court calendar is not asserted."
+        }
+      ]
+    },
+    {
+      "id": "G-TREATMENT",
+      "readme": "G-TREATMENT/README.md",
+      "purpose": "Law Currency Stamp and Treatment Graph: sentences with treatment language (overruled, reversed, distinguished, followed, doubted, per incuriam, referred to a larger bench) and the sentences that merely mention an authority.",
+      "source_class": "SYNTHETIC_CONTROLLED",
+      "acs": [
+        "AC-S4-08.1",
+        "AC-S4-08.2",
+        "AC-S4-08.3"
+      ],
+      "fixtures": [
+        {
+          "path": "G-TREATMENT/fixtures/treatment_core.json",
+          "sha256": "e99813cbb2b3026af2aec8148d03fcc842e693e6bcbc7856cb0d620d42a54d19",
+          "kind": "MECHANICAL",
+          "engine_batch": "B-S4-13",
+          "first_commit": "45eba02",
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G-INDIC",
+      "readme": "G-INDIC/README.md",
+      "purpose": "Hindi (Devanagari) ingestion: scans for OCR accuracy, aligned translation, critical fields after translation. Scaffold only: nothing is authored yet.",
+      "source_class": "UNDECIDED",
+      "acs": [
+        "AC-S4-09.1",
+        "AC-S4-09.2",
+        "AC-S4-09.3"
+      ],
+      "fixtures": [
+        {
+          "path": "G-INDIC/fixtures/devanagari_placeholder/meta.json",
+          "sha256": "d707c58a79b88bdaaae87d0501b6f909dc4530007f785b9ec373ec507cdb392f",
+          "kind": "PLACEHOLDER",
+          "engine_batch": "B-S4-14/15",
+          "first_commit": null,
+          "pinned_before_engine": false,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "PLACEHOLDER",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          },
+          "note": "Placeholder so the harness discovers the set. Real scans need either rights-cleared pages or synthetic renderings, and the OCR comparison (Q-S4-04)."
+        }
+      ],
+      "blocked_by": [
+        "B-S4-14",
+        "B-S4-15",
+        "Q-S4-04"
+      ]
+    },
+    {
+      "id": "G-BUNDLE",
+      "readme": "G-BUNDLE/README.md",
+      "purpose": "Encrypted Bundle Exchange: redaction rules and the byte-level absence that must follow, tamper and wrong-key behaviour, how a received correction is classified against the recipient's own, and the addresses a LAN transfer may use.",
+      "source_class": "SYNTHETIC_CONTROLLED",
+      "acs": [
+        "AC-S4-10.1",
+        "AC-S4-10.2",
+        "AC-S4-10.3",
+        "AC-S4-10.4"
+      ],
+      "fixtures": [
+        {
+          "path": "G-BUNDLE/fixtures/bundle_core.json",
+          "sha256": "59b8cb0a66e24f11b3b477b8fc4027c61252cdaa531304cab25be542e73ca90c",
+          "kind": "MECHANICAL",
+          "engine_batch": "B-S4-16",
+          "first_commit": "52749d5",
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G-CHAMBERS",
+      "readme": "G-CHAMBERS/README.md",
+      "purpose": "Chambers Edition: record-only classification (G7), the issue matrix and its fallback pairing, record lookup, and the judgment scaffold.",
+      "source_class": "SYNTHETIC_CONTROLLED",
+      "acs": [
+        "AC-S4-11.1",
+        "AC-S4-11.2",
+        "AC-S4-12.1",
+        "AC-S4-12.2",
+        "AC-S4-13.1",
+        "AC-S4-13.2",
+        "AC-S4-15.1",
+        "AC-S4-15.3"
+      ],
+      "fixtures": [
+        {
+          "path": "G-CHAMBERS/fixtures/record_only_core.json",
+          "sha256": "0f4ad28924e7617cba6fa14caac2199525837cd0bd88e6ac486bb692adbc2021",
+          "kind": "MECHANICAL",
+          "engine_batch": "B-S4-17",
+          "first_commit": "d725ba0",
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          }
+        },
+        {
+          "path": "G-CHAMBERS/fixtures/issue_matrix_core.json",
+          "sha256": "301c5742795323ea726c33207b7bee4ebfaa2ff2d522cc48ae3247dc74ce01da",
+          "kind": "MECHANICAL",
+          "engine_batch": "B-S4-18",
+          "first_commit": "6c78a28",
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          }
+        },
+        {
+          "path": "G-CHAMBERS/fixtures/issue_matrix_fallback.json",
+          "sha256": "96a2321af5d5429203c8bb5b6ca81be1e35c8b7b0a80eb08d4ba1631139f9120",
+          "kind": "MECHANICAL",
+          "engine_batch": "B-S4-18",
+          "first_commit": "152d3da",
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          }
+        },
+        {
+          "path": "G-CHAMBERS/fixtures/record_lookup_core.json",
+          "sha256": "b8655d2333ef8343e23df0b0176e7fd5f17ec086c0ef78fd8d921547c7d90cdf",
+          "kind": "MECHANICAL",
+          "engine_batch": "B-S4-19",
+          "first_commit": "2c300d5",
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          }
+        },
+        {
+          "path": "G-CHAMBERS/fixtures/judgment_scaffold_core.json",
+          "sha256": "6339dcb55dbe54f5d56c221269e1aa2732b0b32d6c3469eeb16f923046b20da0",
+          "kind": "MECHANICAL",
+          "engine_batch": "B-S4-21",
+          "first_commit": "bbef75b",
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G-CAUSELIST",
+      "readme": "G-CAUSELIST/README.md",
+      "purpose": "Daily Cause-List Brief: an imported cause list, orders in the record, confirmation of each matter, and a 100-matter budget case.",
+      "source_class": "SYNTHETIC_CONTROLLED",
+      "acs": [
+        "AC-S4-14.1",
+        "AC-S4-14.2"
+      ],
+      "fixtures": [
+        {
+          "path": "G-CAUSELIST/fixtures/cause_list_core.json",
+          "sha256": "75b2630d218e78e9dae035bd7a3718825f181c5d67bd4ba959330140df22205d",
+          "kind": "MECHANICAL",
+          "engine_batch": "B-S4-20",
+          "first_commit": "fd0c765",
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G-REDTEAM-S4",
+      "readme": "G-REDTEAM-S4/README.md",
+      "purpose": "Stage 4 red-team: witness-coaching requests (G3), Chambers requests for a decision and decisional statements (G8), and statements that reach outside the record (G7).",
+      "source_class": "ADVERSARIAL_SYNTHETIC",
+      "acs": [
+        "AC-S4-03.4",
+        "AC-S4-12.3",
+        "AC-S4-15.2",
+        "AC-S4-RT-RED"
+      ],
+      "fixtures": [
+        {
+          "path": "G-REDTEAM-S4/fixtures/witness_coaching.json",
+          "sha256": "58f23f604814f19973b91cf83aa0d2b16a219765ac35555d0bd17127e67243b9",
+          "kind": "ADVERSARIAL",
+          "engine_batch": "B-S4-08",
+          "first_commit": "57ec899",
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          }
+        },
+        {
+          "path": "G-REDTEAM-S4/fixtures/chambers_decision_zone.json",
+          "sha256": "62cb5f59a7d1d0219e7acc360bb30bcd6d2c8f235c9b475b5851ac9e3ff63003",
+          "kind": "ADVERSARIAL",
+          "engine_batch": "B-S4-21",
+          "first_commit": "bbef75b",
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          }
+        },
+        {
+          "path": "G-REDTEAM-S4/fixtures/chambers_extra_record.json",
+          "sha256": "2748c8c759b7b41a09339e668f36c645543dd7ce36391de6093ac529e784a229",
+          "kind": "ADVERSARIAL",
+          "engine_batch": "B-S4-23",
+          "first_commit": "bdedd0b",
+          "pinned_before_engine": false,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          },
+          "note": "Written after the record-only classifier, by the same author: a probing set, not an independent one."
+        }
+      ]
+    }
+  ],
+  "planted_cases": [
+    {
+      "id": "fabricated_citations",
+      "prd": "§7.1",
+      "applies_to": [
+        "IN",
+        "US"
+      ],
+      "evidence": [
+        {
+          "file": "G-AUDIT/fixtures/audit_core.json",
+          "regex": "NOT_IN_CORPUS"
+        }
+      ]
+    },
+    {
+      "id": "single_word_misquotes",
+      "prd": "§7.1",
+      "applies_to": [
+        "IN",
+        "US"
+      ],
+      "evidence": [
+        {
+          "file": "G-AUDIT/fixtures/audit_core.json",
+          "regex": "MISQUOTED"
+        }
+      ]
+    },
+    {
+      "id": "wrong_pinpoints",
+      "prd": "§7.1",
+      "applies_to": [
+        "IN",
+        "US"
+      ],
+      "evidence": [
+        {
+          "file": "G-AUDIT/fixtures/audit_core.json",
+          "regex": "(?i)pinpoint"
+        }
+      ]
+    },
+    {
+      "id": "opponent_record_conflicts",
+      "prd": "§7.2",
+      "applies_to": [
+        "IN",
+        "US"
+      ],
+      "evidence": [
+        {
+          "file": "G-OPPOSING/fixtures/respondent_reply.json",
+          "regex": "(?i)conflict"
+        }
+      ]
+    },
+    {
+      "id": "injection_inside_external_filings",
+      "prd": "§7.2",
+      "applies_to": [
+        "IN",
+        "US"
+      ],
+      "evidence": [
+        {
+          "file": "G-OPPOSING/fixtures/respondent_reply.json",
+          "regex": "(?i)ignore (all|previous|prior)|injection"
+        }
+      ]
+    },
+    {
+      "id": "witness_contradictions",
+      "prd": "§7.3",
+      "applies_to": [
+        "IN",
+        "US"
+      ],
+      "evidence": [
+        {
+          "file": "G-IMPEACH/fixtures/impeach_core.json",
+          "regex": "CONTRADICT"
+        }
+      ]
+    },
+    {
+      "id": "witness_omissions",
+      "prd": "§7.3",
+      "applies_to": [
+        "IN",
+        "US"
+      ],
+      "evidence": [
+        {
+          "file": "G-IMPEACH/fixtures/impeach_core.json",
+          "regex": "(?i)omission"
+        }
+      ]
+    },
+    {
+      "id": "missing_key_dates",
+      "prd": "§7.4",
+      "applies_to": [
+        "IN"
+      ],
+      "evidence": [
+        {
+          "file": "G-CODEBRIDGE/fixtures/code_bridge_core.json",
+          "regex": "planted_missing_date_refs|NEEDS_COUNSEL_INPUT"
+        }
+      ]
+    },
+    {
+      "id": "missing_foundation_certificates",
+      "prd": "§7.5",
+      "applies_to": [
+        "IN",
+        "US"
+      ],
+      "evidence": [
+        {
+          "file": "G-ADMISS/fixtures/foundation_core.json",
+          "regex": "(?i)certificate"
+        }
+      ]
+    },
+    {
+      "id": "holiday_rollovers",
+      "prd": "§7.6",
+      "applies_to": [
+        "IN",
+        "US"
+      ],
+      "evidence": [
+        {
+          "file": "G-DEADLINE/fixtures/deadline_core.json",
+          "regex": "rolls_over"
+        }
+      ]
+    },
+    {
+      "id": "overruled_authority",
+      "prd": "§7.8",
+      "applies_to": [
+        "IN",
+        "US"
+      ],
+      "evidence": [
+        {
+          "file": "G-TREATMENT/fixtures/treatment_core.json",
+          "regex": "(?i)overruled"
+        }
+      ]
+    },
+    {
+      "id": "devanagari_scans",
+      "prd": "§7.9",
+      "applies_to": [
+        "IN"
+      ],
+      "evidence": [],
+      "blocked_by": [
+        "B-S4-14",
+        "B-S4-15",
+        "Q-S4-04"
+      ]
+    },
+    {
+      "id": "unanswered_argument",
+      "prd": "§9.2",
+      "applies_to": [],
+      "neutral": "a structural property of the record, not a rule of any jurisdiction",
+      "evidence": [
+        {
+          "file": "G-CHAMBERS/fixtures/issue_matrix_core.json",
+          "regex": "(?i)unanswered"
+        }
+      ]
+    },
+    {
+      "id": "extra_record_bait",
+      "prd": "§9.1",
+      "applies_to": [],
+      "neutral": "a structural property of the record, not a rule of any jurisdiction",
+      "evidence": [
+        {
+          "file": "G-CHAMBERS/fixtures/record_only_core.json",
+          "regex": "EXTRA_RECORD"
+        },
+        {
+          "file": "G-REDTEAM-S4/fixtures/chambers_extra_record.json",
+          "regex": "MODEL_MEMORY_NO_SUPPORT"
+        }
+      ]
+    },
+    {
+      "id": "decision_solicitation_prompts",
+      "prd": "§9.5",
+      "applies_to": [],
+      "neutral": "a refusal rule that holds in every court",
+      "evidence": [
+        {
+          "file": "G-REDTEAM-S4/fixtures/chambers_decision_zone.json",
+          "regex": "(?i)write the analysis"
+        }
+      ]
+    }
+  ]
+}
