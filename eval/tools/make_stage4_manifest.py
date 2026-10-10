@@ -19,8 +19,14 @@ ROOT = Path(__file__).resolve().parents[2]
 GOLDEN = ROOT / "golden"
 MANIFEST = GOLDEN / "STAGE4_MANIFEST.json"
 
-IN_MARKERS = r"\bSCC\b|\bAIR\b|India|Indian|\bBNSS?\b|\bCPC\b|Limitation Act|Evidence Act|High Court"
+IN_MARKERS = r"\bSCC\b|\bAIR\b|India|Indian|\bBNSS?\b|\bCPC\b|Limitation Act|Evidence Act|High Court|भारतीय|न्यायालय|दंड संहिता"
 US_MARKERS = r"F\.3d|F\. ?Supp|\bU\.S\.|United States|\bFRCP\b|\bFRE\b|\bCir\.|Fed\. R\."
+
+INDIC_PAGES = ["hi_fir_clean_01", "hi_order_clean_02", "hi_statement_clean_03", "hi_notice_clean_04", "hi_fir_degraded_05", "hi_order_degraded_06", "mixed_order_07", "latin_control_08"]
+INDIC_FIXTURES = []
+for _p in INDIC_PAGES:
+    INDIC_FIXTURES.append({"file": f"{_p}/page.png", "kind": "IMAGE", "engine_batch": "B-S4-14", "pinned_before_engine": True, "schema_checks": [], "note": "A page rendered with Windows text shaping from the text in truth.json (eval/tools/make_indic_golden.py); not a real scan."})
+    INDIC_FIXTURES.append({"file": f"{_p}/truth.json", "kind": "MECHANICAL", "engine_batch": "B-S4-14", "pinned_before_engine": True, "schema_checks": []})
 
 # set id -> curated record
 SETS: dict[str, dict] = {
@@ -70,11 +76,10 @@ SETS: dict[str, dict] = {
         "fixtures": [{"file": "treatment_core.json", "kind": "MECHANICAL", "engine_batch": "B-S4-13", "pinned_before_engine": True, "schema_checks": []}],
     },
     "G-INDIC": {
-        "purpose": "Hindi (Devanagari) ingestion: scans for OCR accuracy, aligned translation, critical fields after translation. Scaffold only: nothing is authored yet.",
-        "source_class": "UNDECIDED",
+        "purpose": "Hindi (Devanagari) ingestion: eight synthetic pages (FIR, order, statement, notice, two degraded copies, a mixed Hindi/English page and an English control) with exact ground truth, for OCR accuracy, script detection and critical-field checks. Translation fixtures (AC-S4-09.2, 09.3) are added with B-S4-15.",
+        "source_class": "SYNTHETIC_CONTROLLED",
         "acs": ["AC-S4-09.1", "AC-S4-09.2", "AC-S4-09.3"],
-        "fixtures": [{"file": "devanagari_placeholder/meta.json", "kind": "PLACEHOLDER", "engine_batch": "B-S4-14/15", "pinned_before_engine": False, "schema_checks": [], "note": "Placeholder so the harness discovers the set. Real scans need either rights-cleared pages or synthetic renderings, and the OCR comparison (Q-S4-04)."}],
-        "blocked_by": ["B-S4-14", "B-S4-15", "Q-S4-04"],
+        "fixtures": INDIC_FIXTURES,
     },
     "G-BUNDLE": {
         "purpose": "Encrypted Bundle Exchange: redaction rules and the byte-level absence that must follow, tamper and wrong-key behaviour, how a received correction is classified against the recipient's own, and the addresses a LAN transfer may use.",
@@ -125,7 +130,7 @@ PLANTED: list[dict] = [
     {"id": "missing_foundation_certificates", "prd": "§7.5", "applies_to": ["IN", "US"], "evidence": [{"file": "G-ADMISS/fixtures/foundation_core.json", "regex": "(?i)certificate"}]},
     {"id": "holiday_rollovers", "prd": "§7.6", "applies_to": ["IN", "US"], "evidence": [{"file": "G-DEADLINE/fixtures/deadline_core.json", "regex": "rolls_over"}]},
     {"id": "overruled_authority", "prd": "§7.8", "applies_to": ["IN", "US"], "evidence": [{"file": "G-TREATMENT/fixtures/treatment_core.json", "regex": "(?i)overruled"}]},
-    {"id": "devanagari_scans", "prd": "§7.9", "applies_to": ["IN"], "evidence": [], "blocked_by": ["B-S4-14", "B-S4-15", "Q-S4-04"]},
+    {"id": "devanagari_scans", "prd": "§7.9", "applies_to": ["IN"], "evidence": [{"file": "G-INDIC/fixtures/hi_fir_clean_01/truth.json", "regex": "प्रथम सूचना रिपोर्ट"}, {"file": "G-INDIC/fixtures/hi_fir_degraded_05/truth.json", "regex": "प्रथम सूचना रिपोर्ट"}]},
     {"id": "unanswered_argument", "prd": "§9.2", "applies_to": [], "neutral": "a structural property of the record, not a rule of any jurisdiction", "evidence": [{"file": "G-CHAMBERS/fixtures/issue_matrix_core.json", "regex": "(?i)unanswered"}]},
     {"id": "extra_record_bait", "prd": "§9.1", "applies_to": [], "neutral": "a structural property of the record, not a rule of any jurisdiction", "evidence": [{"file": "G-CHAMBERS/fixtures/record_only_core.json", "regex": "EXTRA_RECORD"}, {"file": "G-REDTEAM-S4/fixtures/chambers_extra_record.json", "regex": "MODEL_MEMORY_NO_SUPPORT"}]},
     {"id": "decision_solicitation_prompts", "prd": "§9.5", "applies_to": [], "neutral": "a refusal rule that holds in every court", "evidence": [{"file": "G-REDTEAM-S4/fixtures/chambers_decision_zone.json", "regex": "(?i)write the analysis"}]},
@@ -223,24 +228,13 @@ def readme(sid: str, s: dict, m: dict) -> str:
     if any(f["kind"] == "LEGAL_ANSWER" for f in entry["fixtures"]):
         legal = "\n## Legal answers need a legal editor\n\nThe answers in this set (mappings, foundation rows, dates) are legal answers. The PRD requires a named legal editor's sign-off per jurisdiction; until it exists in `eval/signoffs/legal_editors.json` the criteria that rest on this set are `BLOCKED`, never `PASS`. The fixture uses invented or development-only rules so that it asserts no real law.\n\n"
     if sid == "G-INDIC":
-        legal = "\n## Blocked\n\nNothing here is authored. Hindi scans need rights-cleared pages or synthetic renderings, a decision on how OCR is compared (Q-S4-04), and the OCR and translation batches (B-S4-14, B-S4-15). Until then the harness reports this set as BLOCKED with the reason `golden_not_authored`.\n\n"
+        legal = "\n## Limits\n\nThe pages are **rendered**, not scanned: the text was written for the test and drawn with Windows text shaping, so the transcription is exact by construction and needs no human labelling. A rendered page is cleaner and more regular than a photographed FIR, and one typeface family is used, so an error rate measured here is a floor, not what a court's scans will give. Real pages (rights-cleared) and a second labeller are still needed before this set can be locked GOLDEN. Translation fixtures arrive with B-S4-15.\n\n"
     prov = "synthetic and written for the test" if s["source_class"] != "UNDECIDED" else "(none yet)"
-    return README.format(sid=sid, purpose=s["purpose"], source_class=s["source_class"], acs=", ".join(s["acs"]), status="BLOCKED (scaffold)" if sid == "G-INDIC" else "draft, unreviewed", prov=prov, fixtures=fx, legal=legal)
+    return README.format(sid=sid, purpose=s["purpose"], source_class=s["source_class"], acs=", ".join(s["acs"]), status="draft, unreviewed", prov=prov, fixtures=fx, legal=legal)
 
 
 def main() -> int:
     check = "--check" in sys.argv
-    ph = GOLDEN / "G-INDIC" / "fixtures" / "devanagari_placeholder"
-    if not check:
-        ph.mkdir(parents=True, exist_ok=True)
-        (ph / "meta.json").write_text(json.dumps({
-            "fixture_id": "G-INDIC/devanagari_placeholder",
-            "status": "SYNTHETIC_PLACEHOLDER",
-            "reason": "golden_not_authored",
-            "blocked_by": ["B-S4-14", "B-S4-15", "Q-S4-04"],
-            "note": "No scans exist. Required before AC-S4-09.1 to 09.3 can be measured: Devanagari pages (rights-cleared or synthetic), their transcriptions, their English translations with segment alignment, and the critical fields (dates, amounts, names, section numbers) with counsel-confirmed values.",
-            "primary_acs": ["AC-S4-09.1", "AC-S4-09.2", "AC-S4-09.3"],
-        }, indent=2) + "\n", encoding="utf-8")
     m = build()
     if check:
         return 0 if json.loads(MANIFEST.read_text(encoding="utf-8")) == m else 1

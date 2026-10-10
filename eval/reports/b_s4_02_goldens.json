@@ -54,8 +54,8 @@
     {
       "set": "G-INDIC",
       "readme": true,
-      "fixtures": 1,
-      "hash_ok": 1,
+      "fixtures": 16,
+      "hash_ok": 16,
       "problems": []
     },
     {
@@ -277,14 +277,14 @@
       "applies_to": [
         "IN"
       ],
-      "fixtures": [],
-      "detected_jurisdictions": [],
-      "status": "BLOCKED",
-      "blocked_by": [
-        "B-S4-14",
-        "B-S4-15",
-        "Q-S4-04"
-      ]
+      "fixtures": [
+        "G-INDIC/fixtures/hi_fir_clean_01/truth.json",
+        "G-INDIC/fixtures/hi_fir_degraded_05/truth.json"
+      ],
+      "detected_jurisdictions": [
+        "IN"
+      ],
+      "status": "COVERED"
     },
     {
       "id": "unanswered_argument",
@@ -322,10 +322,10 @@
     }
   ],
   "planted_counts": {
-    "COVERED": 8,
+    "COVERED": 9,
     "PARTIAL": 3,
     "SYNTHETIC_ONLY": 3,
-    "BLOCKED": 1,
+    "BLOCKED": 0,
     "MISSING": 0
   },
   "legal_answers": [
@@ -353,8 +353,8 @@
   ],
   "fixture_status": {
     "GOLDEN": 0,
-    "DRAFT_UNREVIEWED": 18,
-    "PLACEHOLDER": 1
+    "DRAFT_UNREVIEWED": 34,
+    "PLACEHOLDER": 0
   },
   "reading": "Every fixture is a draft written by a coding agent; none has had the independent review that locks it GOLDEN. They are sound regression tests of the software. The legal answers are BLOCKED until two named legal editors sign them per jurisdiction. Several features that apply to both India and the United States are carried only by synthetic-jurisdiction fixtures (SYNTHETIC_ONLY / PARTIAL): real-jurisdiction coverage needs editor-supplied sources. The Devanagari set is a scaffold (BLOCKED).",
   "errors": []

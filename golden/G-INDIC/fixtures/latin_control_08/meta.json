@@ -1,0 +1,15 @@
+{
+  "fixture_id": "G-INDIC/latin_control_08",
+  "status": "DRAFT",
+  "source_class": "SYNTHETIC_CONTROLLED",
+  "authored_by": "coding agent, at the owner's instruction",
+  "independent_review": null,
+  "description": "A synthetic Hindi page: text written for the test and rendered with Windows text shaping; the transcription is the rendered text.",
+  "font": "Nirmala UI 36px at 200 dpi",
+  "degradation": null,
+  "primary_acs": [
+    "AC-S4-09.1"
+  ],
+  "limits": "Rendered text is cleaner than a photographed scan; one typeface family. An error rate here is a floor, not what real scans will give.",
+  "page_sha256": "eaab3f57006a44683cb7997579d1cb4b26428f92010e6be7f5cb89ad3492978f"
+}

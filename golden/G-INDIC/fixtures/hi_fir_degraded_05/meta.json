@@ -1,0 +1,22 @@
+{
+  "fixture_id": "G-INDIC/hi_fir_degraded_05",
+  "status": "DRAFT",
+  "source_class": "SYNTHETIC_CONTROLLED",
+  "authored_by": "coding agent, at the owner's instruction",
+  "independent_review": null,
+  "description": "A synthetic Hindi page: text written for the test and rendered with Windows text shaping; the transcription is the rendered text.",
+  "font": "Nirmala UI 38px at 200 dpi",
+  "degradation": {
+    "rotate": 1.2,
+    "blur": 1.0,
+    "noise": 18,
+    "contrast": 0.75,
+    "jpeg": null,
+    "seed": 5
+  },
+  "primary_acs": [
+    "AC-S4-09.1"
+  ],
+  "limits": "Rendered text is cleaner than a photographed scan; one typeface family. An error rate here is a floor, not what real scans will give.",
+  "page_sha256": "f1eba98444b04bdd04f32df29d1d2f4ebdd98f3f41f2d9075a7be8bb363e41d3"
+}

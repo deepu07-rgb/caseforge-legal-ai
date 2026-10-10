@@ -113,6 +113,10 @@ def main() -> int:
                 errors.append(f"{f['path']}: claims a review or lock no one has done")
             if f["kind"] == "LEGAL_ANSWER" and not f["legal_editor_signoff"]["required"]:
                 errors.append(f"{f['path']}: a legal answer without a sign-off requirement")
+            if f["kind"] == "IMAGE":
+                if not p.read_bytes().startswith(b"\x89PNG"):
+                    errors.append(f"{f['path']}: not a PNG image")
+                continue
             txt = p.read_text(encoding="utf-8-sig")
             fixture_text[f["path"]] = txt
             if f["kind"] != "PLACEHOLDER":

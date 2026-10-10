@@ -1,0 +1,74 @@
+{
+  "fixture_id": "G-INDIC/mixed_order_07",
+  "lines": [
+    "जिला न्यायालय, काल्पनिकपुर",
+    "Criminal Case No. 456/2024",
+    "राज्य बनाम श्री सुरेश वर्मा",
+    "आरोपी के विरुद्ध Section 420 IPC तथा धारा ३४ के अंतर्गत आरोप तय किए गए।",
+    "The next hearing is fixed on 20 April 2024.",
+    "अभियोजन ने दिनांक १८/०४/२०२४ तक समय मांगा।",
+    "जमानत राशि ₹ 50,000 निर्धारित की गई।"
+  ],
+  "text": "जिला न्यायालय, काल्पनिकपुर\nCriminal Case No. 456/2024\nराज्य बनाम श्री सुरेश वर्मा\nआरोपी के विरुद्ध Section 420 IPC तथा धारा ३४ के अंतर्गत आरोप तय किए गए।\nThe next hearing is fixed on 20 April 2024.\nअभियोजन ने दिनांक १८/०४/२०२४ तक समय मांगा।\nजमानत राशि ₹ 50,000 निर्धारित की गई।",
+  "script": "MIXED",
+  "line_scripts": [
+    "DEVANAGARI",
+    "LATIN",
+    "DEVANAGARI",
+    "MIXED",
+    "LATIN",
+    "DEVANAGARI",
+    "DEVANAGARI"
+  ],
+  "critical_fields": [
+    {
+      "field_id": "f1",
+      "kind": "case_number",
+      "text": "Criminal Case No. 456/2024",
+      "char_start": 27,
+      "char_end": 53
+    },
+    {
+      "field_id": "f2",
+      "kind": "provision",
+      "text": "Section 420",
+      "char_start": 99,
+      "char_end": 110
+    },
+    {
+      "field_id": "f3",
+      "kind": "provision",
+      "text": "धारा ३४",
+      "char_start": 119,
+      "char_end": 126
+    },
+    {
+      "field_id": "f4",
+      "kind": "date",
+      "text": "20 April 2024",
+      "char_start": 183,
+      "char_end": 196
+    },
+    {
+      "field_id": "f5",
+      "kind": "date",
+      "text": "१८/०४/२०२४",
+      "char_start": 216,
+      "char_end": 226
+    },
+    {
+      "field_id": "f6",
+      "kind": "money",
+      "text": "₹ 50,000",
+      "char_start": 252,
+      "char_end": 260
+    },
+    {
+      "field_id": "f7",
+      "kind": "name",
+      "text": "श्री सुरेश वर्मा",
+      "char_start": 65,
+      "char_end": 81
+    }
+  ]
+}

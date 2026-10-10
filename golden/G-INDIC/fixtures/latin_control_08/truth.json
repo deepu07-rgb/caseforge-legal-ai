@@ -1,0 +1,56 @@
+{
+  "fixture_id": "G-INDIC/latin_control_08",
+  "lines": [
+    "Order of the District Court",
+    "Case No. 789/2024",
+    "The plaintiff filed this suit on 12 March 2024 under Section 302 of the Code",
+    "and claims Rs. 1,25,000 from the defendant. The defendant denies the claim.",
+    "The next hearing is fixed on 15 April 2024."
+  ],
+  "text": "Order of the District Court\nCase No. 789/2024\nThe plaintiff filed this suit on 12 March 2024 under Section 302 of the Code\nand claims Rs. 1,25,000 from the defendant. The defendant denies the claim.\nThe next hearing is fixed on 15 April 2024.",
+  "script": "LATIN",
+  "line_scripts": [
+    "LATIN",
+    "LATIN",
+    "LATIN",
+    "LATIN",
+    "LATIN"
+  ],
+  "critical_fields": [
+    {
+      "field_id": "f1",
+      "kind": "case_number",
+      "text": "Case No. 789/2024",
+      "char_start": 28,
+      "char_end": 45
+    },
+    {
+      "field_id": "f2",
+      "kind": "date",
+      "text": "12 March 2024",
+      "char_start": 79,
+      "char_end": 92
+    },
+    {
+      "field_id": "f3",
+      "kind": "provision",
+      "text": "Section 302",
+      "char_start": 99,
+      "char_end": 110
+    },
+    {
+      "field_id": "f4",
+      "kind": "money",
+      "text": "Rs. 1,25,000",
+      "char_start": 134,
+      "char_end": 146
+    },
+    {
+      "field_id": "f5",
+      "kind": "date",
+      "text": "15 April 2024",
+      "char_start": 228,
+      "char_end": 241
+    }
+  ]
+}

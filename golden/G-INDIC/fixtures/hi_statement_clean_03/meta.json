@@ -1,0 +1,15 @@
+{
+  "fixture_id": "G-INDIC/hi_statement_clean_03",
+  "status": "DRAFT",
+  "source_class": "SYNTHETIC_CONTROLLED",
+  "authored_by": "coding agent, at the owner's instruction",
+  "independent_review": null,
+  "description": "A synthetic Hindi page: text written for the test and rendered with Windows text shaping; the transcription is the rendered text.",
+  "font": "Nirmala UI Semilight 40px at 200 dpi",
+  "degradation": null,
+  "primary_acs": [
+    "AC-S4-09.1"
+  ],
+  "limits": "Rendered text is cleaner than a photographed scan; one typeface family. An error rate here is a floor, not what real scans will give.",
+  "page_sha256": "bbbabafade428d63d4fd94d928f5ba30bd5b146da4cf9853bde5c5a6670e387b"
+}

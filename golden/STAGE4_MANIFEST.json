@@ -16,7 +16,7 @@
     "protocol": "docs/STAGE4_LEGAL_EDITOR_PROTOCOL.md"
   },
   "jurisdiction_markers": {
-    "IN": "\\bSCC\\b|\\bAIR\\b|India|Indian|\\bBNSS?\\b|\\bCPC\\b|Limitation Act|Evidence Act|High Court",
+    "IN": "\\bSCC\\b|\\bAIR\\b|India|Indian|\\bBNSS?\\b|\\bCPC\\b|Limitation Act|Evidence Act|High Court|भारतीय|न्यायालय|दंड संहिता",
     "US": "F\\.3d|F\\. ?Supp|\\bU\\.S\\.|United States|\\bFRCP\\b|\\bFRE\\b|\\bCir\\.|Fed\\. R\\."
   },
   "sets": [
@@ -277,8 +277,8 @@
     {
       "id": "G-INDIC",
       "readme": "G-INDIC/README.md",
-      "purpose": "Hindi (Devanagari) ingestion: scans for OCR accuracy, aligned translation, critical fields after translation. Scaffold only: nothing is authored yet.",
-      "source_class": "UNDECIDED",
+      "purpose": "Hindi (Devanagari) ingestion: eight synthetic pages (FIR, order, statement, notice, two degraded copies, a mixed Hindi/English page and an English control) with exact ground truth, for OCR accuracy, script detection and critical-field checks. Translation fixtures (AC-S4-09.2, 09.3) are added with B-S4-15.",
+      "source_class": "SYNTHETIC_CONTROLLED",
       "acs": [
         "AC-S4-09.1",
         "AC-S4-09.2",
@@ -286,15 +286,15 @@
       ],
       "fixtures": [
         {
-          "path": "G-INDIC/fixtures/devanagari_placeholder/meta.json",
-          "sha256": "d707c58a79b88bdaaae87d0501b6f909dc4530007f785b9ec373ec507cdb392f",
-          "kind": "PLACEHOLDER",
-          "engine_batch": "B-S4-14/15",
+          "path": "G-INDIC/fixtures/hi_fir_clean_01/page.png",
+          "sha256": "c34a4dd64686d1adbfcc4f467efcc528c101a9fa492acf6f474c7559b700b7ea",
+          "kind": "IMAGE",
+          "engine_batch": "B-S4-14",
           "first_commit": null,
-          "pinned_before_engine": false,
+          "pinned_before_engine": true,
           "authored_by": "coding agent, at the owner's instruction",
           "synthetic_rules": false,
-          "policy_status": "PLACEHOLDER",
+          "policy_status": "DRAFT_UNREVIEWED",
           "independent_review": null,
           "schema_checks": [],
           "legal_editor_signoff": {
@@ -302,13 +302,285 @@
             "status": "NOT_REQUIRED",
             "record": "eval/signoffs/legal_editors.json"
           },
-          "note": "Placeholder so the harness discovers the set. Real scans need either rights-cleared pages or synthetic renderings, and the OCR comparison (Q-S4-04)."
+          "note": "A page rendered with Windows text shaping from the text in truth.json (eval/tools/make_indic_golden.py); not a real scan."
+        },
+        {
+          "path": "G-INDIC/fixtures/hi_fir_clean_01/truth.json",
+          "sha256": "c7c99c5a834249be2cc24682181d1c303a5ff916ef6c04d484aa6da71748c359",
+          "kind": "MECHANICAL",
+          "engine_batch": "B-S4-14",
+          "first_commit": null,
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          }
+        },
+        {
+          "path": "G-INDIC/fixtures/hi_order_clean_02/page.png",
+          "sha256": "b37e85521c3274305908345dc8e52325629128574ab6e7639ccfde4d32658545",
+          "kind": "IMAGE",
+          "engine_batch": "B-S4-14",
+          "first_commit": null,
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          },
+          "note": "A page rendered with Windows text shaping from the text in truth.json (eval/tools/make_indic_golden.py); not a real scan."
+        },
+        {
+          "path": "G-INDIC/fixtures/hi_order_clean_02/truth.json",
+          "sha256": "09a7af9299df1a374e94257e20b540c8df24165a66b3a1a6068b0cccc2d8f69a",
+          "kind": "MECHANICAL",
+          "engine_batch": "B-S4-14",
+          "first_commit": null,
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          }
+        },
+        {
+          "path": "G-INDIC/fixtures/hi_statement_clean_03/page.png",
+          "sha256": "bbbabafade428d63d4fd94d928f5ba30bd5b146da4cf9853bde5c5a6670e387b",
+          "kind": "IMAGE",
+          "engine_batch": "B-S4-14",
+          "first_commit": null,
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          },
+          "note": "A page rendered with Windows text shaping from the text in truth.json (eval/tools/make_indic_golden.py); not a real scan."
+        },
+        {
+          "path": "G-INDIC/fixtures/hi_statement_clean_03/truth.json",
+          "sha256": "f88584053a310fd718ecbeb881b232080abbde57079c4a74ec3fa79fc464696a",
+          "kind": "MECHANICAL",
+          "engine_batch": "B-S4-14",
+          "first_commit": null,
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          }
+        },
+        {
+          "path": "G-INDIC/fixtures/hi_notice_clean_04/page.png",
+          "sha256": "5ae65d8cbe0d5adbe843695dd8df5299c796f26e626281673d97d34d7247e250",
+          "kind": "IMAGE",
+          "engine_batch": "B-S4-14",
+          "first_commit": null,
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          },
+          "note": "A page rendered with Windows text shaping from the text in truth.json (eval/tools/make_indic_golden.py); not a real scan."
+        },
+        {
+          "path": "G-INDIC/fixtures/hi_notice_clean_04/truth.json",
+          "sha256": "3a9ea86dd7b0a6c24e07389a0034c92ecb388dc4d6aa8264573122b9fcf1dbbb",
+          "kind": "MECHANICAL",
+          "engine_batch": "B-S4-14",
+          "first_commit": null,
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          }
+        },
+        {
+          "path": "G-INDIC/fixtures/hi_fir_degraded_05/page.png",
+          "sha256": "f1eba98444b04bdd04f32df29d1d2f4ebdd98f3f41f2d9075a7be8bb363e41d3",
+          "kind": "IMAGE",
+          "engine_batch": "B-S4-14",
+          "first_commit": null,
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          },
+          "note": "A page rendered with Windows text shaping from the text in truth.json (eval/tools/make_indic_golden.py); not a real scan."
+        },
+        {
+          "path": "G-INDIC/fixtures/hi_fir_degraded_05/truth.json",
+          "sha256": "1943e2b46cc16cd149ced4c1802aad0bfd75653e66787c9b2ab1457420d83ba2",
+          "kind": "MECHANICAL",
+          "engine_batch": "B-S4-14",
+          "first_commit": null,
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          }
+        },
+        {
+          "path": "G-INDIC/fixtures/hi_order_degraded_06/page.png",
+          "sha256": "580f2ca68eb016b4971f0291eca9297aa6f939c703ba3012be6e9baaa4bf859e",
+          "kind": "IMAGE",
+          "engine_batch": "B-S4-14",
+          "first_commit": null,
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          },
+          "note": "A page rendered with Windows text shaping from the text in truth.json (eval/tools/make_indic_golden.py); not a real scan."
+        },
+        {
+          "path": "G-INDIC/fixtures/hi_order_degraded_06/truth.json",
+          "sha256": "291bb6477e82d7f8e51cc9cc99bf404f287ff5099d68b51d609e227ea394ce1b",
+          "kind": "MECHANICAL",
+          "engine_batch": "B-S4-14",
+          "first_commit": null,
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          }
+        },
+        {
+          "path": "G-INDIC/fixtures/mixed_order_07/page.png",
+          "sha256": "e6bb60768d8e5aea1ef7baeac561af4fa3fece9eef9370db64134d6a3a8ff8b1",
+          "kind": "IMAGE",
+          "engine_batch": "B-S4-14",
+          "first_commit": null,
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          },
+          "note": "A page rendered with Windows text shaping from the text in truth.json (eval/tools/make_indic_golden.py); not a real scan."
+        },
+        {
+          "path": "G-INDIC/fixtures/mixed_order_07/truth.json",
+          "sha256": "18f986c8d5b32d854242e58815e97ca58bf489de68c03702eba01fd36e7ffdf2",
+          "kind": "MECHANICAL",
+          "engine_batch": "B-S4-14",
+          "first_commit": null,
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          }
+        },
+        {
+          "path": "G-INDIC/fixtures/latin_control_08/page.png",
+          "sha256": "eaab3f57006a44683cb7997579d1cb4b26428f92010e6be7f5cb89ad3492978f",
+          "kind": "IMAGE",
+          "engine_batch": "B-S4-14",
+          "first_commit": null,
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          },
+          "note": "A page rendered with Windows text shaping from the text in truth.json (eval/tools/make_indic_golden.py); not a real scan."
+        },
+        {
+          "path": "G-INDIC/fixtures/latin_control_08/truth.json",
+          "sha256": "2b6dd92a4012bbc9f27e2330d99f68f77b2e14f727d80d704ac8b48515495c81",
+          "kind": "MECHANICAL",
+          "engine_batch": "B-S4-14",
+          "first_commit": null,
+          "pinned_before_engine": true,
+          "authored_by": "coding agent, at the owner's instruction",
+          "synthetic_rules": false,
+          "policy_status": "DRAFT_UNREVIEWED",
+          "independent_review": null,
+          "schema_checks": [],
+          "legal_editor_signoff": {
+            "required": false,
+            "status": "NOT_REQUIRED",
+            "record": "eval/signoffs/legal_editors.json"
+          }
         }
-      ],
-      "blocked_by": [
-        "B-S4-14",
-        "B-S4-15",
-        "Q-S4-04"
       ]
     },
     {
@@ -711,11 +983,15 @@
       "applies_to": [
         "IN"
       ],
-      "evidence": [],
-      "blocked_by": [
-        "B-S4-14",
-        "B-S4-15",
-        "Q-S4-04"
+      "evidence": [
+        {
+          "file": "G-INDIC/fixtures/hi_fir_clean_01/truth.json",
+          "regex": "प्रथम सूचना रिपोर्ट"
+        },
+        {
+          "file": "G-INDIC/fixtures/hi_fir_degraded_05/truth.json",
+          "regex": "प्रथम सूचना रिपोर्ट"
+        }
       ]
     },
     {
