@@ -30,6 +30,7 @@ mod edition;
 mod entitlements;
 mod seat;
 mod subscription;
+mod ship_gate;
 mod record_only;
 mod chambers_lookup;
 mod cause_list;

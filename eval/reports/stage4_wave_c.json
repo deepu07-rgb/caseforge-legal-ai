@@ -1,6 +1,6 @@
 {
   "checkpoint": "Stage 4 Wave C",
-  "generated_at": "2026-10-10T09:30:38Z",
+  "generated_at": "2026-10-10T09:54:04Z",
   "verdict": {
     "wave_c_batches_17_to_21": "GREEN",
     "ci_gates": "GREEN",
@@ -12,7 +12,7 @@
     {
       "gate": "contracts_b_s4_01.py",
       "exit": 0,
-      "seconds": 0.7
+      "seconds": 0.6
     },
     {
       "gate": "injection_guard_b_s4_00.py",
@@ -82,7 +82,7 @@
     {
       "gate": "treatment_b_s4_13.py",
       "exit": 0,
-      "seconds": 0.9
+      "seconds": 1.0
     },
     {
       "gate": "chambers_record_only_b_s4_17.py",
@@ -92,7 +92,7 @@
     {
       "gate": "chambers_lookup_b_s4_19.py",
       "exit": 0,
-      "seconds": 0.1
+      "seconds": 0.2
     },
     {
       "gate": "cause_list_b_s4_20.py",
@@ -111,7 +111,7 @@
     }
   ],
   "rust_tests": {
-    "passed": 232,
+    "passed": 234,
     "failed": 0,
     "ignored": 1
   },
@@ -164,18 +164,18 @@
   },
   "acceptance_counts": {
     "measured": {
-      "PASS": 46,
+      "PASS": 47,
       "WAIVED": 1,
       "BLOCKED": 7,
       "FAIL": 1,
-      "NOT_BUILT": 11
+      "NOT_BUILT": 10
     },
     "formal": {
       "PASS": 40,
       "WAIVED": 1,
-      "BLOCKED": 13,
+      "BLOCKED": 14,
       "FAIL": 1,
-      "NOT_BUILT": 11
+      "NOT_BUILT": 10
     },
     "total": 66
   },
@@ -1006,12 +1006,14 @@
       "ac": "AC-S4-RT-RED",
       "batch": "B-S4-23",
       "description": "Stage 4 red-team: zero G1/G2/G3/G7/G8 violations.",
-      "measured": "NOT_BUILT",
-      "formal": "NOT_BUILT",
+      "measured": "PASS",
+      "formal": "BLOCKED",
       "blocked_by": [
         "threshold not approved by the owner: S4.redteam.full_suite_min_prompts (Q-S4-01)"
       ],
-      "reports": [],
+      "reports": [
+        "b_s4_23_redteam.json"
+      ],
       "detail": {}
     }
   ],
@@ -1033,8 +1035,7 @@
     "B-S4-12": "Timed Oral Rehearsal (Wave B)",
     "B-S4-14": "Devanagari triage + OCR (Wave B; needs the OCR bake-off, Q-S4-04)",
     "B-S4-15": "Aligned offline translation + G10 (Wave B)",
-    "B-S4-16": "Encrypted Bundle Exchange (Wave B)",
-    "B-S4-23": "Cumulative ship report and full red-team (Ship)"
+    "B-S4-16": "Encrypted Bundle Exchange (Wave B)"
   },
   "owner_decisions_needed": {
     "Q-S4-01": "approve (or change) the PROPOSED thresholds; until then no threshold-based criterion can be formally accepted",

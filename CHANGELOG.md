@@ -1,5 +1,21 @@
 # Changelog
 
+## [4.0.0-dev] — 2026-10-10
+
+### Stage 4 — ship gate (B-S4-23), verdict NOT READY
+
+Not a release. The Stage 4 cumulative gate now exists and says so plainly.
+
+- `npm run ship:stage4` (`eval/run_stage4.py`): production build, Rust tests, every CI gate, then the ship gate.
+- Full red-team suite run against the real filters: 487 attack probes across G1, G2, G3, G7, G8 (lawyer and Chambers), zero violations.
+- Report: `eval/reports/stage4_ship_gate.json` (hash-fixed, unsigned: no release key exists). Checklist: `docs/RELEASE_CHECKLIST_v4.0.md`.
+- Why NOT READY: five batches not built (B-S4-02, 12, 14, 15, 16), AC-S4-00.7 fails, no legal-editor sign-off, no network capture,
+  controlled matters not end to end. See `docs/B-S4-23_ship_gate.md`.
+
+### Stage 4 — editions (B-S4-22)
+
+Edition entitlement map (development-only), pack subscription separate from the app licence, offline seat transfer.
+
 ## [2.0.0-rc1] — 2026-08-09
 
 ### Stage 2 Mock Court — release candidate

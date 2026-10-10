@@ -33,9 +33,11 @@ NOT_BUILT = {
     "B-S4-14": "Devanagari triage + OCR (Wave B; needs the OCR bake-off, Q-S4-04)",
     "B-S4-15": "Aligned offline translation + G10 (Wave B)",
     "B-S4-16": "Encrypted Bundle Exchange (Wave B)",
-    "B-S4-23": "Cumulative ship report and full red-team (Ship)",
 }
 ORDER = {"FAIL": 0, "BLOCKED": 1, "WAIVED": 2, "SKIP": 3, "PASS": 4}
+
+
+SKIP_GATES = ("stage4_wave_c.py", "ship_gate_b_s4_23.py")  # the checkpoint and the ship gate read the other gates' reports; neither runs the other
 
 
 def gate_commands() -> list[str]:
@@ -43,7 +45,7 @@ def gate_commands() -> list[str]:
     cmds = []
     for line in text.splitlines():
         m = re.match(r"\s*(python eval/checks/\S+\.py.*)$", line)
-        if m and "stage4_wave_c.py" not in m.group(1):
+        if m and not any(g in m.group(1) for g in SKIP_GATES):
             cmds.append(m.group(1).strip())
     return cmds
 
@@ -82,15 +84,8 @@ def collect_acs() -> dict[str, dict]:
     return found
 
 
-def main() -> int:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--cargo-log", default=None)
-    ap.add_argument("--evidence-dir", default=None)
-    ap.add_argument("--no-run", action="store_true", help="read the reports the gates just wrote instead of running them again")
-    args = ap.parse_args()
-
-    gates = [] if args.no_run else run_gates(args.cargo_log, args.evidence_dir)
-    found = collect_acs()
+def acceptance_rows(found: dict[str, dict]) -> list[dict]:
+    """One row per Stage 4 acceptance criterion: what the gates measured, and whether anything still blocks formal acceptance."""
     inv = json.loads((ROOT / "eval" / "stage4_ac_inventory.json").read_text(encoding="utf-8"))
     thr = json.loads((ROOT / "contracts" / "stage4_thresholds.json").read_text(encoding="utf-8"))
     approved = {t["id"]: t.get("approval") for t in thr.get("thresholds", [])}
@@ -111,6 +106,20 @@ def main() -> int:
             why.append("open owner questions: " + ", ".join(qs))
         formal = "PASS" if measured == "PASS" and not why else ("BLOCKED" if measured in ("PASS", "WAIVED", "BLOCKED") and why else measured)
         rows.append({"ac": ac, "batch": batch, "description": a["description"], "measured": measured, "formal": formal, "blocked_by": why, "reports": (got or {}).get("reports", []), "detail": (got or {}).get("detail", {})})
+
+    return rows
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--cargo-log", default=None)
+    ap.add_argument("--evidence-dir", default=None)
+    ap.add_argument("--no-run", action="store_true", help="read the reports the gates just wrote instead of running them again")
+    args = ap.parse_args()
+
+    gates = [] if args.no_run else run_gates(args.cargo_log, args.evidence_dir)
+    found = collect_acs()
+    rows = acceptance_rows(found)
 
     by_batch: dict[str, dict] = {}
     for r in rows:
