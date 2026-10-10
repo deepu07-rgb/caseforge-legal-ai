@@ -12,8 +12,10 @@ import base64
 import sys
 from typing import Any
 
+import translate
 from pdf_parser import PARSER_ID, PdfParseError, parse_pdf_bytes
-from recognize import OcrError, RECOGNIZER_ID, load_thresholds, processed_preview_bytes, recognize_document, recognize_pages, runtime_manifest
+from confidence import INDIC_CALIBRATION_ID
+from recognize import INDIC_RECOGNIZER_ID, OcrError, RECOGNIZER_ID, indic_model_ready, load_thresholds, processed_preview_bytes, recognize_document, recognize_pages, runtime_manifest
 from skeleton import EXTRACTOR_ID, assert_every_extracted_has_source, extract_from_pages
 from triage import (
     CLASSIFIER_ID,
@@ -71,6 +73,12 @@ def handle(req: dict[str, Any]) -> dict[str, Any]:
                 "confidence_thresholds": thr,
                 "ocr_runtime": runtime_manifest(),
                 "calibration_id": "caseforge.tesseract-eng-fast.synthetic-isotonic.v1",
+                "indic_ocr": {
+                    "recognizer_id": INDIC_RECOGNIZER_ID,
+                    "ready": indic_model_ready(),
+                    "calibration_id": INDIC_CALIBRATION_ID,
+                    "scripts": ["DEVANAGARI", "LATIN", "MIXED"],
+                },
                 "critical_field_validator_id": "caseforge.critical-fields.deterministic.v1",
                 "note": "B-S3-06: calibrated trusted text into normalized graph v2 with complete provenance, ambiguity-aware dates, semantic contradictions, and v1 read projections.",
             },
@@ -258,6 +266,21 @@ def handle(req: dict[str, Any]) -> dict[str, Any]:
             },
         )
 
+    if method in ("docpipe.translate_info", "docpipe.translate_prepare", "docpipe.translate_finish"):
+        try:
+            if method == "docpipe.translate_info":
+                return ok(rid, translate.info())
+            if method == "docpipe.translate_prepare":
+                text = params.get("text")
+                if not isinstance(text, str):
+                    return err(rid, -32602, "Invalid params: text required", {"code": "CF_TRANSLATE_BAD_PARAMS"})
+                return ok(rid, {"segments": translate.prepare(doc_id=str(params.get("doc_id") or ""), page_index=int(params.get("page_index") or 0), text=text, words=params.get("words")), **translate.info()})
+            prepared = params.get("prepared")
+            if not isinstance(prepared, dict) or not isinstance(params.get("model_output"), str):
+                return err(rid, -32602, "Invalid params: prepared and model_output required", {"code": "CF_TRANSLATE_BAD_PARAMS"})
+            return ok(rid, translate.finish(doc_id=str(params.get("doc_id") or ""), page_index=int(params.get("page_index") or 0), prepared=prepared, model_output=params["model_output"], calibration_id=params.get("calibration_id")))
+        except RuntimeError as exc:
+            return err(rid, -32050, str(exc), {"code": str(exc).split(":", 1)[0]})
     return err(rid, -32601, f"Method not found: {method}")
 
 

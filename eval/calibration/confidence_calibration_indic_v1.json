@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0.0",
+  "calibration_id": "caseforge.tesseract-hin-eng.synthetic-isotonic.v1",
+  "status": "PROPOSED_AWAITING_OWNER_APPROVAL",
+  "engine_class": "tesseract_hin_eng_scan",
+  "method": "monotonic_piecewise_constant",
+  "dataset_path": "eval/calibration/indic_ocr_calibration_v1.json",
+  "dataset_sha256": "09c0ad6008d7fbe41ea2b74aaef4a86f642b1384c3d9316f70473a1cc8f08d64",
+  "evaluation_set_overlap": false,
+  "bins": [
+    {
+      "raw_min": 0.0,
+      "raw_max": 0.699,
+      "calibrated": 0.5,
+      "training_words": 20
+    },
+    {
+      "raw_min": 0.699,
+      "raw_max": 0.8669,
+      "calibrated": 0.8438,
+      "training_words": 47
+    },
+    {
+      "raw_min": 0.8669,
+      "raw_max": 0.9256,
+      "calibrated": 0.9631,
+      "training_words": 175
+    },
+    {
+      "raw_min": 0.9256,
+      "raw_max": 0.9311,
+      "calibrated": 0.9638,
+      "training_words": 68
+    },
+    {
+      "raw_min": 0.9311,
+      "raw_max": 0.9413,
+      "calibrated": 0.9847,
+      "training_words": 162
+    },
+    {
+      "raw_min": 0.9413,
+      "raw_max": 0.9676,
+      "calibrated": 0.993,
+      "training_words": 646
+    },
+    {
+      "raw_min": 0.9676,
+      "raw_max": 1.000001,
+      "calibrated": 0.995,
+      "training_words": 217
+    }
+  ],
+  "held_out_metrics": {
+    "ece": 0.018025,
+    "brier": 0.019035,
+    "uncalibrated_ece": 0.050727,
+    "uncalibrated_brier": 0.017536
+  },
+  "word_accuracy": {
+    "training": 0.9768,
+    "held_out": 0.9635
+  },
+  "limits": "Synthetic rendered Hindi, one typeface family, synthetic degradation. Over-confident on real photographed scans is expected until a real-scan calibration set exists.",
+  "approval": {
+    "owner": null,
+    "approved_at": null,
+    "missing": [
+      "ece_max",
+      "brier_max",
+      "critical_field_error_costs_by_type"
+    ]
+  }
+}

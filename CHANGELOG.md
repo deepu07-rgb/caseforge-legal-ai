@@ -12,6 +12,18 @@ All twelve Stage 4 golden sets are now under one manifest with hashes and proven
 
 Mock Court gains a timer mode: a host-kept clock with presets, graceful end at the limit, bench interruptions from your own Missing Links (host-worded, not model-worded), and a debrief timeline of which points were reached, when, for how long, and which never were. See `docs/B-S4-12_timed_rehearsal.md`. Verdict of the Stage 4 ship gate is still NOT READY.
 
+## [4.0.0-dev] — 2026-10-11
+
+### Stage 4 — Hindi (Devanagari) ingestion (B-S4-14)
+
+Scanned Hindi pages are read offline, with a confidence on every word and a script label on every page and line.
+
+- Tesseract OSD picks the reader: Devanagari goes to `hin+eng` (`tessdata_best`, Apache-2.0, 11.9 MB); English pages keep the frozen English path unchanged (same CER/WER as B-S3-04). A rotation is only applied when the detector is confident.
+- Bake-off (`eval/bakeoff/indic_ocr_b_s4_14.json`): `hin+eng` best gives CER 0.0056 clean / 0.0024 degraded on the eight synthetic G-INDIC pages (a floor: rendered, not photographed). The error limit is the owner's to freeze (Q-S4-04); AC-S4-09.1 is BLOCKED.
+- Critical fields in Devanagari (dates, amounts in lakh/crore, dhara numbers, labelled case numbers, names): a misread one is held for review, never accepted (58 labelled; 4 OCR misreads, all held). Indian grouping `1,25,000` now validates in the English validator too.
+- Hindi confidence map (synthetic, held-out ECE 0.018 vs 0.051 raw), page script on the review screen, `docs/B-S4-14_indic_ocr.md`.
+- Also pinned for B-S4-15: the translation golden `golden/G-INDIC/fixtures/translation_core.json`.
+
 ## [4.0.0-dev] — 2026-10-10
 
 ### Stage 4 — ship gate (B-S4-23), verdict NOT READY

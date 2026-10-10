@@ -459,6 +459,17 @@ fn fail_job(state: &DocpipeState, job_id: &str, err: &str) {
     }
 }
 
+/// Which calibration map scored a recognizer's words: the Hindi route and the English route each have their own (B-S4-14).
+fn calibration_id_for(recognizer_id: &str) -> Option<String> {
+    if recognizer_id.contains("tesseract-hin") {
+        Some("caseforge.tesseract-hin-eng.synthetic-isotonic.v1".into())
+    } else if recognizer_id.contains("tesseract") {
+        Some("caseforge.tesseract-eng-fast.synthetic-isotonic.v1".into())
+    } else {
+        None
+    }
+}
+
 fn layer_to_rows(
     doc_id: &str,
     layers: Vec<recognize::PageTextLayerResult>,
@@ -475,10 +486,7 @@ fn layer_to_rows(
             mean_confidence: p.mean_confidence,
             page_quality_warn: p.page_quality_warn,
             notes: p.notes,
-            calibration_id: p
-                .recognizer_id
-                .contains("tesseract")
-                .then(|| "caseforge.tesseract-eng-fast.synthetic-isotonic.v1".into()),
+            calibration_id: calibration_id_for(&p.recognizer_id),
             critical_fields: p.critical_fields,
             words: p
                 .words
@@ -1034,10 +1042,7 @@ fn run_unit(
                     mean_confidence: p.mean_confidence,
                     page_quality_warn: p.page_quality_warn,
                     notes: p.notes,
-                    calibration_id: p
-                        .recognizer_id
-                        .contains("tesseract")
-                        .then(|| "caseforge.tesseract-eng-fast.synthetic-isotonic.v1".into()),
+                    calibration_id: calibration_id_for(&p.recognizer_id),
                     critical_fields: p.critical_fields,
                     words: p
                         .words
@@ -1542,5 +1547,17 @@ mod external_filing_barrier_tests {
         assert_eq!(kept.iter().map(|p| p.doc_id.as_str()).collect::<Vec<_>>(), vec!["doc-deed", "doc-decree"]);
         let graph = extract_case_graph("case-x", "India", &kept, CLASSIFIER_ID, RECOGNIZER_ID);
         assert!(!graph.to_string().contains("doc-reply"), "an external filing leaked into the case graph");
+    }
+}
+
+#[cfg(test)]
+mod indic_calibration_tests {
+    use super::*;
+
+    #[test]
+    fn each_route_is_scored_by_its_own_calibration_map() {
+        assert_eq!(calibration_id_for("caseforge.ocr.tesseract-eng-fast.v1").as_deref(), Some("caseforge.tesseract-eng-fast.synthetic-isotonic.v1"));
+        assert_eq!(calibration_id_for("caseforge.ocr.tesseract-hin-eng-best.v1").as_deref(), Some("caseforge.tesseract-hin-eng.synthetic-isotonic.v1"));
+        assert_eq!(calibration_id_for("caseforge.pdfium.native-text.v1"), None, "native text has no OCR calibration");
     }
 }

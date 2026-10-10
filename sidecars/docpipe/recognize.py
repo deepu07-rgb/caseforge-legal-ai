@@ -1,4 +1,4 @@
-"""Offline English OCR and native text-layer construction (B-S3-04).
+"""Offline OCR (English, and Hindi with English) and native text-layer construction (B-S3-04, B-S4-14).
 
 Tesseract runs as a local subprocess over stdin/stdout. Source bytes, rendered
 pages, and processed images are never written to disk. Every OCR word carries
@@ -22,14 +22,18 @@ from typing import Any, Callable
 
 from PIL import Image, ImageEnhance, ImageFilter, ImageOps
 
-from confidence import CALIBRATION_ID, calibrate_words, validate_critical_fields
+import script_detect
+from confidence import CALIBRATION_ID, INDIC_CALIBRATION_ID, INDIC_ENGINE_CLASS, calibrate_words, validate_critical_fields
 from pdf_parser import PdfParseError, parse_pdf_bytes
 from triage import pages_from_document
 
 ROOT = Path(__file__).resolve().parents[2]
 CONFIG_PATH = ROOT / "contracts" / "ocr_config.json"
+INDIC_CONFIG_PATH = ROOT / "contracts" / "ocr_config_indic.json"
 CONSTANTS_PATH = ROOT / "contracts" / "constants.json"
 RECOGNIZER_ID = "caseforge.ocr.tesseract-eng-fast.v1"
+INDIC_RECOGNIZER_ID = "caseforge.ocr.tesseract-hin-eng-best.v1"
+ROUTE_ENGLISH, ROUTE_INDIC, ROUTE_AUTO = "english", "indic", "auto"
 WORD_RE = re.compile(r"\S+")
 
 _FALLBACK = {
@@ -59,6 +63,25 @@ def load_ocr_config() -> dict[str, Any]:
     if not CONFIG_PATH.is_file():
         raise OcrError("CF_OCR_CONFIG_MISSING", "frozen OCR configuration is unavailable")
     return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+
+
+def load_indic_config() -> dict[str, Any] | None:
+    """The Hindi OCR configuration, or None when this build does not carry it."""
+    if not INDIC_CONFIG_PATH.is_file():
+        return None
+    return json.loads(INDIC_CONFIG_PATH.read_text(encoding="utf-8"))
+
+
+def indic_model_ready(config: dict[str, Any] | None = None) -> bool:
+    """True when the Hindi model is present and matches its recorded hash. A model that fails the check is never used."""
+    config = config or load_indic_config()
+    if not config:
+        return False
+    try:
+        model = find_tesseract().parent / "tessdata" / config["model"]["filename"]
+    except OcrError:
+        return False
+    return model.is_file() and hashlib.sha256(model.read_bytes()).hexdigest() == config["model"]["sha256"].lower()
 
 
 def recognize_text(text: str, *, thresholds: dict[str, float] | None = None) -> dict[str, Any]:
@@ -125,20 +148,38 @@ def _png_bytes(image: Image.Image) -> bytes:
     return output.getvalue()
 
 
-def _orientation(image: Image.Image, executable: Path) -> int:
-    """Return the clockwise correction; safely use 0 when OSD has too few glyphs."""
+def _osd(image: Image.Image, executable: Path) -> dict[str, Any]:
+    """Orientation and script of the page. Rotation is trusted only above the confidence floor; with too few glyphs the report is a guess,
+    and a short English page was once turned upside down by a 0.71-confidence one."""
     osd_image = image.copy()
     osd_image.thumbnail((1200, 1200))
     try:
         proc = subprocess.run(
             [str(executable), "stdin", "stdout", "-l", "osd", "--psm", "0"],
-            input=_png_bytes(osd_image), capture_output=True, timeout=5, check=False,
+            input=_png_bytes(osd_image), capture_output=True, timeout=15, check=False,
         )
     except subprocess.TimeoutExpired:
-        return 0
+        return script_detect.parse_osd("")
     text = proc.stdout.decode("utf-8", errors="replace") + "\n" + proc.stderr.decode("utf-8", errors="replace")
-    match = re.search(r"Rotate:\s*(0|90|180|270)", text)
-    return int(match.group(1)) if match else 0
+    return script_detect.parse_osd(text)
+
+
+def _orientation(image: Image.Image, executable: Path) -> int:
+    """Return the clockwise correction; 0 when the engine is not confident."""
+    return int(_osd(image, executable)["rotation"])
+
+
+def choose_route(osd: dict[str, Any], indic_ready: bool) -> tuple[str, str]:
+    """Which recognizer a page gets, and why. Deterministic and recorded with the page."""
+    config = load_indic_config() or {}
+    floor = float((config.get("routing") or {}).get("latin_script_confidence_min", 1.0))
+    if not indic_ready:
+        return ROUTE_ENGLISH, "hindi model not installed"
+    if osd.get("script") == script_detect.DEVANAGARI:
+        return ROUTE_INDIC, "osd detected Devanagari"
+    if osd.get("script") == script_detect.LATIN and (osd.get("script_confidence") or 0.0) >= floor:
+        return ROUTE_ENGLISH, "osd detected Latin"
+    return ROUTE_AUTO, "osd script unclear"
 
 
 def _deskew_angle(image: Image.Image) -> float:
@@ -163,7 +204,8 @@ def _deskew_angle(image: Image.Image) -> float:
 
 def preprocess_image(image: Image.Image, executable: Path) -> tuple[Image.Image, dict[str, Any]]:
     original_size = image.size
-    orientation = _orientation(image, executable)
+    osd = _osd(image, executable)
+    orientation = int(osd["rotation"])
     if orientation:
         image = image.rotate(-orientation, expand=True, fillcolor="white")
     deskew = _deskew_angle(image)
@@ -179,6 +221,7 @@ def preprocess_image(image: Image.Image, executable: Path) -> tuple[Image.Image,
     return processed, {
         "orientation_correction_degrees": orientation,
         "deskew_degrees": deskew,
+        "osd": {k: osd[k] for k in ("script", "script_name", "script_confidence", "orientation_confidence", "rotation_suggested", "rotation_trusted")},
         "original_size": {"width": original_size[0], "height": original_size[1]},
         "processed_size": {"width": processed.width, "height": processed.height},
         "steps": ["osd", "small-angle-deskew", "min-long-edge-2200", "grayscale", "autocontrast", "median-3", "contrast-1.15"],
@@ -282,6 +325,34 @@ def _run_engine(command: list[str], payload: bytes, timeout: int) -> tuple[subpr
     return subprocess.CompletedProcess(command, process.returncode or 0, stdout, stderr), peak_rss
 
 
+INDIC_MIN_LETTERS = 20
+INDIC_MIN_SHARE = 0.30
+
+
+def _reads_devanagari(text: str) -> bool:
+    dev, lat = script_detect._counts(text)
+    return dev >= INDIC_MIN_LETTERS and dev / max(1, dev + lat) >= INDIC_MIN_SHARE
+
+
+def _recognize_pass(route: str, processed: Image.Image, processed_bytes: bytes, executable: Path, thresholds: dict[str, float]) -> dict[str, Any]:
+    """One engine run. route is ROUTE_ENGLISH (the frozen English path) or ROUTE_INDIC (Hindi with English)."""
+    if route == ROUTE_INDIC:
+        config = load_indic_config() or {}
+        engine_class, recognizer_id, calibration_id = INDIC_ENGINE_CLASS, INDIC_RECOGNIZER_ID, INDIC_CALIBRATION_ID
+    else:
+        config = load_ocr_config()
+        engine_class, recognizer_id, calibration_id = "tesseract_eng_fast_scan", RECOGNIZER_ID, CALIBRATION_ID
+    command = [str(executable), "stdin", "stdout", "-l", config["language"], "--oem", str(config["oem"]), "--psm", str(config["psm"]), "tsv"]
+    proc, peak_rss = _run_engine(command, processed_bytes, int(config["timeout_seconds_per_page"]))
+    if proc.returncode != 0:
+        raise OcrError("CF_OCR_ENGINE_FAILED", "offline OCR could not recognize this page")
+    full_text, words = _parse_tsv(proc.stdout.decode("utf-8", errors="replace"), processed.width, processed.height, thresholds)
+    raw_mean = sum(word["confidence"] for word in words) / len(words) if words else 0.0
+    calibrate_words(words, engine_class)
+    return {"route": route, "recognizer_id": recognizer_id, "calibration_id": calibration_id, "language": config["language"],
+            "full_text": full_text, "words": words, "peak_rss": peak_rss, "raw_mean": raw_mean}
+
+
 def recognize_image_bytes(content: bytes, *, page_index: int = 0) -> dict[str, Any]:
     started = time.perf_counter()
     source_sha = hashlib.sha256(content).hexdigest()
@@ -296,28 +367,50 @@ def recognize_image_bytes(content: bytes, *, page_index: int = 0) -> dict[str, A
     except Exception as exc:
         raise OcrError("CF_OCR_IMAGE_INVALID", "the image could not be decoded") from exc
     processed_bytes = _png_bytes(processed)
-    config = load_ocr_config()
-    command = [str(executable), "stdin", "stdout", "-l", config["language"], "--oem", str(config["oem"]), "--psm", str(config["psm"]), "tsv"]
-    proc, peak_rss = _run_engine(command, processed_bytes, int(config["timeout_seconds_per_page"]))
-    if proc.returncode != 0:
-        raise OcrError("CF_OCR_ENGINE_FAILED", "offline OCR could not recognize this page")
-    full_text, words = _parse_tsv(proc.stdout.decode("utf-8", errors="replace"), processed.width, processed.height, load_thresholds())
-    calibrate_words(words, "tesseract_eng_fast_scan")
+    thresholds = load_thresholds()
+    indic_ready = indic_model_ready()
+    route, route_reason = choose_route(provenance["osd"], indic_ready)
+
+    def page_warn(attempt: dict[str, Any]) -> bool:
+        words = attempt["words"]
+        mean = sum(word["confidence"] for word in words) / len(words) if words else 0.0
+        return not words or mean < thresholds["page_mean_warn_below"]
+
+    attempts: list[dict[str, Any]] = []
+    if route == ROUTE_INDIC:
+        attempts.append(_recognize_pass(ROUTE_INDIC, processed, processed_bytes, executable, thresholds))
+    else:
+        attempts.append(_recognize_pass(ROUTE_ENGLISH, processed, processed_bytes, executable, thresholds))
+        if route == ROUTE_AUTO and page_warn(attempts[0]):
+            attempts.append(_recognize_pass(ROUTE_INDIC, processed, processed_bytes, executable, thresholds))
+    chosen = attempts[0]
+    if len(attempts) > 1 and _reads_devanagari(attempts[1]["full_text"]):
+        # An unclear page is only given to the Hindi reader when that reader actually finds Hindi text in it. A noisy English page can score a
+        # higher engine confidence under the Hindi model while reading worse, so confidence is not the test; the script of the text is.
+        chosen = attempts[1]
+    words, full_text = chosen["words"], chosen["full_text"]
     critical_fields = validate_critical_fields(full_text, words)
     mean = sum(word["confidence"] for word in words) / len(words) if words else 0.0
     critical_block = any(field["suppress_from_auto"] for field in critical_fields)
-    warn = not words or mean < load_thresholds()["page_mean_warn_below"]
+    warn = not words or mean < thresholds["page_mean_warn_below"]
     state = "success" if words else "empty"
+    text_script = script_detect.describe(full_text)
     diagnostics = {
         **manifest, **provenance, "state": state, "source_kind": "raster",
         "source_sha256": source_sha, "processed_sha256": hashlib.sha256(processed_bytes).hexdigest(),
         "duration_ms": round((time.perf_counter() - started) * 1000),
-        "peak_engine_rss_bytes": peak_rss,
-        "calibration_id": CALIBRATION_ID, "critical_field_count": len(critical_fields),
+        "peak_engine_rss_bytes": max(a["peak_rss"] for a in attempts),
+        "calibration_id": chosen["calibration_id"], "critical_field_count": len(critical_fields),
+        "route": chosen["route"], "route_reason": route_reason, "language": chosen["language"],
+        "attempts": [{"route": a["route"], "raw_mean_confidence": round(a["raw_mean"], 4), "word_count": len(a["words"])} for a in attempts],
+        "text_script": text_script["script"],
+        "line_scripts": [{"line": r["line"], "script": r["script"]} for r in text_script["regions"]],
         "requires_review": warn or critical_block, "automatic_extraction_allowed": bool(words) and not warn and not critical_block,
     }
+    if chosen["route"] == ROUTE_INDIC:
+        diagnostics["indic_model_sha256"] = (load_indic_config() or {})["model"]["sha256"]
     return {
-        "page_index": page_index, "recognizer_id": RECOGNIZER_ID, "full_text": full_text,
+        "page_index": page_index, "recognizer_id": chosen["recognizer_id"], "full_text": full_text,
         "mean_confidence": mean, "page_quality_warn": warn, "words": words, "critical_fields": critical_fields,
         "notes": json.dumps(diagnostics, sort_keys=True, separators=(",", ":")),
     }
@@ -359,6 +452,7 @@ def recognize_native_page(page: dict[str, Any]) -> dict[str, Any]:
         "state": state, "source_kind": "native", "engine_confidence_present": False,
         "requires_review": not words, "automatic_extraction_allowed": bool(words),
         "source_sha256": page.get("source_sha256"), "processed_sha256": None,
+        "text_script": script_detect.script_of_text(text),
     }, sort_keys=True, separators=(",", ":"))
     critical_fields = validate_critical_fields(text, words)
     return {

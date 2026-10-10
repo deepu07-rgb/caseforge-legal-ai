@@ -479,6 +479,28 @@ def handle(req: dict[str, Any]) -> dict[str, Any]:
         propositions = _parse_propositions(result["content"]) if params.get("structured_propositions") else []
         structured_turn = _parse_mock_court_turn(result["content"]) if params.get("mock_court_schema_v2") else None
         return ok(rid, {**result, "propositions": propositions, "mock_court_turn": structured_turn, "role": params.get("role") or "counsel", "format": params.get("format") or "oral_argument", "controlled_beta_ready": bool(info.get("controlled_beta_ready")), "provenance": _provenance(info, messages, context, max_tokens, variant), "disclaimer": "Local preparation output only. Not legal advice. Inspect every cited source before use."})
+    if method == "llm.translate":
+        # B-S4-15: one masked Hindi segment in, English prose out. A fixed translation prompt (its hash is recorded in contracts/translation_config.json),
+        # greedy decoding, no matter context: the reasoner's legal prompt and case context are not involved.
+        info = resolve_backend()
+        if not info.get("available"): return err(rid, -32000, "No local LLM backend available", {"code": "CF_LLM_NOT_READY", "detail": info})
+        text = str(params.get("text") or "")
+        if not text.strip(): return err(rid, -32602, "text required", {"code": "CF_LLM_BAD_PARAMS"})
+        cfg = json.loads((ROOT / "contracts" / "translation_config.json").read_text(encoding="utf-8"))
+        prompt_bytes = (ROOT / cfg["prompt"]["file"]).read_bytes()
+        if hashlib.sha256(prompt_bytes).hexdigest() != cfg["prompt"]["sha256"]: return err(rid, -32050, "translation prompt hash mismatch", {"code": "CF_TRANSLATE_PROMPT_CHECKSUM"})
+        gen = cfg["generation"]
+        max_tokens = max(32, min(int(gen["num_predict_max"]), int(len(text) * float(gen["num_predict_per_source_char"])) + 64))
+        messages = [{"role": "system", "content": prompt_bytes.decode("utf-8")}, {"role": "user", "content": text}]
+        model = str(info.get("model") or DEFAULT_MODEL)
+        try:
+            if info.get("backend") != "ollama": return err(rid, -32000, "translation currently needs the Ollama backend", {"code": "CF_TRANSLATE_BACKEND"})
+            started = time.time()
+            data = http_json(f"{DEFAULT_OLLAMA}/api/chat", {"model": model, "messages": messages, "stream": False, "options": {"temperature": float(gen["temperature"]), "top_p": float(gen["top_p"]), "seed": int(gen["seed"]), "num_ctx": int(gen["num_ctx"]), "num_predict": max_tokens}}, timeout=300.0)
+        except Exception as exc: return err(rid, -32001, f"LLM generation failed: {exc}", {"code": "CF_LLM_GENERATE_FAILED"})
+        content = strip_reasoning(str((data.get("message") or {}).get("content") or ""))
+        if not content: return err(rid, -32001, "Empty model response", {"code": "CF_LLM_EMPTY"})
+        return ok(rid, {"content": content, "model": data.get("model") or model, "backend": "ollama", "elapsed_ms": int((time.time() - started) * 1000), "done_reason": data.get("done_reason"), "prompt_sha256": cfg["prompt"]["sha256"], "eval_count": int(data.get("eval_count") or 0)})
     return err(rid, -32601, f"Method not found: {method}")
 
 

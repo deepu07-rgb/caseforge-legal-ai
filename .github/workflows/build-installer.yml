@@ -100,6 +100,9 @@ jobs:
       - name: Smoke-test the staged layout with the bundled Python only
         run: ./scripts/smoke_installed_layout.ps1 -Root .
 
+      - name: Hindi OCR gate (B-S4-14), run with the bundled Python on the vendored Windows OCR runtime
+        run: ./runtime-python/python.exe -I eval/checks/indic_ocr_b_s4_14.py
+
       - name: Build installer (NSIS)
         run: npm run tauri:build -- --bundles nsis
 

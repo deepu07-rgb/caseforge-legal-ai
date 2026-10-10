@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "batch": "B-S4-15",
+  "status": "PROPOSED",
+  "description": "Offline Hindi-to-English translation, segment by segment (PRD v4.0 7.9, guardrail G10). The model writes prose only; critical fields are masked before and rendered by the host after.",
+  "model": {
+    "name": "qwen2.5:7b",
+    "digest": "sha256:845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+    "selected_by": "default local reasoner reused: no new download, no second large model (B-S1-20 choreography); a dedicated translation model is an owner decision (Q-S4-04)",
+    "license": "Apache-2.0"
+  },
+  "prompt": {
+    "version": "caseforge.translate-hi-en.v1",
+    "file": "contracts/prompts/translate_hi_en_v1.txt",
+    "sha256": "31ead27dcaf42bbd1449ad233a763fcb9ca19a8deae02b0f131394f02875ec37"
+  },
+  "generation": {
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "seed": 42,
+    "num_ctx": 4096,
+    "num_predict_max": 700,
+    "num_predict_per_source_char": 2.0
+  },
+  "choreography": {
+    "role": "primary_llm",
+    "note": "Translation runs on the primary reasoner's slot, so it can never be resident beside the vision model or run beside a reasoning turn (one large model at a time)."
+  },
+  "segmentation": {
+    "wrap_share": 0.85,
+    "sentence_marks": "।.?!:",
+    "max_segment_chars": 1200,
+    "rule": "golden/G-INDIC/fixtures/translation_core.json#segmentation_rule"
+  },
+  "label": "machine translation - wording not verified",
+  "guardrail": {
+    "id": "G10",
+    "error_code": "CF_GUARDRAIL_G10_TRANSLATION_AS_VERIFIED",
+    "translated_quote_label": "translation - wording not verified"
+  },
+  "thresholds": {
+    "critical_field_accuracy_min": {
+      "value": 0.98,
+      "id": "S4.indic.critical_field_accuracy_min",
+      "status": "PROPOSED_NOT_FROZEN"
+    }
+  }
+}

@@ -12,6 +12,7 @@ import {
   collectWordReviewItems,
   highlightSpan,
   layerForSource,
+  pageScriptLabel,
   type ReviewItem,
 } from "../lib/review";
 import { graphProvenance } from "../lib/provenance";
@@ -247,6 +248,7 @@ export default function ReviewView({
             <span className="chip muted mono">
               {selected.source.doc_id?.slice(0, 8)}… · p.
               {selected.source.page_index}
+              {pageScriptLabel(sourceLayer) ? ` · ${pageScriptLabel(sourceLayer)}` : ""}
             </span>
           )}
         </div>

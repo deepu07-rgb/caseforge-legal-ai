@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0.0",
+  "batch": "B-S4-14",
+  "status": "PROPOSED",
+  "recognizer_id": "caseforge.ocr.tesseract-hin-eng-best.v1",
+  "engine": {
+    "name": "Tesseract OCR",
+    "tested_version": "5.5.3.20260724",
+    "source_license": "Apache-2.0",
+    "offline_only": true
+  },
+  "model": {
+    "family": "tessdata_best",
+    "filename": "hin.traineddata",
+    "sha256": "bd2e65a2184af08a167b0be2439e91fa5edbc4394399ca2f692b843ae26e78d6",
+    "license": "Apache-2.0",
+    "source": "https://github.com/tesseract-ocr/tessdata_best (official repository; downloaded once with the owner's approval, then vendored)",
+    "selection_rule": "lowest mean character error rate on the degraded G-INDIC pages, ties broken by clean pages; size must fit the base-install budget",
+    "rejected": {
+      "family": "tessdata_fast",
+      "sha256": "4c73ffc59d497c186b19d1e90f5d721d678ea6b2e277b719bee4e2af12271825",
+      "reason": "higher error rate on clean and degraded pages in the recorded bake-off"
+    }
+  },
+  "language": "hin+eng",
+  "companion_models": [
+    "eng.traineddata"
+  ],
+  "oem": 1,
+  "psm": 3,
+  "render_dpi": 300,
+  "timeout_seconds_per_page": 180,
+  "routing": {
+    "detector": "tesseract OSD (osd.traineddata) on a 1200 px thumbnail",
+    "devanagari": "hin+eng",
+    "latin_script_confidence_min": 1.0,
+    "latin": "the frozen English path (contracts/ocr_config.json), unchanged",
+    "ambiguous": "run the English path; when its page quality warns, also run hin+eng and keep the result with the higher mean engine confidence; both are recorded",
+    "orientation_confidence_min": 2.0
+  },
+  "quality_gate": {
+    "critical_field_accuracy_min": 0.98,
+    "proposed_by_agent": {
+      "clean_scan_cer_max": 0.02,
+      "degraded_scan_cer_max": 0.05,
+      "basis": "the bake-off on the rendered G-INDIC pages (clean about 0.006, degraded about 0.002) with headroom for real scans, which will be worse; the owner freezes the real value (S4.indic.ocr_cer_max, Q-S4-04), ideally after measuring on real scans",
+      "status": "PROPOSED_NOT_FROZEN"
+    },
+    "below_gate_action": "require_human_review_and_block_automatic_extraction"
+  }
+}

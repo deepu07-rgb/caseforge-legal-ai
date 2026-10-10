@@ -1,0 +1,457 @@
+{
+  "batch": "B-S4-14",
+  "implementation_status": "PASS",
+  "acs": {
+    "AC-S4-09.1": {
+      "status": "BLOCKED",
+      "reason": "S4.indic.ocr_cer_max has no frozen value (owner freezes it after the bake-off, Q-S4-04); the measured error is under the agent's proposal but a proposal is not a threshold",
+      "evidence": {
+        "clean_cer_mean": 0.0056,
+        "degraded_cer_mean": 0.0024,
+        "proposal": {
+          "clean_scan_cer_max": 0.02,
+          "degraded_scan_cer_max": 0.05,
+          "basis": "the bake-off on the rendered G-INDIC pages (clean about 0.006, degraded about 0.002) with headroom for real scans, which will be worse; the owner freezes the real value (S4.indic.ocr_cer_max, Q-S4-04), ideally after measuring on real scans",
+          "status": "PROPOSED_NOT_FROZEN"
+        },
+        "frozen_value": null,
+        "engine": "tesseract v5.5.3.20260724",
+        "model": "tessdata_best hin.traineddata bd2e65a2184af08a"
+      },
+      "limits": "Rendered pages are cleaner than photographed scans; one typeface family (Nirmala UI). This is a floor, not what a court's scans will give."
+    }
+  },
+  "pages": {
+    "hi_fir_clean_01": {
+      "route": "indic",
+      "route_reason": "osd detected Devanagari",
+      "recognizer_id": "caseforge.ocr.tesseract-hin-eng-best.v1",
+      "cer": 0.0022,
+      "wer": 0.0118,
+      "page_script": "DEVANAGARI",
+      "lines_compared": true,
+      "fields": {
+        "truth": 10,
+        "exact": 9,
+        "wrong_and_held": 1,
+        "wrong_and_not_held": 0,
+        "undetected": 0
+      },
+      "extra_fields_found": [],
+      "mean_confidence": 0.9711,
+      "duration_ms": 1966,
+      "peak_engine_rss_mb": 67,
+      "orientation_correction_degrees": 0,
+      "osd": {
+        "orientation_confidence": 10.54,
+        "rotation_suggested": 0,
+        "rotation_trusted": true,
+        "script": "DEVANAGARI",
+        "script_confidence": 19.17,
+        "script_name": "Devanagari"
+      }
+    },
+    "hi_fir_degraded_05": {
+      "route": "indic",
+      "route_reason": "osd detected Devanagari",
+      "recognizer_id": "caseforge.ocr.tesseract-hin-eng-best.v1",
+      "cer": 0.0022,
+      "wer": 0.0118,
+      "page_script": "DEVANAGARI",
+      "lines_compared": true,
+      "fields": {
+        "truth": 10,
+        "exact": 10,
+        "wrong_and_held": 0,
+        "wrong_and_not_held": 0,
+        "undetected": 0
+      },
+      "extra_fields_found": [],
+      "mean_confidence": 0.975,
+      "duration_ms": 4600,
+      "peak_engine_rss_mb": 69,
+      "orientation_correction_degrees": 0,
+      "osd": {
+        "orientation_confidence": 9.57,
+        "rotation_suggested": 0,
+        "rotation_trusted": true,
+        "script": "DEVANAGARI",
+        "script_confidence": 13.33,
+        "script_name": "Devanagari"
+      }
+    },
+    "hi_notice_clean_04": {
+      "route": "indic",
+      "route_reason": "osd detected Devanagari",
+      "recognizer_id": "caseforge.ocr.tesseract-hin-eng-best.v1",
+      "cer": 0.0153,
+      "wer": 0.0323,
+      "page_script": "DEVANAGARI",
+      "lines_compared": true,
+      "fields": {
+        "truth": 7,
+        "exact": 6,
+        "wrong_and_held": 1,
+        "wrong_and_not_held": 0,
+        "undetected": 0
+      },
+      "extra_fields_found": [],
+      "mean_confidence": 0.9786,
+      "duration_ms": 1473,
+      "peak_engine_rss_mb": 65,
+      "orientation_correction_degrees": 0,
+      "osd": {
+        "orientation_confidence": 7.45,
+        "rotation_suggested": 0,
+        "rotation_trusted": true,
+        "script": "DEVANAGARI",
+        "script_confidence": 7.5,
+        "script_name": "Devanagari"
+      }
+    },
+    "hi_order_clean_02": {
+      "route": "indic",
+      "route_reason": "osd detected Devanagari",
+      "recognizer_id": "caseforge.ocr.tesseract-hin-eng-best.v1",
+      "cer": 0.0,
+      "wer": 0.0,
+      "page_script": "DEVANAGARI",
+      "lines_compared": true,
+      "fields": {
+        "truth": 7,
+        "exact": 7,
+        "wrong_and_held": 0,
+        "wrong_and_not_held": 0,
+        "undetected": 0
+      },
+      "extra_fields_found": [],
+      "mean_confidence": 0.9775,
+      "duration_ms": 1725,
+      "peak_engine_rss_mb": 68,
+      "orientation_correction_degrees": 0,
+      "osd": {
+        "orientation_confidence": 9.62,
+        "rotation_suggested": 0,
+        "rotation_trusted": true,
+        "script": "DEVANAGARI",
+        "script_confidence": 12.5,
+        "script_name": "Devanagari"
+      }
+    },
+    "hi_order_degraded_06": {
+      "route": "indic",
+      "route_reason": "osd detected Devanagari",
+      "recognizer_id": "caseforge.ocr.tesseract-hin-eng-best.v1",
+      "cer": 0.0025,
+      "wer": 0.0137,
+      "page_script": "DEVANAGARI",
+      "lines_compared": true,
+      "fields": {
+        "truth": 7,
+        "exact": 7,
+        "wrong_and_held": 0,
+        "wrong_and_not_held": 0,
+        "undetected": 0
+      },
+      "extra_fields_found": [],
+      "mean_confidence": 0.974,
+      "duration_ms": 3751,
+      "peak_engine_rss_mb": 71,
+      "orientation_correction_degrees": 0,
+      "osd": {
+        "orientation_confidence": 7.54,
+        "rotation_suggested": 0,
+        "rotation_trusted": true,
+        "script": "DEVANAGARI",
+        "script_confidence": 6.0,
+        "script_name": "Devanagari"
+      }
+    },
+    "hi_statement_clean_03": {
+      "route": "indic",
+      "route_reason": "osd detected Devanagari",
+      "recognizer_id": "caseforge.ocr.tesseract-hin-eng-best.v1",
+      "cer": 0.0105,
+      "wer": 0.0339,
+      "page_script": "DEVANAGARI",
+      "lines_compared": true,
+      "fields": {
+        "truth": 5,
+        "exact": 3,
+        "wrong_and_held": 2,
+        "wrong_and_not_held": 0,
+        "undetected": 0
+      },
+      "extra_fields_found": [],
+      "mean_confidence": 0.9641,
+      "duration_ms": 1540,
+      "peak_engine_rss_mb": 63,
+      "orientation_correction_degrees": 0,
+      "osd": {
+        "orientation_confidence": 10.89,
+        "rotation_suggested": 0,
+        "rotation_trusted": true,
+        "script": "DEVANAGARI",
+        "script_confidence": 4.81,
+        "script_name": "Devanagari"
+      }
+    },
+    "latin_control_08": {
+      "route": "english",
+      "route_reason": "osd detected Latin",
+      "recognizer_id": "caseforge.ocr.tesseract-eng-fast.v1",
+      "cer": 0.0,
+      "wer": 0.0,
+      "page_script": "LATIN",
+      "lines_compared": true,
+      "fields": {
+        "truth": 5,
+        "exact": 5,
+        "wrong_and_held": 0,
+        "wrong_and_not_held": 0,
+        "undetected": 0
+      },
+      "extra_fields_found": [],
+      "mean_confidence": 0.9778,
+      "duration_ms": 1166,
+      "peak_engine_rss_mb": 49,
+      "orientation_correction_degrees": 0,
+      "osd": {
+        "orientation_confidence": 0.71,
+        "rotation_suggested": 180,
+        "rotation_trusted": false,
+        "script": "LATIN",
+        "script_confidence": 2.5,
+        "script_name": "Latin"
+      }
+    },
+    "mixed_order_07": {
+      "route": "indic",
+      "route_reason": "osd detected Devanagari",
+      "recognizer_id": "caseforge.ocr.tesseract-hin-eng-best.v1",
+      "cer": 0.0,
+      "wer": 0.0,
+      "page_script": "MIXED",
+      "lines_compared": true,
+      "fields": {
+        "truth": 7,
+        "exact": 7,
+        "wrong_and_held": 0,
+        "wrong_and_not_held": 0,
+        "undetected": 0
+      },
+      "extra_fields_found": [],
+      "mean_confidence": 0.9723,
+      "duration_ms": 1547,
+      "peak_engine_rss_mb": 67,
+      "orientation_correction_degrees": 0,
+      "osd": {
+        "orientation_confidence": 4.47,
+        "rotation_suggested": 0,
+        "rotation_trusted": true,
+        "script": "DEVANAGARI",
+        "script_confidence": 0.61,
+        "script_name": "Devanagari"
+      }
+    }
+  },
+  "script_detection": {
+    "page_scripts_correct": 8,
+    "line_script_accuracy": 1.0,
+    "lines": 62
+  },
+  "critical_fields": {
+    "truth": 58,
+    "exact": 54,
+    "wrong_held": 4,
+    "wrong_unheld": 0,
+    "undetected": 0,
+    "exact_rate": 0.931,
+    "exact_or_held_rate": 1.0,
+    "proposed_min": 0.98,
+    "wrong_not_held": [],
+    "corrupted_values_held": {
+      "३२/१३/२०२४": true,
+      "१२/०३/२०२४": true,
+      "१२/०३/२०24": true,
+      "१० मार्च २०O४": true,
+      "३० फरवरी २०२४": true,
+      "₹ १,२५,००O": true,
+      "₹ १,२५००,०००": true,
+      "₹ ०": true,
+      "रुपये ७५,०O०": true,
+      "धारा": true,
+      "धारा O": true,
+      "वाद संख्या १४५/": true,
+      "वाद संख्या १४५/२०२३५": true
+    },
+    "meaning": "a misread date, amount, section, case number or name is never accepted automatically; it is held for counsel to confirm"
+  },
+  "calibration": {
+    "status": "BLOCKED",
+    "reason": "the owner has not set ECE/Brier limits or per-field error costs (approval.missing in the artifact)",
+    "training_words": 1335,
+    "held_out_words": 822,
+    "held_out_ece": 0.018025,
+    "held_out_brier": 0.019035,
+    "uncalibrated_ece": 0.050727,
+    "uncalibrated_brier": 0.017536,
+    "word_accuracy": {
+      "training": 0.9768,
+      "held_out": 0.9635
+    },
+    "bins": [
+      [
+        0.0,
+        0.699,
+        0.5,
+        20
+      ],
+      [
+        0.699,
+        0.8669,
+        0.8438,
+        47
+      ],
+      [
+        0.8669,
+        0.9256,
+        0.9631,
+        175
+      ],
+      [
+        0.9256,
+        0.9311,
+        0.9638,
+        68
+      ],
+      [
+        0.9311,
+        0.9413,
+        0.9847,
+        162
+      ],
+      [
+        0.9413,
+        0.9676,
+        0.993,
+        646
+      ],
+      [
+        0.9676,
+        1.000001,
+        0.995,
+        217
+      ]
+    ],
+    "note": "ECE improves; Brier is not better than the raw score on these pages (calibration trades sharpness for honesty), and the low-confidence bins hold few words"
+  },
+  "english_path": {
+    "page_1.png": {
+      "now": {
+        "cer": 0.005742,
+        "wer": 0.017857,
+        "words": 232,
+        "mean_confidence": 0.948836
+      },
+      "committed": {
+        "cer": 0.005742,
+        "wer": 0.017857,
+        "words": 232,
+        "mean_confidence": 0.948836
+      },
+      "route": "english",
+      "recognizer_id": "caseforge.ocr.tesseract-eng-fast.v1"
+    },
+    "page_1.jpg": {
+      "now": {
+        "cer": 0.007383,
+        "wer": 0.03125,
+        "words": 232,
+        "mean_confidence": 0.953448
+      },
+      "committed": {
+        "cer": 0.007383,
+        "wer": 0.03125,
+        "words": 232,
+        "mean_confidence": 0.953448
+      },
+      "route": "english",
+      "recognizer_id": "caseforge.ocr.tesseract-eng-fast.v1"
+    },
+    "page_1_rotated_degraded.jpg": {
+      "now": {
+        "cer": 0.280558,
+        "wer": 0.611607,
+        "words": 218,
+        "mean_confidence": 0.479541
+      },
+      "committed": {
+        "cer": 0.280558,
+        "wer": 0.611607,
+        "words": 218,
+        "mean_confidence": 0.479541
+      },
+      "route": "english",
+      "recognizer_id": "caseforge.ocr.tesseract-eng-fast.v1"
+    }
+  },
+  "bakeoff": {
+    "selected": "hin+eng-best",
+    "summary": {
+      "hin-fast": {
+        "clean_cer": 0.042,
+        "degraded_cer": 0.0024,
+        "latin_control_cer": 0.7231,
+        "clean_wer": 0.0633,
+        "seconds_per_page": 0.45,
+        "max_peak_rss_mb": 43
+      },
+      "hin-best": {
+        "clean_cer": 0.0428,
+        "degraded_cer": 0.0024,
+        "latin_control_cer": 0.7025,
+        "clean_wer": 0.0637,
+        "seconds_per_page": 0.79,
+        "max_peak_rss_mb": 54
+      },
+      "hin+eng-fast": {
+        "clean_cer": 0.0081,
+        "degraded_cer": 0.0061,
+        "latin_control_cer": 0.0124,
+        "clean_wer": 0.0159,
+        "seconds_per_page": 0.6,
+        "max_peak_rss_mb": 60
+      },
+      "hin+eng-best": {
+        "clean_cer": 0.0056,
+        "degraded_cer": 0.0024,
+        "latin_control_cer": 0.0124,
+        "clean_wer": 0.0156,
+        "seconds_per_page": 1.05,
+        "max_peak_rss_mb": 73
+      },
+      "hin+eng-best-psm6": {
+        "clean_cer": 0.0056,
+        "degraded_cer": 0.0061,
+        "latin_control_cer": 0.0124,
+        "clean_wer": 0.0156,
+        "seconds_per_page": 1.04,
+        "max_peak_rss_mb": 74
+      },
+      "eng-only (current path)": {
+        "clean_cer": 0.7441,
+        "degraded_cer": 0.8229,
+        "latin_control_cer": 0.0,
+        "clean_wer": 0.915,
+        "seconds_per_page": 0.51,
+        "max_peak_rss_mb": 52
+      }
+    },
+    "models": {
+      "tessdata_fast hin": "4c73ffc59d497c186b19d1e90f5d721d678ea6b2e277b719bee4e2af12271825",
+      "tessdata_best hin": "bd2e65a2184af08a167b0be2439e91fa5edbc4394399ca2f692b843ae26e78d6"
+    }
+  },
+  "errors": []
+}

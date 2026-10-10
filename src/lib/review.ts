@@ -202,6 +202,20 @@ export function layerForSource(
   );
 }
 
+/** The script of a page's text as the text layer records it (Hindi, English, or both), or null when it is not recorded. */
+export function pageScriptLabel(layer: PageTextLayerRow | null): string | null {
+  if (!layer?.notes) return null;
+  try {
+    const script = (JSON.parse(layer.notes) as { text_script?: string | null }).text_script;
+    if (script === "DEVANAGARI") return "Hindi";
+    if (script === "LATIN") return "English";
+    if (script === "MIXED") return "Hindi and English";
+  } catch {
+    /* notes are diagnostics; an unreadable note simply shows no label */
+  }
+  return null;
+}
+
 export function wordAt(
   layer: PageTextLayerRow | null,
   wordIndex: number | undefined,

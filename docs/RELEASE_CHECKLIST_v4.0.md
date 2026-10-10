@@ -19,7 +19,7 @@ A box is ticked only where the gate or a test has shown it. Nothing here is sign
 ## Batches
 
 - [x] B-S4-00, 00b, 01, 02, 03–13, 16–23 built (B-S4-02: the sets, manifest and protocol exist; the legal sign-offs do not)
-- [ ] B-S4-14 Devanagari triage and OCR
+- [x] B-S4-14 Devanagari triage and OCR (built; AC-S4-09.1 is BLOCKED until the owner freezes the error limit, Q-S4-04)
 - [ ] B-S4-15 Aligned offline translation and G10
 
 ## Acceptance

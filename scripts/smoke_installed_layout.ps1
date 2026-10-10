@@ -44,6 +44,7 @@ Check 'infer_llm.ping'               { $r = Rpc 'sidecars/infer_llm/infer_llm.py
 Check 'infer_llm.tiers'              { $r = Rpc 'sidecars/infer_llm/infer_llm.py' 'llm.tiers'; if ($r.auto_download -ne $false) { throw 'auto_download must be false' }; ($r.tiers | ForEach-Object { $_.tier + '=' + $_.model }) -join ', ' }
 Check 'tesseract runs'               { $t = Join-Path $Root 'sidecars/docpipe/runtime/tesseract/tesseract.exe'; $v = (& $t --version 2>&1 | Select-Object -First 1); if ($LASTEXITCODE -ne 0) { throw "exit $LASTEXITCODE" }; "$v" }
 Check 'tesseract English data'       { if (-not (Test-Path (Join-Path $Root 'sidecars/docpipe/runtime/tesseract/tessdata/eng.traineddata'))) { throw 'missing eng.traineddata' }; 'eng.traineddata' }
+Check 'tesseract Hindi data'          { $h = Join-Path $Root 'sidecars/docpipe/runtime/tesseract/tessdata/hin.traineddata'; if (-not (Test-Path $h)) { throw 'missing hin.traineddata' }; $c = (Get-Content -Raw (Join-Path $Root 'contracts/ocr_config_indic.json') | ConvertFrom-Json); $s = (Get-FileHash $h -Algorithm SHA256).Hash.ToLower(); if ($s -ne $c.model.sha256) { throw "hin.traineddata hash $s" }; "hin.traineddata $($s.Substring(0,16))" }
 Check 'official India pack bundled'  { if (-not (Test-Path (Join-Path $Root 'packs/official/caseforge.india.partition.highcourt.civil-appeal/manifest.json'))) { throw 'missing pack' }; 'ok' }
 
 if ($failures.Count -gt 0) { Write-Host ("`n{0} check(s) failed: {1}" -f $failures.Count, ($failures -join ', ')); exit 1 }

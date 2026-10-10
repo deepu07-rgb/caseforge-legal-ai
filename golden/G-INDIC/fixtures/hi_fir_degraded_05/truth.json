@@ -56,8 +56,8 @@
     {
       "field_id": "f5",
       "kind": "case_number",
-      "text": "०१२३/२०२४",
-      "char_start": 82,
+      "text": "प्रथम सूचना रिपोर्ट सं. ०१२३/२०२४",
+      "char_start": 58,
       "char_end": 91
     },
     {
@@ -70,19 +70,26 @@
     {
       "field_id": "f7",
       "kind": "name",
+      "text": "श्री मोहन लाल",
+      "char_start": 192,
+      "char_end": 205
+    },
+    {
+      "field_id": "f8",
+      "kind": "name",
       "text": "श्री सुरेश वर्मा",
       "char_start": 284,
       "char_end": 300
     },
     {
-      "field_id": "f8",
+      "field_id": "f9",
       "kind": "name",
       "text": "श्रीमती सीता देवी",
       "char_start": 367,
       "char_end": 384
     },
     {
-      "field_id": "f9",
+      "field_id": "f10",
       "kind": "name",
       "text": "श्री अजय सिंह",
       "char_start": 388,

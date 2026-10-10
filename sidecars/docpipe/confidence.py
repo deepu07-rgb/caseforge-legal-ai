@@ -10,18 +10,25 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+import indic_fields
+
 ROOT = Path(__file__).resolve().parents[2]
 ARTIFACT_PATH = ROOT / "eval" / "calibration" / "confidence_calibration_v1.json"
+INDIC_ARTIFACT_PATH = ROOT / "eval" / "calibration" / "confidence_calibration_indic_v1.json"
+INDIC_DATASET_PATH = ROOT / "eval" / "calibration" / "indic_ocr_calibration_v1.json"
+INDIC_CALIBRATION_ID = "caseforge.tesseract-hin-eng.synthetic-isotonic.v1"
+INDIC_ENGINE_CLASS = "tesseract_hin_eng_scan"
 DATASET_PATH = ROOT / "eval" / "calibration" / "legal_ocr_calibration_v1.json"
 CONSTANTS_PATH = ROOT / "contracts" / "constants.json"
 CALIBRATION_ID = "caseforge.tesseract-eng-fast.synthetic-isotonic.v1"
 VALIDATOR_ID = "caseforge.critical-fields.deterministic.v1"
 
 PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
+    ("date", re.compile(r"\b\d{1,2}\s+(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\.?\s+\d{4}\b", re.I)),
     ("date", re.compile(r"\b(?:\d{1,2}[./-]\d{1,2}[./-]\d{2,4}|(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2},?\s+\d{4})\b", re.I)),
     ("money", re.compile(r"(?<!\w)(?:USD|INR|Rs\.?|₹|\$|£)\s*[0-9OoIl][0-9OoIl,]*(?:\.[0-9OoIl]{1,2})?(?!\w)", re.I)),
     ("citation", re.compile(r"\b(?:[0-9OoIl]{1,4}\s+(?:U\.S\.|F\.?\s*\d[dD]?|S\.\s*Ct\.|AIR|SCC)\s+[0-9OoIl]{1,6}|[A-Z][A-Za-z.&' -]+\s+v\.?\s+[A-Z][A-Za-z.&' -]+,?\s+[0-9OoIl]{1,4}\s+[A-Z.]+\s+[0-9OoIl]{1,6})\b")),
-    ("provision", re.compile(r"\b(?:Section|Sec\.?|Rule|Order|Article)\s+[0-9A-Za-z]+(?:\([0-9A-Za-z]+\))*\b", re.I)),
+    ("provision", re.compile(r"\b(?:Section|Sec\.?|Rule|Order|Article)\s+(?:[0-9][0-9A-Za-z]*|(?-i:[IVXLC]{1,7}(?![A-Za-z])))(?:\([0-9A-Za-z]+\))*\b", re.I)),
     ("case_number", re.compile(r"\b(?:Case|Civil Case|Criminal Case|Crl\.?|Writ|Appeal|Suit)\s+No\.?\s*[A-Z0-9][A-Z0-9./-]{2,}\b", re.I)),
     ("exhibit_label", re.compile(r"\b(?:Exhibit|Annexure|Schedule)\s*[-:]?\s*[A-Z0-9][A-Z0-9./-]*\b", re.I)),
     ("name", re.compile(r"\b(?:Mr\.|Ms\.|Mrs\.|Dr\.|Justice|Judge)\s+[A-Z][A-Za-z'’-]+(?:\s+[A-Z][A-Za-z'’-]+){1,3}\b")),
@@ -42,12 +49,29 @@ def load_calibration() -> dict[str, Any]:
     return artifact
 
 
+@lru_cache(maxsize=1)
+def load_indic_calibration() -> dict[str, Any] | None:
+    """The Hindi calibration map, bound to its dataset's hash. None when it has not been built (raw confidence only)."""
+    if not INDIC_ARTIFACT_PATH.is_file() or not INDIC_DATASET_PATH.is_file():
+        return None
+    artifact = json.loads(INDIC_ARTIFACT_PATH.read_text(encoding="utf-8"))
+    actual = hashlib.sha256(INDIC_DATASET_PATH.read_bytes()).hexdigest()
+    if artifact.get("dataset_sha256") != actual:
+        raise RuntimeError("CF_CONFIDENCE_DATASET_CHECKSUM: Hindi calibration dataset fingerprint mismatch")
+    return artifact
+
+
 def calibrate(raw: float | None, engine_class: str) -> tuple[float | None, str]:
     if raw is None:
         return None, "missing"
-    if engine_class != "tesseract_eng_fast_scan":
+    if engine_class == INDIC_ENGINE_CLASS:
+        artifact = load_indic_calibration()
+        if artifact is None:
+            return None, "raw_only"
+    elif engine_class != "tesseract_eng_fast_scan":
         return None, "raw_only"
-    artifact = load_calibration()
+    else:
+        artifact = load_calibration()
     value = min(1.0, max(0.0, float(raw)))
     for item in artifact["bins"]:
         if float(item["raw_min"]) <= value < float(item["raw_max"]):
@@ -71,6 +95,14 @@ def calibrate_words(words: list[dict[str, Any]], engine_class: str) -> None:
 
 
 def _date_valid(value: str) -> tuple[bool, list[str]]:
+    if re.fullmatch(r"\d{1,2}\s+[A-Za-z]+\.?\s+\d{4}", value.strip()):
+        for fmt in ("%d %B %Y", "%d %b %Y", "%d %b. %Y"):
+            try:
+                datetime.strptime(re.sub(r"\s+", " ", value.strip()), fmt)
+                return True, ["calendar-valid named-month date"]
+            except ValueError:
+                continue
+        return False, ["calendar-invalid date"]
     normalized = value.replace(".", "/").replace("-", "/")
     if re.fullmatch(r"\d{1,2}/\d{1,2}/\d{2,4}", normalized):
         day, month, year = [int(part) for part in normalized.split("/")]
@@ -91,6 +123,8 @@ def _date_valid(value: str) -> tuple[bool, list[str]]:
 
 
 def _validate(kind: str, value: str) -> tuple[bool, list[str]]:
+    if indic_fields.HAS_DEV.search(value):
+        return indic_fields.validate(kind, value)
     suspicious = bool(re.search(r"[|{}?]", value) or re.search(r"\d[OoIl]|[OoIl]\d|[A-Za-z][01][A-Za-z]", value))
     reasons = ["OCR-confusable character pattern detected"] if suspicious else []
     if kind == "date":
@@ -98,7 +132,10 @@ def _validate(kind: str, value: str) -> tuple[bool, list[str]]:
         return valid and not suspicious, reasons + detail
     if kind == "money":
         digits = re.sub(r"\D", "", value)
-        valid = bool(digits) and not re.search(r",\d{1,2}(?:\D|$)", value)
+        # Indian amounts group as 1,25,000 (lakh and crore); that grouping is right after a rupee marker and wrong after any other
+        indian = bool(re.search(r"(?:₹|\bRs\.?|\bINR)", value, re.I)) and all(
+            re.fullmatch(r"\d{1,2}(?:,\d{2})*,\d{3}(?:\.\d+)?|\d{1,3}(?:,\d{3})*(?:\.\d+)?|\d+(?:\.\d+)?", n) for n in re.findall(r"\d[\d,]*(?:\.\d+)?", value))
+        valid = bool(digits) and (indian or not re.search(r",\d{1,2}(?:\D|$)", value))
         return valid and not suspicious, reasons + (["currency marker and numeric grouping validated"] if valid else ["invalid currency amount grouping"])
     if kind == "citation":
         valid = bool(re.search(r"\d", value) and re.search(r"(?:U\.S\.|SCC|AIR|F\.?\s*\d|S\.\s*Ct\.)", value, re.I))
@@ -131,24 +168,27 @@ def validate_critical_fields(text: str, words: list[dict[str, Any]]) -> list[dic
     thresholds = _thresholds()
     found: list[dict[str, Any]] = []
     occupied: set[tuple[int, int, str]] = set()
-    for kind, pattern in PATTERNS:
-        for match in pattern.finditer(text):
-            key = (match.start(), match.end(), kind)
+    spans: list[tuple[str, int, int, str]] = [(kind, m.start(), m.end(), m.group(0)) for kind, pattern in PATTERNS for m in pattern.finditer(text)]
+    # Hindi fields (Devanagari or Latin digits, Hindi months, rupee words, dhara numbers, labelled case numbers, names after an honorific)
+    spans += [(kind, s, e, text[s:e]) for kind, s, e in indic_fields.find(text)]
+    for kind, start, end, matched in spans:
+        if True:
+            key = (start, end, kind)
             if key in occupied:
                 continue
             occupied.add(key)
-            source_words = [word for word in words if word["char_start"] < match.end() and word["char_end"] > match.start()]
+            source_words = [word for word in words if word["char_start"] < end and word["char_end"] > start]
             values = [word.get("calibrated_confidence") for word in source_words if word.get("calibrated_confidence") is not None]
             raw_values = [word.get("raw_engine_confidence") for word in source_words if word.get("raw_engine_confidence") is not None]
-            valid, reasons = _validate(kind, match.group(0))
+            valid, reasons = _validate(kind, matched)
             calibrated = min(values) if values and len(values) == len(source_words) else None
             raw = min(raw_values) if raw_values and len(raw_values) == len(source_words) else None
             confidence_state = "calibrated" if calibrated is not None else "missing"
             field_confidence = calibrated if valid and calibrated is not None else (min(calibrated or 0.0, 0.49) if calibrated is not None else None)
             force = field_confidence is None or field_confidence < thresholds["item_block_downstream_below"] or not valid
             found.append({
-                "field_index": len(found), "field_type": kind, "text": match.group(0),
-                "char_start": match.start(), "char_end": match.end(), "bbox": _union_bbox(source_words),
+                "field_index": len(found), "field_type": kind, "text": matched,
+                "char_start": start, "char_end": end, "bbox": _union_bbox(source_words),
                 "raw_engine_confidence": raw, "calibrated_confidence": calibrated,
                 "field_confidence": field_confidence, "confidence_state": confidence_state,
                 "syntactically_valid": valid, "validation_reasons": reasons,

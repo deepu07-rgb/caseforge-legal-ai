@@ -1,6 +1,6 @@
 # G-INDIC
 
-Hindi (Devanagari) ingestion: eight synthetic pages (FIR, order, statement, notice, two degraded copies, a mixed Hindi/English page and an English control) with exact ground truth, for OCR accuracy, script detection and critical-field checks. Translation fixtures (AC-S4-09.2, 09.3) are added with B-S4-15.
+Hindi (Devanagari) ingestion: eight synthetic pages (FIR, order, statement, notice, two degraded copies, a mixed Hindi/English page and an English control) with exact ground truth, for OCR accuracy, script detection and critical-field checks. Translation fixture `translation_core.json` (AC-S4-09.2, 09.3) was pinned before the B-S4-15 engine.
 
 | | |
 |---|---|
@@ -32,6 +32,7 @@ review exists).
 * `mixed_order_07/truth.json` — mechanical; engine batch B-S4-14; pinned before the engine
 * `latin_control_08/page.png` — image; engine batch B-S4-14; pinned before the engine. A page rendered with Windows text shaping from the text in truth.json (eval/tools/make_indic_golden.py); not a real scan.
 * `latin_control_08/truth.json` — mechanical; engine batch B-S4-14; pinned before the engine
+* `translation_core.json` — mechanical; engine batch B-S4-15; pinned before the engine. Segmentation, reference English, host-rendered critical fields, model-protocol failures and guardrail G10 probes for Hindi-to-English translation. Reference translations are the coding agent's, not a legal translator's.
 
 ## How to read the status
 

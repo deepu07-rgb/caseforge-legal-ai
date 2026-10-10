@@ -1,0 +1,665 @@
+{
+  "fixture_id": "G-INDIC/translation_core",
+  "status": "DRAFT",
+  "source_class": "SYNTHETIC_CONTROLLED",
+  "authored_by": "coding agent, at the owner's instruction",
+  "independent_review": null,
+  "description": "Segmentation, reference English, host-rendered critical fields, model-protocol failures and guardrail G10 probes for Hindi-to-English translation (AC-S4-09.2, AC-S4-09.3).",
+  "limits": "Reference translations are one acceptable rendering written by the coding agent and not reviewed by a Hindi-English legal translator. Names are never pinned: counsel confirms them.",
+  "primary_acs": [
+    "AC-S4-09.2",
+    "AC-S4-09.3"
+  ],
+  "segmentation_rule": "1. Take the page's lines in order (empty lines are ignored).\n  2. A line is CONTINUED into the next one when it does not end with a sentence mark (। . ? ! :) and is at least 85% as long as the longest line\n     on the page (a wrapped line runs full width; a heading or a short line does not).\n  3. Continued lines are joined with one space into a paragraph.\n  4. A paragraph is split after every danda (।) that is followed by a space.\n  5. Each piece is one segment. A segment with no Devanagari letter is carried as it is and is not translated.",
+  "pages": {
+    "hi_fir_clean_01": [
+      {
+        "source": "प्रथम सूचना रिपोर्ट",
+        "translate": true,
+        "reference_english": "First Information Report",
+        "fields": []
+      },
+      {
+        "source": "थाना: काल्पनिक नगर, जिला: काल्पनिकपुर",
+        "translate": true,
+        "reference_english": "Police station: Kalpanik Nagar, District: Kalpanikpur",
+        "fields": []
+      },
+      {
+        "source": "प्रथम सूचना रिपोर्ट सं. ०१२३/२०२४, दिनांक १२/०३/२०२४",
+        "translate": true,
+        "reference_english": "First Information Report No. 0123/2024, dated 12/03/2024",
+        "fields": [
+          {
+            "kind": "CASE_NUMBER",
+            "source_value": "प्रथम सूचना रिपोर्ट सं. ०१२३/२०२४",
+            "english": "FIR No. 0123/2024"
+          },
+          {
+            "kind": "DATE",
+            "source_value": "१२/०३/२०२४",
+            "english": "12/03/2024"
+          }
+        ]
+      },
+      {
+        "source": "धारा ३०२/३४ भारतीय दंड संहिता के अंतर्गत अपराध",
+        "translate": true,
+        "reference_english": "Offence under Section 302/34 of the Indian Penal Code",
+        "fields": [
+          {
+            "kind": "SECTION_NUMBER",
+            "source_value": "धारा ३०२/३४",
+            "english": "Section 302/34"
+          }
+        ]
+      },
+      {
+        "source": "शिकायतकर्ता श्री रमेश कुमार पुत्र श्री मोहन लाल, निवासी ग्राम रामपुर ने बताया कि दिनांक १० मार्च २०२४ को रात लगभग ९ बजे आरोपी श्री सुरेश वर्मा ने उनके घर में घुसकर विवाद किया और ₹ १,२५,००० की मांग की।",
+        "translate": true,
+        "reference_english": "The complainant Shri Ramesh Kumar, son of Shri Mohan Lal, resident of village Rampur, stated that on 10 March 2024 at about 9 pm the accused Shri Suresh Verma entered their house, quarrelled and demanded ₹1,25,000.",
+        "fields": [
+          {
+            "kind": "NAME",
+            "source_value": "श्री रमेश कुमार",
+            "english": null
+          },
+          {
+            "kind": "NAME",
+            "source_value": "श्री मोहन लाल",
+            "english": null
+          },
+          {
+            "kind": "DATE",
+            "source_value": "१० मार्च २०२४",
+            "english": "10 March 2024"
+          },
+          {
+            "kind": "NAME",
+            "source_value": "श्री सुरेश वर्मा",
+            "english": null
+          },
+          {
+            "kind": "AMOUNT",
+            "source_value": "₹ १,२५,०००",
+            "english": "₹1,25,000"
+          }
+        ]
+      },
+      {
+        "source": "मौके पर श्रीमती सीता देवी और श्री अजय सिंह गवाह के रूप में उपस्थित थे।",
+        "translate": true,
+        "reference_english": "Smt. Sita Devi and Shri Ajay Singh were present at the spot as witnesses.",
+        "fields": [
+          {
+            "kind": "NAME",
+            "source_value": "श्रीमती सीता देवी",
+            "english": null
+          },
+          {
+            "kind": "NAME",
+            "source_value": "श्री अजय सिंह",
+            "english": null
+          }
+        ]
+      },
+      {
+        "source": "मामला दर्ज कर जांच प्रारंभ की गई।",
+        "translate": true,
+        "reference_english": "The case was registered and the investigation was begun.",
+        "fields": []
+      }
+    ],
+    "hi_order_clean_02": [
+      {
+        "source": "अपर जिला एवं सत्र न्यायाधीश का न्यायालय, काल्पनिकपुर",
+        "translate": true,
+        "reference_english": "Court of the Additional District and Sessions Judge, Kalpanikpur",
+        "fields": []
+      },
+      {
+        "source": "वाद संख्या १४५/२०२३",
+        "translate": true,
+        "reference_english": "Case No. 145/2023",
+        "fields": [
+          {
+            "kind": "CASE_NUMBER",
+            "source_value": "वाद संख्या १४५/२०२३",
+            "english": "Case No. 145/2023"
+          }
+        ]
+      },
+      {
+        "source": "श्रीमती गीता शर्मा बनाम श्री विजय प्रसाद",
+        "translate": true,
+        "reference_english": "Smt. Geeta Sharma versus Shri Vijay Prasad",
+        "fields": [
+          {
+            "kind": "NAME",
+            "source_value": "श्रीमती गीता शर्मा",
+            "english": null
+          },
+          {
+            "kind": "NAME",
+            "source_value": "श्री विजय प्रसाद",
+            "english": null
+          }
+        ]
+      },
+      {
+        "source": "आदेश दिनांक २८ फरवरी २०२४",
+        "translate": true,
+        "reference_english": "Order dated 28 February 2024",
+        "fields": [
+          {
+            "kind": "DATE",
+            "source_value": "२८ फरवरी २०२४",
+            "english": "28 February 2024"
+          }
+        ]
+      },
+      {
+        "source": "प्रार्थिनी ने धारा ८० सिविल प्रक्रिया संहिता के अंतर्गत नोटिस की सेवा का उल्लेख किया है।",
+        "translate": true,
+        "reference_english": "The petitioner has mentioned the service of notice under Section 80 of the Code of Civil Procedure.",
+        "fields": [
+          {
+            "kind": "SECTION_NUMBER",
+            "source_value": "धारा ८०",
+            "english": "Section 80"
+          }
+        ]
+      },
+      {
+        "source": "विपक्षी ने रुपये ७५,००० की राशि जमा करने का आश्वासन दिया था।",
+        "translate": true,
+        "reference_english": "The opposite party had assured that the amount of ₹75,000 would be deposited.",
+        "fields": [
+          {
+            "kind": "AMOUNT",
+            "source_value": "रुपये ७५,०००",
+            "english": "₹75,000"
+          }
+        ]
+      },
+      {
+        "source": "अगली सुनवाई की तिथि १५ अप्रैल २०२४ नियत की जाती है।",
+        "translate": true,
+        "reference_english": "The next date of hearing is fixed as 15 April 2024.",
+        "fields": [
+          {
+            "kind": "DATE",
+            "source_value": "१५ अप्रैल २०२४",
+            "english": "15 April 2024"
+          }
+        ]
+      },
+      {
+        "source": "पक्षकारों को सूचित किया जाए।",
+        "translate": true,
+        "reference_english": "Let the parties be informed.",
+        "fields": []
+      },
+      {
+        "source": "आदेश खुले न्यायालय में सुनाया गया।",
+        "translate": true,
+        "reference_english": "The order was pronounced in open court.",
+        "fields": []
+      }
+    ],
+    "hi_statement_clean_03": [
+      {
+        "source": "गवाह का बयान",
+        "translate": true,
+        "reference_english": "Statement of the witness",
+        "fields": []
+      },
+      {
+        "source": "नाम: श्री अजय सिंह, आयु 42 वर्ष",
+        "translate": true,
+        "reference_english": "Name: Shri Ajay Singh, age 42 years",
+        "fields": [
+          {
+            "kind": "NAME",
+            "source_value": "श्री अजय सिंह",
+            "english": null
+          }
+        ]
+      },
+      {
+        "source": "मैंने दिनांक 10/03/2024 को लगभग 9 बजे रात शोर सुना।",
+        "translate": true,
+        "reference_english": "On 10/03/2024 at about 9 pm I heard noise.",
+        "fields": [
+          {
+            "kind": "DATE",
+            "source_value": "10/03/2024",
+            "english": "10/03/2024"
+          }
+        ]
+      },
+      {
+        "source": "मैंने देखा कि श्री सुरेश वर्मा के हाथ में लाठी थी।",
+        "translate": true,
+        "reference_english": "I saw that Shri Suresh Verma had a stick in his hand.",
+        "fields": [
+          {
+            "kind": "NAME",
+            "source_value": "श्री सुरेश वर्मा",
+            "english": null
+          }
+        ]
+      },
+      {
+        "source": "उसने Rs. 50,000 की मांग की थी, ऐसा मैंने सुना।",
+        "translate": true,
+        "reference_english": "He had demanded Rs. 50,000; so I heard.",
+        "fields": [
+          {
+            "kind": "AMOUNT",
+            "source_value": "Rs. 50,000",
+            "english": "Rs. 50,000"
+          }
+        ]
+      },
+      {
+        "source": "थाने में मेरा बयान दिनांक 11 मार्च 2024 को दर्ज हुआ।",
+        "translate": true,
+        "reference_english": "My statement was recorded at the police station on 11 March 2024.",
+        "fields": [
+          {
+            "kind": "DATE",
+            "source_value": "11 मार्च 2024",
+            "english": "11 March 2024"
+          }
+        ]
+      },
+      {
+        "source": "मैं अपना बयान पढ़कर हस्ताक्षर करता हूं।",
+        "translate": true,
+        "reference_english": "I sign this statement after reading it.",
+        "fields": []
+      }
+    ],
+    "hi_notice_clean_04": [
+      {
+        "source": "विधिक नोटिस",
+        "translate": true,
+        "reference_english": "Legal notice",
+        "fields": []
+      },
+      {
+        "source": "प्रेषक: श्रीमती गीता शर्मा, काल्पनिकपुर",
+        "translate": true,
+        "reference_english": "From: Smt. Geeta Sharma, Kalpanikpur",
+        "fields": [
+          {
+            "kind": "NAME",
+            "source_value": "श्रीमती गीता शर्मा",
+            "english": null
+          }
+        ]
+      },
+      {
+        "source": "प्रति: श्री विजय प्रसाद, नया बाजार",
+        "translate": true,
+        "reference_english": "To: Shri Vijay Prasad, Naya Bazar",
+        "fields": [
+          {
+            "kind": "NAME",
+            "source_value": "श्री विजय प्रसाद",
+            "english": null
+          }
+        ]
+      },
+      {
+        "source": "आपने दिनांक ५ अप्रैल २०२३ को ₹ २ लाख ५० हजार लेकर भूमि बेचने का अनुबंध किया था।",
+        "translate": true,
+        "reference_english": "You had entered into an agreement to sell land on 5 April 2023, taking ₹2,50,000.",
+        "fields": [
+          {
+            "kind": "DATE",
+            "source_value": "५ अप्रैल २०२३",
+            "english": "5 April 2023"
+          },
+          {
+            "kind": "AMOUNT",
+            "source_value": "₹ २ लाख ५० हजार",
+            "english": "₹2,50,000"
+          }
+        ]
+      },
+      {
+        "source": "धारा ४२० भारतीय दंड संहिता तथा धारा ३४ के अंतर्गत कार्यवाही की जा सकती है।",
+        "translate": true,
+        "reference_english": "Action can be taken under Section 420 of the Indian Penal Code and Section 34.",
+        "fields": [
+          {
+            "kind": "SECTION_NUMBER",
+            "source_value": "धारा ४२०",
+            "english": "Section 420"
+          },
+          {
+            "kind": "SECTION_NUMBER",
+            "source_value": "धारा ३४",
+            "english": "Section 34"
+          }
+        ]
+      },
+      {
+        "source": "यह नोटिस प्राप्ति के १५ दिन के भीतर उत्तर दें।",
+        "translate": true,
+        "reference_english": "Reply within 15 days of receiving this notice.",
+        "fields": []
+      },
+      {
+        "source": "अपराध क्रमांक ०४५६/२०२३ का संदर्भ लें।",
+        "translate": true,
+        "reference_english": "Refer to Crime No. 0456/2023.",
+        "fields": [
+          {
+            "kind": "CASE_NUMBER",
+            "source_value": "अपराध क्रमांक ०४५६/२०२३",
+            "english": "Crime No. 0456/2023"
+          }
+        ]
+      }
+    ],
+    "mixed_order_07": [
+      {
+        "source": "जिला न्यायालय, काल्पनिकपुर",
+        "translate": true,
+        "reference_english": "District Court, Kalpanikpur",
+        "fields": []
+      },
+      {
+        "source": "Criminal Case No. 456/2024",
+        "translate": false
+      },
+      {
+        "source": "राज्य बनाम श्री सुरेश वर्मा",
+        "translate": true,
+        "reference_english": "State versus Shri Suresh Verma",
+        "fields": [
+          {
+            "kind": "NAME",
+            "source_value": "श्री सुरेश वर्मा",
+            "english": null
+          }
+        ]
+      },
+      {
+        "source": "आरोपी के विरुद्ध Section 420 IPC तथा धारा ३४ के अंतर्गत आरोप तय किए गए।",
+        "translate": true,
+        "reference_english": "Charges were framed against the accused under Section 420 IPC and Section 34.",
+        "fields": [
+          {
+            "kind": "SECTION_NUMBER",
+            "source_value": "Section 420",
+            "english": "Section 420"
+          },
+          {
+            "kind": "SECTION_NUMBER",
+            "source_value": "धारा ३४",
+            "english": "Section 34"
+          }
+        ]
+      },
+      {
+        "source": "The next hearing is fixed on 20 April 2024.",
+        "translate": false
+      },
+      {
+        "source": "अभियोजन ने दिनांक १८/०४/२०२४ तक समय मांगा।",
+        "translate": true,
+        "reference_english": "The prosecution sought time until 18/04/2024.",
+        "fields": [
+          {
+            "kind": "DATE",
+            "source_value": "१८/०४/२०२४",
+            "english": "18 April 2024"
+          }
+        ]
+      },
+      {
+        "source": "जमानत राशि ₹ 50,000 निर्धारित की गई।",
+        "translate": true,
+        "reference_english": "The bail amount was fixed at ₹50,000.",
+        "fields": [
+          {
+            "kind": "AMOUNT",
+            "source_value": "₹ 50,000",
+            "english": "₹50,000"
+          }
+        ]
+      }
+    ]
+  },
+  "rendering_rule_cases": [
+    {
+      "kind": "DATE",
+      "source": "१० मार्च २०२४",
+      "english": "10 March 2024",
+      "needs_confirmation_reason": null
+    },
+    {
+      "kind": "DATE",
+      "source": "१५/०४/२०२४",
+      "english": "15 April 2024",
+      "needs_confirmation_reason": null
+    },
+    {
+      "kind": "DATE",
+      "source": "१२/०३/२०२४",
+      "english": "12/03/2024",
+      "needs_confirmation_reason": "day/month order cannot be told from the numbers"
+    },
+    {
+      "kind": "DATE",
+      "source": "३२/१३/२०२४",
+      "english": null,
+      "needs_confirmation_reason": "not a calendar date"
+    },
+    {
+      "kind": "AMOUNT",
+      "source": "₹ १,२५,०००",
+      "english": "₹1,25,000",
+      "needs_confirmation_reason": null
+    },
+    {
+      "kind": "AMOUNT",
+      "source": "रुपये ७५,०००",
+      "english": "₹75,000",
+      "needs_confirmation_reason": null
+    },
+    {
+      "kind": "AMOUNT",
+      "source": "₹ २ लाख ५० हजार",
+      "english": "₹2,50,000",
+      "needs_confirmation_reason": null
+    },
+    {
+      "kind": "AMOUNT",
+      "source": "₹ १ करोड़ २५ लाख",
+      "english": "₹1,25,00,000",
+      "needs_confirmation_reason": null
+    },
+    {
+      "kind": "AMOUNT",
+      "source": "२ लाख ५० हजार",
+      "english": null,
+      "needs_confirmation_reason": "no currency marker"
+    },
+    {
+      "kind": "SECTION_NUMBER",
+      "source": "धारा ३०२/३४",
+      "english": "Section 302/34",
+      "needs_confirmation_reason": null
+    },
+    {
+      "kind": "SECTION_NUMBER",
+      "source": "धारा ८०",
+      "english": "Section 80",
+      "needs_confirmation_reason": null
+    },
+    {
+      "kind": "CASE_NUMBER",
+      "source": "वाद संख्या १४५/२०२३",
+      "english": "Case No. 145/2023",
+      "needs_confirmation_reason": null
+    },
+    {
+      "kind": "CASE_NUMBER",
+      "source": "अपराध क्रमांक ०४५६/२०२३",
+      "english": "Crime No. 0456/2023",
+      "needs_confirmation_reason": null
+    },
+    {
+      "kind": "CASE_NUMBER",
+      "source": "प्रथम सूचना रिपोर्ट सं. ०१२३/२०२४",
+      "english": "FIR No. 0123/2024",
+      "needs_confirmation_reason": null
+    }
+  ],
+  "protocol_cases": [
+    {
+      "id": "lost",
+      "model_output": "The complainant stated that the accused demanded money.",
+      "fields": 1,
+      "expect": {
+        "F1": "NOT_CARRIED"
+      },
+      "segment_flagged": true
+    },
+    {
+      "id": "repeated",
+      "model_output": "He demanded [F1] and then again [F1].",
+      "fields": 1,
+      "expect": {
+        "F1": "REPEATED"
+      },
+      "segment_flagged": true
+    },
+    {
+      "id": "invented",
+      "model_output": "He demanded [F1] on [F7].",
+      "fields": 1,
+      "expect": {
+        "F1": "OK"
+      },
+      "segment_flagged": true,
+      "invented": [
+        "F7"
+      ]
+    },
+    {
+      "id": "clean",
+      "model_output": "He demanded [F1] on [F2].",
+      "fields": 2,
+      "expect": {
+        "F1": "OK",
+        "F2": "OK"
+      },
+      "segment_flagged": false
+    },
+    {
+      "id": "reordered",
+      "model_output": "On [F2] he demanded [F1].",
+      "fields": 2,
+      "expect": {
+        "F1": "OK",
+        "F2": "OK"
+      },
+      "segment_flagged": false
+    },
+    {
+      "id": "empty",
+      "model_output": "",
+      "fields": 1,
+      "expect": {
+        "F1": "NOT_CARRIED"
+      },
+      "segment_flagged": true
+    }
+  ],
+  "g10_probes": [
+    {
+      "id": "translated_fact_is_never_green",
+      "class": "FACTUAL_BASIS",
+      "source_translated": true,
+      "exact_excerpt": true,
+      "expect": {
+        "verification_status": "AMBER",
+        "render_action": "LABELLED"
+      }
+    },
+    {
+      "id": "original_language_fact_is_green",
+      "class": "FACTUAL_BASIS",
+      "source_translated": false,
+      "exact_excerpt": true,
+      "expect": {
+        "verification_status": "GREEN",
+        "render_action": "TRUSTED"
+      }
+    },
+    {
+      "id": "translated_quotation_is_not_verified",
+      "class": "FACTUAL_BASIS",
+      "source_translated": true,
+      "quotation": true,
+      "expect": {
+        "quote_verified": false,
+        "label": "translation - wording not verified",
+        "verification_status_not": "GREEN"
+      }
+    },
+    {
+      "id": "original_quotation_is_verified",
+      "class": "FACTUAL_BASIS",
+      "source_translated": false,
+      "quotation": true,
+      "expect": {
+        "quote_verified": true
+      }
+    },
+    {
+      "id": "translated_fact_cannot_be_laundered_by_a_second_source",
+      "class": "FACTUAL_BASIS",
+      "mixed_sources": true,
+      "expect": {
+        "verification_status_not": "GREEN"
+      }
+    },
+    {
+      "id": "inference_on_translated_basis_stays_amber_labelled",
+      "class": "INFERENCE",
+      "basis_translated": true,
+      "expect": {
+        "verification_status": "AMBER",
+        "render_action": "LABELLED",
+        "carries_translation_label": true
+      }
+    },
+    {
+      "id": "legal_authority_is_not_affected",
+      "class": "LEGAL_BASIS",
+      "expect": {
+        "unchanged": true
+      }
+    }
+  ],
+  "ui_requirements": [
+    "the original Hindi text and its English translation are shown side by side for every segment",
+    "every translated segment carries the label 'machine translation - wording not verified'",
+    "a critical field shows the source value, the English form and 'not confirmed' until counsel confirms it",
+    "a translated sentence is never offered as a quotation"
+  ],
+  "name_honorifics": {
+    "श्रीमती": "Smt.",
+    "सुश्री": "Ms.",
+    "कुमारी": "Kumari",
+    "श्री": "Shri",
+    "डॉ": "Dr."
+  }
+}

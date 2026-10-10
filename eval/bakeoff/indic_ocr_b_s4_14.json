@@ -1,0 +1,417 @@
+{
+  "batch": "B-S4-14",
+  "tool": "eval/tools/bakeoff_indic_ocr.py",
+  "engine": "tesseract v5.5.3.20260724",
+  "models": {
+    "tessdata_fast hin": "4c73ffc59d497c186b19d1e90f5d721d678ea6b2e277b719bee4e2af12271825",
+    "tessdata_best hin": "bd2e65a2184af08a167b0be2439e91fa5edbc4394399ca2f692b843ae26e78d6"
+  },
+  "model_sizes_bytes": {
+    "tessdata_fast hin": 1122751,
+    "tessdata_best hin": 11895564
+  },
+  "selection_rule": "among hin+eng candidates at psm 3: lowest mean degraded-page CER, ties by clean-page CER",
+  "selected": "hin+eng-best",
+  "summary": {
+    "hin-fast": {
+      "clean_cer": 0.042,
+      "degraded_cer": 0.0024,
+      "latin_control_cer": 0.7231,
+      "clean_wer": 0.0633,
+      "seconds_per_page": 0.45,
+      "max_peak_rss_mb": 43
+    },
+    "hin-best": {
+      "clean_cer": 0.0428,
+      "degraded_cer": 0.0024,
+      "latin_control_cer": 0.7025,
+      "clean_wer": 0.0637,
+      "seconds_per_page": 0.79,
+      "max_peak_rss_mb": 54
+    },
+    "hin+eng-fast": {
+      "clean_cer": 0.0081,
+      "degraded_cer": 0.0061,
+      "latin_control_cer": 0.0124,
+      "clean_wer": 0.0159,
+      "seconds_per_page": 0.6,
+      "max_peak_rss_mb": 60
+    },
+    "hin+eng-best": {
+      "clean_cer": 0.0056,
+      "degraded_cer": 0.0024,
+      "latin_control_cer": 0.0124,
+      "clean_wer": 0.0156,
+      "seconds_per_page": 1.05,
+      "max_peak_rss_mb": 73
+    },
+    "hin+eng-best-psm6": {
+      "clean_cer": 0.0056,
+      "degraded_cer": 0.0061,
+      "latin_control_cer": 0.0124,
+      "clean_wer": 0.0156,
+      "seconds_per_page": 1.04,
+      "max_peak_rss_mb": 74
+    },
+    "eng-only (current path)": {
+      "clean_cer": 0.7441,
+      "degraded_cer": 0.8229,
+      "latin_control_cer": 0.0,
+      "clean_wer": 0.915,
+      "seconds_per_page": 0.51,
+      "max_peak_rss_mb": 52
+    }
+  },
+  "pages": {
+    "hin-fast": [
+      {
+        "page": "hi_fir_clean_01",
+        "cer": 0.0022,
+        "wer": 0.0118,
+        "seconds": 0.42,
+        "peak_rss_mb": 40
+      },
+      {
+        "page": "hi_fir_degraded_05",
+        "cer": 0.0022,
+        "wer": 0.0118,
+        "seconds": 0.7,
+        "peak_rss_mb": 42
+      },
+      {
+        "page": "hi_notice_clean_04",
+        "cer": 0.0,
+        "wer": 0.0,
+        "seconds": 0.35,
+        "peak_rss_mb": 39
+      },
+      {
+        "page": "hi_order_clean_02",
+        "cer": 0.0025,
+        "wer": 0.0137,
+        "seconds": 0.42,
+        "peak_rss_mb": 40
+      },
+      {
+        "page": "hi_order_degraded_06",
+        "cer": 0.0025,
+        "wer": 0.0137,
+        "seconds": 0.68,
+        "peak_rss_mb": 43
+      },
+      {
+        "page": "hi_statement_clean_03",
+        "cer": 0.0174,
+        "wer": 0.0508,
+        "seconds": 0.32,
+        "peak_rss_mb": 38
+      },
+      {
+        "page": "latin_control_08",
+        "cer": 0.7231,
+        "wer": 0.9318,
+        "seconds": 0.36,
+        "peak_rss_mb": 42
+      },
+      {
+        "page": "mixed_order_07",
+        "cer": 0.1877,
+        "wer": 0.24,
+        "seconds": 0.32,
+        "peak_rss_mb": 39
+      }
+    ],
+    "hin-best": [
+      {
+        "page": "hi_fir_clean_01",
+        "cer": 0.0022,
+        "wer": 0.0118,
+        "seconds": 0.94,
+        "peak_rss_mb": 49
+      },
+      {
+        "page": "hi_fir_degraded_05",
+        "cer": 0.0022,
+        "wer": 0.0118,
+        "seconds": 1.19,
+        "peak_rss_mb": 52
+      },
+      {
+        "page": "hi_notice_clean_04",
+        "cer": 0.0031,
+        "wer": 0.0161,
+        "seconds": 0.61,
+        "peak_rss_mb": 48
+      },
+      {
+        "page": "hi_order_clean_02",
+        "cer": 0.0,
+        "wer": 0.0,
+        "seconds": 0.72,
+        "peak_rss_mb": 50
+      },
+      {
+        "page": "hi_order_degraded_06",
+        "cer": 0.0025,
+        "wer": 0.0137,
+        "seconds": 1.03,
+        "peak_rss_mb": 54
+      },
+      {
+        "page": "hi_statement_clean_03",
+        "cer": 0.0174,
+        "wer": 0.0508,
+        "seconds": 0.54,
+        "peak_rss_mb": 46
+      },
+      {
+        "page": "latin_control_08",
+        "cer": 0.7025,
+        "wer": 0.9773,
+        "seconds": 0.64,
+        "peak_rss_mb": 54
+      },
+      {
+        "page": "mixed_order_07",
+        "cer": 0.1913,
+        "wer": 0.24,
+        "seconds": 0.61,
+        "peak_rss_mb": 50
+      }
+    ],
+    "hin+eng-fast": [
+      {
+        "page": "hi_fir_clean_01",
+        "cer": 0.0022,
+        "wer": 0.0118,
+        "seconds": 0.55,
+        "peak_rss_mb": 57
+      },
+      {
+        "page": "hi_fir_degraded_05",
+        "cer": 0.0022,
+        "wer": 0.0118,
+        "seconds": 0.89,
+        "peak_rss_mb": 59
+      },
+      {
+        "page": "hi_notice_clean_04",
+        "cer": 0.0,
+        "wer": 0.0,
+        "seconds": 0.5,
+        "peak_rss_mb": 56
+      },
+      {
+        "page": "hi_order_clean_02",
+        "cer": 0.0025,
+        "wer": 0.0137,
+        "seconds": 0.55,
+        "peak_rss_mb": 57
+      },
+      {
+        "page": "hi_order_degraded_06",
+        "cer": 0.0099,
+        "wer": 0.0137,
+        "seconds": 0.87,
+        "peak_rss_mb": 60
+      },
+      {
+        "page": "hi_statement_clean_03",
+        "cer": 0.0105,
+        "wer": 0.0339,
+        "seconds": 0.46,
+        "peak_rss_mb": 55
+      },
+      {
+        "page": "latin_control_08",
+        "cer": 0.0124,
+        "wer": 0.0682,
+        "seconds": 0.5,
+        "peak_rss_mb": 60
+      },
+      {
+        "page": "mixed_order_07",
+        "cer": 0.0253,
+        "wer": 0.02,
+        "seconds": 0.52,
+        "peak_rss_mb": 57
+      }
+    ],
+    "hin+eng-best": [
+      {
+        "page": "hi_fir_clean_01",
+        "cer": 0.0022,
+        "wer": 0.0118,
+        "seconds": 1.0,
+        "peak_rss_mb": 67
+      },
+      {
+        "page": "hi_fir_degraded_05",
+        "cer": 0.0022,
+        "wer": 0.0118,
+        "seconds": 1.25,
+        "peak_rss_mb": 70
+      },
+      {
+        "page": "hi_notice_clean_04",
+        "cer": 0.0153,
+        "wer": 0.0323,
+        "seconds": 0.86,
+        "peak_rss_mb": 65
+      },
+      {
+        "page": "hi_order_clean_02",
+        "cer": 0.0,
+        "wer": 0.0,
+        "seconds": 1.14,
+        "peak_rss_mb": 68
+      },
+      {
+        "page": "hi_order_degraded_06",
+        "cer": 0.0025,
+        "wer": 0.0137,
+        "seconds": 1.36,
+        "peak_rss_mb": 71
+      },
+      {
+        "page": "hi_statement_clean_03",
+        "cer": 0.0105,
+        "wer": 0.0339,
+        "seconds": 0.89,
+        "peak_rss_mb": 63
+      },
+      {
+        "page": "latin_control_08",
+        "cer": 0.0124,
+        "wer": 0.0682,
+        "seconds": 0.93,
+        "peak_rss_mb": 73
+      },
+      {
+        "page": "mixed_order_07",
+        "cer": 0.0,
+        "wer": 0.0,
+        "seconds": 0.98,
+        "peak_rss_mb": 67
+      }
+    ],
+    "hin+eng-best-psm6": [
+      {
+        "page": "hi_fir_clean_01",
+        "cer": 0.0022,
+        "wer": 0.0118,
+        "seconds": 1.14,
+        "peak_rss_mb": 66
+      },
+      {
+        "page": "hi_fir_degraded_05",
+        "cer": 0.0022,
+        "wer": 0.0118,
+        "seconds": 1.44,
+        "peak_rss_mb": 69
+      },
+      {
+        "page": "hi_notice_clean_04",
+        "cer": 0.0153,
+        "wer": 0.0323,
+        "seconds": 0.81,
+        "peak_rss_mb": 65
+      },
+      {
+        "page": "hi_order_clean_02",
+        "cer": 0.0,
+        "wer": 0.0,
+        "seconds": 1.0,
+        "peak_rss_mb": 68
+      },
+      {
+        "page": "hi_order_degraded_06",
+        "cer": 0.0099,
+        "wer": 0.0274,
+        "seconds": 1.31,
+        "peak_rss_mb": 70
+      },
+      {
+        "page": "hi_statement_clean_03",
+        "cer": 0.0105,
+        "wer": 0.0339,
+        "seconds": 0.82,
+        "peak_rss_mb": 62
+      },
+      {
+        "page": "latin_control_08",
+        "cer": 0.0124,
+        "wer": 0.0682,
+        "seconds": 0.89,
+        "peak_rss_mb": 74
+      },
+      {
+        "page": "mixed_order_07",
+        "cer": 0.0,
+        "wer": 0.0,
+        "seconds": 0.9,
+        "peak_rss_mb": 67
+      }
+    ],
+    "eng-only (current path)": [
+      {
+        "page": "hi_fir_clean_01",
+        "cer": 0.8207,
+        "wer": 1.0,
+        "seconds": 0.53,
+        "peak_rss_mb": 49
+      },
+      {
+        "page": "hi_fir_degraded_05",
+        "cer": 0.8186,
+        "wer": 1.0,
+        "seconds": 0.85,
+        "peak_rss_mb": 52
+      },
+      {
+        "page": "hi_notice_clean_04",
+        "cer": 0.8226,
+        "wer": 1.0,
+        "seconds": 0.43,
+        "peak_rss_mb": 48
+      },
+      {
+        "page": "hi_order_clean_02",
+        "cer": 0.8247,
+        "wer": 1.0137,
+        "seconds": 0.44,
+        "peak_rss_mb": 49
+      },
+      {
+        "page": "hi_order_degraded_06",
+        "cer": 0.8272,
+        "wer": 1.0,
+        "seconds": 0.7,
+        "peak_rss_mb": 52
+      },
+      {
+        "page": "hi_statement_clean_03",
+        "cer": 0.7073,
+        "wer": 0.8814,
+        "seconds": 0.36,
+        "peak_rss_mb": 47
+      },
+      {
+        "page": "latin_control_08",
+        "cer": 0.0,
+        "wer": 0.0,
+        "seconds": 0.37,
+        "peak_rss_mb": 49
+      },
+      {
+        "page": "mixed_order_07",
+        "cer": 0.5451,
+        "wer": 0.68,
+        "seconds": 0.42,
+        "peak_rss_mb": 48
+      }
+    ]
+  },
+  "limits": "Rendered pages are cleaner than photographed scans and use one typeface family (Nirmala UI); these error rates are a floor. The latin_control column is the English page read by a Hindi-capable model, shown only to confirm routing matters - the product reads Latin pages with the frozen English path.",
+  "decision_owner": "Q-S4-04 (OCR and translation model choice) - this report informs it"
+}

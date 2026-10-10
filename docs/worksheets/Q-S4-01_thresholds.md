@@ -17,7 +17,7 @@ Mark each row **Approve**, **Change to …**, or **Reject (drop the gate)**.
 | S4.foundation.planted_gap_rank_max | AC-S4-05.1 | top 3 | Same spirit as AC-8.1 (top 2) with more link types | |
 | S4.rehearsal.timer_accuracy_max_s | AC-S4-07.1 | ±1 s | Short Indian hearing slots | |
 | S4.rehearsal.slot_presets_min | AC-S4-07.1 | 2, 5, 10, 15, 30 min | Mention/interim through final arguments | |
-| S4.indic.ocr_cer_max | AC-S4-09.1 | *no proposal* | Set after B-S4-14 bake-off on G-INDIC | |
+| S4.indic.ocr_cer_max | AC-S4-09.1 | *agent proposal, not frozen:* 0.02 clean / 0.05 degraded | B-S4-14 bake-off on G-INDIC measured 0.0056 clean / 0.0024 degraded on rendered pages (a floor; real scans will be worse). Freeze after a real-scan measurement if you can. | |
 | S4.indic.critical_field_accuracy_min | AC-S4-09.2 | 98 % or flagged | Dates/amounts/sections must be right or visibly unconfirmed | |
 | S4.chambers.admitted_disputed_agreement_min | AC-S4-12.2 | 95 % | Judges must trust the admitted/disputed split | |
 | S4.chambers.lookup_top5_hit_rate_min | AC-S4-13.1 | 90 % | Lookup is excerpt-only, so misses are the main risk | |
