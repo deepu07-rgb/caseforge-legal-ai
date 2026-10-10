@@ -1,0 +1,217 @@
+{
+  "schema_version": "1.0.0",
+  "golden": "G-CHAMBERS",
+  "set": "judgment_scaffold",
+  "batch": "B-S4-21",
+  "description": "A matter with two pleadings (one admitted fact, one denied, an argument each), an order sheet with counsel's appearances, an exhibit list, issues in every decision state and evidence in the graph. Expected pre-fill is hand-authored; the judge's text for the locked sections is stored exactly as written.",
+  "profile": {
+    "case_id": "case-1",
+    "cause_title": "Ravi Kumar v. Anil Kumar",
+    "court": "District Court, Delhi",
+    "label": "CS 112/2023"
+  },
+  "parties": [
+    {
+      "party_id": "P",
+      "display_name": "Ravi Kumar",
+      "role": "Plaintiff"
+    },
+    {
+      "party_id": "D",
+      "display_name": "Anil Kumar",
+      "role": "Defendant"
+    }
+  ],
+  "filings": [
+    {
+      "doc_id": "d-plaint",
+      "party_id": "P",
+      "pages": [
+        "1. The plaintiff and the defendant are brothers and the registered owners of the house at 12 Gandhi Road under the registered sale deed.\n2. The defendant has been in exclusive possession of the entire house since 2020 and has refused the plaintiff entry.\n3. It is submitted that a co-owner is entitled to partition of the joint house by metes and bounds.\n"
+      ]
+    },
+    {
+      "doc_id": "d-ws",
+      "party_id": "D",
+      "pages": [
+        "1. Paragraph 1 of the plaint is admitted to the extent that the parties are brothers and are the registered owners of the house.\n2. Paragraph 2 of the plaint is denied. The defendant has never excluded the plaintiff.\n3. It is submitted that the suit is barred by limitation because the plaintiff has known of the possession since 2012.\n"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "doc_id": "d-plaint",
+      "filename": "Plaint.pdf",
+      "type_tag": "OTHER",
+      "pages": [
+        "1. The plaintiff and the defendant are brothers and the registered owners of the house at 12 Gandhi Road under the registered sale deed.\n2. The defendant has been in exclusive possession of the entire house since 2020 and has refused the plaintiff entry.\n3. It is submitted that a co-owner is entitled to partition of the joint house by metes and bounds.\n"
+      ]
+    },
+    {
+      "doc_id": "d-ws",
+      "filename": "Written statement.pdf",
+      "type_tag": "OTHER",
+      "pages": [
+        "1. Paragraph 1 of the plaint is admitted to the extent that the parties are brothers and are the registered owners of the house.\n2. Paragraph 2 of the plaint is denied. The defendant has never excluded the plaintiff.\n3. It is submitted that the suit is barred by limitation because the plaintiff has known of the possession since 2012.\n"
+      ]
+    },
+    {
+      "doc_id": "d-orders",
+      "filename": "Order sheet.pdf",
+      "type_tag": "ORDER_SHEET",
+      "pages": [
+        "Order dated 12 March 2024. Mr. A. Rao appeared for the plaintiff. Mr. S. Gupta appeared for the defendant. Written statement filed. Case adjourned to 18 April 2024 for framing of issues.\n\nOrder dated 18 April 2024. Issues were not framed as counsel for the plaintiff was absent. Adjourned to 2 May 2024.\n"
+      ]
+    },
+    {
+      "doc_id": "d-exh",
+      "filename": "Exhibit list.pdf",
+      "type_tag": "OTHER",
+      "pages": [
+        "Exhibit P-1: Certified copy of the registered sale deed dated 4 June 1998.\n\nExhibit D-1: Municipal tax receipts for the years 2015 to 2023.\n"
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "judge:1",
+      "text": "Whether the plaintiff and the defendant are registered owners of the house?",
+      "origin": "JUDGE_AUTHORED",
+      "template_rule_id": null,
+      "decision": "ACCEPTED",
+      "merged_into": null
+    },
+    {
+      "issue_id": "tpl:limitation",
+      "text": "Whether the suit is barred by limitation?",
+      "origin": "TEMPLATE",
+      "template_rule_id": "test.rule",
+      "decision": "EDITED",
+      "merged_into": null
+    },
+    {
+      "issue_id": "tpl:costs",
+      "text": "Whether costs should follow the event?",
+      "origin": "TEMPLATE",
+      "template_rule_id": "test.rule",
+      "decision": "PROPOSED",
+      "merged_into": null
+    },
+    {
+      "issue_id": "graph:x",
+      "text": "Whether the defendant is a necessary party?",
+      "origin": "GRAPH_ISSUE",
+      "template_rule_id": null,
+      "decision": "REJECTED",
+      "merged_into": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev1",
+      "label": "Exhibit P-1: Certified copy of the registered sale deed dated 4 June 1998.",
+      "doc_id": "d-exh"
+    },
+    {
+      "evidence_id": "ev2",
+      "label": "Photograph of the front gate",
+      "doc_id": "d-exh"
+    }
+  ],
+  "expect": {
+    "CAUSE_TITLE": [
+      {
+        "text": "Ravi Kumar v. Anil Kumar",
+        "class": "RECORD",
+        "origin": "MACHINE_PREFILL"
+      },
+      {
+        "text": "District Court, Delhi",
+        "class": "RECORD",
+        "origin": "MACHINE_PREFILL"
+      },
+      {
+        "text": "CS 112/2023",
+        "class": "RECORD",
+        "origin": "MACHINE_PREFILL"
+      }
+    ],
+    "APPEARANCES": [
+      {
+        "text": "Mr. A. Rao appeared for the plaintiff.",
+        "doc_id": "d-orders"
+      },
+      {
+        "text": "Mr. S. Gupta appeared for the defendant.",
+        "doc_id": "d-orders"
+      }
+    ],
+    "BRIEF_FACTS": [
+      {
+        "text": "1. The plaintiff and the defendant are brothers and the registered owners of the house at 12 Gandhi Road under the registered sale deed.",
+        "doc_ids": [
+          "d-plaint",
+          "d-ws"
+        ]
+      }
+    ],
+    "PROCEDURAL_HISTORY": [
+      {
+        "text": "Order dated 12 March 2024. Mr. A. Rao appeared for the plaintiff. Mr. S. Gupta appeared for the defendant. Written statement filed. Case adjourned to 18 April 2024 for framing of issues.",
+        "doc_id": "d-orders"
+      },
+      {
+        "text": "Order dated 18 April 2024. Issues were not framed as counsel for the plaintiff was absent. Adjourned to 2 May 2024.",
+        "doc_id": "d-orders"
+      }
+    ],
+    "SUBMISSIONS": [
+      {
+        "text": "3. It is submitted that a co-owner is entitled to partition of the joint house by metes and bounds.",
+        "doc_id": "d-plaint",
+        "party_id": "P"
+      },
+      {
+        "text": "3. It is submitted that the suit is barred by limitation because the plaintiff has known of the possession since 2012.",
+        "doc_id": "d-ws",
+        "party_id": "D"
+      }
+    ],
+    "ISSUES": [
+      {
+        "text": "Whether the plaintiff and the defendant are registered owners of the house?",
+        "issue_id": "judge:1"
+      },
+      {
+        "text": "Whether the suit is barred by limitation?",
+        "issue_id": "tpl:limitation"
+      }
+    ],
+    "EVIDENCE_SUMMARY": [
+      {
+        "text": "Exhibit P-1: Certified copy of the registered sale deed dated 4 June 1998.",
+        "doc_id": "d-exh"
+      }
+    ],
+    "ANALYSIS": [],
+    "FINDINGS": [],
+    "OPERATIVE_ORDER": []
+  },
+  "judge_text": {
+    "ANALYSIS": "The plaintiff's case fails on limitation. We therefore dismiss the suit.",
+    "FINDINGS": "Issue 1 is answered in favour of the plaintiff.",
+    "OPERATIVE_ORDER": "The suit is dismissed with costs."
+  },
+  "section_order": [
+    "CAUSE_TITLE",
+    "APPEARANCES",
+    "BRIEF_FACTS",
+    "PROCEDURAL_HISTORY",
+    "SUBMISSIONS",
+    "ISSUES",
+    "EVIDENCE_SUMMARY",
+    "ANALYSIS",
+    "FINDINGS",
+    "OPERATIVE_ORDER"
+  ]
+}
