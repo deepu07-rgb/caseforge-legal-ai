@@ -32,6 +32,8 @@ mod seat;
 mod subscription;
 mod ship_gate;
 mod timed_rehearsal;
+mod bundle;
+mod bundle_lan;
 mod record_only;
 mod chambers_lookup;
 mod cause_list;
@@ -2332,6 +2334,325 @@ fn seat_status(app: AppHandle, vault: State<'_, VaultState>) -> Result<serde_jso
 fn seat_deactivate(app: AppHandle, vault: State<'_, VaultState>) -> Result<serde_json::Value, String> {
     let mgr = vault.get_or_init(&app)?;
     mgr.seat_deactivate().map_err(Into::into)
+}
+
+// --- B-S4-16 Encrypted Bundle Exchange ---
+
+fn bundle_me(mgr: &VaultManager) -> Result<bundle::Identity, String> {
+    Ok(bundle::Identity::from_seed(&mgr.audit_signing_seed().map_err(|e| e.to_string())?))
+}
+
+fn unix_ms_now() -> i64 {
+    std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map(|d| d.as_millis() as i64).unwrap_or(0)
+}
+
+fn peer_json(v: &serde_json::Value) -> serde_json::Value {
+    let c = &v["card"];
+    let mut out = v.clone();
+    out["verification_code"] = serde_json::json!(bundle::verification_code(c["signing_public_key_hex"].as_str().unwrap_or(""), c["agreement_public_key_hex"].as_str().unwrap_or("")));
+    out
+}
+
+/// This install's public identity card (to hand to people who will send you bundles) and the code to read aloud to check it.
+#[tauri::command]
+fn bundle_identity(app: AppHandle, vault: State<'_, VaultState>, display_name: String) -> Result<serde_json::Value, String> {
+    edition::require_feature("bundle_exchange")?;
+    if display_name.trim().is_empty() {
+        return Err("CF_BUNDLE_BAD_CARD: give the name people will see on your bundles".into());
+    }
+    let me = bundle_me(&*vault.get_or_init(&app)?)?;
+    Ok(serde_json::json!({"card": me.card(display_name.trim(), unix_ms_now()), "key_id": me.key_id, "verification_code": me.verification_code()}))
+}
+
+fn bundle_peer_get(mgr: &VaultManager, key_id: &str) -> Result<Option<serde_json::Value>, String> {
+    let key = format!("bundle_peer:{key_id}");
+    Ok(mgr.app_kv_list(&key).map_err(|e| e.to_string())?.into_iter().find(|(k, _)| k == &key).map(|(_, v)| v))
+}
+
+fn bundle_peer_add_core(mgr: &VaultManager, card: &serde_json::Value, label: Option<String>) -> Result<serde_json::Value, String> {
+    let c = bundle::read_card(card)?;
+    let prior = bundle_peer_get(mgr, &c.key_id)?;
+    let same_keys = prior.as_ref().map(|p| p["card"]["signing_public_key_hex"] == c.signing_public_key_hex.as_str() && p["card"]["agreement_public_key_hex"] == c.agreement_public_key_hex.as_str()).unwrap_or(false);
+    let rec = serde_json::json!({
+        "card": c,
+        "label": label.filter(|l| !l.trim().is_empty()).unwrap_or_else(|| c.display_name.clone()),
+        "verified": same_keys && prior.as_ref().map(|p| p["verified"] == true).unwrap_or(false),
+        "added_at_unix_ms": unix_ms_now(),
+    });
+    mgr.app_kv_put(&format!("bundle_peer:{}", c.key_id), &rec).map_err(|e| e.to_string())?;
+    Ok(peer_json(&rec))
+}
+
+/// Adds someone's identity card to your contacts. It is not trusted until you have checked its code with them.
+#[tauri::command]
+fn bundle_peer_add(app: AppHandle, vault: State<'_, VaultState>, card: serde_json::Value, label: Option<String>) -> Result<serde_json::Value, String> {
+    edition::require_feature("bundle_exchange")?;
+    bundle_peer_add_core(&*vault.get_or_init(&app)?, &card, label)
+}
+
+fn bundle_peer_verify_core(mgr: &VaultManager, key_id: &str, code: &str) -> Result<serde_json::Value, String> {
+    let mut rec = bundle_peer_get(mgr, key_id)?.ok_or("CF_BUNDLE_NO_PEER: that contact is not in your list")?;
+    let want = peer_json(&rec)["verification_code"].as_str().unwrap_or("").replace(' ', "");
+    if code.replace(' ', "").trim() != want {
+        return Err("CF_BUNDLE_CODE_MISMATCH: that code does not match this card. Do not send them anything until you have the right code from them.".into());
+    }
+    rec["verified"] = serde_json::json!(true);
+    rec["verified_at_unix_ms"] = serde_json::json!(unix_ms_now());
+    mgr.app_kv_put(&format!("bundle_peer:{key_id}"), &rec).map_err(|e| e.to_string())?;
+    Ok(peer_json(&rec))
+}
+
+/// Marks a contact verified when the code you were told matches the code computed from their card.
+#[tauri::command]
+fn bundle_peer_verify(app: AppHandle, vault: State<'_, VaultState>, key_id: String, code: String) -> Result<serde_json::Value, String> {
+    edition::require_feature("bundle_exchange")?;
+    bundle_peer_verify_core(&*vault.get_or_init(&app)?, &key_id, &code)
+}
+
+#[tauri::command]
+fn bundle_peer_list(app: AppHandle, vault: State<'_, VaultState>) -> Result<Vec<serde_json::Value>, String> {
+    edition::require_feature("bundle_exchange")?;
+    Ok(vault.get_or_init(&app)?.app_kv_list("bundle_peer:").map_err(|e| e.to_string())?.iter().map(|(_, v)| peer_json(v)).collect())
+}
+
+#[tauri::command]
+fn bundle_peer_remove(app: AppHandle, vault: State<'_, VaultState>, key_id: String) -> Result<(), String> {
+    edition::require_feature("bundle_exchange")?;
+    vault.get_or_init(&app)?.app_kv_delete(&format!("bundle_peer:{key_id}")).map_err(|e| e.to_string())
+}
+
+#[derive(Deserialize)]
+struct BundleExtraItem {
+    kind: String,
+    payload: serde_json::Value,
+}
+
+#[derive(Deserialize)]
+struct BundleExportArgs {
+    case_id: String,
+    recipient_key_ids: Vec<String>,
+    kinds: Vec<String>,
+    #[serde(default)]
+    redactions: Vec<bundle::Redaction>,
+    #[serde(default)]
+    extra_items: Vec<BundleExtraItem>,
+    display_name: String,
+}
+
+/// What of the matter can go in a bundle straight from the vault: its graph, its argument tree, its documents (as the text the app
+/// has read from them, not the original files) and counsel's corrections. The rest (digest, kits, audit reports, notes) is passed in.
+fn bundle_collect(mgr: &VaultManager, case_id: &str, kinds: &[String]) -> Result<(Vec<bundle::PlainItem>, Vec<String>), String> {
+    let mut items = vec![];
+    let mut skipped = vec![];
+    for kind in kinds {
+        match kind.as_str() {
+            "GRAPH_SUBSET" => {
+                let cases = mgr.list_cases().map_err(|e| e.to_string())?;
+                let profile = cases.iter().find(|c| c.case_id == case_id).map(|c| serde_json::json!({"cause_title": c.cause_title, "court": c.court, "jurisdiction": c.jurisdiction, "matter_type": c.matter_type, "user_side": c.user_side}));
+                match mgr.case_graph_get(case_id).map_err(|e| e.to_string())? {
+                    Some(g) => items.push(bundle::PlainItem { kind: kind.clone(), payload: serde_json::json!({"profile": profile, "graph": g}) }),
+                    None => skipped.push(format!("{kind}: the matter has no case graph yet")),
+                }
+            }
+            "ARGUMENT_TREE" => match mgr.argument_tree_get(case_id).map_err(|e| e.to_string())? {
+                Some(t) => items.push(bundle::PlainItem { kind: kind.clone(), payload: t }),
+                None => skipped.push(format!("{kind}: the matter has no argument tree yet")),
+            },
+            "DOCUMENT" => {
+                let docs = mgr.doc_list(case_id).map_err(|e| e.to_string())?;
+                if docs.is_empty() {
+                    skipped.push(format!("{kind}: the matter has no documents"));
+                }
+                for d in docs {
+                    let layers = mgr.page_text_layer_list(case_id, Some(&d.doc_id)).map_err(|e| e.to_string())?;
+                    let (pages, truncated) = if layers.is_empty() {
+                        let p = mgr.doc_text_preview(case_id, &d.doc_id, 40_000).map_err(|e| e.to_string())?;
+                        (vec![serde_json::json!({"page_index": 0, "text": p.text})], p.char_count > 40_000 && !p.is_binary_stub)
+                    } else {
+                        (layers.iter().map(|l| serde_json::json!({"page_index": l.page_index, "text": l.full_text})).collect(), false)
+                    };
+                    items.push(bundle::PlainItem { kind: kind.clone(), payload: serde_json::json!({"doc_id": d.doc_id, "filename": d.original_filename, "type_tag": d.type_tag, "language_tag": d.language_tag, "source_format": d.source_format, "page_count": d.page_count, "pages": pages, "text_truncated": truncated, "note": "the text CaseForge read from the file; the original file is not in the bundle"}) });
+                }
+            }
+            "COUNSEL_CORRECTIONS" => {
+                let ev = mgr.correction_events_list(case_id, 500).map_err(|e| e.to_string())?;
+                if ev.is_empty() {
+                    skipped.push(format!("{kind}: no corrections have been made on the matter"));
+                } else {
+                    items.push(bundle::PlainItem { kind: kind.clone(), payload: serde_json::Value::Array(ev) });
+                }
+            }
+            other => skipped.push(format!("{other}: pass it in from its screen")),
+        }
+    }
+    Ok((items, skipped))
+}
+
+fn bundle_export_core(mgr: &VaultManager, args: BundleExportArgs) -> Result<(bundle::Built, Vec<bundle::PeerCard>, Vec<String>), String> {
+    if args.display_name.trim().is_empty() {
+        return Err("CF_BUNDLE_BAD_CARD: give the name people will see on your bundles".into());
+    }
+    let mut recipients = vec![];
+    for id in &args.recipient_key_ids {
+        let rec = bundle_peer_get(mgr, id)?.ok_or_else(|| format!("CF_BUNDLE_NO_PEER: {id} is not in your contacts"))?;
+        if rec["verified"] != true {
+            return Err(format!("CF_BUNDLE_PEER_UNVERIFIED: you have not checked {}'s code with them. A bundle is encrypted to the key on their card; check the code first.", rec["label"].as_str().unwrap_or(id)));
+        }
+        recipients.push(serde_json::from_value::<bundle::PeerCard>(rec["card"].clone()).map_err(|e| format!("CF_BUNDLE_BAD_CARD: {e}"))?);
+    }
+    let (mut items, skipped) = bundle_collect(mgr, &args.case_id, &args.kinds)?;
+    for e in args.extra_items {
+        items.push(bundle::PlainItem { kind: e.kind, payload: e.payload });
+    }
+    let me = bundle_me(mgr)?;
+    let built = bundle::build(&me, args.display_name.trim(), &recipients, &args.case_id, items, &args.redactions, unix_ms_now(), env!("CARGO_PKG_VERSION"), &mut rand::rngs::OsRng)?;
+    Ok((built, recipients, skipped))
+}
+
+/// Builds an encrypted bundle for verified contacts and returns it (as base64) to be saved to a USB stick or offered on the local network.
+#[tauri::command]
+fn bundle_export(app: AppHandle, vault: State<'_, VaultState>, args: BundleExportArgs) -> Result<serde_json::Value, String> {
+    edition::require_feature("bundle_exchange")?;
+    let (built, recipients, skipped) = bundle_export_core(&*vault.get_or_init(&app)?, args)?;
+    use base64::Engine as _;
+    Ok(serde_json::json!({
+        "bundle_b64": base64::engine::general_purpose::STANDARD.encode(&built.bytes),
+        "bundle_id": built.bundle_id,
+        "bytes": built.bytes.len(),
+        "items": built.items.iter().map(|(id, kind, n, red)| serde_json::json!({"item_id": id, "kind": kind, "plaintext_bytes": n, "redacted": red})).collect::<Vec<_>>(),
+        "redaction_log": built.redaction_log.iter().map(|(id, n)| serde_json::json!({"item_id": id, "redaction_count": n})).collect::<Vec<_>>(),
+        "recipients": recipients.iter().map(|r| serde_json::json!({"key_id": r.key_id, "display_name": r.display_name})).collect::<Vec<_>>(),
+        "skipped": skipped,
+    }))
+}
+
+fn bundle_bytes(b64: &str) -> Result<Vec<u8>, String> {
+    use base64::Engine as _;
+    base64::engine::general_purpose::STANDARD.decode(b64.trim()).map_err(|_| "CF_BUNDLE_BAD_FILE: this is not a bundle file".to_string())
+}
+
+fn sender_standing(mgr: &VaultManager, signing_pub: &str) -> Result<Option<serde_json::Value>, String> {
+    Ok(mgr.app_kv_list("bundle_peer:").map_err(|e| e.to_string())?.into_iter().map(|(_, v)| v).find(|p| p["card"]["signing_public_key_hex"] == signing_pub))
+}
+
+/// What a bundle says about itself, with its signature and hashes checked. Needs no key; shows who sent it and whether you know them.
+#[tauri::command]
+fn bundle_inspect(app: AppHandle, vault: State<'_, VaultState>, bundle_b64: String) -> Result<serde_json::Value, String> {
+    edition::require_feature("bundle_exchange")?;
+    let mgr = vault.get_or_init(&app)?;
+    let bytes = bundle_bytes(&bundle_b64)?;
+    let p = bundle::parse_and_verify(&bytes)?;
+    let m = &p.manifest;
+    let me = bundle_me(&mgr)?;
+    let sp = m["sender"]["signing_public_key_hex"].as_str().unwrap_or("");
+    let known = sender_standing(&mgr, sp)?;
+    Ok(serde_json::json!({
+        "bundle_id": m["bundle_id"], "created_at": m["created_at"], "app_version": m["app_version"],
+        "sender": {"display_name": m["sender"]["display_name"], "key_id": m["sender"]["key_id"], "signing_public_key_hex": sp,
+                   "known_as": known.as_ref().map(|k| k["label"].clone()), "verified": known.as_ref().map(|k| k["verified"] == true).unwrap_or(false)},
+        "addressed_to_you": m["recipients"].as_array().map(|r| r.iter().any(|e| e["key_id"] == me.key_id.as_str())).unwrap_or(false),
+        "items": m["contents"].as_array().map(|c| c.iter().map(|i| serde_json::json!({"item_id": i["item_id"], "kind": i["item_kind"], "plaintext_bytes": i["plaintext_bytes"], "redacted": i["redacted"]})).collect::<Vec<_>>()),
+        "redaction_log": m["redaction_log"],
+        "signature_valid": true,
+    }))
+}
+
+/// Opens a bundle addressed to you and keeps what is in it, with who sent it and when, beside the matter. Nothing in it replaces
+/// anything of yours: received corrections are listed against your own and never applied.
+fn bundle_import_core(mgr: &VaultManager, case_id: &str, bytes: &[u8], accept_unknown_sender: bool) -> Result<serde_json::Value, String> {
+    let me = bundle_me(mgr)?;
+    let opened = bundle::open(bytes, &me)?;
+    let m = &opened.manifest;
+    let bundle_id = m["bundle_id"].as_str().unwrap_or("").to_string();
+    let sp = m["sender"]["signing_public_key_hex"].as_str().unwrap_or("");
+    let known = sender_standing(mgr, sp)?;
+    let verified = known.as_ref().map(|k| k["verified"] == true).unwrap_or(false);
+    if !verified && !accept_unknown_sender {
+        return Err(format!("CF_BUNDLE_UNKNOWN_SENDER: this bundle is signed by a key you have not verified (code {}). Check the code with {} before opening it, or confirm that you accept it.", bundle::verification_code(sp, m["sender"]["key_id"].as_str().unwrap_or("")), m["sender"]["display_name"].as_str().unwrap_or("the sender")));
+    }
+    let skey = format!("bundle_in:{bundle_id}");
+    if mgr.witness_kv_list(case_id, &skey).map_err(|e| e.to_string())?.iter().any(|(k, _)| k == &skey) {
+        return Err("CF_BUNDLE_ALREADY_IMPORTED: this bundle is already in the matter".into());
+    }
+    let sender_name = m["sender"]["display_name"].as_str().unwrap_or("").to_string();
+    let created_ms = opened.items.first().and_then(|i| i.envelope["produced_at_unix_ms"].as_i64()).unwrap_or(0);
+    let label = bundle::attribution_label(&sender_name, created_ms);
+    let mine = mgr.correction_overlay_values(case_id).map_err(|e| e.to_string())?;
+    let mut summary_items = vec![];
+    for it in &opened.items {
+        let mut rec = serde_json::json!({"item_id": it.item_id, "kind": it.kind, "attribution": label, "envelope": it.envelope});
+        if it.kind == "COUNSEL_CORRECTIONS" {
+            if let Some(arr) = it.envelope["payload"].as_array() {
+                rec["plan"] = serde_json::Value::Array(bundle::plan_corrections(&mine, arr));
+            }
+        }
+        mgr.witness_kv_put(case_id, &format!("{skey}:{}", it.item_id), &rec).map_err(|e| e.to_string())?;
+        summary_items.push(serde_json::json!({"item_id": it.item_id, "kind": it.kind}));
+    }
+    let summary = serde_json::json!({
+        "bundle_id": bundle_id, "attribution": label, "created_at": m["created_at"], "imported_at_unix_ms": unix_ms_now(),
+        "sender": {"display_name": sender_name, "key_id": m["sender"]["key_id"], "signing_public_key_hex": sp, "known_as": known.as_ref().map(|k| k["label"].clone()), "verified": verified},
+        "source_case_id": m["source_case_id"], "items": summary_items, "redaction_log": m["redaction_log"],
+    });
+    mgr.witness_kv_put(case_id, &skey, &summary).map_err(|e| e.to_string())?;
+    Ok(summary)
+}
+
+#[tauri::command]
+fn bundle_import(app: AppHandle, vault: State<'_, VaultState>, case_id: String, bundle_b64: String, accept_unknown_sender: Option<bool>) -> Result<serde_json::Value, String> {
+    edition::require_feature("bundle_exchange")?;
+    bundle_import_core(&*vault.get_or_init(&app)?, &case_id, &bundle_bytes(&bundle_b64)?, accept_unknown_sender == Some(true))
+}
+
+/// Bundles received into the matter, newest first.
+#[tauri::command]
+fn bundle_received_list(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<Vec<serde_json::Value>, String> {
+    edition::require_feature("bundle_exchange")?;
+    let mgr = vault.get_or_init(&app)?;
+    let mut v: Vec<serde_json::Value> = mgr.witness_kv_list(&case_id, "bundle_in:").map_err(|e| e.to_string())?.into_iter().filter(|(k, _)| k.matches(':').count() == 1).map(|(_, v)| v).collect();
+    v.sort_by(|a, b| b["imported_at_unix_ms"].as_i64().cmp(&a["imported_at_unix_ms"].as_i64()));
+    Ok(v)
+}
+
+#[tauri::command]
+fn bundle_received_get(app: AppHandle, vault: State<'_, VaultState>, case_id: String, bundle_id: String) -> Result<serde_json::Value, String> {
+    edition::require_feature("bundle_exchange")?;
+    let mgr = vault.get_or_init(&app)?;
+    let skey = format!("bundle_in:{bundle_id}");
+    let all = mgr.witness_kv_list(&case_id, &skey).map_err(|e| e.to_string())?;
+    let summary = all.iter().find(|(k, _)| k == &skey).map(|(_, v)| v.clone()).ok_or("CF_BUNDLE_NOT_FOUND: that bundle is not in this matter")?;
+    let items: Vec<serde_json::Value> = all.into_iter().filter(|(k, _)| k != &skey).map(|(_, v)| v).collect();
+    Ok(serde_json::json!({"summary": summary, "items": items}))
+}
+
+/// Offers a bundle once on the local network. Refused under air-gap (a USB file needs no network).
+#[tauri::command]
+fn bundle_lan_share(app: AppHandle, vault: State<'_, VaultState>, bundle_b64: String) -> Result<bundle_lan::ShareInfo, String> {
+    edition::require_feature("bundle_exchange")?;
+    let mgr = vault.get_or_init(&app)?;
+    if mgr.air_gap_enabled().unwrap_or(false) {
+        return Err("CF_AIR_GAP: local-network transfer is switched off while air-gap mode is on. Save the bundle to a USB stick instead.".into());
+    }
+    bundle_lan::share(bundle_bytes(&bundle_b64)?, None, std::time::Duration::from_secs(600), None)
+}
+
+#[tauri::command]
+fn bundle_lan_stop() -> Result<(), String> {
+    edition::require_feature("bundle_exchange")?;
+    bundle_lan::stop();
+    Ok(())
+}
+
+/// Fetches a bundle offered on the local network; the address must be the numeric one shown on the other computer.
+#[tauri::command]
+fn bundle_lan_fetch(app: AppHandle, vault: State<'_, VaultState>, url: String) -> Result<String, String> {
+    edition::require_feature("bundle_exchange")?;
+    let mgr = vault.get_or_init(&app)?;
+    if mgr.air_gap_enabled().unwrap_or(false) {
+        return Err("CF_AIR_GAP: local-network transfer is switched off while air-gap mode is on. Copy the bundle from a USB stick instead.".into());
+    }
+    use base64::Engine as _;
+    Ok(base64::engine::general_purpose::STANDARD.encode(bundle_lan::fetch(&url)?))
 }
 
 // --- B-S4-12 Timed Oral Rehearsal ---
@@ -4859,6 +5180,19 @@ pub fn run() {
             rehearsal_end,
             rehearsal_get,
             rehearsal_list,
+            bundle_identity,
+            bundle_peer_add,
+            bundle_peer_verify,
+            bundle_peer_list,
+            bundle_peer_remove,
+            bundle_export,
+            bundle_inspect,
+            bundle_import,
+            bundle_received_list,
+            bundle_received_get,
+            bundle_lan_share,
+            bundle_lan_stop,
+            bundle_lan_fetch,
             seat_deactivate,
             air_gap_set,
             network_audit,
@@ -4950,5 +5284,161 @@ mod installed_layout_tests {
         // Complete bundle: resource root is `<exe dir>/_up_`.
         touch(&up.join("sidecars").join("infer_llm").join("infer_llm.py"));
         assert_eq!(installed_layout_root(exe_dir.path()), Some(up));
+    }
+}
+
+#[cfg(test)]
+mod bundle_vault_tests {
+    //! B-S4-16 across two real vaults: one sends, the other receives (AC-S4-10.1 to 10.4 at the level of the app).
+    use super::*;
+    use crate::vault::{CaseWizardInput, DocumentIngestRequest};
+    use base64::Engine as _;
+    use serde_json::{json, Value};
+
+    const FIXTURE: &str = include_str!("../../golden/G-BUNDLE/fixtures/bundle_core.json");
+
+    fn vault(tag: &str, pass: &str) -> (std::sync::Arc<VaultManager>, std::path::PathBuf) {
+        let dir = std::env::temp_dir().join(format!("caseforge-bundle-{tag}-{}", uuid::Uuid::new_v4()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let mgr = std::sync::Arc::new(VaultManager::new(dir.clone()));
+        mgr.init_and_unlock(pass).unwrap();
+        (mgr, dir)
+    }
+    fn case(mgr: &VaultManager, pass: &str, title: &str) -> String {
+        let id = mgr.create_case_with_wizard(pass, CaseWizardInput { cause_title: title.into(), court: "District Court".into(), jurisdiction: "India".into(), matter_type: "Property partition civil appeal".into(), user_side: "Appellant".into(), code_era: None, language: None }).unwrap().case_id;
+        mgr.open_case(&id, pass).unwrap();
+        id
+    }
+    fn exchange(a: &VaultManager, a_name: &str, b: &VaultManager, b_name: &str) -> (String, String) {
+        // each side makes a card, the other adds it and confirms the code read aloud
+        let ca = bundle_me(a).unwrap().card(a_name, 1);
+        let cb = bundle_me(b).unwrap().card(b_name, 1);
+        let pa = bundle_peer_add_core(b, &ca, None).unwrap();
+        let pb = bundle_peer_add_core(a, &cb, None).unwrap();
+        bundle_peer_verify_core(b, pa["card"]["key_id"].as_str().unwrap(), pa["verification_code"].as_str().unwrap()).unwrap();
+        bundle_peer_verify_core(a, pb["card"]["key_id"].as_str().unwrap(), pb["verification_code"].as_str().unwrap()).unwrap();
+        (pa["card"]["key_id"].as_str().unwrap().to_string(), pb["card"]["key_id"].as_str().unwrap().to_string())
+    }
+
+    #[test]
+    fn a_junior_hands_a_senior_an_encrypted_attributable_bundle_and_nothing_of_the_seniors_changes() {
+        let f: Value = serde_json::from_str(FIXTURE).unwrap();
+        let (pw_s, pw_r) = ("sender passphrase", "recipient passphrase");
+        let (sender, sdir) = vault("s", pw_s);
+        let (recipient, rdir) = vault("r", pw_r);
+        let (sender_key_at_recipient, recipient_key_at_sender) = exchange(&sender, "Priya Nair", &recipient, "Senior Counsel");
+
+        // the junior's matter: a graph, a document, and a correction of her own
+        let sc = case(&sender, pw_s, "Kumar v Verma");
+        let graph = json!({"schema_version": "1.0.0", "chronology": [{"event_id": "e1", "date": "2020-03-01", "description": "Suresh Verma took exclusive possession"}], "parties": [{"party_id": "p1", "name": "Ramesh Kumar", "role": "plaintiff"}]});
+        sender.case_graph_put(&sc, &graph).unwrap();
+        sender.doc_ingest(&sc, DocumentIngestRequest { original_filename: "Plaint of Ramesh Kumar.txt".into(), content_base64: base64::engine::general_purpose::STANDARD.encode(f["items"]["document"]["text"].as_str().unwrap()), type_tag: Some("PLAINT".into()), language_tag: Some("en".into()) }).unwrap();
+        sender.case_graph_correct_item(&sc, "chronology", "e1", "date", "2020-03-11", 2).unwrap();
+
+        // the senior's matter has the same event and her own, different correction of it
+        let rc = case(&recipient, pw_r, "Kumar v Verma (senior's copy)");
+        recipient.case_graph_put(&rc, &graph).unwrap();
+        recipient.case_graph_correct_item(&rc, "chronology", "e1", "date", "2020-03-05", 2).unwrap();
+        let before_overlays = recipient.correction_overlay_values(&rc).unwrap();
+        let before_events = recipient.correction_events_list(&rc, 500).unwrap();
+        let before_graph = recipient.case_graph_get(&rc).unwrap();
+        let before_docs = recipient.doc_list(&rc).unwrap().len();
+        assert_eq!(before_overlays.values().collect::<Vec<_>>(), vec!["2020-03-05"]);
+
+        // build: redactions applied, a note added
+        let reds: Vec<bundle::Redaction> = serde_json::from_value(f["redactions"].clone()).unwrap();
+        let (built, _, skipped) = bundle_export_core(&sender, BundleExportArgs {
+            case_id: sc.clone(),
+            recipient_key_ids: vec![recipient_key_at_sender.clone()],
+            kinds: vec!["GRAPH_SUBSET".into(), "ARGUMENT_TREE".into(), "DOCUMENT".into(), "COUNSEL_CORRECTIONS".into()],
+            redactions: reds,
+            extra_items: vec![BundleExtraItem { kind: "NOTES".into(), payload: f["notes_item"].clone() }],
+            display_name: "Priya Nair".into(),
+        })
+        .unwrap();
+        assert!(skipped.iter().any(|s| s.starts_with("ARGUMENT_TREE")), "no argument tree yet, said so: {skipped:?}");
+        // nothing readable in the file
+        assert!(!built.bytes.windows(12).any(|w| w == b"Suresh Verma") && !built.bytes.windows(12).any(|w| w == b"Ramesh Kumar"));
+
+        // the senior inspects it: who it is from, that it is for her, what is in it
+        let p = bundle::parse_and_verify(&built.bytes).unwrap();
+        assert_eq!(p.manifest["sender"]["display_name"], "Priya Nair");
+        assert_eq!(sender_standing(&recipient, p.manifest["sender"]["signing_public_key_hex"].as_str().unwrap()).unwrap().unwrap()["verified"], true);
+
+        // a stranger's vault cannot open it
+        let (stranger, tdir) = vault("t", "stranger passphrase");
+        let tc = case(&stranger, "stranger passphrase", "Other");
+        assert!(bundle_import_core(&stranger, &tc, &built.bytes, true).unwrap_err().starts_with("CF_BUNDLE_NOT_FOR_YOU"));
+        assert!(stranger.witness_kv_list(&tc, "bundle_in:").unwrap().is_empty(), "nothing was kept");
+
+        // the senior imports it
+        let summary = bundle_import_core(&recipient, &rc, &built.bytes, false).unwrap();
+        assert!(summary["attribution"].as_str().unwrap().starts_with("from Priya Nair, "), "{}", summary["attribution"]);
+        assert_eq!(summary["sender"]["verified"], true);
+        let stored = recipient.witness_kv_list(&rc, &format!("bundle_in:{}", summary["bundle_id"].as_str().unwrap())).unwrap();
+        assert_eq!(stored.len(), 1 + summary["items"].as_array().unwrap().len());
+        // every kept item carries who it is from
+        assert!(stored.iter().filter(|(k, _)| k.matches(':').count() == 2).all(|(_, v)| v["attribution"].as_str().unwrap().starts_with("from Priya Nair")));
+        // redacted text is in none of what the senior was given
+        let kept = serde_json::to_string(&stored).unwrap();
+        for t in ["Ramesh Kumar", "98765 43210", "9876543210", "ramesh.k@example.org"] {
+            assert!(!kept.contains(t), "{t} reached the recipient");
+        }
+        assert!(kept.contains("Suresh Verma") && kept.contains("[REDACTED]"));
+        // AC-S4-10.4: her correction is untouched and the junior's differing one is listed against it, not applied
+        let plan = stored.iter().map(|(_, v)| v.clone()).find(|v| v["kind"] == "COUNSEL_CORRECTIONS").expect("the corrections item was kept");
+        let rows = plan["plan"].as_array().unwrap();
+        let my_key = before_overlays.keys().next().unwrap().clone();
+        let row = rows.iter().find(|r| r["target_key"] == my_key.as_str()).expect("the correction on the same event is listed against the recipient's");
+        assert_eq!((row["status"].as_str(), row["recipient_value"].as_str(), row["sender_value"].as_str()), (Some("CONFLICTS_WITH_YOUR_CORRECTION"), Some("2020-03-05"), Some("2020-03-11")));
+        assert_eq!(recipient.correction_overlay_values(&rc).unwrap(), before_overlays, "her active corrections are exactly as they were");
+        assert_eq!(recipient.correction_events_list(&rc, 500).unwrap(), before_events, "no correction event was added");
+        assert_eq!(recipient.case_graph_get(&rc).unwrap(), before_graph, "her graph is untouched");
+        assert_eq!(recipient.doc_list(&rc).unwrap().len(), before_docs, "her documents are untouched");
+        // the same bundle twice is refused
+        assert!(bundle_import_core(&recipient, &rc, &built.bytes, false).unwrap_err().starts_with("CF_BUNDLE_ALREADY_IMPORTED"));
+        // a changed file is refused before anything is kept
+        let mut bad = built.bytes.clone();
+        let n = bad.len() / 2;
+        bad[n] ^= 1;
+        let rc2 = case(&recipient, pw_r, "Second");
+        assert!(bundle_import_core(&recipient, &rc2, &bad, false).unwrap_err().starts_with("CF_BUNDLE_TAMPERED"));
+        assert!(recipient.witness_kv_list(&rc2, "bundle_in:").unwrap().is_empty());
+        let _ = sender_key_at_recipient;
+        for d in [sdir, rdir, tdir] {
+            let _ = std::fs::remove_dir_all(d);
+        }
+    }
+
+    #[test]
+    fn a_bundle_is_not_made_for_someone_whose_code_has_not_been_checked_and_an_unknown_sender_must_be_accepted_by_hand() {
+        let (a, adir) = vault("ua", "a passphrase");
+        let (b, bdir) = vault("ub", "b passphrase");
+        let ca = case(&a, "a passphrase", "A");
+        let cb = case(&b, "b passphrase", "B");
+        // B's card is added by A but its code is not confirmed
+        let card_b = bundle_me(&b).unwrap().card("Bee", 1);
+        let pb = bundle_peer_add_core(&a, &card_b, None).unwrap();
+        let args = |kid: String| BundleExportArgs { case_id: ca.clone(), recipient_key_ids: vec![kid], kinds: vec![], redactions: vec![], extra_items: vec![BundleExtraItem { kind: "NOTES".into(), payload: json!({"text": "hi"}) }], display_name: "Ay".into() };
+        let key_b = pb["card"]["key_id"].as_str().unwrap().to_string();
+        assert!(bundle_export_core(&a, args(key_b.clone())).err().unwrap().starts_with("CF_BUNDLE_PEER_UNVERIFIED"));
+        // a wrong code does not verify; the right one does
+        assert!(bundle_peer_verify_core(&a, &key_b, "00000 00000 00000 00000 00000 00000").unwrap_err().starts_with("CF_BUNDLE_CODE_MISMATCH"));
+        bundle_peer_verify_core(&a, &key_b, pb["verification_code"].as_str().unwrap()).unwrap();
+        let (built, _, _) = bundle_export_core(&a, args(key_b.clone())).unwrap();
+        // B has not added A: the sender is unknown, so B must accept by hand
+        let e = bundle_import_core(&b, &cb, &built.bytes, false).unwrap_err();
+        assert!(e.starts_with("CF_BUNDLE_UNKNOWN_SENDER") && e.contains("Ay"), "{e}");
+        assert!(b.witness_kv_list(&cb, "bundle_in:").unwrap().is_empty());
+        let s = bundle_import_core(&b, &cb, &built.bytes, true).unwrap();
+        assert_eq!(s["sender"]["verified"], false, "accepting by hand does not make the sender trusted");
+        // a card whose key id or signature was altered is not accepted
+        let mut forged = bundle_me(&a).unwrap().card("Ay", 1);
+        forged["display_name"] = json!("Someone else");
+        assert!(bundle_peer_add_core(&b, &forged, None).unwrap_err().starts_with("CF_BUNDLE_BAD_CARD"));
+        // changing a contact's keys under the same id un-verifies it
+        for d in [adir, bdir] {
+            let _ = std::fs::remove_dir_all(d);
+        }
     }
 }

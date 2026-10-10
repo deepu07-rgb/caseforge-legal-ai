@@ -41,8 +41,8 @@ but this is a real result, not a pending one.
 
 ## What is not ready
 
-- **Wave B is incomplete**, and the playbook makes Wave C depend on it: Devanagari OCR (B-S4-14),
-  Hindi translation (B-S4-15) and Encrypted Bundle Exchange (B-S4-16) are not built (Timed Oral Rehearsal, B-S4-12, has since been built). For a court that files in Hindi, B-S4-14/15 matter.
+- **Wave B is incomplete**, and the playbook makes Wave C depend on it: Devanagari OCR (B-S4-14)
+  and Hindi translation (B-S4-15) are not built (Timed Oral Rehearsal, B-S4-12, and Encrypted Bundle Exchange, B-S4-16, have since been built). For a court that files in Hindi, B-S4-14/15 matter.
 - **No signed rules.** Limitation, admissibility and code-succession tables are development-only; no legal editor has signed one.
   The Deadlines and Foundation Gaps screens say so. Issue-framing templates are not shipped (they need the text of Order XIV rule 1 CPC and editor sign-off).
 - **Editions and licences (B-S4-22)** — updated after the Wave C checkpoint: the mechanism is now built (an edition entitlement

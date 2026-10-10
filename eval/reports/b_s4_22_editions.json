@@ -22,7 +22,7 @@
           "unlicensed": 8,
           "seat": 17
         },
-        "host_commands_gated": 40,
+        "host_commands_gated": 53,
         "seat_transfers_per_year": "PROPOSED 2 (Q-S4-07); the licence carries its own limit, null = transfer disabled"
       },
       "detail": "Each edition shows exactly the screens and runs exactly the host commands its licence entitles, from one map; a licence can only narrow its edition. The map in contracts is a DEVELOPMENT_ONLY placeholder (Q-S4-06) - the rules are pinned, the contents are the owner's to decide. Seat transfers are counted over a rolling year and every licence is re-checked at activation."

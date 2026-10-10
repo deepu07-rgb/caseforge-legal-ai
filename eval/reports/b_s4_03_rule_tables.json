@@ -32,8 +32,8 @@
     "B-S3-09_MALICIOUS_PACK_SUITE": {
       "status": "PASS",
       "evidence": {
-        "packs::tests::b_s3_09_protection_failure_is_fail_closed": "ok",
         "packs::tests::b_s3_09_failed_upgrade_preserves_prior_pack": "ok",
+        "packs::tests::b_s3_09_protection_failure_is_fail_closed": "ok",
         "packs::tests::b_s3_09_malicious_paths_active_content_and_hashes_are_rejected": "ok",
         "packs::tests::b_s3_09_signed_official_positive_and_protection_rollback": "ok",
         "packs::tests::b_s3_09_symlink_or_reparse_is_rejected_when_platform_can_create_it": "ok"

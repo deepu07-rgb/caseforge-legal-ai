@@ -1,13 +1,13 @@
 {
   "batch": "B-S4-23",
   "release": "Stage 4 (v4.0) - not a release",
-  "generated_at": "2026-10-10T10:44:29Z",
+  "generated_at": "2026-10-10T11:13:19Z",
   "verdict": "NOT READY",
-  "answer_to_the_question": "No, not yet. Blocking: 4 batch(es) not built: B-S4-02, B-S4-14, B-S4-15, B-S4-16 | 1 criterion(s) failing (AC-S4-00.7); 7 not built or unreported | 7 criterion(s) could not be measured here: AC-S4-00.4, AC-S4-01.3, AC-S4-02.2, AC-S4-03.1, AC-S4-04.1, AC-S4-05.1, AC-S4-06.1 | no legal-editor sign-off for AC-S4-04.1, AC-S4-05.1, AC-S4-06.1. What does hold, and is tested, is that no decision is made by the machine.",
+  "answer_to_the_question": "No, not yet. Blocking: 3 batch(es) not built: B-S4-02, B-S4-14, B-S4-15 | 1 criterion(s) failing (AC-S4-00.7); 3 not built or unreported | 8 criterion(s) could not be measured here: AC-S4-00.4, AC-S4-01.3, AC-S4-02.2, AC-S4-03.1, AC-S4-04.1, AC-S4-05.1, AC-S4-06.1, AC-S4-10.3 | no legal-editor sign-off for AC-S4-04.1, AC-S4-05.1, AC-S4-06.1. What does hold, and is tested, is that no decision is made by the machine.",
   "reasons": [
-    "4 batch(es) not built: B-S4-02, B-S4-14, B-S4-15, B-S4-16",
-    "1 criterion(s) failing (AC-S4-00.7); 7 not built or unreported",
-    "7 criterion(s) could not be measured here: AC-S4-00.4, AC-S4-01.3, AC-S4-02.2, AC-S4-03.1, AC-S4-04.1, AC-S4-05.1, AC-S4-06.1",
+    "3 batch(es) not built: B-S4-02, B-S4-14, B-S4-15",
+    "1 criterion(s) failing (AC-S4-00.7); 3 not built or unreported",
+    "8 criterion(s) could not be measured here: AC-S4-00.4, AC-S4-01.3, AC-S4-02.2, AC-S4-03.1, AC-S4-04.1, AC-S4-05.1, AC-S4-06.1, AC-S4-10.3",
     "no legal-editor sign-off for AC-S4-04.1, AC-S4-05.1, AC-S4-06.1"
   ],
   "hard_failures": [],
@@ -82,16 +82,16 @@
       "title": "Production build (tsc -b && vite build)",
       "status": "PASS",
       "hard": false,
-      "detail": "exit 0 in 9.2 s"
+      "detail": "exit 0 in 8.9 s"
     },
     {
       "id": "ci_gates",
       "title": "Every Stage 1-4 gate in the CI workflow",
       "status": "PASS",
       "hard": false,
-      "detail": "21 gates, all exit 0",
+      "detail": "22 gates, all exit 0",
       "evidence": {
-        "gates": 21
+        "gates": 22
       }
     },
     {
@@ -99,7 +99,7 @@
       "title": "Rust tests (cargo test --lib)",
       "status": "PASS",
       "hard": false,
-      "detail": "245 passed, 0 failed, 1 ignored",
+      "detail": "263 passed, 0 failed, 1 ignored",
       "evidence": {
         "ignored": [
           "retrieval::store::tests::b_s4_29_scale_benchmark"
@@ -118,7 +118,7 @@
       "title": "Every AC-S4-* measured PASS",
       "status": "FAIL",
       "hard": false,
-      "detail": "measured: {'BLOCKED': 7, 'FAIL': 1, 'NOT_BUILT': 7, 'PASS': 50, 'WAIVED': 1}",
+      "detail": "measured: {'BLOCKED': 8, 'FAIL': 1, 'NOT_BUILT': 3, 'PASS': 53, 'WAIVED': 1}",
       "evidence": {
         "failing": [
           "AC-S4-00.7"
@@ -126,11 +126,7 @@
         "not_built_or_unreported": [
           "AC-S4-09.1",
           "AC-S4-09.2",
-          "AC-S4-09.3",
-          "AC-S4-10.1",
-          "AC-S4-10.2",
-          "AC-S4-10.3",
-          "AC-S4-10.4"
+          "AC-S4-09.3"
         ],
         "blocked": [
           "AC-S4-00.4",
@@ -139,7 +135,8 @@
           "AC-S4-03.1",
           "AC-S4-04.1",
           "AC-S4-05.1",
-          "AC-S4-06.1"
+          "AC-S4-06.1",
+          "AC-S4-10.3"
         ],
         "waived": [
           "AC-S4-00.1"
@@ -151,7 +148,7 @@
       "title": "Every AC-S4-* formally accepted (thresholds approved, sign-offs, no open question)",
       "status": "BLOCKED",
       "hard": false,
-      "detail": "formal: {'BLOCKED': 15, 'FAIL': 1, 'NOT_BUILT': 7, 'PASS': 42, 'WAIVED': 1}",
+      "detail": "formal: {'BLOCKED': 16, 'FAIL': 1, 'NOT_BUILT': 3, 'PASS': 45, 'WAIVED': 1}",
       "evidence": {
         "blocked_by": [
           "needs two legal editors' sign-off (Q-S4-02)",
@@ -181,7 +178,7 @@
       "title": "Every Stage 4 batch built",
       "status": "BLOCKED",
       "hard": false,
-      "detail": "21 of 25 built; not built: B-S4-02 (twelve golden sets with legal-editor protocol (needs legal editors, Q-S4-02)), B-S4-14 (Devanagari triage + OCR (Wave B; needs the OCR bake-off, Q-S4-04)), B-S4-15 (Aligned offline translation + G10 (Wave B)), B-S4-16 (Encrypted Bundle Exchange (Wave B))",
+      "detail": "22 of 25 built; not built: B-S4-02 (twelve golden sets with legal-editor protocol (needs legal editors, Q-S4-02)), B-S4-14 (Devanagari triage + OCR (Wave B; needs the OCR bake-off, Q-S4-04)), B-S4-15 (Aligned offline translation + G10 (Wave B))",
       "evidence": {
         "built": [
           "B-S4-00",
@@ -198,6 +195,7 @@
           "B-S4-11",
           "B-S4-12",
           "B-S4-13",
+          "B-S4-16",
           "B-S4-17",
           "B-S4-18",
           "B-S4-19",
@@ -209,8 +207,7 @@
         "not_built": [
           "B-S4-02",
           "B-S4-14",
-          "B-S4-15",
-          "B-S4-16"
+          "B-S4-15"
         ]
       }
     },
@@ -250,9 +247,10 @@
       "title": "No network primitive in any Stage 4 engine (AC-13.1 / AC-S3-22.2, static)",
       "status": "PASS",
       "hard": true,
-      "detail": "scanned 24 engines; modules in the whole app with a network primitive: ['companion/mod.rs'] (the phone companion, refused under air-gap: True)",
+      "detail": "scanned 26 engines; modules in the whole app with a network primitive: ['bundle_lan.rs', 'companion/mod.rs'] (only the phone companion and the encrypted-bundle LAN transfer may; each is refused under air-gap: True/True)",
       "evidence": {
         "modules_with_network_primitives": [
+          "bundle_lan.rs",
           "companion/mod.rs"
         ]
       }
@@ -365,17 +363,17 @@
   ],
   "acceptance": {
     "measured": {
-      "BLOCKED": 7,
+      "BLOCKED": 8,
       "FAIL": 1,
-      "NOT_BUILT": 7,
-      "PASS": 50,
+      "NOT_BUILT": 3,
+      "PASS": 53,
       "WAIVED": 1
     },
     "formal": {
-      "BLOCKED": 15,
+      "BLOCKED": 16,
       "FAIL": 1,
-      "NOT_BUILT": 7,
-      "PASS": 42,
+      "NOT_BUILT": 3,
+      "PASS": 45,
       "WAIVED": 1
     },
     "total": 66,
@@ -385,11 +383,7 @@
     "not_built_or_unreported": [
       "AC-S4-09.1",
       "AC-S4-09.2",
-      "AC-S4-09.3",
-      "AC-S4-10.1",
-      "AC-S4-10.2",
-      "AC-S4-10.3",
-      "AC-S4-10.4"
+      "AC-S4-09.3"
     ],
     "blocked": [
       "AC-S4-00.4",
@@ -398,7 +392,8 @@
       "AC-S4-03.1",
       "AC-S4-04.1",
       "AC-S4-05.1",
-      "AC-S4-06.1"
+      "AC-S4-06.1",
+      "AC-S4-10.3"
     ],
     "waived": [
       "AC-S4-00.1"
@@ -435,8 +430,7 @@
     "not_built": [
       "B-S4-02",
       "B-S4-14",
-      "B-S4-15",
-      "B-S4-16"
+      "B-S4-15"
     ]
   },
   "owner_decisions_pending": {
@@ -493,9 +487,9 @@
   },
   "run": {
     "source": "eval/run_stage4.py",
-    "generated_at": "2026-10-10T10:44:29Z"
+    "generated_at": "2026-10-10T11:13:19Z"
   },
-  "report_sha256": "1de1334e68fd7a858c517099762b3ca32d3a4ca1f419cc2786604b9ab98d1d93",
+  "report_sha256": "886e83b3d045d24fdc0ac8f3a2f9b1baa455b4578c3f8e7a2343f78db8d0b95e",
   "signature": {
     "status": "UNSIGNED",
     "reason": "no release signing key exists; the owner decides who signs a release (set CASEFORGE_RELEASE_KEY_PEM to sign). The report_sha256 above fixes the content."

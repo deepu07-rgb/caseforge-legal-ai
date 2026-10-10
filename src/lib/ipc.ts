@@ -2948,6 +2948,32 @@ export interface TreatmentLookup { source_id: string; state: "FOUND" | "NONE_FOU
 export async function packCurrency(): Promise<PackStamp[]> { return invoke<PackStamp[]>("pack_currency"); }
 export async function treatmentLookup(sources: { source_id: string; chunk_id: string }[]): Promise<TreatmentLookup[]> { return invoke<TreatmentLookup[]>("treatment_lookup", { sources }); }
 
+// --- B-S4-16 Encrypted Bundle Exchange ---
+export interface BundlePeer { card: { display_name: string; key_id: string; signing_public_key_hex: string; agreement_public_key_hex: string; created_at_unix_ms: number }; label: string; verified: boolean; verification_code: string; added_at_unix_ms: number }
+export interface BundleItemInfo { item_id: string; kind: string; plaintext_bytes: number; redacted: boolean }
+export interface BundleExport { bundle_b64: string; bundle_id: string; bytes: number; items: BundleItemInfo[]; redaction_log: { item_id: string; redaction_count: number }[]; recipients: { key_id: string; display_name: string }[]; skipped: string[] }
+export interface BundleInspect { bundle_id: string; created_at: string; app_version: string; sender: { display_name: string; key_id: string; signing_public_key_hex: string; known_as: string | null; verified: boolean }; addressed_to_you: boolean; items: BundleItemInfo[] | null; redaction_log: { item_id: string; redaction_count: number }[]; signature_valid: boolean }
+export interface BundleCorrectionPlan { target_key: string; status: "SUGGESTED" | "CONFLICTS_WITH_YOUR_CORRECTION" | "SAME_AS_YOURS"; recipient_value: string | null; sender_value: string | null; event_type: string; reason: string | null; origin: "COUNSEL_INPUT" }
+export interface BundleReceived {
+  summary: { bundle_id: string; attribution: string; created_at: string; imported_at_unix_ms: number; sender: { display_name: string; key_id: string; known_as: string | null; verified: boolean }; items: { item_id: string; kind: string }[]; redaction_log: { item_id: string; redaction_count: number }[] };
+  items: { item_id: string; kind: string; attribution: string; envelope: unknown; plan?: BundleCorrectionPlan[] }[];
+}
+export async function bundleIdentity(displayName: string): Promise<{ card: Record<string, unknown>; key_id: string; verification_code: string }> { return invoke("bundle_identity", { displayName }); }
+export async function bundlePeerAdd(card: unknown, label?: string): Promise<BundlePeer> { return invoke<BundlePeer>("bundle_peer_add", { card, label }); }
+export async function bundlePeerVerify(keyId: string, code: string): Promise<BundlePeer> { return invoke<BundlePeer>("bundle_peer_verify", { keyId, code }); }
+export async function bundlePeerList(): Promise<BundlePeer[]> { return invoke<BundlePeer[]>("bundle_peer_list"); }
+export async function bundlePeerRemove(keyId: string): Promise<void> { return invoke<void>("bundle_peer_remove", { keyId }); }
+export async function bundleExport(a: { caseId: string; recipientKeyIds: string[]; kinds: string[]; redactions: { text: string; mode: string }[]; extraItems: { kind: string; payload: unknown }[]; displayName: string }): Promise<BundleExport> {
+  return invoke<BundleExport>("bundle_export", { args: { case_id: a.caseId, recipient_key_ids: a.recipientKeyIds, kinds: a.kinds, redactions: a.redactions, extra_items: a.extraItems, display_name: a.displayName } });
+}
+export async function bundleInspect(bundleB64: string): Promise<BundleInspect> { return invoke<BundleInspect>("bundle_inspect", { bundleB64 }); }
+export async function bundleImport(caseId: string, bundleB64: string, acceptUnknownSender?: boolean): Promise<BundleReceived["summary"]> { return invoke("bundle_import", { caseId, bundleB64, acceptUnknownSender }); }
+export async function bundleReceivedList(caseId: string): Promise<BundleReceived["summary"][]> { return invoke("bundle_received_list", { caseId }); }
+export async function bundleReceivedGet(caseId: string, bundleId: string): Promise<BundleReceived> { return invoke<BundleReceived>("bundle_received_get", { caseId, bundleId }); }
+export async function bundleLanShare(bundleB64: string): Promise<{ url: string; bind_ip: string; port: number; expires_in_s: number; bytes: number }> { return invoke("bundle_lan_share", { bundleB64 }); }
+export async function bundleLanStop(): Promise<void> { return invoke<void>("bundle_lan_stop"); }
+export async function bundleLanFetch(url: string): Promise<string> { return invoke<string>("bundle_lan_fetch", { url }); }
+
 // --- B-S4-12 Timed Oral Rehearsal ---
 export interface RehearsalPolicy { batch: string; status: string; presets_seconds: number[]; min_seconds: number; max_seconds: number; rates: string[]; interval_ms: Record<string, number | null>; warnings_remaining_seconds: number[]; reached_by: string }
 export interface RehearsalEvent { t_ms: number; kind: "SESSION_START" | "LIMB_REACHED" | "INTERRUPTION" | "USER_RESPONSE" | "TIME_WARNING" | "TIME_EXPIRED" | "SESSION_END"; limb_node_id: string | null; turn_id: string | null; grounding_ref: string | null }

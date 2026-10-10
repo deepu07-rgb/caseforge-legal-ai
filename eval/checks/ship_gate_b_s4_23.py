@@ -44,7 +44,7 @@ REQUIRED_GUARDRAILS = ("G1", "G2", "G3", "G7", "G8")
 # Batches of the Stage 4 map in the playbook (section 2).
 BATCHES = ["B-S4-00", "B-S4-00b", "B-S4-01", "B-S4-02", "B-S4-03", "B-S4-04", "B-S4-05", "B-S4-06", "B-S4-07", "B-S4-08", "B-S4-09", "B-S4-10", "B-S4-11", "B-S4-12", "B-S4-13", "B-S4-14", "B-S4-15", "B-S4-16", "B-S4-17", "B-S4-18", "B-S4-19", "B-S4-20", "B-S4-21", "B-S4-22", "B-S4-23"]
 # Stage 4 engines: none may contain a network primitive. (The phone-capture companion is Stage 1, LAN only, refused under air-gap.)
-STAGE4_ENGINES = ["edition.rs", "entitlements.rs", "seat.rs", "subscription.rs", "g8.rs", "record_only.rs", "issue_matrix.rs", "chambers_lookup.rs", "cause_list.rs", "judgment_scaffold.rs", "deadlines.rs", "foundation.rs", "witness.rs", "impeach.rs", "opposition.rs", "certificate.rs", "code_bridge.rs", "treatment.rs", "rule_tables.rs", "reasoning.rs", "audit.rs", "answer_feedback.rs", "proposition.rs", "working_set.rs"]
+STAGE4_ENGINES = ["edition.rs", "entitlements.rs", "seat.rs", "subscription.rs", "g8.rs", "record_only.rs", "issue_matrix.rs", "chambers_lookup.rs", "cause_list.rs", "judgment_scaffold.rs", "deadlines.rs", "foundation.rs", "witness.rs", "impeach.rs", "opposition.rs", "certificate.rs", "code_bridge.rs", "treatment.rs", "rule_tables.rs", "reasoning.rs", "audit.rs", "answer_feedback.rs", "proposition.rs", "working_set.rs", "bundle.rs", "timed_rehearsal.rs"]
 NET = re.compile(r"reqwest|TcpStream|TcpListener|UdpSocket|std::net|tokio::net|\bureq\b|hyper::|isahc|surf::")
 # What each controlled matter is made of, as the Rust tests that already run it. Composed from per-engine goldens; not one run through the UI.
 MATTERS = {
@@ -202,10 +202,12 @@ def main() -> int:
     offenders = [n for n in STAGE4_ENGINES if (SRC / n).is_file() and NET.search(non_test((SRC / n).read_text(encoding="utf-8")))]
     lib = (SRC / "lib.rs").read_text(encoding="utf-8")
     companion_ok = "mgr.air_gap_enabled()" in lib[lib.index("fn companion_start") : lib.index("fn companion_start") + 700]
+    lan_ok = all("air_gap_enabled" in lib[lib.index(f"fn {c}(") : lib.index(f"fn {c}(") + 900] for c in ("bundle_lan_share", "bundle_lan_fetch"))
+    allowed_net = {"companion/mod.rs", "bundle_lan.rs"}
     hosts_with_net = sorted(str(p.relative_to(SRC)).replace("\\", "/") for p in SRC.rglob("*.rs") if NET.search(non_test(p.read_text(encoding="utf-8"))))
     air_tests = ["edition::tests::the_air_gap_cannot_be_turned_off_under_a_judiciary_licence"]
     air_ok = all(t in log.get("ok", set()) for t in air_tests) if log["present"] else None
-    checks.append(check("network_static", "No network primitive in any Stage 4 engine (AC-13.1 / AC-S3-22.2, static)", "PASS" if not offenders and companion_ok and air_ok is not False else "FAIL", f"scanned {len([n for n in STAGE4_ENGINES if (SRC / n).is_file()])} engines; modules in the whole app with a network primitive: {hosts_with_net} (the phone companion, refused under air-gap: {companion_ok})" + (f"; OFFENDERS: {offenders}" if offenders else ""), hard=True, evidence={"modules_with_network_primitives": hosts_with_net}))
+    checks.append(check("network_static", "No network primitive in any Stage 4 engine (AC-13.1 / AC-S3-22.2, static)", "PASS" if not offenders and companion_ok and lan_ok and set(hosts_with_net) <= allowed_net and air_ok is not False else "FAIL", f"scanned {len([n for n in STAGE4_ENGINES if (SRC / n).is_file()])} engines; modules in the whole app with a network primitive: {hosts_with_net} (only the phone companion and the encrypted-bundle LAN transfer may; each is refused under air-gap: {companion_ok}/{lan_ok})" + (f"; OFFENDERS: {offenders}" if offenders else ""), hard=True, evidence={"modules_with_network_primitives": hosts_with_net}))
     checks.append(check("network_capture", "Measured network capture across the Stage 4 workflows", "NOT_RUN", "no packet capture has been made; the static scan above is not a capture. A capture on the Full reference machine with the app running each workflow is required for LIMITED REAL-CASE"))
 
     # ---- size ----

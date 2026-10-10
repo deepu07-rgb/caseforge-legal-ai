@@ -16,7 +16,7 @@
       "status": "PASS",
       "evidence": {
         "prohibited_phrases_found": [],
-        "files_scanned": 52
+        "files_scanned": 53
       },
       "detail": "No screen says a case is good law, valid or the like; absence of treatment reads 'no treatment found in installed corpus' and says it speaks only for the library."
     },
@@ -57,8 +57,8 @@
         "build_tool": true,
         "existing_install_tests": {
           "packs::tests::b_s3_08_b_s3_09_v2_lineage_duplicate_and_tamper_validation": "ok",
-          "packs::tests::b_s3_09_protection_failure_is_fail_closed": "ok",
           "packs::tests::b_s3_09_failed_upgrade_preserves_prior_pack": "ok",
+          "packs::tests::b_s3_09_protection_failure_is_fail_closed": "ok",
           "packs::tests::b_s3_09_malicious_paths_active_content_and_hashes_are_rejected": "ok",
           "packs::tests::b_s3_09_signed_official_positive_and_protection_rollback": "ok",
           "packs::tests::b_s4_27_pack_vectors_pass_install_checks_and_register": "ok",

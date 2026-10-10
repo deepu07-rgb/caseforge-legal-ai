@@ -1,0 +1,95 @@
+{
+  "batch": "B-S4-16",
+  "golden_sha256": "59b8cb0a66e24f11b3b477b8fc4027c61252cdaa531304cab25be542e73ca90c",
+  "acs": {
+    "AC-S4-10.1": {
+      "status": "PASS",
+      "evidence": {
+        "cipher": "X25519 + HKDF-SHA256 + AES-256-GCM, signed Ed25519",
+        "manifest_schema_validated": true,
+        "every_byte_flipped": "all bytes of a small bundle and a sample of a large one",
+        "wrong_key": "CF_BUNDLE_NOT_FOR_YOU",
+        "changed_file": "CF_BUNDLE_TAMPERED / CF_BUNDLE_BAD_FILE"
+      },
+      "detail": "A bundle opens only with the recipient's key; a stranger's key, the sender's, and an impostor with a recipient's key id all fail; every flipped byte, truncation, swapped or grafted item is rejected. The sender is whoever's key signed it: the app shows that key's code and asks you to accept an unchecked sender by hand."
+    },
+    "AC-S4-10.2": {
+      "status": "PASS",
+      "evidence": {
+        "how": "redaction on the plaintext before encryption; an independent normalising check refuses the export if a term survives; terms searched for in the file and in all decrypted items in raw, JSON-escaped, upper, lower, spaceless and split-by-newline shapes",
+        "limits": "finds the phrases it is given; a different spelling, a nickname or a number not listed is not found"
+      },
+      "detail": "Redacted wording is in no byte of the bundle or of anything decrypted from it, the log holds counts only, and the sender's own copy is untouched."
+    },
+    "AC-S4-10.3": {
+      "status": "BLOCKED",
+      "reason": "needs a packet capture on a real local network; the code-level LAN-only rules pass (below) but the criterion asks for a capture, which has not been made",
+      "evidence": {
+        "addresses_bound": [
+          "127.0.0.1:53862"
+        ],
+        "peers_seen": [
+          [
+            "127.0.0.1",
+            true
+          ],
+          [
+            "127.0.0.1",
+            true
+          ]
+        ],
+        "connected_to": [
+          "127.0.0.1:53862",
+          "127.0.0.1:53862",
+          "127.0.0.1:53862"
+        ],
+        "rules": "private, link-local and loopback only; numeric addresses only; one download; refused under air-gap"
+      },
+      "detail": "Enforced and tested in code, over loopback; the USB route needs no network."
+    },
+    "AC-S4-10.4": {
+      "status": "PASS",
+      "evidence": {
+        "two_vaults": "the recipient's active corrections, correction events, graph and documents are identical before and after importing a bundle whose correction on the same event differs",
+        "listed_as": "CONFLICTS_WITH_YOUR_CORRECTION (yours stays), SAME_AS_YOURS, or SUGGESTED, each attributed to the sender as COUNSEL_INPUT"
+      },
+      "detail": "The import path cannot write a correction (static scan) and the received ones are kept beside the matter as attributed suggestions."
+    }
+  },
+  "static": {
+    "algorithms_are_the_frozen_ones": true,
+    "no_network_or_model_in_the_format_module": true,
+    "redaction_runs_before_encryption": true,
+    "export_refuses_when_a_term_survives": true,
+    "redaction_log_is_counts_only": true,
+    "key_agreement_is_ephemeral_per_recipient": true,
+    "item_bound_to_bundle_item_and_kind": true,
+    "signature_covers_the_manifest": true,
+    "hex_fields_must_be_lowercase": true,
+    "bundle_signing_key_is_not_the_certificate_key": true,
+    "lan_uses_the_companion_rules": true,
+    "lan_never_resolves_a_name": true,
+    "lan_serves_one_download": true,
+    "lan_peers_filtered_before_reading": true,
+    "lan_commands_refuse_under_air_gap": true,
+    "lan_has_no_relay_or_cloud_word": true,
+    "import_cannot_write_a_correction": true,
+    "overlay_reader_is_read_only": true,
+    "plan_function_is_pure": true,
+    "unknown_sender_needs_hand_acceptance": true,
+    "export_needs_checked_contacts": true,
+    "commands_exist_and_are_mapped_to_the_edition": true,
+    "commands_check_the_feature_first": true,
+    "commands_registered": true,
+    "curve25519_is_already_in_the_lock_file": true,
+    "panel_lists_only_checked_contacts_to_send_to": true,
+    "panel_says_it_never_leaves_the_machines": true,
+    "panel_explains_redaction_honestly": true,
+    "panel_requires_acceptance_of_unchecked_senders": true,
+    "panel_says_received_corrections_never_replace_yours": true,
+    "tab_is_in_the_case_file": true,
+    "ipc_has_the_commands": true,
+    "panel_vocabulary_honest": true
+  },
+  "errors": []
+}

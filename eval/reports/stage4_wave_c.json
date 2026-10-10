@@ -1,6 +1,6 @@
 {
   "checkpoint": "Stage 4 Wave C",
-  "generated_at": "2026-10-10T10:44:58Z",
+  "generated_at": "2026-10-10T11:13:40Z",
   "verdict": {
     "wave_c_batches_17_to_21": "GREEN",
     "ci_gates": "GREEN",
@@ -27,12 +27,12 @@
     {
       "gate": "citation_audit_b_s4_04.py",
       "exit": 0,
-      "seconds": 0.1
+      "seconds": 0.2
     },
     {
       "gate": "certificate_b_s4_05.py",
       "exit": 0,
-      "seconds": 0.3
+      "seconds": 0.4
     },
     {
       "gate": "opposing_scan_b_s4_06.py",
@@ -62,27 +62,27 @@
     {
       "gate": "reasoning_b_s4_28.py",
       "exit": 0,
-      "seconds": 0.2
+      "seconds": 0.3
     },
     {
       "gate": "deadlines_b_s4_11.py",
       "exit": 0,
-      "seconds": 0.3
+      "seconds": 0.4
     },
     {
       "gate": "foundation_b_s4_10.py",
       "exit": 0,
-      "seconds": 0.3
+      "seconds": 0.4
     },
     {
       "gate": "issue_matrix_b_s4_18.py",
       "exit": 0,
-      "seconds": 0.3
+      "seconds": 0.4
     },
     {
       "gate": "treatment_b_s4_13.py",
       "exit": 0,
-      "seconds": 0.9
+      "seconds": 1.0
     },
     {
       "gate": "chambers_record_only_b_s4_17.py",
@@ -97,26 +97,31 @@
     {
       "gate": "cause_list_b_s4_20.py",
       "exit": 0,
-      "seconds": 0.3
+      "seconds": 0.4
     },
     {
       "gate": "judgment_scaffold_b_s4_21.py",
       "exit": 0,
-      "seconds": 0.4
+      "seconds": 0.5
     },
     {
       "gate": "editions_b_s4_22.py",
       "exit": 0,
-      "seconds": 0.3
+      "seconds": 0.4
     },
     {
       "gate": "timed_rehearsal_b_s4_12.py",
       "exit": 0,
-      "seconds": 0.3
+      "seconds": 0.4
+    },
+    {
+      "gate": "bundle_b_s4_16.py",
+      "exit": 0,
+      "seconds": 0.4
     }
   ],
   "rust_tests": {
-    "passed": 245,
+    "passed": 263,
     "failed": 0,
     "ignored": 1
   },
@@ -169,18 +174,18 @@
   },
   "acceptance_counts": {
     "measured": {
-      "PASS": 50,
+      "PASS": 53,
       "WAIVED": 1,
-      "BLOCKED": 7,
+      "BLOCKED": 8,
       "FAIL": 1,
-      "NOT_BUILT": 7
+      "NOT_BUILT": 3
     },
     "formal": {
-      "PASS": 42,
+      "PASS": 45,
       "WAIVED": 1,
-      "BLOCKED": 15,
+      "BLOCKED": 16,
       "FAIL": 1,
-      "NOT_BUILT": 7
+      "NOT_BUILT": 3
     },
     "total": 66
   },
@@ -796,40 +801,50 @@
       "ac": "AC-S4-10.1",
       "batch": "B-S4-16",
       "description": "Bundle undecryptable without key; tampered bundle rejected.",
-      "measured": "NOT_BUILT",
-      "formal": "NOT_BUILT",
+      "measured": "PASS",
+      "formal": "PASS",
       "blocked_by": [],
-      "reports": [],
+      "reports": [
+        "b_s4_16_bundle.json"
+      ],
       "detail": {}
     },
     {
       "ac": "AC-S4-10.2",
       "batch": "B-S4-16",
       "description": "Redacted text absent from every byte of the bundle.",
-      "measured": "NOT_BUILT",
-      "formal": "NOT_BUILT",
+      "measured": "PASS",
+      "formal": "PASS",
       "blocked_by": [],
-      "reports": [],
+      "reports": [
+        "b_s4_16_bundle.json"
+      ],
       "detail": {}
     },
     {
       "ac": "AC-S4-10.3",
       "batch": "B-S4-16",
       "description": "Exchange traffic LAN-only.",
-      "measured": "NOT_BUILT",
-      "formal": "NOT_BUILT",
+      "measured": "BLOCKED",
+      "formal": "BLOCKED",
       "blocked_by": [],
-      "reports": [],
-      "detail": {}
+      "reports": [
+        "b_s4_16_bundle.json"
+      ],
+      "detail": {
+        "reason": "needs a packet capture on a real local network; the code-level LAN-only rules pass (below) but the criterion asks for a capture, which has not been made"
+      }
     },
     {
       "ac": "AC-S4-10.4",
       "batch": "B-S4-16",
       "description": "Import never overwrites a recipient correction.",
-      "measured": "NOT_BUILT",
-      "formal": "NOT_BUILT",
+      "measured": "PASS",
+      "formal": "PASS",
       "blocked_by": [],
-      "reports": [],
+      "reports": [
+        "b_s4_16_bundle.json"
+      ],
       "detail": {}
     },
     {
@@ -1044,8 +1059,7 @@
   "not_built": {
     "B-S4-02": "twelve golden sets with legal-editor protocol (needs legal editors, Q-S4-02)",
     "B-S4-14": "Devanagari triage + OCR (Wave B; needs the OCR bake-off, Q-S4-04)",
-    "B-S4-15": "Aligned offline translation + G10 (Wave B)",
-    "B-S4-16": "Encrypted Bundle Exchange (Wave B)"
+    "B-S4-15": "Aligned offline translation + G10 (Wave B)"
   },
   "owner_decisions_needed": {
     "Q-S4-01": "approve (or change) the PROPOSED thresholds; until then no threshold-based criterion can be formally accepted",

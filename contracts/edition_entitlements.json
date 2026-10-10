@@ -66,7 +66,20 @@
     "rehearsal_response": "timed_rehearsal",
     "rehearsal_end": "timed_rehearsal",
     "rehearsal_get": "timed_rehearsal",
-    "rehearsal_list": "timed_rehearsal"
+    "rehearsal_list": "timed_rehearsal",
+    "bundle_identity": "bundle_exchange",
+    "bundle_peer_add": "bundle_exchange",
+    "bundle_peer_verify": "bundle_exchange",
+    "bundle_peer_list": "bundle_exchange",
+    "bundle_peer_remove": "bundle_exchange",
+    "bundle_export": "bundle_exchange",
+    "bundle_inspect": "bundle_exchange",
+    "bundle_import": "bundle_exchange",
+    "bundle_received_list": "bundle_exchange",
+    "bundle_received_get": "bundle_exchange",
+    "bundle_lan_share": "bundle_exchange",
+    "bundle_lan_stop": "bundle_exchange",
+    "bundle_lan_fetch": "bundle_exchange"
   },
   "never_blocked_by_expiry": ["case_open", "case_list", "doc_list", "doc_text_preview", "pack_list", "pack_currency", "licence_status", "edition_status", "seat_status"]
 }

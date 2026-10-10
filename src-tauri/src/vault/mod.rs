@@ -4935,6 +4935,50 @@ impl VaultManager {
         Ok(ctx)
     }
 
+    /// B-S4-16: small install-wide records (bundle contacts) kept in the app vault's licence_meta table.
+    pub fn app_kv_put(&self, key: &str, value: &serde_json::Value) -> VaultResult<()> {
+        let mut g = self.inner.lock().map_err(|_| VaultError::LockPoisoned)?;
+        let app = g.app.as_mut().ok_or(VaultError::Locked)?;
+        sql::apply_pending_migrations(app, APP_MIGRATIONS)?;
+        app.execute("INSERT OR REPLACE INTO licence_meta (key, value) VALUES (?1, ?2)", rusqlite::params![key, value.to_string()])?;
+        Ok(())
+    }
+
+    pub fn app_kv_list(&self, prefix: &str) -> VaultResult<Vec<(String, serde_json::Value)>> {
+        let mut g = self.inner.lock().map_err(|_| VaultError::LockPoisoned)?;
+        let app = g.app.as_mut().ok_or(VaultError::Locked)?;
+        sql::apply_pending_migrations(app, APP_MIGRATIONS)?;
+        let mut stmt = app.prepare("SELECT key, value FROM licence_meta WHERE substr(key, 1, length(?1)) = ?1 ORDER BY key")?;
+        let rows = stmt.query_map([prefix], |r| Ok((r.get::<_, String>(0)?, r.get::<_, String>(1)?)))?;
+        let mut out = vec![];
+        for r in rows {
+            let (k, v) = r?;
+            if let Ok(v) = serde_json::from_str(&v) {
+                out.push((k, v));
+            }
+        }
+        Ok(out)
+    }
+
+    pub fn app_kv_delete(&self, key: &str) -> VaultResult<()> {
+        let mut g = self.inner.lock().map_err(|_| VaultError::LockPoisoned)?;
+        let app = g.app.as_mut().ok_or(VaultError::Locked)?;
+        sql::apply_pending_migrations(app, APP_MIGRATIONS)?;
+        app.execute("DELETE FROM licence_meta WHERE key = ?1", [key])?;
+        Ok(())
+    }
+
+    /// B-S4-16: the values of the recipient's own active corrections, by target key (graph items and word spans). Read only.
+    pub fn correction_overlay_values(&self, case_id: &str) -> VaultResult<std::collections::HashMap<String, String>> {
+        let mut out = std::collections::HashMap::new();
+        for kind in ["graph_item", "word_span"] {
+            for o in self.authority_overlays_list(case_id, kind)? {
+                out.insert(o.target_key, o.counsel_value);
+            }
+        }
+        Ok(out)
+    }
+
     /// B-S4-22: the seat record this vault keeps in licence_meta once it has given a seat away.
     fn seat_released_record(&self) -> VaultResult<Option<serde_json::Value>> {
         let mut g = self.inner.lock().map_err(|_| VaultError::LockPoisoned)?;

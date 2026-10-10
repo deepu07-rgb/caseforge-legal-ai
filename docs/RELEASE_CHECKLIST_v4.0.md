@@ -18,15 +18,14 @@ A box is ticked only where the gate or a test has shown it. Nothing here is sign
 
 ## Batches
 
-- [x] B-S4-00, 00b, 01, 03–13, 17–23 built
+- [x] B-S4-00, 00b, 01, 03–13, 16–23 built
 - [ ] B-S4-02 twelve golden sets and the legal-editor protocol
 - [ ] B-S4-14 Devanagari triage and OCR
 - [ ] B-S4-15 Aligned offline translation and G10
-- [ ] B-S4-16 Encrypted Bundle Exchange
 
 ## Acceptance
 
-- [ ] Every AC-S4-* measured PASS — 50 of 66 today; AC-S4-00.7 fails; 7 not measurable here; 7 belong to unbuilt batches
+- [ ] Every AC-S4-* measured PASS — 53 of 66 today; AC-S4-00.7 fails; 8 not measurable here (one is the bundle LAN capture); 3 belong to unbuilt batches
 - [ ] Every AC-S4-* formally accepted (thresholds approved by the owner, sign-offs, no open owner question)
 - [ ] Two legal editors' sign-off for every legal-answer criterion (`eval/signoffs/legal_editors.json` does not exist)
 - [ ] Base install within the 4 GiB cap — over the cap by owner waiver W-AC-S4-00.1 (5.08 GiB), reported as WAIVED

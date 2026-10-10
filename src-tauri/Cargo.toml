@@ -31,6 +31,8 @@ flate2 = "1"
 base64 = "0.22"
 sha2 = "0.10"
 ed25519-dalek = { version = "2", default-features = false, features = ["std"] }
+# B-S4-16: X25519 key agreement for bundles. Already in the lock file as ed25519-dalek's dependency; no new download.
+curve25519-dalek = "4"
 # B-S1-19: economic at-rest protection for packs/models (not user vault data).
 aes-gcm = "0.10"
 
