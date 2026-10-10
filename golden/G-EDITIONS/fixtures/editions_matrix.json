@@ -1,0 +1,907 @@
+{
+  "schema_version": "1.0.0",
+  "batch": "B-S4-22",
+  "golden_set": "G-EDITIONS",
+  "description": "Pinned before the engine. Rules of editions, pack subscription and seat transfer on a SYNTHETIC entitlement map (not the product map): which surfaces and commands a licence entitles, what an expired pack subscription may and may not block, and how seat transfers are counted over a rolling year. The product's own map is validated by invariants in eval/checks/editions_b_s4_22.py, so an owner decision on Q-S4-06 changes the map without changing these rules.",
+  "now_ms": 1800000000000,
+  "day_ms": 86400000,
+  "map": {
+    "schema_version": "1.0.0",
+    "status": "DEVELOPMENT_ONLY",
+    "question": "Q-S4-06",
+    "unlicensed_stage4_policy": "OPEN_DEVELOPMENT",
+    "stage4_features": [
+      "witness_matrix",
+      "opposition_scan",
+      "deadline_watch",
+      "audit_certificate",
+      "chambers"
+    ],
+    "editions": {
+      "ADVOCATE": {
+        "features": [
+          "digest",
+          "retrieval",
+          "export",
+          "audit",
+          "deadline_watch"
+        ]
+      },
+      "PRO": {
+        "features": [
+          "digest",
+          "retrieval",
+          "export",
+          "audit",
+          "deadline_watch",
+          "witness_matrix",
+          "opposition_scan",
+          "mock_court",
+          "voice"
+        ]
+      },
+      "CHAMBERS_FIRM": {
+        "features": [
+          "digest",
+          "retrieval",
+          "export",
+          "audit",
+          "deadline_watch",
+          "witness_matrix",
+          "opposition_scan",
+          "mock_court",
+          "voice",
+          "audit_certificate"
+        ]
+      },
+      "JUDICIARY": {
+        "features": [
+          "digest",
+          "retrieval",
+          "export",
+          "audit",
+          "deadline_watch",
+          "chambers"
+        ]
+      }
+    },
+    "surfaces": {
+      "home": null,
+      "cases": null,
+      "new-case": null,
+      "workspace": null,
+      "builder": null,
+      "integrity": null,
+      "digest": "digest",
+      "voice": "voice",
+      "experience": null,
+      "court": "mock_court",
+      "opposition": "opposition_scan",
+      "witnesses": "witness_matrix",
+      "deadlines": "deadline_watch",
+      "issues": "chambers",
+      "chambers": "chambers",
+      "causelist": "chambers",
+      "scaffold": "chambers",
+      "practice": null,
+      "library": null,
+      "licence": null,
+      "protection": null,
+      "guardrails": null,
+      "settings": null
+    },
+    "commands": {
+      "witness_matrix_build": "witness_matrix",
+      "opposition_scan": "opposition_scan",
+      "deadlines_compute": "deadline_watch",
+      "audit_certificate_issue": "audit_certificate",
+      "mock_court_turn": "mock_court"
+    }
+  },
+  "always_visible": [
+    "home",
+    "cases",
+    "new-case",
+    "workspace",
+    "library",
+    "licence",
+    "protection",
+    "guardrails",
+    "settings"
+  ],
+  "surface_cases": [
+    {
+      "name": "ADVOCATE with everything its edition includes",
+      "edition": "ADVOCATE",
+      "licence_features": [
+        "digest",
+        "retrieval",
+        "export",
+        "audit",
+        "deadline_watch"
+      ],
+      "expect_effective": [
+        "digest",
+        "retrieval",
+        "export",
+        "audit",
+        "deadline_watch"
+      ],
+      "expect_ignored": [],
+      "expect_chambers": false,
+      "expect_hidden": [
+        "voice",
+        "court",
+        "opposition",
+        "witnesses",
+        "issues",
+        "chambers",
+        "causelist",
+        "scaffold"
+      ]
+    },
+    {
+      "name": "a feature outside the edition is carried but ignored",
+      "edition": "ADVOCATE",
+      "licence_features": [
+        "digest",
+        "retrieval",
+        "export",
+        "audit",
+        "deadline_watch",
+        "witness_matrix"
+      ],
+      "expect_effective": [
+        "digest",
+        "retrieval",
+        "export",
+        "audit",
+        "deadline_watch"
+      ],
+      "expect_ignored": [
+        "witness_matrix"
+      ],
+      "expect_chambers": false,
+      "expect_hidden": [
+        "voice",
+        "court",
+        "opposition",
+        "witnesses",
+        "issues",
+        "chambers",
+        "causelist",
+        "scaffold"
+      ]
+    },
+    {
+      "name": "a licence narrower than its edition shows only what it carries",
+      "edition": "ADVOCATE",
+      "licence_features": [
+        "digest"
+      ],
+      "expect_effective": [
+        "digest"
+      ],
+      "expect_ignored": [],
+      "expect_chambers": false,
+      "expect_hidden": [
+        "voice",
+        "court",
+        "opposition",
+        "witnesses",
+        "deadlines",
+        "issues",
+        "chambers",
+        "causelist",
+        "scaffold"
+      ]
+    },
+    {
+      "name": "PRO",
+      "edition": "PRO",
+      "licence_features": [
+        "digest",
+        "retrieval",
+        "export",
+        "audit",
+        "deadline_watch",
+        "witness_matrix",
+        "opposition_scan",
+        "mock_court",
+        "voice"
+      ],
+      "expect_effective": [
+        "digest",
+        "retrieval",
+        "export",
+        "audit",
+        "deadline_watch",
+        "witness_matrix",
+        "opposition_scan",
+        "mock_court",
+        "voice"
+      ],
+      "expect_ignored": [],
+      "expect_chambers": false,
+      "expect_hidden": [
+        "issues",
+        "chambers",
+        "causelist",
+        "scaffold"
+      ]
+    },
+    {
+      "name": "CHAMBERS_FIRM",
+      "edition": "CHAMBERS_FIRM",
+      "licence_features": [
+        "digest",
+        "retrieval",
+        "export",
+        "audit",
+        "deadline_watch",
+        "witness_matrix",
+        "opposition_scan",
+        "mock_court",
+        "voice",
+        "audit_certificate"
+      ],
+      "expect_effective": [
+        "digest",
+        "retrieval",
+        "export",
+        "audit",
+        "deadline_watch",
+        "witness_matrix",
+        "opposition_scan",
+        "mock_court",
+        "voice",
+        "audit_certificate"
+      ],
+      "expect_ignored": [],
+      "expect_chambers": false,
+      "expect_hidden": [
+        "issues",
+        "chambers",
+        "causelist",
+        "scaffold"
+      ]
+    },
+    {
+      "name": "JUDICIARY shows the Chambers screens and hides advocacy",
+      "edition": "JUDICIARY",
+      "licence_features": [
+        "digest",
+        "retrieval",
+        "export",
+        "audit",
+        "deadline_watch",
+        "chambers"
+      ],
+      "expect_effective": [
+        "digest",
+        "retrieval",
+        "export",
+        "audit",
+        "deadline_watch",
+        "chambers"
+      ],
+      "expect_ignored": [],
+      "expect_chambers": true,
+      "expect_hidden": [
+        "builder",
+        "integrity",
+        "voice",
+        "experience",
+        "court",
+        "opposition",
+        "witnesses",
+        "practice"
+      ]
+    },
+    {
+      "name": "JUDICIARY narrower than its edition",
+      "edition": "JUDICIARY",
+      "licence_features": [
+        "digest",
+        "chambers"
+      ],
+      "expect_effective": [
+        "digest",
+        "chambers"
+      ],
+      "expect_ignored": [],
+      "expect_chambers": true,
+      "expect_hidden": [
+        "builder",
+        "integrity",
+        "voice",
+        "experience",
+        "court",
+        "opposition",
+        "witnesses",
+        "practice",
+        "deadlines"
+      ]
+    },
+    {
+      "name": "JUDICIARY carrying an advocacy feature ignores it",
+      "edition": "JUDICIARY",
+      "licence_features": [
+        "digest",
+        "retrieval",
+        "export",
+        "audit",
+        "deadline_watch",
+        "chambers",
+        "mock_court"
+      ],
+      "expect_effective": [
+        "digest",
+        "retrieval",
+        "export",
+        "audit",
+        "deadline_watch",
+        "chambers"
+      ],
+      "expect_ignored": [
+        "mock_court"
+      ],
+      "expect_chambers": true,
+      "expect_hidden": [
+        "builder",
+        "integrity",
+        "voice",
+        "experience",
+        "court",
+        "opposition",
+        "witnesses",
+        "practice"
+      ]
+    },
+    {
+      "name": "JUDICIARY without the chambers feature is not a Chambers install but still hides advocacy",
+      "edition": "JUDICIARY",
+      "licence_features": [
+        "digest",
+        "audit"
+      ],
+      "expect_effective": [
+        "digest",
+        "audit"
+      ],
+      "expect_ignored": [],
+      "expect_chambers": false,
+      "expect_hidden": [
+        "builder",
+        "integrity",
+        "voice",
+        "experience",
+        "court",
+        "opposition",
+        "witnesses",
+        "practice",
+        "deadlines",
+        "issues",
+        "chambers",
+        "causelist",
+        "scaffold"
+      ]
+    }
+  ],
+  "command_cases": [
+    {
+      "edition": "PRO",
+      "licence_features": [
+        "digest",
+        "retrieval",
+        "export",
+        "audit",
+        "deadline_watch",
+        "witness_matrix",
+        "opposition_scan",
+        "mock_court",
+        "voice"
+      ],
+      "feature": "witness_matrix",
+      "expect": "ok"
+    },
+    {
+      "edition": "ADVOCATE",
+      "licence_features": [
+        "digest",
+        "retrieval",
+        "export",
+        "audit",
+        "deadline_watch"
+      ],
+      "feature": "witness_matrix",
+      "expect": "refused"
+    },
+    {
+      "edition": "JUDICIARY",
+      "licence_features": [
+        "digest",
+        "retrieval",
+        "export",
+        "audit",
+        "deadline_watch",
+        "chambers"
+      ],
+      "feature": "mock_court",
+      "expect": "refused"
+    },
+    {
+      "edition": "CHAMBERS_FIRM",
+      "licence_features": [
+        "digest",
+        "retrieval",
+        "export",
+        "audit",
+        "deadline_watch",
+        "witness_matrix",
+        "opposition_scan",
+        "mock_court",
+        "voice",
+        "audit_certificate"
+      ],
+      "feature": "audit_certificate",
+      "expect": "ok"
+    },
+    {
+      "edition": "PRO",
+      "licence_features": [
+        "digest",
+        "retrieval",
+        "export",
+        "audit",
+        "deadline_watch",
+        "witness_matrix",
+        "opposition_scan",
+        "mock_court",
+        "voice"
+      ],
+      "feature": "audit_certificate",
+      "expect": "refused"
+    },
+    {
+      "edition": "ADVOCATE",
+      "licence_features": [
+        "digest",
+        "retrieval",
+        "export",
+        "audit",
+        "deadline_watch",
+        "witness_matrix"
+      ],
+      "feature": "witness_matrix",
+      "expect": "refused"
+    },
+    {
+      "edition": "PRO",
+      "licence_features": [
+        "digest",
+        "witness_matrix"
+      ],
+      "feature": "opposition_scan",
+      "expect": "refused"
+    },
+    {
+      "edition": "PRO",
+      "licence_features": [
+        "digest",
+        "retrieval",
+        "export",
+        "audit",
+        "deadline_watch",
+        "witness_matrix",
+        "opposition_scan",
+        "mock_court",
+        "voice"
+      ],
+      "feature": "deadline_watch",
+      "expect": "ok"
+    },
+    {
+      "edition": "PRO",
+      "licence_features": [
+        "digest",
+        "retrieval",
+        "export",
+        "audit",
+        "deadline_watch",
+        "witness_matrix",
+        "opposition_scan",
+        "mock_court",
+        "voice"
+      ],
+      "feature": "no_such_feature",
+      "expect": "refused"
+    }
+  ],
+  "command_map_cases": [
+    {
+      "command": "witness_matrix_build",
+      "needs": "witness_matrix"
+    },
+    {
+      "command": "mock_court_turn",
+      "needs": "mock_court"
+    },
+    {
+      "command": "home_screen_data",
+      "needs": null
+    }
+  ],
+  "unlicensed_cases": [
+    {
+      "policy": "OPEN_DEVELOPMENT",
+      "feature": "digest",
+      "expect": "ok"
+    },
+    {
+      "policy": "OPEN_DEVELOPMENT",
+      "feature": "witness_matrix",
+      "expect": "ok"
+    },
+    {
+      "policy": "OPEN_DEVELOPMENT",
+      "feature": "chambers",
+      "expect": "refused"
+    },
+    {
+      "policy": "LOCKED",
+      "feature": "digest",
+      "expect": "ok"
+    },
+    {
+      "policy": "LOCKED",
+      "feature": "audit",
+      "expect": "ok"
+    },
+    {
+      "policy": "LOCKED",
+      "feature": "witness_matrix",
+      "expect": "refused"
+    },
+    {
+      "policy": "LOCKED",
+      "feature": "deadline_watch",
+      "expect": "refused"
+    },
+    {
+      "policy": "LOCKED",
+      "feature": "chambers",
+      "expect": "refused"
+    }
+  ],
+  "subscription_cases": [
+    {
+      "name": "no end date",
+      "until_ms": null,
+      "expect_state": "SUBSCRIBED",
+      "expect_notice": false
+    },
+    {
+      "name": "ends in the future",
+      "until_ms": 1800086400000,
+      "expect_state": "SUBSCRIBED",
+      "expect_notice": false
+    },
+    {
+      "name": "ends this very instant",
+      "until_ms": 1800000000000,
+      "expect_state": "SUBSCRIBED",
+      "expect_notice": false
+    },
+    {
+      "name": "ended a millisecond ago",
+      "until_ms": 1799999999999,
+      "expect_state": "UPDATES_EXPIRED",
+      "expect_notice": true,
+      "expect_date": "2027-01-15"
+    },
+    {
+      "name": "ended long ago",
+      "until_ms": 1765440000000,
+      "expect_state": "UPDATES_EXPIRED",
+      "expect_notice": true,
+      "expect_date": "2025-12-11"
+    },
+    {
+      "name": "zero means no end date, like the app licence",
+      "until_ms": 0,
+      "expect_state": "SUBSCRIBED",
+      "expect_notice": false
+    }
+  ],
+  "notice_must_say": [
+    "updates expired",
+    "last",
+    "not affected"
+  ],
+  "pack_install_cases": [
+    {
+      "name": "subscribed: an official delta installs",
+      "state": "SUBSCRIBED",
+      "pack_kind": "official",
+      "delta": true,
+      "currency_date": "2027-03-01",
+      "expect": "allowed"
+    },
+    {
+      "name": "expired: an official delta is refused",
+      "state": "UPDATES_EXPIRED",
+      "until_ms": 1799999999999,
+      "pack_kind": "official",
+      "delta": true,
+      "currency_date": "2027-01-10",
+      "expect": "refused"
+    },
+    {
+      "name": "expired: an official pack checked after the end date is refused",
+      "state": "UPDATES_EXPIRED",
+      "until_ms": 1799999999999,
+      "pack_kind": "official",
+      "delta": false,
+      "currency_date": "2027-02-01",
+      "expect": "refused"
+    },
+    {
+      "name": "expired: an official pack checked on the end date can be put back",
+      "state": "UPDATES_EXPIRED",
+      "until_ms": 1799999999999,
+      "pack_kind": "official",
+      "delta": false,
+      "currency_date": "2027-01-15",
+      "expect": "allowed"
+    },
+    {
+      "name": "expired: an older official pack can be put back",
+      "state": "UPDATES_EXPIRED",
+      "until_ms": 1799999999999,
+      "pack_kind": "official",
+      "delta": false,
+      "currency_date": "2026-06-01",
+      "expect": "allowed"
+    },
+    {
+      "name": "expired: an official pack that states no date cannot claim to be newer",
+      "state": "UPDATES_EXPIRED",
+      "until_ms": 1799999999999,
+      "pack_kind": "official",
+      "delta": false,
+      "currency_date": null,
+      "expect": "allowed"
+    },
+    {
+      "name": "expired: the lawyer's own custom pack is never blocked",
+      "state": "UPDATES_EXPIRED",
+      "until_ms": 1799999999999,
+      "pack_kind": "custom",
+      "delta": true,
+      "currency_date": "2027-09-01",
+      "expect": "allowed"
+    },
+    {
+      "name": "no licence: nothing is blocked",
+      "state": "NOT_APPLICABLE",
+      "pack_kind": "official",
+      "delta": true,
+      "currency_date": "2027-09-01",
+      "expect": "allowed"
+    }
+  ],
+  "refusal_code": "CF_PACK_UPDATES_EXPIRED",
+  "expired_everything_case": {
+    "description": "AC-S4-16.2 and Stage 3 AC-S3-22.8: both the app licence and the pack subscription have ended. Work stays readable and exportable; only new updates and new writes are refused.",
+    "edition": "PRO",
+    "licence_features": [
+      "digest",
+      "retrieval",
+      "export",
+      "audit",
+      "deadline_watch",
+      "witness_matrix",
+      "opposition_scan",
+      "mock_court",
+      "voice"
+    ],
+    "expires_ms": 1797408000000,
+    "pack_until_ms": 1794816000000,
+    "expect": {
+      "licence_state": "EXPIRED",
+      "vault_writable": false,
+      "features_kept": true,
+      "feature_checks_ok": [
+        "digest",
+        "retrieval",
+        "export",
+        "audit",
+        "witness_matrix"
+      ],
+      "subscription_state": "UPDATES_EXPIRED",
+      "new_official_delta": "refused",
+      "installed_pack_stamp_keeps_older_date": true,
+      "stamp_says": "updates expired"
+    }
+  },
+  "seat_window_days": 365,
+  "seat_cases": [
+    {
+      "name": "limit not decided: transfer is disabled",
+      "limit": null,
+      "transfers_days_ago": [],
+      "expect": {
+        "enabled": false,
+        "used": 0,
+        "remaining": null,
+        "can_deactivate": false,
+        "reason_contains": "not enabled"
+      }
+    },
+    {
+      "name": "limit 2, none used",
+      "limit": 2,
+      "transfers_days_ago": [],
+      "expect": {
+        "enabled": true,
+        "used": 0,
+        "remaining": 2,
+        "can_deactivate": true
+      }
+    },
+    {
+      "name": "limit 2, one used",
+      "limit": 2,
+      "transfers_days_ago": [
+        10
+      ],
+      "expect": {
+        "enabled": true,
+        "used": 1,
+        "remaining": 1,
+        "can_deactivate": true
+      }
+    },
+    {
+      "name": "limit 2, both used",
+      "limit": 2,
+      "transfers_days_ago": [
+        10,
+        100
+      ],
+      "expect": {
+        "enabled": true,
+        "used": 2,
+        "remaining": 0,
+        "can_deactivate": false,
+        "reason_contains": "no transfers left"
+      }
+    },
+    {
+      "name": "a transfer older than a year no longer counts",
+      "limit": 2,
+      "transfers_days_ago": [
+        400,
+        10
+      ],
+      "expect": {
+        "enabled": true,
+        "used": 1,
+        "remaining": 1,
+        "can_deactivate": true
+      }
+    },
+    {
+      "name": "exactly a year ago is outside the window",
+      "limit": 2,
+      "transfers_days_ago": [
+        365,
+        10
+      ],
+      "expect": {
+        "enabled": true,
+        "used": 1,
+        "remaining": 1,
+        "can_deactivate": true
+      }
+    },
+    {
+      "name": "364 days ago is inside the window",
+      "limit": 2,
+      "transfers_days_ago": [
+        364,
+        10
+      ],
+      "expect": {
+        "enabled": true,
+        "used": 2,
+        "remaining": 0,
+        "can_deactivate": false
+      }
+    },
+    {
+      "name": "limit 0 allows none",
+      "limit": 0,
+      "transfers_days_ago": [],
+      "expect": {
+        "enabled": true,
+        "used": 0,
+        "remaining": 0,
+        "can_deactivate": false
+      }
+    }
+  ],
+  "seat_licence_cases": [
+    {
+      "name": "within the limit",
+      "limit": 2,
+      "transfers_days_ago": [
+        10,
+        100
+      ],
+      "expect": "ok"
+    },
+    {
+      "name": "over the limit in the window",
+      "limit": 2,
+      "transfers_days_ago": [
+        10,
+        100,
+        200
+      ],
+      "expect": "CF_SEAT_TRANSFER_LIMIT"
+    },
+    {
+      "name": "old transfers do not count against the limit",
+      "limit": 2,
+      "transfers_days_ago": [
+        10,
+        100,
+        400,
+        500
+      ],
+      "expect": "ok"
+    },
+    {
+      "name": "transfers recorded although transfer is disabled",
+      "limit": null,
+      "transfers_days_ago": [
+        10
+      ],
+      "expect": "CF_SEAT_TRANSFER_LIMIT"
+    },
+    {
+      "name": "disabled and none recorded",
+      "limit": null,
+      "transfers_days_ago": [],
+      "expect": "ok"
+    }
+  ],
+  "seat_released_cases": [
+    {
+      "name": "this machine gave the seat away and the old licence file is used again",
+      "released_ordinal": 1,
+      "licence_transfers": 0,
+      "expect": "CF_SEAT_RELEASED"
+    },
+    {
+      "name": "the re-issued licence is accepted",
+      "released_ordinal": 1,
+      "licence_transfers": 1,
+      "expect": "ok"
+    },
+    {
+      "name": "nothing was released here",
+      "released_ordinal": null,
+      "licence_transfers": 0,
+      "expect": "ok"
+    },
+    {
+      "name": "second release, first re-issue still refused",
+      "released_ordinal": 2,
+      "licence_transfers": 1,
+      "expect": "CF_SEAT_RELEASED"
+    }
+  ]
+}
