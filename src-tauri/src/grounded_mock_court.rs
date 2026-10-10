@@ -73,6 +73,7 @@ pub(crate) fn support_sources(
         temporal_status: None,
         superseded_status: None,
         permitted: true,
+        translated: false,
     }];
     sources.push(SupportSource {
         support_id: format!("counsel-turn:{case_id}"),
@@ -88,6 +89,7 @@ pub(crate) fn support_sources(
         temporal_status: None,
         superseded_status: None,
         permitted: true,
+        translated: false,
     });
     sources.extend(authorities.iter().map(|a| SupportSource {
         support_id: format!("legal:{}:{}", a.authority_id, a.chunk_id),
@@ -103,6 +105,7 @@ pub(crate) fn support_sources(
         temporal_status: Some(a.temporal_status.clone()),
         superseded_status: Some(a.superseded_status.clone()),
         permitted: true,
+        translated: false,
     }));
     sources
 }
@@ -456,6 +459,8 @@ mod tests {
             rejected_support_ids: vec![],
             quote_offsets: None,
             reason: "test".into(),
+            translated_basis: false,
+            quote_verified: false,
         }
     }
     #[test]

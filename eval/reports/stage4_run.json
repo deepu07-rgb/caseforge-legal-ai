@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-10T19:08:42Z",
+  "generated_at": "2026-10-10T19:27:34Z",
   "steps": [
     {
       "name": "rust_tests",
@@ -11,12 +11,12 @@
     {
       "name": "ci_gates",
       "exit": 0,
-      "seconds": 8.4,
+      "seconds": 8.2,
       "gates": [
         {
           "gate": "contracts_b_s4_01.py",
           "exit": 0,
-          "seconds": 0.8
+          "seconds": 0.6
         },
         {
           "gate": "injection_guard_b_s4_00.py",
@@ -31,7 +31,7 @@
         {
           "gate": "citation_audit_b_s4_04.py",
           "exit": 0,
-          "seconds": 0.2
+          "seconds": 0.1
         },
         {
           "gate": "certificate_b_s4_05.py",
@@ -51,12 +51,12 @@
         {
           "gate": "impeachment_b_s4_08.py",
           "exit": 0,
-          "seconds": 0.4
+          "seconds": 0.3
         },
         {
           "gate": "rule_tables_b_s4_03.py",
           "exit": 0,
-          "seconds": 0.1
+          "seconds": 0.2
         },
         {
           "gate": "code_bridge_b_s4_09.py",
@@ -81,7 +81,7 @@
         {
           "gate": "issue_matrix_b_s4_18.py",
           "exit": 0,
-          "seconds": 0.4
+          "seconds": 0.3
         },
         {
           "gate": "treatment_b_s4_13.py",
@@ -111,7 +111,7 @@
         {
           "gate": "editions_b_s4_22.py",
           "exit": 0,
-          "seconds": 0.5
+          "seconds": 0.4
         },
         {
           "gate": "timed_rehearsal_b_s4_12.py",
@@ -120,6 +120,11 @@
         },
         {
           "gate": "bundle_b_s4_16.py",
+          "exit": 0,
+          "seconds": 0.4
+        },
+        {
+          "gate": "translation_b_s4_15.py",
           "exit": 0,
           "seconds": 0.4
         },

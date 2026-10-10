@@ -48,7 +48,7 @@
   },
   "static": {
     "engine_has_no_model_or_network": true,
-    "model_gate_in_both_entry_points": true,
+    "model_gate_in_every_entry_point": true,
     "dev_override_is_debug_only": true,
     "permit_only_in_record_only_path": true,
     "chambers_commands_registered": true,

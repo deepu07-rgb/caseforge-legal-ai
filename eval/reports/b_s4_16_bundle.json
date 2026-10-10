@@ -26,7 +26,7 @@
       "reason": "needs a packet capture on a real local network; the code-level LAN-only rules pass (below) but the criterion asks for a capture, which has not been made",
       "evidence": {
         "addresses_bound": [
-          "127.0.0.1:56196"
+          "127.0.0.1:49308"
         ],
         "peers_seen": [
           [
@@ -39,9 +39,9 @@
           ]
         ],
         "connected_to": [
-          "127.0.0.1:56196",
-          "127.0.0.1:56196",
-          "127.0.0.1:56196"
+          "127.0.0.1:49308",
+          "127.0.0.1:49308",
+          "127.0.0.1:49308"
         ],
         "rules": "private, link-local and loopback only; numeric addresses only; one download; refused under air-gap"
       },

@@ -111,7 +111,7 @@ def main() -> int:
 
     static = {
         "engine_has_no_model_or_network": not LLM_TOKENS.search(engine_ro) and not LLM_TOKENS.search(engine_ed),
-        "model_gate_in_both_entry_points": llm.count("crate::edition::check_generation()?") == 2,
+        "model_gate_in_every_entry_point": llm.count("crate::edition::check_generation()?") == 3,  # chat, chat_with_timeout and translate (B-S4-15)
         "dev_override_is_debug_only": "if !cfg!(debug_assertions)" in engine_ed and "CASEFORGE_DEV_EDITION" in engine_ed,
         "permit_only_in_record_only_path": lib.count("edition::record_only_permit") == 1 and "chambers.then(edition::record_only_permit)" in lib,
         "chambers_commands_registered": all(f"fn {n}" in lib for n in ("edition_status", "chambers_status", "chambers_set_record_only", "chambers_g7_log", "chambers_reason")),
@@ -137,7 +137,7 @@ def main() -> int:
         res = {k: ("ok" if re.search(rf"test {re.escape(t)} \.\.\. ok", log) else "FAILED" if re.search(rf"test {re.escape(t)} \.\.\. FAILED", log) else "missing") for k, t in TESTS.items()}
         ok = lambda *ks: all(res[k] == "ok" for k in ks)  # noqa: E731
         acs["AC-S4-11.1"] = {"status": "PASS" if ok("golden", "off", "inference", "lock") and not errors else "FAIL",
-                             "evidence": {"planted": PLANTED, "golden": res["golden"], "model_gate": static["model_gate_in_both_entry_points"], "question_never_a_source": static["question_is_never_a_source_in_chambers"]},
+                             "evidence": {"planted": PLANTED, "golden": res["golden"], "model_gate": static["model_gate_in_every_entry_point"], "question_never_a_source": static["question_is_never_a_source_in_chambers"]},
                              "detail": "Planted extra-record content (model memory, an invented quotation, a custom-pack law, a fact in the prompt, inferences resting on them) never renders; it is counted and logged by hash. The model is reachable in Chambers only through the record-only path."}
         acs["AC-S4-11.2"] = {"status": "PASS" if ok("golden") and static["screen_shows_class_and_source"] else "FAIL",
                              "evidence": {"golden": res["golden"], "screen_shows_class_and_source": static["screen_shows_class_and_source"]},

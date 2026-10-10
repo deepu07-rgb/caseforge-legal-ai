@@ -586,3 +586,15 @@ mod tests {
         assert_eq!(current_tier(), "default");
     }
 }
+
+/// B-S4-15: one masked Hindi segment in, English prose out. A fixed translation prompt, greedy decoding, no case context (the reasoner's
+/// prompt is not involved). Edition rule B-S4-17 applies: Chambers reaches the model only through record-only reasoning.
+pub fn translate(text: &str) -> Result<String, String> {
+    crate::edition::check_generation()?;
+    let v = run_rpc("llm.translate", json!({ "text": text }), 300)?;
+    v.get("content")
+        .and_then(|x| x.as_str())
+        .map(str::to_string)
+        .filter(|s| !s.trim().is_empty())
+        .ok_or_else(|| "CF_LLM_EMPTY: the model returned no translation".to_string())
+}

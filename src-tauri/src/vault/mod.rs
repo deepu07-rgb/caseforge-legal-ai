@@ -111,6 +111,10 @@ const CASE_MIGRATIONS: &[(i64, &str)] = &[
         17,
         include_str!("../../migrations/case_017_witness_store.sql"),
     ),
+    (
+        18,
+        include_str!("../../migrations/case_018_translation_store.sql"),
+    ),
 ];
 
 #[derive(Debug, Clone, Serialize)]
@@ -2494,6 +2498,48 @@ impl VaultManager {
         })?;
         sql::apply_pending_migrations(conn, CASE_MIGRATIONS)?;
         let mut stmt = conn.prepare("SELECT key, value_json FROM witness_store WHERE substr(key, 1, length(?1)) = ?1 ORDER BY key")?;
+        let rows = stmt.query_map([prefix], |r| Ok((r.get::<_, String>(0)?, r.get::<_, String>(1)?)))?;
+        let mut out = Vec::new();
+        for row in rows {
+            let (k, v) = row?;
+            out.push((k, serde_json::from_str(&v).unwrap_or(serde_json::Value::Null)));
+        }
+        Ok(out)
+    }
+
+    // --- B-S4-15 translation store (segments, counsel confirmations, facts read from a translation) ---
+
+    pub fn translation_kv_put(&self, case_id: &str, key: &str, value: &serde_json::Value) -> VaultResult<()> {
+        let g = self.inner.lock().map_err(|_| VaultError::LockPoisoned)?;
+        let conn = g.cases.get(case_id).ok_or_else(|| VaultError::Internal {
+            detail: "CF_VAULT_LOCKED: open the case vault before writing translations".into(),
+        })?;
+        sql::apply_pending_migrations(conn, CASE_MIGRATIONS)?;
+        conn.execute(
+            "INSERT INTO translation_store (key, value_json, updated_at_unix_ms) VALUES (?1, ?2, ?3)
+             ON CONFLICT(key) DO UPDATE SET value_json = excluded.value_json, updated_at_unix_ms = excluded.updated_at_unix_ms",
+            rusqlite::params![key, value.to_string(), now_ms()],
+        )?;
+        Ok(())
+    }
+
+    pub fn translation_kv_delete_prefix(&self, case_id: &str, prefix: &str) -> VaultResult<usize> {
+        let g = self.inner.lock().map_err(|_| VaultError::LockPoisoned)?;
+        let conn = g.cases.get(case_id).ok_or_else(|| VaultError::Internal {
+            detail: "CF_VAULT_LOCKED: open the case vault before writing translations".into(),
+        })?;
+        sql::apply_pending_migrations(conn, CASE_MIGRATIONS)?;
+        Ok(conn.execute("DELETE FROM translation_store WHERE substr(key, 1, length(?1)) = ?1", [prefix])?)
+    }
+
+    /// All entries whose key starts with `prefix`, in key order.
+    pub fn translation_kv_list(&self, case_id: &str, prefix: &str) -> VaultResult<Vec<(String, serde_json::Value)>> {
+        let g = self.inner.lock().map_err(|_| VaultError::LockPoisoned)?;
+        let conn = g.cases.get(case_id).ok_or_else(|| VaultError::Internal {
+            detail: "CF_VAULT_LOCKED: open the case vault before reading translations".into(),
+        })?;
+        sql::apply_pending_migrations(conn, CASE_MIGRATIONS)?;
+        let mut stmt = conn.prepare("SELECT key, value_json FROM translation_store WHERE substr(key, 1, length(?1)) = ?1 ORDER BY key")?;
         let rows = stmt.query_map([prefix], |r| Ok((r.get::<_, String>(0)?, r.get::<_, String>(1)?)))?;
         let mut out = Vec::new();
         for row in rows {

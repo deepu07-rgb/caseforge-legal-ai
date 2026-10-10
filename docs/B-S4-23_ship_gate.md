@@ -79,8 +79,9 @@ that reached the screen from outside the record, or an ordinary request that was
   (LAN, Stage 1), refused under air-gap. This is **not** a packet capture; the gate lists the capture as NOT_RUN.
 * **Contracts and migrations** — every contract parses, the B-S4-01 gate is clean, migrations are consecutive and all embedded.
 * **Controlled matters** — one IN (Hindi document, code-bridge transition), one US (deposition impeachment, deadline), one Chambers
-  session. They are composed from the per-engine goldens that already run and are **not** a single run through the screens; the IN matter
-  cannot be completed because Hindi OCR and translation (B-S4-14, B-S4-15) are not built.
+  session. They are composed from the per-engine goldens that already run and are **not** a single run through the screens. The IN matter's
+  Hindi translation step is the B-S4-15 tests (translate, resume, confirm, guardrail G10); its Hindi scan reading is the Windows-only gate
+  `indic_ocr_b_s4_14`, which is not part of this Linux-run roll-up.
 
 ## The signed readiness report
 
@@ -89,10 +90,10 @@ and who signs a release is the owner's decision. With `CASEFORGE_RELEASE_KEY_PEM
 
 ## Why the verdict is NOT READY today
 
-See `reasons` in the report. In short: two batches are not built (B-S4-14 Devanagari OCR and B-S4-15 translation; B-S4-02 golden sets and editor protocol,
-B-S4-12 timed rehearsal and B-S4-16 bundle exchange have since been built); AC-S4-00.7 (prompt injection on the default model) fails; eight
-criteria could not be measured here; no legal-editor sign-off exists; one Rust test is ignored without a recorded reason; the controlled
-matters are not end to end; no packet capture has been made.
+See `reasons` in the report. In short: every batch is now built (B-S4-02, 12, 14, 15 and 16 were the last); AC-S4-00.7 (prompt injection on
+the default model) fails; nine criteria could not be measured here (one of them, AC-S4-09.1, because the owner has not frozen the Hindi OCR error
+limit); no legal-editor sign-off exists; one Rust test is ignored without a recorded reason; the controlled matters are not end to end; no packet
+capture has been made; and the production build was not run in the last local pass (CI runs it).
 
 ## Owner decisions this surfaces
 

@@ -28,7 +28,6 @@ REPORTS = ROOT / "eval" / "reports"
 WAVE_C = ["B-S4-17", "B-S4-18", "B-S4-19", "B-S4-20", "B-S4-21"]
 # Batches the playbook places before Wave C that are not built (nothing in the repo implements them).
 NOT_BUILT = {
-    "B-S4-15": "Aligned offline translation + G10 (Wave B)",
 }
 ORDER = {"FAIL": 0, "BLOCKED": 1, "WAIVED": 2, "SKIP": 3, "PASS": 4}
 

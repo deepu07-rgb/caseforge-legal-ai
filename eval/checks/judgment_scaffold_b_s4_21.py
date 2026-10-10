@@ -118,7 +118,7 @@ def main() -> int:
         "scaffold_export_writes_no_document": not re.search(r"doc_ingest|ingest|document_add|doc_put", "\n".join(b for f, b in scaffold_fns)),
         "decision_request_refused_before_the_model": reason.index("g8::check_input") < reason.index("reasoning_core("),
         "decisional_output_filtered_before_rendering": "apply_decision_filter" in reason and reason.index("apply_decision_filter") < reason.index('"statements"'),
-        "model_gate_in_both_entry_points": llm.count("crate::edition::check_generation()?") == 2,
+        "model_gate_in_every_entry_point": llm.count("crate::edition::check_generation()?") == 3,  # chat, chat_with_timeout and translate (B-S4-15)
         "g8_engine_has_no_model": not MODEL_TOKENS.search(non_test(files["g8.rs"]).replace("chat_with_timeout", "")) or True,
         "scaffold_commands_need_chambers": all("edition::require_chambers" in b for _, b in scaffold_fns),
         "record_only_locks_when_a_scaffold_exists": '"scaffold:"' in lib and "locked" in lib,

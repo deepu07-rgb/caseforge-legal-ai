@@ -6,6 +6,7 @@ import MockCourtView from "./components/MockCourtView";
 import BatchView from "./components/BatchView";
 import CompanionView from "./components/CompanionView";
 import BundlePanel from "./components/BundlePanel";
+import TranslationPanel from "./components/TranslationPanel";
 import InterviewView from "./components/InterviewView";
 import DigestView from "./components/DigestView";
 import PacksView from "./components/PacksView";
@@ -180,7 +181,8 @@ type CaseTab =
   | "interview"
   | "batch"
   | "capture"
-  | "share";
+  | "share"
+  | "translate";
 
 const NAV: { id: NavId; label: string; section?: string; badge?: string }[] = [
   { id: "home", label: "Preparation Journey", section: "Prepare" },
@@ -2706,6 +2708,7 @@ function WorkspaceView({
             ["documents", "Add material"],
             ["review", "Review understanding"],
             ["interview", "Missing facts"],
+            ["translate", "Hindi to English"],
             ["share", "Share with colleagues"],
           ] as [CaseTab, string][]
         ).map(([id, label]) => (
@@ -2816,6 +2819,7 @@ function WorkspaceView({
         />
       )}
 
+      {caseTab === "translate" && activeCase && <TranslationPanel caseId={activeCase.case_id} />}
       {caseTab === "share" && activeCase && <BundlePanel caseId={activeCase.case_id} caseTitle={activeCase.cause_title || activeCase.label} />}
 
       {caseTab === "capture" && (

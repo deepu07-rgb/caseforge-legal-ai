@@ -1,5 +1,28 @@
 # Changelog
 
+## [4.0.0-dev] — 2026-10-11
+
+### Stage 4 — Hindi to English translation and guardrail G10 (B-S4-15)
+
+A lawyer reads the Hindi original and the English side by side, and nothing translated is passed off as verified.
+
+- Translation tab: segment by segment, original beside English, every English segment labelled "machine translation - wording not verified"; resumable overnight batch; stoppable; runs on the primary model's slot.
+- Dates, amounts, section numbers and case numbers are set aside before the model sees the text and written back by fixed rules, so the model cannot change a number; a marker it drops or invents flags the field. Names get a suggested spelling and always wait for counsel. Counsel confirms each field against the original (append-only history).
+- Guardrail G10 in the host verifier: anything resting on translated text is never GREEN, a quotation of it is never verified, a translated source cannot launder a fact, and the label follows an inference.
+- Facts read from a translation are kept as a separate graph, every item TRANSLATED and unconfirmed (new coexisting schema `case_graph_v2_1`); the 2.0.0 schema is untouched.
+- Real-model run recorded (qwen2.5:7b): 33 of 34 markers carried intact, the dropped one flagged; prose quality is modest, which is why the original is always shown. Reference translations are the coding agent's.
+- AC-S4-09.2 and 09.3 measured PASS, formally BLOCKED (98% limit and translation model are the owner's). `docs/B-S4-15_translation.md`. All 25 Stage 4 batches are now built; the ship verdict is still NOT READY.
+
+### Stage 4 — Hindi (Devanagari) ingestion (B-S4-14)
+
+Scanned Hindi pages are read offline, with a confidence on every word and a script label on every page and line.
+
+- Tesseract OSD picks the reader: Devanagari goes to `hin+eng` (`tessdata_best`, Apache-2.0, 11.9 MB); English pages keep the frozen English path unchanged (same CER/WER as B-S3-04). A rotation is only applied when the detector is confident.
+- Bake-off (`eval/bakeoff/indic_ocr_b_s4_14.json`): `hin+eng` best gives CER 0.0056 clean / 0.0024 degraded on the eight synthetic G-INDIC pages (a floor: rendered, not photographed). The error limit is the owner's to freeze (Q-S4-04); AC-S4-09.1 is BLOCKED.
+- Critical fields in Devanagari (dates, amounts in lakh/crore, dhara numbers, labelled case numbers, names): a misread one is held for review, never accepted (58 labelled; 4 OCR misreads, all held). Indian grouping `1,25,000` now validates in the English validator too.
+- Hindi confidence map (synthetic, held-out ECE 0.018 vs 0.051 raw), page script on the review screen, `docs/B-S4-14_indic_ocr.md`.
+- Also pinned for B-S4-15: the translation golden `golden/G-INDIC/fixtures/translation_core.json`.
+
 ## [4.0.0-dev] — 2026-10-10 (golden sets and legal-editor protocol, B-S4-02)
 
 All twelve Stage 4 golden sets are now under one manifest with hashes and provenance (`golden/STAGE4_MANIFEST.json`); the missing `G-INDIC` set exists as a blocked scaffold; `docs/STAGE4_LEGAL_EDITOR_PROTOCOL.md` says who signs the legal answers and how a sign-off is recorded and counted. No legal editor has signed, so the code-bridge, foundation and deadline criteria stay blocked, and no fixture is locked GOLDEN. See `docs/B-S4-02_goldens.md`.
@@ -11,18 +34,6 @@ All twelve Stage 4 golden sets are now under one manifest with hashes and proven
 ## [4.0.0-dev] — 2026-10-10 (Timed Oral Rehearsal, B-S4-12)
 
 Mock Court gains a timer mode: a host-kept clock with presets, graceful end at the limit, bench interruptions from your own Missing Links (host-worded, not model-worded), and a debrief timeline of which points were reached, when, for how long, and which never were. See `docs/B-S4-12_timed_rehearsal.md`. Verdict of the Stage 4 ship gate is still NOT READY.
-
-## [4.0.0-dev] — 2026-10-11
-
-### Stage 4 — Hindi (Devanagari) ingestion (B-S4-14)
-
-Scanned Hindi pages are read offline, with a confidence on every word and a script label on every page and line.
-
-- Tesseract OSD picks the reader: Devanagari goes to `hin+eng` (`tessdata_best`, Apache-2.0, 11.9 MB); English pages keep the frozen English path unchanged (same CER/WER as B-S3-04). A rotation is only applied when the detector is confident.
-- Bake-off (`eval/bakeoff/indic_ocr_b_s4_14.json`): `hin+eng` best gives CER 0.0056 clean / 0.0024 degraded on the eight synthetic G-INDIC pages (a floor: rendered, not photographed). The error limit is the owner's to freeze (Q-S4-04); AC-S4-09.1 is BLOCKED.
-- Critical fields in Devanagari (dates, amounts in lakh/crore, dhara numbers, labelled case numbers, names): a misread one is held for review, never accepted (58 labelled; 4 OCR misreads, all held). Indian grouping `1,25,000` now validates in the English validator too.
-- Hindi confidence map (synthetic, held-out ECE 0.018 vs 0.051 raw), page script on the review screen, `docs/B-S4-14_indic_ocr.md`.
-- Also pinned for B-S4-15: the translation golden `golden/G-INDIC/fixtures/translation_core.json`.
 
 ## [4.0.0-dev] — 2026-10-10
 

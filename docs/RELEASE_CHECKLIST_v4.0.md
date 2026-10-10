@@ -18,20 +18,20 @@ A box is ticked only where the gate or a test has shown it. Nothing here is sign
 
 ## Batches
 
-- [x] B-S4-00, 00b, 01, 02, 03–13, 16–23 built (B-S4-02: the sets, manifest and protocol exist; the legal sign-offs do not)
+- [x] B-S4-00, 00b, 01, 02, 03–23 built (B-S4-02: the sets, manifest and protocol exist; the legal sign-offs do not)
 - [x] B-S4-14 Devanagari triage and OCR (built; AC-S4-09.1 is BLOCKED until the owner freezes the error limit, Q-S4-04)
-- [ ] B-S4-15 Aligned offline translation and G10
+- [x] B-S4-15 Aligned offline translation and G10 (built; the 98% limit and the translation model are the owner's, Q-S4-01 / Q-S4-04)
 
 ## Acceptance
 
-- [ ] Every AC-S4-* measured PASS — 53 of 66 today; AC-S4-00.7 fails; 8 not measurable here (one is the bundle LAN capture); 3 belong to unbuilt batches (B-S4-14, 15)
+- [ ] Every AC-S4-* measured PASS — 55 of 66 today; AC-S4-00.7 fails; 9 not measurable here (AC-S4-09.1 awaits the owner's error limit; one is the bundle LAN capture)
 - [ ] Every AC-S4-* formally accepted (thresholds approved by the owner, sign-offs, no open owner question)
 - [ ] Two legal editors' sign-off for every legal-answer criterion (`eval/signoffs/legal_editors.json` does not exist)
 - [ ] Base install within the 4 GiB cap — over the cap by owner waiver W-AC-S4-00.1 (5.08 GiB), reported as WAIVED
 
 ## Controlled matters
 
-- [ ] IN matter with a Hindi document and a code-bridge transition (needs B-S4-14 and B-S4-15)
+- [ ] IN matter with a Hindi document and a code-bridge transition (the pieces exist; not run end to end through the screens)
 - [ ] US matter with deposition impeachment and a deadline
 - [ ] Chambers session
 

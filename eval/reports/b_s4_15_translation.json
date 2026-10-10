@@ -1,0 +1,156 @@
+{
+  "batch": "B-S4-15",
+  "implementation_status": "PASS",
+  "golden_sha256": "08f569955d7466f451ea29c8c49933fcfbdf1a679cc399603769244203a3fe48",
+  "acs": {
+    "AC-S4-09.2": {
+      "status": "PASS",
+      "measured": {
+        "critical_field_accuracy_exact_or_flagged": 1.0,
+        "proposed_min": 0.98,
+        "by_model": {
+          "marker_intact": {
+            "fields": 22,
+            "exact": 22,
+            "flagged": 0,
+            "silent_wrong": 0,
+            "accuracy_exact_or_flagged": 1.0
+          },
+          "marker_ignored": {
+            "fields": 22,
+            "exact": 0,
+            "flagged": 22,
+            "silent_wrong": 0,
+            "accuracy_exact_or_flagged": 1.0
+          },
+          "marker_corrupted": {
+            "fields": 22,
+            "exact": 0,
+            "flagged": 22,
+            "silent_wrong": 0,
+            "accuracy_exact_or_flagged": 1.0
+          }
+        },
+        "live_model_run": {
+          "status": "CURRENT",
+          "model": {
+            "name": "qwen2.5:7b",
+            "digest": "sha256:845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+            "backend": "ollama",
+            "backend_version": "0.35.1"
+          },
+          "made_at": "2026-10-10T19:19:33Z",
+          "segments": 35,
+          "segments_flagged": 1,
+          "fields": 34,
+          "markers_carried_intact": 33,
+          "marker_survival": 0.9706,
+          "non_name_fields": 22,
+          "non_name_fields_equal_to_expected": 22,
+          "non_name_fields_wrong_and_not_flagged": 0,
+          "names": 12,
+          "chrf_mean": 0.74
+        },
+        "records_checked_against_the_frozen_schema": 35,
+        "names": {
+          "total": 12,
+          "left_for_counsel": 12
+        }
+      },
+      "note": "S4.indic.critical_field_accuracy_min (0.98) is PROPOSED, not frozen. The guarantee is structural: the model never writes a field, and a marker it fails to return flags the field.",
+      "limits": "Reference translations and the 22 labelled fields are the coding agent's, on synthetic pages; the live run is one 7B local model. Prose quality is not scored against a limit."
+    },
+    "AC-S4-09.3": {
+      "status": "PASS",
+      "measured": {
+        "g10_tests": {
+          "g10_translated_fact": "ok",
+          "g10_original_fact": "ok",
+          "g10_translated_quote": "ok",
+          "g10_original_quote": "ok",
+          "g10_launder": "ok",
+          "g10_inference": "ok",
+          "g10_legal": "ok",
+          "verifier": "ok"
+        },
+        "rules": "never GREEN; a quotation of translated text is never verified; the label follows an inference; legal authority unaffected"
+      },
+      "note": "Enforced in the host verifier (proposition::verify); the screen shows the original beside the English, labelled, with no way to quote the English."
+    }
+  },
+  "segmentation": {
+    "segments": 37,
+    "matching_the_golden": 37
+  },
+  "fields": {
+    "non_name_total": 22,
+    "rendered_as_golden": 22,
+    "names": 12
+  },
+  "translated_graph_schema": "VALID",
+  "model_protocol_cases": 6,
+  "rendering_rule_cases": 14,
+  "live": {
+    "status": "CURRENT",
+    "model": {
+      "name": "qwen2.5:7b",
+      "digest": "sha256:845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+      "backend": "ollama",
+      "backend_version": "0.35.1"
+    },
+    "made_at": "2026-10-10T19:19:33Z",
+    "segments": 35,
+    "segments_flagged": 1,
+    "fields": 34,
+    "markers_carried_intact": 33,
+    "marker_survival": 0.9706,
+    "non_name_fields": 22,
+    "non_name_fields_equal_to_expected": 22,
+    "non_name_fields_wrong_and_not_flagged": 0,
+    "names": 12,
+    "chrf_mean": 0.74
+  },
+  "static": {
+    "no_network_in_the_python_module": true,
+    "no_network_in_the_host_module": true,
+    "commands_exist_registered_and_mapped": true,
+    "commands_check_the_feature_first": true,
+    "translation_takes_the_primary_models_slot": true,
+    "the_model_call_respects_the_chambers_rule": true,
+    "verifier_marks_translated_sources": true,
+    "verifier_never_greens_a_translation": true,
+    "translated_pages_reach_the_verifier": true,
+    "no_other_source_is_marked_translated": true,
+    "segments_are_translated_provenance_and_unquotable": true,
+    "critical_fields_start_unconfirmed": true,
+    "names_are_always_left_to_counsel": true,
+    "the_job_is_resumable": true,
+    "the_job_can_be_stopped": true,
+    "derived_graph_is_not_merged": true,
+    "panel_shows_original_beside_english": true,
+    "panel_labels_every_segment": true,
+    "panel_offers_no_way_to_quote_the_english": true,
+    "panel_says_confirmation_is_against_the_original": true,
+    "tab_in_the_case_workspace": true,
+    "ipc_has_the_commands": true,
+    "panel_never_calls_the_english_verified": true
+  },
+  "rust_tests": {
+    "g10_translated_fact": "ok",
+    "g10_original_fact": "ok",
+    "g10_translated_quote": "ok",
+    "g10_original_quote": "ok",
+    "g10_launder": "ok",
+    "g10_inference": "ok",
+    "g10_legal": "ok",
+    "flow": "ok",
+    "stop": "ok",
+    "stale": "ok",
+    "confirm": "ok",
+    "verifier": "ok",
+    "marking": "ok",
+    "extractor": "ok",
+    "no_network": "ok"
+  },
+  "errors": []
+}

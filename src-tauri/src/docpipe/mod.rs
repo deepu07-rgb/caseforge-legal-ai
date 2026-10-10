@@ -1561,3 +1561,13 @@ mod indic_calibration_tests {
         assert_eq!(calibration_id_for("caseforge.pdfium.native-text.v1"), None, "native text has no OCR calibration");
     }
 }
+
+/// B-S4-15: run the deterministic extractor over translated English pages. The caller (translation) marks every item TRANSLATED.
+/// Each page is (doc_id, page_index, text, mean_confidence).
+pub(crate) fn extract_translated_graph(case_id: &str, jurisdiction: &str, pages: &[(String, i64, String, f64)]) -> serde_json::Value {
+    let inputs: Vec<skeleton::PageInput> = pages
+        .iter()
+        .map(|(doc_id, page_index, text, mean_confidence)| skeleton::PageInput { doc_id: doc_id.clone(), page_index: *page_index, text: text.clone(), mean_confidence: *mean_confidence })
+        .collect();
+    extract_case_graph(case_id, jurisdiction, &inputs, CLASSIFIER_ID, "caseforge.translation.hi-en.v1")
+}

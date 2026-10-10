@@ -435,6 +435,8 @@ mod tests {
                 rejected_support_ids: vec![],
                 quote_offsets: None,
                 reason: "exact matter source".into(),
+                translated_basis: false,
+                quote_verified: false,
             },
             crate::proposition::VerifiedProposition {
                 proposition_id: "p2".into(),
@@ -450,6 +452,8 @@ mod tests {
                 rejected_support_ids: vec![],
                 quote_offsets: None,
                 reason: "explicit gap".into(),
+                translated_basis: false,
+                quote_verified: false,
             },
         ];
         let ledger = crate::proposition::PropositionLedger {

@@ -79,7 +79,16 @@
     "bundle_received_get": "bundle_exchange",
     "bundle_lan_share": "bundle_exchange",
     "bundle_lan_stop": "bundle_exchange",
-    "bundle_lan_fetch": "bundle_exchange"
+    "bundle_lan_fetch": "bundle_exchange",
+    "translation_start": "indic_ingestion",
+    "translation_status": "indic_ingestion",
+    "translation_cancel": "indic_ingestion",
+    "translation_list": "indic_ingestion",
+    "translation_events": "indic_ingestion",
+    "translation_confirm_field": "indic_ingestion",
+    "translation_unconfirm_field": "indic_ingestion",
+    "translation_graph": "indic_ingestion",
+    "translation_graph_get": "indic_ingestion"
   },
   "never_blocked_by_expiry": ["case_open", "case_list", "doc_list", "doc_text_preview", "pack_list", "pack_currency", "licence_status", "edition_status", "seat_status"]
 }

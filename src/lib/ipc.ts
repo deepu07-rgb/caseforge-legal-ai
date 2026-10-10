@@ -198,11 +198,15 @@ export interface PropositionSupportSource {
   source_id?: string | null; chunk_id?: string | null; authority_id?: string | null; doc_id?: string | null;
   page?: number | null; paragraph?: string | null; trust_level?: string | null; temporal_status?: string | null;
   superseded_status?: string | null; permitted: boolean;
+  /** B-S4-15 (G10): machine-translated text; nothing resting on it is GREEN and a quotation of it is never verified. */
+  translated?: boolean;
 }
 export interface VerifiedProposition extends PropositionInput {
   verification_status: CitationStatus; render_action: "TRUSTED" | "LABELLED" | "REPOSITORY_GAP" | "BLOCKED";
   verified_support_ids: string[]; rejected_support_ids: string[];
   quote_offsets: { support_id: string; char_start: number; char_end: number } | null; reason: string;
+  /** G10: rests on machine-translated text. */ translated_basis?: boolean;
+  /** The quotation is an exact substring of ORIGINAL-language text (false for any quotation of a translation). */ quote_verified?: boolean;
 }
 export interface PropositionLedger {
   schema_version: "caseforge.proposition-ledger.v1"; batch: "B-S3-14"; output_kind: PropositionOutputKind;
@@ -3069,3 +3073,51 @@ export async function scaffoldSetText(caseId: string, sectionKind: string, text:
 export async function scaffoldRemoveSentence(caseId: string, sectionKind: string, index: number): Promise<ScaffoldState> { return invoke<ScaffoldState>("scaffold_remove_sentence", { caseId, sectionKind, index }); }
 export async function scaffoldAuditText(caseId: string, sectionKind: string): Promise<AuditReport> { return invoke<AuditReport>("scaffold_audit_text", { caseId, sectionKind }); }
 export async function scaffoldExport(caseId: string): Promise<string> { return invoke<string>("scaffold_export", { caseId }); }
+
+// --- B-S4-15 aligned Hindi-to-English translation (guardrail G10) ---
+export interface TranslationField {
+  field_id: string;
+  field_kind: "DATE" | "AMOUNT" | "NAME" | "SECTION_NUMBER" | "CASE_NUMBER";
+  source_char_start: number;
+  source_char_end: number;
+  source_value: string;
+  translated_value: string;
+  counsel_confirmed: boolean;
+  confirmed_value: string | null;
+}
+export interface TranslationSegment {
+  segment_id: string;
+  doc_id: string;
+  page_index: number;
+  source_script: string;
+  source_language: string;
+  source_text: string;
+  source_char_start: number;
+  source_char_end: number;
+  ocr_confidence: { raw: number | null; calibrated: number | null; calibration_id: string | null };
+  target_text: string;
+  model: { model_id: string; digest: string };
+  provenance_origin: "TRANSLATED";
+  quotation_verifiable: false;
+  critical_fields: TranslationField[];
+}
+export interface TranslationReview {
+  label: string;
+  segment_flagged: boolean;
+  invented_markers: number[];
+  field_flags: Record<string, string[]>;
+  unconfirmed_fields: string[];
+}
+export interface TranslationRecord { segment: TranslationSegment; review: TranslationReview; translated_at_unix_ms: number }
+export interface TranslationSummary { pages: number; segments: number; translated: number; resumed: number; carried: number; flagged: number; cancelled: boolean }
+export interface TranslationJob { job_id: string; case_id: string; doc_ids: string[]; state: "running" | "done" | "failed" | "cancelled"; progress_percent: number; message: string; summary: TranslationSummary | null; error: string | null }
+export interface TranslationEvent { event: "CONFIRM" | "REVOKE"; segment_id: string; field_id: string; source_value: string; machine_value: string; note: string | null; at_unix_ms: number }
+export async function translationStart(caseId: string, docId?: string): Promise<TranslationJob> { return invoke<TranslationJob>("translation_start", { caseId, docId }); }
+export async function translationStatus(jobId: string): Promise<TranslationJob> { return invoke<TranslationJob>("translation_status", { jobId }); }
+export async function translationCancel(jobId: string): Promise<boolean> { return invoke<boolean>("translation_cancel", { jobId }); }
+export async function translationList(caseId: string, docId?: string): Promise<TranslationRecord[]> { return invoke<TranslationRecord[]>("translation_list", { caseId, docId }); }
+export async function translationEvents(caseId: string): Promise<TranslationEvent[]> { return invoke<TranslationEvent[]>("translation_events", { caseId }); }
+export async function translationConfirmField(caseId: string, segmentId: string, fieldId: string, confirmedValue: string, note?: string): Promise<TranslationRecord> { return invoke<TranslationRecord>("translation_confirm_field", { caseId, segmentId, fieldId, confirmedValue, note }); }
+export async function translationUnconfirmField(caseId: string, segmentId: string, fieldId: string, note?: string): Promise<TranslationRecord> { return invoke<TranslationRecord>("translation_unconfirm_field", { caseId, segmentId, fieldId, note }); }
+export async function translationGraph(caseId: string, docId: string, jurisdiction?: string): Promise<Record<string, unknown>> { return invoke<Record<string, unknown>>("translation_graph", { caseId, docId, jurisdiction }); }
+export async function translationGraphGet(caseId: string, docId: string): Promise<Record<string, unknown> | null> { return invoke<Record<string, unknown> | null>("translation_graph_get", { caseId, docId }); }

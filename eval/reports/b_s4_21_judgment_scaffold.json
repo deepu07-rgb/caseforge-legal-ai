@@ -57,7 +57,7 @@
     "scaffold_export_writes_no_document": true,
     "decision_request_refused_before_the_model": true,
     "decisional_output_filtered_before_rendering": true,
-    "model_gate_in_both_entry_points": true,
+    "model_gate_in_every_entry_point": true,
     "g8_engine_has_no_model": true,
     "scaffold_commands_need_chambers": true,
     "record_only_locks_when_a_scaffold_exists": true,

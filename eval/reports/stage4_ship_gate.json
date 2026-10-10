@@ -1,12 +1,11 @@
 {
   "batch": "B-S4-23",
   "release": "Stage 4 (v4.0) - not a release",
-  "generated_at": "2026-10-10T19:08:42Z",
+  "generated_at": "2026-10-10T19:27:35Z",
   "verdict": "NOT READY",
-  "answer_to_the_question": "No, not yet. Blocking: 1 batch(es) not built: B-S4-15 | 1 criterion(s) failing (AC-S4-00.7); 2 not built or unreported | 9 criterion(s) could not be measured here: AC-S4-00.4, AC-S4-01.3, AC-S4-02.2, AC-S4-03.1, AC-S4-04.1, AC-S4-05.1, AC-S4-06.1, AC-S4-09.1, AC-S4-10.3 | no legal-editor sign-off for AC-S4-04.1, AC-S4-05.1, AC-S4-06.1 | Production build (tsc -b && vite build) was not run. What does hold, and is tested, is that no decision is made by the machine.",
+  "answer_to_the_question": "No, not yet. Blocking: 1 criterion(s) failing (AC-S4-00.7); 0 not built or unreported | 9 criterion(s) could not be measured here: AC-S4-00.4, AC-S4-01.3, AC-S4-02.2, AC-S4-03.1, AC-S4-04.1, AC-S4-05.1, AC-S4-06.1, AC-S4-09.1, AC-S4-10.3 | no legal-editor sign-off for AC-S4-04.1, AC-S4-05.1, AC-S4-06.1 | Production build (tsc -b && vite build) was not run. What does hold, and is tested, is that no decision is made by the machine.",
   "reasons": [
-    "1 batch(es) not built: B-S4-15",
-    "1 criterion(s) failing (AC-S4-00.7); 2 not built or unreported",
+    "1 criterion(s) failing (AC-S4-00.7); 0 not built or unreported",
     "9 criterion(s) could not be measured here: AC-S4-00.4, AC-S4-01.3, AC-S4-02.2, AC-S4-03.1, AC-S4-04.1, AC-S4-05.1, AC-S4-06.1, AC-S4-09.1, AC-S4-10.3",
     "no legal-editor sign-off for AC-S4-04.1, AC-S4-05.1, AC-S4-06.1",
     "Production build (tsc -b && vite build) was not run"
@@ -90,9 +89,9 @@
       "title": "Every Stage 1-4 gate in the CI workflow",
       "status": "PASS",
       "hard": false,
-      "detail": "23 gates, all exit 0",
+      "detail": "24 gates, all exit 0",
       "evidence": {
-        "gates": 23
+        "gates": 24
       }
     },
     {
@@ -100,7 +99,7 @@
       "title": "Rust tests (cargo test --lib)",
       "status": "PASS",
       "hard": false,
-      "detail": "264 passed, 0 failed, 1 ignored",
+      "detail": "279 passed, 0 failed, 1 ignored",
       "evidence": {
         "ignored": [
           "retrieval::store::tests::b_s4_29_scale_benchmark"
@@ -119,15 +118,12 @@
       "title": "Every AC-S4-* measured PASS",
       "status": "FAIL",
       "hard": false,
-      "detail": "measured: {'BLOCKED': 9, 'FAIL': 1, 'NOT_BUILT': 2, 'PASS': 53, 'WAIVED': 1}",
+      "detail": "measured: {'BLOCKED': 9, 'FAIL': 1, 'PASS': 55, 'WAIVED': 1}",
       "evidence": {
         "failing": [
           "AC-S4-00.7"
         ],
-        "not_built_or_unreported": [
-          "AC-S4-09.2",
-          "AC-S4-09.3"
-        ],
+        "not_built_or_unreported": [],
         "blocked": [
           "AC-S4-00.4",
           "AC-S4-01.3",
@@ -149,7 +145,7 @@
       "title": "Every AC-S4-* formally accepted (thresholds approved, sign-offs, no open question)",
       "status": "BLOCKED",
       "hard": false,
-      "detail": "formal: {'BLOCKED': 17, 'FAIL': 1, 'NOT_BUILT': 2, 'PASS': 45, 'WAIVED': 1}",
+      "detail": "formal: {'BLOCKED': 18, 'FAIL': 1, 'PASS': 46, 'WAIVED': 1}",
       "evidence": {
         "blocked_by": [
           "needs two legal editors' sign-off (Q-S4-02)",
@@ -177,9 +173,9 @@
     {
       "id": "batches",
       "title": "Every Stage 4 batch built",
-      "status": "BLOCKED",
+      "status": "PASS",
       "hard": false,
-      "detail": "24 of 25 built; not built: B-S4-15 (Aligned offline translation + G10 (Wave B))",
+      "detail": "25 of 25 built",
       "evidence": {
         "built": [
           "B-S4-00",
@@ -198,6 +194,7 @@
           "B-S4-12",
           "B-S4-13",
           "B-S4-14",
+          "B-S4-15",
           "B-S4-16",
           "B-S4-17",
           "B-S4-18",
@@ -207,9 +204,7 @@
           "B-S4-22",
           "B-S4-23"
         ],
-        "not_built": [
-          "B-S4-15"
-        ]
+        "not_built": []
       }
     },
     {
@@ -248,7 +243,7 @@
       "title": "No network primitive in any Stage 4 engine (AC-13.1 / AC-S3-22.2, static)",
       "status": "PASS",
       "hard": true,
-      "detail": "scanned 26 engines; modules in the whole app with a network primitive: ['bundle_lan.rs', 'companion/mod.rs'] (only the phone companion and the encrypted-bundle LAN transfer may; each is refused under air-gap: True/True)",
+      "detail": "scanned 27 engines; modules in the whole app with a network primitive: ['bundle_lan.rs', 'companion/mod.rs'] (only the phone companion and the encrypted-bundle LAN transfer may; each is refused under air-gap: True/True)",
       "evidence": {
         "modules_with_network_primitives": [
           "bundle_lan.rs",
@@ -275,14 +270,14 @@
       "title": "Contracts load, migrations are consecutive and all embedded",
       "status": "PASS",
       "hard": false,
-      "detail": "23 migrations; consecutive app/case: True/True; all embedded in the vault: True; every contract parses: True; B-S4-01 contract gate clean: True"
+      "detail": "24 migrations; consecutive app/case: True/True; all embedded in the vault: True; every contract parses: True; B-S4-01 contract gate clean: True"
     },
     {
       "id": "controlled_matters",
       "title": "Controlled matters: IN with Hindi and code-bridge, US with impeachment and deadline, one Chambers session",
-      "status": "BLOCKED",
+      "status": "PASS",
       "hard": false,
-      "detail": "composed from the per-engine goldens that already run; they are not a single run through the screens, and the IN matter cannot be completed without Hindi OCR and translation",
+      "detail": "composed from the per-engine goldens that already run; they are not a single run through the screens; the IN matter's Hindi scan reading is exercised by the Windows-only gate indic_ocr_b_s4_14 and its translation by the Rust tests named here",
       "evidence": {
         "IN matter (Hindi document, code-bridge transition)": {
           "steps": [
@@ -292,9 +287,9 @@
               "tests_passing": 12
             },
             {
-              "step": "Hindi document ingested, translated and verified",
-              "status": "BLOCKED",
-              "why": "needs B-S4-14 (Devanagari OCR) and B-S4-15 (translation), which are not built"
+              "step": "Hindi document translated, with the translation never passed off as verified",
+              "status": "PASS",
+              "tests_passing": 15
             },
             {
               "step": "citation audit of a filing",
@@ -302,7 +297,7 @@
               "tests_passing": 6
             }
           ],
-          "status": "BLOCKED"
+          "status": "PASS"
         },
         "US matter (deposition impeachment, deadline)": {
           "steps": [
@@ -366,25 +361,20 @@
     "measured": {
       "BLOCKED": 9,
       "FAIL": 1,
-      "NOT_BUILT": 2,
-      "PASS": 53,
+      "PASS": 55,
       "WAIVED": 1
     },
     "formal": {
-      "BLOCKED": 17,
+      "BLOCKED": 18,
       "FAIL": 1,
-      "NOT_BUILT": 2,
-      "PASS": 45,
+      "PASS": 46,
       "WAIVED": 1
     },
     "total": 66,
     "failing": [
       "AC-S4-00.7"
     ],
-    "not_built_or_unreported": [
-      "AC-S4-09.2",
-      "AC-S4-09.3"
-    ],
+    "not_built_or_unreported": [],
     "blocked": [
       "AC-S4-00.4",
       "AC-S4-01.3",
@@ -428,9 +418,7 @@
       "B-S4-22",
       "B-S4-23"
     ],
-    "not_built": [
-      "B-S4-15"
-    ]
+    "not_built": []
   },
   "owner_decisions_pending": {
     "unapproved_thresholds": [
@@ -486,9 +474,9 @@
   },
   "run": {
     "source": "eval/run_stage4.py",
-    "generated_at": "2026-10-10T19:08:42Z"
+    "generated_at": "2026-10-10T19:27:34Z"
   },
-  "report_sha256": "a5216014cb74889d5ba52c2abd1d986558ca8a105ad53c83d6ac37e41152b49e",
+  "report_sha256": "b5d05bec761aae2bd17c05a6739eed4c13fca8cac628c3372dc55a41da4a9b26",
   "signature": {
     "status": "UNSIGNED",
     "reason": "no release signing key exists; the owner decides who signs a release (set CASEFORGE_RELEASE_KEY_PEM to sign). The report_sha256 above fixes the content."

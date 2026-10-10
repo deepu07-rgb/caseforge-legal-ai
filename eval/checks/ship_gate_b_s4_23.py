@@ -44,13 +44,13 @@ REQUIRED_GUARDRAILS = ("G1", "G2", "G3", "G7", "G8")
 # Batches of the Stage 4 map in the playbook (section 2).
 BATCHES = ["B-S4-00", "B-S4-00b", "B-S4-01", "B-S4-02", "B-S4-03", "B-S4-04", "B-S4-05", "B-S4-06", "B-S4-07", "B-S4-08", "B-S4-09", "B-S4-10", "B-S4-11", "B-S4-12", "B-S4-13", "B-S4-14", "B-S4-15", "B-S4-16", "B-S4-17", "B-S4-18", "B-S4-19", "B-S4-20", "B-S4-21", "B-S4-22", "B-S4-23"]
 # Stage 4 engines: none may contain a network primitive. (The phone-capture companion is Stage 1, LAN only, refused under air-gap.)
-STAGE4_ENGINES = ["edition.rs", "entitlements.rs", "seat.rs", "subscription.rs", "g8.rs", "record_only.rs", "issue_matrix.rs", "chambers_lookup.rs", "cause_list.rs", "judgment_scaffold.rs", "deadlines.rs", "foundation.rs", "witness.rs", "impeach.rs", "opposition.rs", "certificate.rs", "code_bridge.rs", "treatment.rs", "rule_tables.rs", "reasoning.rs", "audit.rs", "answer_feedback.rs", "proposition.rs", "working_set.rs", "bundle.rs", "timed_rehearsal.rs"]
+STAGE4_ENGINES = ["translation.rs", "edition.rs", "entitlements.rs", "seat.rs", "subscription.rs", "g8.rs", "record_only.rs", "issue_matrix.rs", "chambers_lookup.rs", "cause_list.rs", "judgment_scaffold.rs", "deadlines.rs", "foundation.rs", "witness.rs", "impeach.rs", "opposition.rs", "certificate.rs", "code_bridge.rs", "treatment.rs", "rule_tables.rs", "reasoning.rs", "audit.rs", "answer_feedback.rs", "proposition.rs", "working_set.rs", "bundle.rs", "timed_rehearsal.rs"]
 NET = re.compile(r"reqwest|TcpStream|TcpListener|UdpSocket|std::net|tokio::net|\bureq\b|hyper::|isahc|surf::")
 # What each controlled matter is made of, as the Rust tests that already run it. Composed from per-engine goldens; not one run through the UI.
 MATTERS = {
     "IN matter (Hindi document, code-bridge transition)": [
         ("code-bridge transition", ["code_bridge::tests::", "rule_tables::tests::"]),
-        ("Hindi document ingested, translated and verified", None),  # B-S4-14 / B-S4-15 are not built
+        ("Hindi document translated, with the translation never passed off as verified", ["translation::tests::", "proposition::tests::g10_"]),
         ("citation audit of a filing", ["audit::tests::"]),
     ],
     "US matter (deposition impeachment, deadline)": [
@@ -247,7 +247,7 @@ def main() -> int:
             bad = [t for t in log["failed_names"] if any(t.startswith(p) for p in prefixes)]
             out.append({"step": label, "status": "FAIL" if bad else "PASS" if names else "BLOCKED", "tests_passing": len(names), **({"why": "no test found for this step"} if not names and not bad else {})})
         matters[name] = {"steps": out, "status": "FAIL" if any(s["status"] == "FAIL" for s in out) else "PASS" if all(s["status"] == "PASS" for s in out) else "BLOCKED"}
-    checks.append(check("controlled_matters", "Controlled matters: IN with Hindi and code-bridge, US with impeachment and deadline, one Chambers session", "PASS" if all(m["status"] == "PASS" for m in matters.values()) else "BLOCKED", "composed from the per-engine goldens that already run; they are not a single run through the screens, and the IN matter cannot be completed without Hindi OCR and translation", evidence=matters))
+    checks.append(check("controlled_matters", "Controlled matters: IN with Hindi and code-bridge, US with impeachment and deadline, one Chambers session", "PASS" if all(m["status"] == "PASS" for m in matters.values()) else "BLOCKED", "composed from the per-engine goldens that already run; they are not a single run through the screens; the IN matter's Hindi scan reading is exercised by the Windows-only gate indic_ocr_b_s4_14 and its translation by the Rust tests named here", evidence=matters))
 
     # ---- verdict ----
     hard_fail = [c for c in checks if c["hard"] and c["status"] == "FAIL"]

@@ -26,6 +26,7 @@ mod deadlines;
 mod foundation;
 mod issue_matrix;
 mod treatment;
+mod translation;
 mod edition;
 mod entitlements;
 mod seat;
@@ -1426,6 +1427,7 @@ fn chambers_record_sources(mgr: &VaultManager, case_id: &str, question: &str, au
                     temporal_status: None,
                     superseded_status: None,
                     permitted: true,
+                    translated: false,
                 }));
             }
         }
@@ -3426,6 +3428,92 @@ fn docpipe_recognize_case(
     docpipe::start_recognize_case_job(app, mgr, docpipe_state.inner().clone(), case_id)
 }
 
+// --- B-S4-15 aligned Hindi-to-English translation (guardrail G10) ---
+
+#[tauri::command]
+fn translation_start(app: AppHandle, vault: State<'_, VaultState>, case_id: String, doc_id: Option<String>) -> Result<translation::JobStatus, String> {
+    edition::require_feature("indic_ingestion")?;
+    let mgr = vault.get_or_init(&app)?;
+    let docs = match doc_id {
+        Some(d) => vec![d],
+        None => translation::docs_with_hindi(&mgr, &case_id)?,
+    };
+    if docs.is_empty() {
+        return Err("CF_TRANSLATE_NOTHING: no document in this matter has Hindi text to translate; recognize the scans first".into());
+    }
+    // The translation model is the primary reasoner's model, so it takes that slot: never beside the vision model or a reasoning turn.
+    let acq = choreography::acquire("primary_llm", "translation");
+    if !acq.ok {
+        return Err(acq.error.unwrap_or_else(|| "CF_CHOREOGRAPHY: the model slot is busy".into()));
+    }
+    let emitter = app.clone();
+    Ok(translation::start_job(
+        mgr,
+        case_id,
+        docs,
+        move |status| {
+            let _ = emitter.emit("translation_progress", status);
+        },
+        || {
+            choreography::release("primary_llm");
+        },
+    ))
+}
+
+#[tauri::command]
+fn translation_status(job_id: String) -> Result<translation::JobStatus, String> {
+    edition::require_feature("indic_ingestion")?;
+    translation::job_status(&job_id).ok_or_else(|| "CF_TRANSLATE_NOT_FOUND: unknown translation job".to_string())
+}
+
+#[tauri::command]
+fn translation_cancel(job_id: String) -> Result<bool, String> {
+    edition::require_feature("indic_ingestion")?;
+    Ok(translation::job_cancel(&job_id))
+}
+
+#[tauri::command]
+fn translation_list(app: AppHandle, vault: State<'_, VaultState>, case_id: String, doc_id: Option<String>) -> Result<Vec<serde_json::Value>, String> {
+    edition::require_feature("indic_ingestion")?;
+    let mgr = vault.get_or_init(&app)?;
+    translation::list(&mgr, &case_id, doc_id.as_deref())
+}
+
+#[tauri::command]
+fn translation_events(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<Vec<serde_json::Value>, String> {
+    edition::require_feature("indic_ingestion")?;
+    let mgr = vault.get_or_init(&app)?;
+    translation::events(&mgr, &case_id)
+}
+
+#[tauri::command]
+fn translation_confirm_field(app: AppHandle, vault: State<'_, VaultState>, case_id: String, segment_id: String, field_id: String, confirmed_value: String, note: Option<String>) -> Result<serde_json::Value, String> {
+    edition::require_feature("indic_ingestion")?;
+    let mgr = vault.get_or_init(&app)?;
+    translation::confirm_field(&mgr, &case_id, &segment_id, &field_id, &confirmed_value, note.as_deref())
+}
+
+#[tauri::command]
+fn translation_unconfirm_field(app: AppHandle, vault: State<'_, VaultState>, case_id: String, segment_id: String, field_id: String, note: Option<String>) -> Result<serde_json::Value, String> {
+    edition::require_feature("indic_ingestion")?;
+    let mgr = vault.get_or_init(&app)?;
+    translation::unconfirm_field(&mgr, &case_id, &segment_id, &field_id, note.as_deref())
+}
+
+#[tauri::command]
+fn translation_graph(app: AppHandle, vault: State<'_, VaultState>, case_id: String, doc_id: String, jurisdiction: Option<String>) -> Result<serde_json::Value, String> {
+    edition::require_feature("indic_ingestion")?;
+    let mgr = vault.get_or_init(&app)?;
+    translation::derive_graph(&mgr, &case_id, jurisdiction.as_deref().unwrap_or("India"), &doc_id)
+}
+
+#[tauri::command]
+fn translation_graph_get(app: AppHandle, vault: State<'_, VaultState>, case_id: String, doc_id: String) -> Result<Option<serde_json::Value>, String> {
+    edition::require_feature("indic_ingestion")?;
+    let mgr = vault.get_or_init(&app)?;
+    translation::graph_get(&mgr, &case_id, &doc_id)
+}
+
 #[tauri::command]
 fn docpipe_text_layer_list(
     app: AppHandle,
@@ -4178,7 +4266,13 @@ fn case_llm_support_sources(
             temporal_status: None,
             superseded_status: None,
             permitted: true,
+            translated: false,
         });
+    }
+    // B-S4-15: a translated page is offered too, marked translated so guardrail G10 keeps anything built on it below GREEN
+    let left = limit.saturating_sub(used);
+    if left > 0 {
+        out.extend(translation::support_sources(&manager, &case_id, left)?);
     }
     Ok(out)
 }
@@ -5193,6 +5287,15 @@ pub fn run() {
             bundle_lan_share,
             bundle_lan_stop,
             bundle_lan_fetch,
+            translation_start,
+            translation_status,
+            translation_cancel,
+            translation_list,
+            translation_events,
+            translation_confirm_field,
+            translation_unconfirm_field,
+            translation_graph,
+            translation_graph_get,
             seat_deactivate,
             air_gap_set,
             network_audit,

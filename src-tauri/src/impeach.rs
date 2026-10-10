@@ -237,6 +237,7 @@ pub fn verify_model_candidates(b: &BuiltWitness, props: &[PropositionInput], exi
             temporal_status: None,
             superseded_status: None,
             permitted: false,
+            translated: false,
         })
         .collect();
     let mut rendered = Vec::new();
@@ -343,6 +344,7 @@ pub fn model_request(b: &BuiltWitness) -> Result<(String, Vec<SupportSource>), S
             temporal_status: None,
             superseded_status: None,
             permitted: false,
+            translated: false,
         });
     }
     let chars: usize = sources.iter().map(|s| s.exact_text.chars().count()).sum();

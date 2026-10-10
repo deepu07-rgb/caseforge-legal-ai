@@ -475,6 +475,13 @@
       "notes": "B-S4-01: additive to debrief v2 (unchanged)."
     },
     {
+      "id": "case_graph_v2_1",
+      "path": "case_graph_v2_1.schema.json",
+      "prd_refs": ["PRD v4.0 §7.9", "G10"],
+      "status": "FROZEN_FOR_IMPLEMENTATION",
+      "notes": "B-S4-15: coexists with case_graph 2.0.0 (unchanged and still pinned); adds Provenance.origin TRANSLATED and an optional translation_notice. Used only for a graph read from a machine translation."
+    },
+    {
       "id": "translation_segment",
       "path": "translation_segment.schema.json",
       "prd_refs": [
@@ -565,7 +572,7 @@
         "Provenance.origin enum += TRANSLATED (facts read from machine translation; critical fields need counsel confirmation)",
         "Provenance += optional asserting_party_id (required when origin is ADVERSE_ASSERTION)"
       ],
-      "compatibility": "Additive; 2.0.0 graphs remain valid. Applied only together with the producers/consumers that need it so the B-S3-06 gates stay green."
+      "compatibility": "Additive; 2.0.0 graphs remain valid. Applied only together with the producers/consumers that need it so the B-S3-06 gates stay green. APPLIED IN B-S4-15 (origin TRANSLATED only) as the coexisting successor case_graph_v2_1.schema.json, because the 2.0.0 file is pinned byte-identical; ADVERSE_ASSERTION and asserting_party_id are NOT applied (B-S4-06 keeps external filings out of the graph)."
     },
     {
       "contract": "rule_table.schema.json",

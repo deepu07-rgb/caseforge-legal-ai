@@ -271,3 +271,35 @@ pub fn render_page(
     }
     Ok(response.get("result").cloned().unwrap_or(Value::Null))
 }
+
+/// One JSON-RPC request to the document sidecar over local stdio, for calls that carry text (B-S4-15 translation steps). Nothing is written to disk.
+pub fn docpipe_rpc(method: &str, params: Value) -> Result<Value, String> {
+    let request = json!({"jsonrpc":"2.0","id":1,"method":method,"params":params});
+    let payload = serde_json::to_string(&request).map_err(|_| "CF_DOCPIPE_INPUT_INVALID: failed to encode request".to_string())?;
+    let python = python_command();
+    let mut command = Command::new(&python);
+    if python == "py" {
+        command.arg("-3");
+    }
+    let mut child = command
+        .arg(script_path()?)
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .map_err(|_| "CF_DOCPIPE_RUNTIME_MISSING: failed to start the local document sidecar".to_string())?;
+    if let Some(mut stdin) = child.stdin.take() {
+        stdin.write_all(payload.as_bytes()).map_err(|_| "CF_DOCPIPE_FAILED: could not send the request".to_string())?;
+        stdin.write_all(b"\n").map_err(|_| "CF_DOCPIPE_FAILED: could not finish the request".to_string())?;
+    }
+    let output = child.wait_with_output().map_err(|_| "CF_DOCPIPE_FAILED: the document sidecar did not finish".to_string())?;
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    let line = stdout.lines().find(|l| !l.trim().is_empty()).ok_or_else(|| "CF_DOCPIPE_FAILED: the document sidecar returned no response".to_string())?;
+    let response: Value = serde_json::from_str(line).map_err(|_| "CF_DOCPIPE_FAILED: the document sidecar returned an invalid response".to_string())?;
+    if let Some(error) = response.get("error") {
+        let code = error.get("data").and_then(|d| d.get("code")).and_then(Value::as_str).unwrap_or("CF_DOCPIPE_FAILED");
+        let message = error.get("message").and_then(Value::as_str).unwrap_or("the document sidecar refused the request");
+        return Err(format!("{code}: {message}"));
+    }
+    Ok(response.get("result").cloned().unwrap_or(Value::Null))
+}
