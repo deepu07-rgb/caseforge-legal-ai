@@ -454,11 +454,14 @@ def recognize_native_page(page: dict[str, Any]) -> dict[str, Any]:
         "source_sha256": page.get("source_sha256"), "processed_sha256": None,
         "text_script": script_detect.script_of_text(text),
     }, sort_keys=True, separators=(",", ":"))
-    critical_fields = validate_critical_fields(text, words)
+    critical_fields = validate_critical_fields(text, words, exact_text=True)
     return {
         "page_index": int(page.get("page_index") or 0), "recognizer_id": "caseforge.pdfium.native-text.v1",
         "full_text": text, "mean_confidence": 1.0 if words else 0.0,
-        "page_quality_warn": not words or bool(critical_fields), "words": words,
+        # A native page is not "poor" because it contains a date. Found by running the real app: every native page with a date, an amount or a
+        # section number was blocked from the case graph as if it were bad OCR, and the Digest chronology came back empty. A field that fails its own
+        # check is still held (see validate_critical_fields); the page is only warned when it has no text at all.
+        "page_quality_warn": not words, "words": words,
         "critical_fields": critical_fields, "notes": notes,
     }
 

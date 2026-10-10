@@ -67,6 +67,22 @@ def main() -> int:
     if not missing or not all(field["confidence_state"] == "missing" and field["force_review"] for field in missing):
         errors.append("missing confidence was not explicit/forced to review")
 
+    # Found by running the real app (2026-10-11): a digital page (native text, no engine confidence) that contained a date, an amount or a
+    # section number was blocked from the case graph as if it were poor OCR, so the Digest chronology came back empty. With exact text, a field is
+    # held only when its own check fails.
+    exact_ok = "On 12 March 2024 the claimant sought $10,000 under Section 10."
+    exact_fields = validate_critical_fields(exact_ok, words(exact_ok, None), exact_text=True)
+    if not exact_fields or any(field["force_review"] or field["suppress_from_auto"] for field in exact_fields):
+        errors.append("a well-formed field in native text was held for review merely because it has no engine confidence")
+    exact_bad = "On 32/13/2024 the claimant sought $1O,000."
+    exact_bad_fields = validate_critical_fields(exact_bad, words(exact_bad, None), exact_text=True)
+    if not exact_bad_fields or not all(field["force_review"] for field in exact_bad_fields if not field["syntactically_valid"]) or not any(not field["syntactically_valid"] for field in exact_bad_fields):
+        errors.append("an impossible date or a malformed amount in native text was not held")
+    native_src = (ROOT / "sidecars" / "docpipe" / "recognize.py").read_text(encoding="utf-8")
+    native_body = native_src.split("def recognize_native_page", 1)[1].split("def recognize_pages", 1)[0]
+    if '"page_quality_warn": not words,' not in native_body or "exact_text=True" not in native_body:
+        errors.append("a native page is blocked by its fields again (it must warn only when it has no text)")
+
     rust = (ROOT / "src-tauri" / "src" / "docpipe" / "recognize.rs").read_text(encoding="utf-8")
     production_body = rust.split("pub fn recognize_document_bytes",1)[1].split("#[cfg(test)]",1)[0]
     if "score_word" in production_body or "recognize_text" in production_body:

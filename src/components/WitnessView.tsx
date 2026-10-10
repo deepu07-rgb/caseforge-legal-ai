@@ -190,11 +190,12 @@ export default function WitnessView({
           </div>
         )}
         {register.length > 0 && (
-          <table className="table" style={{ width: "100%", fontSize: "0.82rem" }}>
+          <div style={{ overflowX: "auto" }} data-testid="witness-register">
+          <table className="table" style={{ width: "100%", minWidth: 820, fontSize: "0.82rem" }}>
             <thead>
               <tr>
-                <th>Document</th>
-                <th>Witness</th>
+                <th style={{ minWidth: 170 }}>Document</th>
+                <th style={{ minWidth: 150 }}>Witness</th>
                 <th>Kind</th>
                 <th>Recorded on</th>
                 <th>Order</th>
@@ -207,8 +208,8 @@ export default function WitnessView({
                 const dirty = Boolean(edits[e.doc_id]);
                 return (
                   <tr key={e.doc_id}>
-                    <td title={e.doc_id}>{docName(e.doc_id)}{r.locator_kind === "PAGE_LINE" ? " (transcript)" : ""}</td>
-                    <td><input value={r.witness_name} onChange={(ev) => setRow(e, { witness_name: ev.target.value })} /></td>
+                    <td title={e.doc_id} style={{ wordBreak: "break-word" }}>{docName(e.doc_id)}{r.locator_kind === "PAGE_LINE" ? " (transcript)" : ""}</td>
+                    <td><input style={{ width: "100%", minWidth: 130 }} value={r.witness_name} onChange={(ev) => setRow(e, { witness_name: ev.target.value })} /></td>
                     <td>
                       <select value={r.statement_kind} onChange={(ev) => setRow(e, { statement_kind: ev.target.value })}>
                         {kinds.map((k) => (
@@ -219,7 +220,7 @@ export default function WitnessView({
                     </td>
                     <td><input type="date" value={r.recorded_on ?? ""} onChange={(ev) => setRow(e, { recorded_on: ev.target.value || null })} /></td>
                     <td><input type="number" style={{ width: 56 }} title="Tie-break when two statements share a date" value={r.sequence_override ?? ""} onChange={(ev) => setRow(e, { sequence_override: ev.target.value === "" ? null : Number(ev.target.value) })} /></td>
-                    <td style={{ whiteSpace: "nowrap" }}>
+                    <td>
                       <span className="muted" style={{ marginRight: 6 }}>{e.origin === "COUNSEL_CONFIRMED" ? "confirmed" : "proposed"}</span>
                       <button type="button" disabled={!!busy} onClick={() => void run("Saving", () => witnessRegisterSave(caseId, r))}>{dirty ? "Save" : e.origin === "COUNSEL_CONFIRMED" ? "Saved" : "Confirm"}</button>{" "}
                       <button type="button" disabled={!!busy} onClick={() => void run("Removing", () => witnessRegisterRemove(caseId, e.doc_id))}>Remove</button>
@@ -229,6 +230,7 @@ export default function WitnessView({
               })}
             </tbody>
           </table>
+          </div>
         )}
         {error && <div className="notice warn">{error}</div>}
         {notice && <div className="notice">{notice}</div>}

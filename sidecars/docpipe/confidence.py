@@ -164,7 +164,10 @@ def _union_bbox(words: list[dict[str, Any]]) -> dict[str, float] | None:
     return {"x": round(left, 7), "y": round(top, 7), "w": round(right - left, 7), "h": round(bottom - top, 7)}
 
 
-def validate_critical_fields(text: str, words: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def validate_critical_fields(text: str, words: list[dict[str, Any]], *, exact_text: bool = False) -> list[dict[str, Any]]:
+    """exact_text: the text is the file's own text (a digital PDF, a text file), not an engine's reading. There is no engine confidence to be
+    missing and no reading error to guard against, so a field is held only when its own check fails (an impossible or ambiguous date, a malformed
+    amount), never merely because it is a date. Word confidence stays "missing", honestly: nothing was read."""
     thresholds = _thresholds()
     found: list[dict[str, Any]] = []
     occupied: set[tuple[int, int, str]] = set()
@@ -185,6 +188,8 @@ def validate_critical_fields(text: str, words: list[dict[str, Any]]) -> list[dic
             raw = min(raw_values) if raw_values and len(raw_values) == len(source_words) else None
             confidence_state = "calibrated" if calibrated is not None else "missing"
             field_confidence = calibrated if valid and calibrated is not None else (min(calibrated or 0.0, 0.49) if calibrated is not None else None)
+            if exact_text and calibrated is None:
+                field_confidence = 1.0 if valid else 0.49
             force = field_confidence is None or field_confidence < thresholds["item_block_downstream_below"] or not valid
             found.append({
                 "field_index": len(found), "field_type": kind, "text": matched,
