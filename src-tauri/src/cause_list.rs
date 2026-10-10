@@ -40,7 +40,7 @@ pub struct ListEntry {
     pub case_number: Option<String>,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct MatterDoc {
     pub doc_id: String,
     pub filename: String,
@@ -243,14 +243,14 @@ static HEADER: Lazy<Regex> = Lazy::new(|| Regex::new(r"(?i)^\s*(?:daily\s+)?orde
 static BLANK: Lazy<Regex> = Lazy::new(|| Regex::new(r"\r?\n[ \t]*(?:\r?\n[ \t]*)+").unwrap());
 
 #[derive(Debug, Clone)]
-struct Order {
-    doc_id: String,
-    page: usize,
+pub(crate) struct Order {
+    pub(crate) doc_id: String,
+    pub(crate) page: usize,
     /// Character range inside the page.
-    start: usize,
-    end: usize,
-    text: String,
-    date: String,
+    pub(crate) start: usize,
+    pub(crate) end: usize,
+    pub(crate) text: String,
+    pub(crate) date: String,
 }
 
 fn char_at(t: &str, byte: usize) -> usize {
@@ -300,7 +300,7 @@ fn orders_of_page(doc_id: &str, page_no: usize, page: &str, day_first: bool) -> 
 }
 
 /// All orders on the record, oldest first, and the ids of the documents they were found in.
-fn orders_of(m: &Matter) -> (Vec<Order>, HashSet<String>) {
+pub(crate) fn orders_of(m: &Matter) -> (Vec<Order>, HashSet<String>) {
     let day_first = !m.jurisdiction.eq_ignore_ascii_case("US");
     let mut orders = Vec::new();
     let mut order_docs = HashSet::new();
@@ -322,7 +322,7 @@ fn orders_of(m: &Matter) -> (Vec<Order>, HashSet<String>) {
 const ABBREV: &[&str] = &["no", "nos", "rs", "mr", "mrs", "ms", "dr", "sh", "smt", "vs", "v", "ltd", "sec", "art", "ex", "hon", "addl", "distt", "dt", "st", "pvt", "co", "inc", "i", "ia"];
 
 /// Sentences of a text as (char start, char end, text).
-fn sentences(text: &str) -> Vec<(usize, usize, String)> {
+pub(crate) fn sentences(text: &str) -> Vec<(usize, usize, String)> {
     let chars: Vec<char> = text.chars().collect();
     let mut out = Vec::new();
     let mut start = 0usize;
@@ -334,7 +334,7 @@ fn sentences(text: &str) -> Vec<(usize, usize, String)> {
                 j += 1;
             }
             let word: String = chars[..i].iter().rev().take_while(|c| c.is_alphabetic()).collect::<Vec<_>>().into_iter().rev().collect();
-            let boundary = j >= chars.len() || (j > i + 1 && chars[j].is_uppercase() && !ABBREV.contains(&word.to_ascii_lowercase().as_str()));
+            let boundary = j >= chars.len() || (j > i + 1 && chars[j].is_uppercase() && word.chars().count() != 1 && !ABBREV.contains(&word.to_ascii_lowercase().as_str()));
             if boundary {
                 let seg: String = chars[start..=i].iter().collect();
                 let lead = seg.chars().take_while(|c| c.is_whitespace()).count();

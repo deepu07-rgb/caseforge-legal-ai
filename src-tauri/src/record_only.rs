@@ -160,6 +160,18 @@ pub fn classify(ledger: &PropositionLedger, sources: &[SupportSource], record_on
     Classified { record_only, statements, withheld, rendered_text }
 }
 
+/// B-S4-21 (G8): removes every statement that itself decides something, whatever its class. This holds even when
+/// record-only mode is off; decisional wording is never shown. Withheld by hash, like the rest.
+pub fn apply_decision_filter(c: &mut Classified, decisional: &dyn Fn(&str) -> bool) {
+    let (keep, drop): (Vec<Statement>, Vec<Statement>) = std::mem::take(&mut c.statements).into_iter().partition(|s| !decisional(&s.text));
+    for s in &drop {
+        c.withheld.push(Withheld { proposition_id: s.proposition_id.clone(), reason: "DECISION_LANGUAGE", text_sha256: sha(&s.text) });
+    }
+    c.statements = keep;
+    let withheld_visible = if c.record_only { c.withheld.len() } else { c.withheld.iter().filter(|w| w.reason == "DECISION_LANGUAGE").count() };
+    c.rendered_text = render(&c.statements, withheld_visible);
+}
+
 /// The text the screen shows: each statement with its class and where it comes from.
 pub fn render(statements: &[Statement], withheld_count: usize) -> String {
     let mut parts: Vec<String> = statements
@@ -256,6 +268,18 @@ mod tests {
         let on = classify(&ledger, &sources, true);
         let strip = |c: &Classified| c.statements.iter().filter(|s| s.class != "EXTRA_RECORD").cloned().collect::<Vec<_>>();
         assert_eq!(strip(&on), strip(&out));
+    }
+
+    #[test]
+    fn decisional_statements_are_removed_whatever_their_class_and_even_with_record_only_off() {
+        let (_, sources, ledger) = load();
+        for on in [true, false] {
+            let mut out = classify(&ledger, &sources, on);
+            let n = out.statements.len();
+            apply_decision_filter(&mut out, &|t| t.starts_with("A co-owner"));
+            assert_eq!(out.statements.len(), n - 1, "the law statement that mentions a co-owner is treated as decisional here");
+            assert!(out.withheld.iter().any(|w| w.reason == "DECISION_LANGUAGE") && !out.rendered_text.contains("A co-owner may apply"));
+        }
     }
 
     #[test]

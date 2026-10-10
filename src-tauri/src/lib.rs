@@ -30,6 +30,8 @@ mod edition;
 mod record_only;
 mod chambers_lookup;
 mod cause_list;
+mod g8;
+mod judgment_scaffold;
 mod opposition;
 mod reasoning;
 mod witness;
@@ -1045,6 +1047,141 @@ fn matter_pages(mgr: &VaultManager, case_id: &str, d: &vault::DocumentMeta) -> R
     Ok(if d.type_tag == docpipe::EXTERNAL_FILING_TAG { docpipe::external_filing_pages(mgr, case_id, &d.doc_id)?.1 } else { docpipe::statement_pages(mgr, case_id, &d.doc_id)?.1 })
 }
 
+// --- B-S4-21 Judgment Scaffold and the decision-free zone (G8) ---
+
+struct ScaffoldWorld {
+    profile: (String, String, String, String),
+    parties: Vec<issue_matrix::Party>,
+    filings: Vec<issue_matrix::Filing>,
+    docs: Vec<cause_list::MatterDoc>,
+    issues: Vec<issue_matrix::IssueIn>,
+    evidence: Vec<judgment_scaffold::EvidenceItem>,
+    matrix: serde_json::Value,
+}
+
+fn scaffold_world(mgr: &VaultManager, case_id: &str) -> Result<ScaffoldWorld, String> {
+    let c = mgr.list_cases().map_err(|e| e.to_string())?.into_iter().find(|c| c.case_id == case_id).ok_or_else(|| "CF_CASE_NOT_FOUND: matter is not registered".to_string())?;
+    let graph = mgr.case_graph_get(case_id).map_err(|e| e.to_string())?.unwrap_or_else(|| serde_json::json!({}));
+    let parties = issue_parties(&graph);
+    let list = mgr.doc_list(case_id).map_err(|e| e.to_string())?;
+    let docs: Vec<cause_list::MatterDoc> = list.iter().map(|d| Ok(cause_list::MatterDoc { doc_id: d.doc_id.clone(), filename: d.original_filename.clone(), type_tag: d.type_tag.clone(), pages: matter_pages(mgr, case_id, d)? })).collect::<Result<_, String>>()?;
+    let mut filings = Vec::new();
+    for v in deadline_kv(mgr, case_id, "issue:filing:")? {
+        if let (Some(doc), Some(party)) = (v["doc_id"].as_str(), v["party_id"].as_str()) {
+            if let Some(d) = docs.iter().find(|d| d.doc_id == doc) {
+                filings.push(issue_matrix::Filing { doc_id: doc.to_string(), party_id: party.to_string(), pages: d.pages.clone() });
+            }
+        }
+    }
+    let issues: Vec<issue_matrix::IssueIn> = issue_stored(mgr, case_id)?.into_iter().map(|(_, i)| i).collect();
+    let matrix = issue_matrix::build(&issue_matrix::Inputs { case_id, built_at: &crate::docpipe::now_rfc3339(), parties: &parties, filings: &filings, issues: &issues, audited: &[] }).map(|o| o.matrix).unwrap_or_else(|_| serde_json::json!({"issues": []}));
+    let evidence = graph_items(&graph, "evidence").iter().filter_map(|e| Some(judgment_scaffold::EvidenceItem { evidence_id: e["evidence_id"].as_str()?.to_string(), label: e["label"].as_str().unwrap_or("").to_string(), doc_id: e["doc_id"].as_str().map(str::to_string) })).collect();
+    Ok(ScaffoldWorld { profile: (c.cause_title, c.court, c.label, c.jurisdiction), parties, filings, docs, issues, evidence, matrix })
+}
+
+fn scaffold_prefill_of(w: &ScaffoldWorld) -> std::collections::BTreeMap<&'static str, Vec<serde_json::Value>> {
+    judgment_scaffold::prefill(&judgment_scaffold::Inputs { cause_title: &w.profile.0, court: &w.profile.1, label: &w.profile.2, jurisdiction: &w.profile.3, parties: &w.parties, filings: &w.filings, docs: &w.docs, issues: &w.issues, evidence: &w.evidence, matrix: &w.matrix })
+}
+
+fn scaffold_stored(mgr: &VaultManager, case_id: &str) -> Result<Option<serde_json::Value>, String> {
+    Ok(deadline_kv(mgr, case_id, "scaffold:main")?.into_iter().next())
+}
+
+fn scaffold_put(mgr: &VaultManager, case_id: &str, sc: &serde_json::Value) -> Result<(), String> {
+    mgr.witness_kv_put(case_id, "scaffold:main", sc).map_err(|e| e.to_string())
+}
+
+fn scaffold_report(mgr: &VaultManager, case_id: &str, sc: Option<serde_json::Value>) -> Result<serde_json::Value, String> {
+    let w = scaffold_world(mgr, case_id)?;
+    let problems = match &sc {
+        Some(s) => judgment_scaffold::validate(s, &w.docs, &judgment_scaffold::Profile { cause_title: &w.profile.0, court: &w.profile.1, label: &w.profile.2 }).err().unwrap_or_default(),
+        None => vec![],
+    };
+    let names: serde_json::Map<String, serde_json::Value> = w.docs.iter().map(|d| (d.doc_id.clone(), serde_json::json!(d.filename))).collect();
+    Ok(serde_json::json!({"scaffold": sc, "exists": sc.is_some(), "problems": problems, "documents": names, "locked_sections": judgment_scaffold::LOCKED,
+        "note": "Analysis, findings and the operative order are written only by the judge: CaseForge has no way to draft them, and nothing you type there is sent to any model."}))
+}
+
+#[tauri::command]
+fn scaffold_get(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<serde_json::Value, String> {
+    let mgr = vault.get_or_init(&app)?;
+    edition::require_chambers(&edition_of(&mgr)?)?;
+    let sc = scaffold_stored(&mgr, &case_id)?;
+    scaffold_report(&mgr, &case_id, sc)
+}
+
+/// Creates the scaffold from the record, or refreshes the pre-filled sections of an existing one (the judge's own text stays).
+/// Once a scaffold exists, record-only mode is locked on for the matter.
+#[tauri::command]
+fn scaffold_prefill(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<serde_json::Value, String> {
+    let mgr = vault.get_or_init(&app)?;
+    edition::require_chambers(&edition_of(&mgr)?)?;
+    let w = scaffold_world(&mgr, &case_id)?;
+    let pre = scaffold_prefill_of(&w);
+    let sc = match scaffold_stored(&mgr, &case_id)? {
+        Some(mut s) => {
+            judgment_scaffold::refresh(&mut s, &pre)?;
+            s
+        }
+        None => judgment_scaffold::new_scaffold(&case_id, &crate::docpipe::now_rfc3339(), Some(format!("im:{case_id}")), &pre),
+    };
+    scaffold_put(&mgr, &case_id, &sc)?;
+    scaffold_report(&mgr, &case_id, Some(sc))
+}
+
+/// The judge's own text for a section. Stored as written; no model, no filter, no suggestion.
+#[tauri::command]
+fn scaffold_set_text(app: AppHandle, vault: State<'_, VaultState>, case_id: String, section_kind: String, text: String) -> Result<serde_json::Value, String> {
+    let mgr = vault.get_or_init(&app)?;
+    edition::require_chambers(&edition_of(&mgr)?)?;
+    let mut sc = scaffold_stored(&mgr, &case_id)?.ok_or("CF_SCAFFOLD_NONE: create the scaffold from the record first")?;
+    judgment_scaffold::set_judge_text(&mut sc, &section_kind, &text)?;
+    scaffold_put(&mgr, &case_id, &sc)?;
+    scaffold_report(&mgr, &case_id, Some(sc))
+}
+
+#[tauri::command]
+fn scaffold_remove_sentence(app: AppHandle, vault: State<'_, VaultState>, case_id: String, section_kind: String, index: usize) -> Result<serde_json::Value, String> {
+    let mgr = vault.get_or_init(&app)?;
+    edition::require_chambers(&edition_of(&mgr)?)?;
+    let mut sc = scaffold_stored(&mgr, &case_id)?.ok_or("CF_SCAFFOLD_NONE: create the scaffold from the record first")?;
+    judgment_scaffold::remove_sentence(&mut sc, &section_kind, index)?;
+    scaffold_put(&mgr, &case_id, &sc)?;
+    scaffold_report(&mgr, &case_id, Some(sc))
+}
+
+/// Citation audit of the judge's own text in a section: allowed help, it checks and generates nothing.
+#[tauri::command]
+fn scaffold_audit_text(app: AppHandle, vault: State<'_, VaultState>, case_id: String, section_kind: String) -> Result<audit::AuditReport, String> {
+    let mgr = vault.get_or_init(&app)?;
+    let ctx = edition_of(&mgr)?;
+    edition::require_chambers(&ctx)?;
+    let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
+    edition::require_capability(&ctx, &paths.root, "citation_audit")?;
+    let sc = scaffold_stored(&mgr, &case_id)?.ok_or("CF_SCAFFOLD_NONE: create the scaffold from the record first")?;
+    let text = judgment_scaffold::judge_text(&sc, &section_kind);
+    if text.trim().is_empty() {
+        return Err("CF_AUDIT_EXTRACTION_FAILED: there is no text of yours in that section to check".into());
+    }
+    let store = retrieval::store::open(&paths)?;
+    let small = retrieval::build_small_corpus(&paths, &[])?;
+    let mut report = audit::audit_with_store(&store, &small, &text, "judge_text.txt", "txt", Some(case_id))?;
+    treatment::decorate_report(&paths, &store, &mut report);
+    Ok(report)
+}
+
+/// The scaffold as text, with the export footer and a statement of which sections were filled from the record.
+#[tauri::command]
+fn scaffold_export(app: AppHandle, vault: State<'_, VaultState>, case_id: String) -> Result<String, String> {
+    let mgr = vault.get_or_init(&app)?;
+    let ctx = edition_of(&mgr)?;
+    edition::require_chambers(&ctx)?;
+    edition::require_capability(&ctx, &mgr.vault_paths().map_err(|e| e.to_string())?.root, "memo_export")?;
+    let sc = scaffold_stored(&mgr, &case_id)?.ok_or("CF_SCAFFOLD_NONE: create the scaffold from the record first")?;
+    let names: std::collections::HashMap<String, String> = mgr.doc_list(&case_id).map_err(|e| e.to_string())?.into_iter().map(|d| (d.doc_id, d.original_filename)).collect();
+    Ok(judgment_scaffold::export_text(&sc, &names, &crate::docpipe::now_rfc3339()))
+}
+
 // --- B-S4-20 Daily Cause-List Brief ---
 
 #[derive(Deserialize)]
@@ -1299,11 +1436,14 @@ fn chambers_reason(app: AppHandle, vault: State<'_, VaultState>, case_id: String
     let paths = mgr.vault_paths().map_err(|e| e.to_string())?;
     edition::require_capability(&ctx, &paths.root, "reasoning")?;
     let (record_only_on, _) = chambers_record_only(&mgr, &case_id)?;
+    g8::check_input(&question)?; // B-S4-21: a request for a decision is refused here, before any model is called
     let run = reasoning_core(&mgr, &case_id, &question, depth, true)?;
     let classified = match run.result.ledger.as_ref() {
         Some(ledger) => record_only::classify(ledger, &run.sources, record_only_on),
         None => record_only::Classified { record_only: record_only_on, statements: vec![], withheld: vec![], rendered_text: String::new() },
     };
+    let mut classified = classified;
+    record_only::apply_decision_filter(&mut classified, &|t| g8::check_output(t).is_some());
     let guarded = guardrails::check_model_output(&question, &classified.rendered_text, &run.status.model, &[]);
     if guarded.refused {
         return Err("CF_REASONING_OUTPUT_REFUSED: the verified reasoning still failed the safety policy".into());
@@ -4491,6 +4631,12 @@ pub fn run() {
             chambers_audit_all,
             chambers_lookup,
             cause_list_import,
+            scaffold_get,
+            scaffold_prefill,
+            scaffold_set_text,
+            scaffold_remove_sentence,
+            scaffold_audit_text,
+            scaffold_export,
             cause_list_briefs,
             treatment_lookup,
             issue_matrix_build,

@@ -3002,3 +3002,17 @@ export async function causeListImport(request: { format: string; file_name?: str
 export async function causeListBriefs(courtLabel: string, listDate: string, format: string, sha256: string | null, entries: CauseListEntryIn[], confirmations: Record<string, string>): Promise<CauseListBriefs> {
   return invoke<CauseListBriefs>("cause_list_briefs", { courtLabel, listDate, format, sha256, entries, confirmations });
 }
+
+// --- B-S4-21 Judgment Scaffold ---
+export interface ScaffoldSentence { text: string; origin: "MACHINE_PREFILL" | "JUDGE_AUTHORED"; classification: string; locators: Record<string, unknown>[] }
+export interface ScaffoldSection { section_kind: string; assist_policy: "PREFILL_ALLOWED" | "LOCKED_JUDGE_ONLY"; sentences: ScaffoldSentence[] }
+export interface ScaffoldState {
+  scaffold: { schema_version: "1.0.0"; scaffold_id: string; case_id: string; created_at: string; record_only_locked: true; issue_matrix_id: string | null; sections: ScaffoldSection[] } | null;
+  exists: boolean; problems: string[]; documents: Record<string, string>; locked_sections: string[]; note: string;
+}
+export async function scaffoldGet(caseId: string): Promise<ScaffoldState> { return invoke<ScaffoldState>("scaffold_get", { caseId }); }
+export async function scaffoldPrefill(caseId: string): Promise<ScaffoldState> { return invoke<ScaffoldState>("scaffold_prefill", { caseId }); }
+export async function scaffoldSetText(caseId: string, sectionKind: string, text: string): Promise<ScaffoldState> { return invoke<ScaffoldState>("scaffold_set_text", { caseId, sectionKind, text }); }
+export async function scaffoldRemoveSentence(caseId: string, sectionKind: string, index: number): Promise<ScaffoldState> { return invoke<ScaffoldState>("scaffold_remove_sentence", { caseId, sectionKind, index }); }
+export async function scaffoldAuditText(caseId: string, sectionKind: string): Promise<AuditReport> { return invoke<AuditReport>("scaffold_audit_text", { caseId, sectionKind }); }
+export async function scaffoldExport(caseId: string): Promise<string> { return invoke<string>("scaffold_export", { caseId }); }

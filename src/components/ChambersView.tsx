@@ -23,12 +23,14 @@ const WHY: Record<string, string> = {
   NOT_VERIFIED: "did not match its source word for word",
   NOT_FROM_THE_RECORD: "came from the question, not the record",
   RESTS_ON_EXTRA_RECORD: "rested on something that is not on the record",
+  DECISION_LANGUAGE: "decided something, which this tool does not do",
 };
 const ERROR: Record<string, string> = {
   CF_EDITION_NOT_ENTITLED: "This belongs to the Chambers Edition, which needs a Judiciary licence.",
   CF_G7_LOCKED: "A judgment scaffold exists for this matter, so record-only mode stays on.",
   CF_EDITION_PILOT_DISABLED: "This court’s configuration has switched this off.",
   CF_EDITION_G7_FREE_GENERATION: "In the Chambers Edition the model can be reached only through this record-only screen.",
+  CF_GUARDRAIL_G8_DECISION_ZONE: "Refused: CaseForge does not write analysis, findings, holdings or orders, and does not say who should win. Those are for the judge alone. Ask where the record speaks to a point instead.",
 };
 
 function plain(e: unknown): string {

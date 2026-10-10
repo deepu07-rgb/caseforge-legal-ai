@@ -101,6 +101,7 @@ jobs:
           python eval/checks/chambers_record_only_b_s4_17.py --cargo-log cargo-test.log
           python eval/checks/chambers_lookup_b_s4_19.py --cargo-log cargo-test.log --evidence-dir evidence
           python eval/checks/cause_list_b_s4_20.py --cargo-log cargo-test.log --evidence-dir evidence
+          python eval/checks/judgment_scaffold_b_s4_21.py --cargo-log cargo-test.log --evidence-dir evidence
 
       - name: Upload gate reports
         if: always()
