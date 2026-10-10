@@ -1,0 +1,471 @@
+{
+  "schema_version": "1.0.0",
+  "golden": "G-BUNDLE",
+  "set": "bundle_core",
+  "batch": "B-S4-16",
+  "authored": "2026-10-10, before the engine. Synthetic. Expectations are hand-derived from the rules in docs/B-S4-16_bundles.md as pinned here: a term matches with optional whitespace between any two of its characters, longest terms first, in one pass; replacement is [REDACTED]; the count is the number of replacements.",
+  "description": "Items for a bundle, the redaction that must be applied to them and the byte-level absence that must follow, tamper and wrong-key behaviour, how a received correction is classified against the recipient's own, and the addresses the LAN transfer may use.",
+  "items": {
+    "document": {
+      "doc_id": "d1",
+      "filename": "Plaint of Ramesh Kumar.txt",
+      "type_tag": "PLAINT",
+      "language_tag": "en",
+      "page_count": 1,
+      "text": "Plaint. Ramesh Kumar, son of Mohan, filed this suit. RAMESH KUMAR says the defendant Suresh Verma holds the house. Ramesh\nKumar can be reached at 98765 43210 or 9876543210 or ramesh.k@example.org. \u0930\u092e\u0947\u0936 \u0915\u0941\u092e\u093e\u0930 is the plaintiff, written in Hindi. Suresh Verma denies it."
+    },
+    "graph": {
+      "profile": {
+        "cause_title": "Kumar v Verma",
+        "court": "District Court",
+        "jurisdiction": "India",
+        "matter_type": "Property partition civil appeal"
+      },
+      "graph": {
+        "parties": [
+          {
+            "party_id": "p1",
+            "name": "Ramesh Kumar",
+            "role": "plaintiff"
+          },
+          {
+            "party_id": "p2",
+            "name": "Suresh Verma",
+            "role": "defendant"
+          }
+        ],
+        "chronology": [
+          {
+            "event_id": "e1",
+            "date": "2020-03-01",
+            "description": "Suresh Verma took exclusive possession of the house"
+          }
+        ]
+      }
+    },
+    "tree": {
+      "limbs": [
+        {
+          "node_id": "L1",
+          "label": "Title passed by the registered sale deed",
+          "links": {
+            "Fact": 80,
+            "Evidence": 35,
+            "Law": 75,
+            "Exposure": 70
+          }
+        }
+      ]
+    },
+    "corrections": [
+      {
+        "event_id": "ev1",
+        "event_type": "CORRECT",
+        "target_kind": "graph_item",
+        "target_key": "cfat:v1:graph_item:chronology:e1:date",
+        "base_value": "2020-03-01",
+        "counsel_value": "2020-03-11",
+        "reason": "typo in the plaint",
+        "created_at_unix_ms": 1700000000000
+      },
+      {
+        "event_id": "ev2",
+        "event_type": "CORRECT",
+        "target_kind": "graph_item",
+        "target_key": "cfat:v1:graph_item:parties:p2:role",
+        "base_value": "defendant",
+        "counsel_value": "respondent",
+        "reason": "appeal posture",
+        "created_at_unix_ms": 1700000100000
+      }
+    ]
+  },
+  "notes_item": {
+    "text": "Senior: please check the sale deed exhibit before the hearing. Ramesh Kumar asked for the original."
+  },
+  "redactions": [
+    {
+      "text": "Ramesh Kumar",
+      "mode": "CASE_INSENSITIVE"
+    },
+    {
+      "text": "\u0930\u092e\u0947\u0936 \u0915\u0941\u092e\u093e\u0930",
+      "mode": "EXACT"
+    },
+    {
+      "text": "98765 43210",
+      "mode": "EXACT"
+    },
+    {
+      "text": "ramesh.k@example.org",
+      "mode": "CASE_INSENSITIVE"
+    }
+  ],
+  "expect_redacted": {
+    "document": {
+      "count": 8,
+      "filename": "Plaint of [REDACTED].txt",
+      "text": "Plaint. [REDACTED], son of Mohan, filed this suit. [REDACTED] says the defendant Suresh Verma holds the house. [REDACTED] can be reached at [REDACTED] or [REDACTED] or [REDACTED]. [REDACTED] is the plaintiff, written in Hindi. Suresh Verma denies it."
+    },
+    "graph": {
+      "count": 1,
+      "party_p1_name": "[REDACTED]",
+      "party_p2_name": "Suresh Verma"
+    },
+    "tree": {
+      "count": 0
+    },
+    "corrections": {
+      "count": 0
+    },
+    "notes": {
+      "count": 1
+    },
+    "log": {
+      "document": 8,
+      "graph": 1,
+      "notes": 1
+    },
+    "kept_unredacted": [
+      "Suresh Verma",
+      "Mohan",
+      "2020-03-11",
+      "Title passed by the registered sale deed"
+    ]
+  },
+  "must_be_absent_from_every_byte": [
+    {
+      "term": "Ramesh Kumar",
+      "forms": [
+        "Ramesh Kumar",
+        "RAMESH KUMAR",
+        "ramesh kumar",
+        "Ramesh\nKumar",
+        "RameshKumar"
+      ]
+    },
+    {
+      "term": "\u0930\u092e\u0947\u0936 \u0915\u0941\u092e\u093e\u0930",
+      "forms": [
+        "\u0930\u092e\u0947\u0936 \u0915\u0941\u092e\u093e\u0930",
+        "\u0930\u092e\u0947\u0936\u0915\u0941\u092e\u093e\u0930"
+      ]
+    },
+    {
+      "term": "98765 43210",
+      "forms": [
+        "98765 43210",
+        "9876543210",
+        "98765  43210"
+      ]
+    },
+    {
+      "term": "ramesh.k@example.org",
+      "forms": [
+        "ramesh.k@example.org",
+        "RAMESH.K@EXAMPLE.ORG"
+      ]
+    }
+  ],
+  "redaction_cases": [
+    {
+      "name": "exact name",
+      "terms": [
+        {
+          "text": "Ramesh Kumar",
+          "mode": "EXACT"
+        }
+      ],
+      "input": "Ramesh Kumar filed it.",
+      "output": "[REDACTED] filed it.",
+      "count": 1
+    },
+    {
+      "name": "exact is case sensitive",
+      "terms": [
+        {
+          "text": "Ramesh Kumar",
+          "mode": "EXACT"
+        }
+      ],
+      "input": "ramesh kumar filed it.",
+      "output": "ramesh kumar filed it.",
+      "count": 0
+    },
+    {
+      "name": "case insensitive",
+      "terms": [
+        {
+          "text": "suresh verma",
+          "mode": "CASE_INSENSITIVE"
+        }
+      ],
+      "input": "SURESH VERMA and Suresh Verma.",
+      "output": "[REDACTED] and [REDACTED].",
+      "count": 2
+    },
+    {
+      "name": "split across a line break",
+      "terms": [
+        {
+          "text": "Ramesh Kumar",
+          "mode": "EXACT"
+        }
+      ],
+      "input": "Ramesh\n   Kumar signed.",
+      "output": "[REDACTED] signed.",
+      "count": 1
+    },
+    {
+      "name": "no space at all",
+      "terms": [
+        {
+          "text": "Ramesh Kumar",
+          "mode": "EXACT"
+        }
+      ],
+      "input": "RameshKumar? No: RameshKumar.",
+      "output": "[REDACTED]? No: [REDACTED].",
+      "count": 2
+    },
+    {
+      "name": "overlapping terms: the longest wins and nothing is left",
+      "terms": [
+        {
+          "text": "Kumar",
+          "mode": "EXACT"
+        },
+        {
+          "text": "Ramesh Kumar",
+          "mode": "EXACT"
+        }
+      ],
+      "input": "Ramesh Kumar and Kumar.",
+      "output": "[REDACTED] and [REDACTED].",
+      "count": 2
+    },
+    {
+      "name": "a term that is not there",
+      "terms": [
+        {
+          "text": "Nobody Atall",
+          "mode": "EXACT"
+        }
+      ],
+      "input": "Nothing to hide.",
+      "output": "Nothing to hide.",
+      "count": 0
+    },
+    {
+      "name": "a replacement is not searched again",
+      "terms": [
+        {
+          "text": "red",
+          "mode": "CASE_INSENSITIVE"
+        }
+      ],
+      "input": "A red door.",
+      "output": "A [REDACTED] door.",
+      "count": 1
+    },
+    {
+      "name": "characters that mean something to a pattern are literal",
+      "terms": [
+        {
+          "text": "a.b (c)+",
+          "mode": "EXACT"
+        }
+      ],
+      "input": "x a.b (c)+ y aXb (c)+ z",
+      "output": "x [REDACTED] y aXb (c)+ z",
+      "count": 1
+    }
+  ],
+  "bad_redactions": [
+    {
+      "term": {
+        "text": "",
+        "mode": "EXACT"
+      }
+    },
+    {
+      "term": {
+        "text": "   ",
+        "mode": "EXACT"
+      }
+    },
+    {
+      "term": {
+        "text": "x",
+        "mode": "SOMETIMES"
+      }
+    }
+  ],
+  "correction_merge_cases": [
+    {
+      "name": "the recipient has no correction on that target",
+      "recipient": {},
+      "incoming": [
+        {
+          "target_key": "T1",
+          "counsel_value": "A",
+          "event_type": "CORRECT"
+        }
+      ],
+      "expect": [
+        {
+          "target_key": "T1",
+          "status": "SUGGESTED",
+          "recipient_value": null
+        }
+      ]
+    },
+    {
+      "name": "the recipient corrected the same target differently",
+      "recipient": {
+        "T1": "B"
+      },
+      "incoming": [
+        {
+          "target_key": "T1",
+          "counsel_value": "A",
+          "event_type": "CORRECT"
+        }
+      ],
+      "expect": [
+        {
+          "target_key": "T1",
+          "status": "CONFLICTS_WITH_YOUR_CORRECTION",
+          "recipient_value": "B"
+        }
+      ]
+    },
+    {
+      "name": "the recipient already made the same correction",
+      "recipient": {
+        "T1": "A"
+      },
+      "incoming": [
+        {
+          "target_key": "T1",
+          "counsel_value": "A",
+          "event_type": "CORRECT"
+        }
+      ],
+      "expect": [
+        {
+          "target_key": "T1",
+          "status": "SAME_AS_YOURS",
+          "recipient_value": "A"
+        }
+      ]
+    },
+    {
+      "name": "a reverted or deleted correction from the sender is shown, never applied",
+      "recipient": {
+        "T2": "B"
+      },
+      "incoming": [
+        {
+          "target_key": "T2",
+          "counsel_value": null,
+          "event_type": "REVERT"
+        },
+        {
+          "target_key": "T3",
+          "counsel_value": null,
+          "event_type": "DELETE"
+        }
+      ],
+      "expect": [
+        {
+          "target_key": "T2",
+          "status": "CONFLICTS_WITH_YOUR_CORRECTION",
+          "recipient_value": "B"
+        },
+        {
+          "target_key": "T3",
+          "status": "SUGGESTED",
+          "recipient_value": null
+        }
+      ]
+    },
+    {
+      "name": "several, in the sender's order",
+      "recipient": {
+        "T1": "B"
+      },
+      "incoming": [
+        {
+          "target_key": "T0",
+          "counsel_value": "Z",
+          "event_type": "CORRECT"
+        },
+        {
+          "target_key": "T1",
+          "counsel_value": "A",
+          "event_type": "CORRECT"
+        }
+      ],
+      "expect": [
+        {
+          "target_key": "T0",
+          "status": "SUGGESTED",
+          "recipient_value": null
+        },
+        {
+          "target_key": "T1",
+          "status": "CONFLICTS_WITH_YOUR_CORRECTION",
+          "recipient_value": "B"
+        }
+      ]
+    }
+  ],
+  "attribution": {
+    "display_name": "Priya Nair",
+    "created_at_unix_ms": 1791590400000,
+    "expect_label": "from Priya Nair, 2026-10-10"
+  },
+  "lan": {
+    "allowed": [
+      "127.0.0.1",
+      "10.1.2.3",
+      "172.16.5.4",
+      "172.31.255.255",
+      "192.168.1.20",
+      "169.254.1.1",
+      "::1",
+      "fd00::1",
+      "fe80::1"
+    ],
+    "refused": [
+      "8.8.8.8",
+      "172.32.0.1",
+      "192.169.0.1",
+      "100.64.0.1",
+      "0.0.0.0",
+      "224.0.0.1",
+      "2001:4860:4860::8888"
+    ]
+  },
+  "kinds": [
+    "DIGEST",
+    "DOCUMENT",
+    "GRAPH_SUBSET",
+    "ARGUMENT_TREE",
+    "IMPEACHMENT_KIT",
+    "AUDIT_REPORT",
+    "NOTES",
+    "COUNSEL_CORRECTIONS"
+  ],
+  "codes": {
+    "not_for_you": "CF_BUNDLE_NOT_FOR_YOU",
+    "tampered": "CF_BUNDLE_TAMPERED",
+    "bad_container": "CF_BUNDLE_BAD_FILE",
+    "unverified_peer": "CF_BUNDLE_PEER_UNVERIFIED",
+    "redaction_incomplete": "CF_BUNDLE_REDACTION_INCOMPLETE",
+    "bad_redaction": "CF_BUNDLE_BAD_REDACTION",
+    "unknown_sender": "CF_BUNDLE_UNKNOWN_SENDER",
+    "non_lan": "CF_BUNDLE_NON_LAN"
+  }
+}
