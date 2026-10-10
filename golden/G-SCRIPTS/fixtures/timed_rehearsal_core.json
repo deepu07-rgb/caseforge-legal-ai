@@ -1,0 +1,727 @@
+{
+  "schema_version": "1.0.0",
+  "golden": "G-SCRIPTS",
+  "set": "timed_rehearsal_core",
+  "batch": "B-S4-12",
+  "authored": "2026-10-10, before the engine. Expectations are derived by hand from the rules in contracts/rehearsal_policy.json and docs/B-S4-12_timed_rehearsal.md and were cross-checked with a separate throwaway prototype of the 'reached' rule (not the engine). Synthetic.",
+  "description": "A 4-limb argument tree and scripted rehearsal sessions with their expected timelines: timer, graceful end, which limbs were reached and for how long, which Missing Link each interruption comes from, and the findings the debrief states. The wording of the interruption text is pinned.",
+  "tree": {
+    "schema_version": "1.0.0",
+    "case_id": "golden_timed_rehearsal",
+    "generated_at": "2026-10-10T00:00:00Z",
+    "pipeline": {
+      "scorer_id": "caseforge.integrity.v1",
+      "builder_id": null,
+      "notes": "GOLDEN B-S4-12 synthetic tree"
+    },
+    "scoring_rules": {
+      "formula": "VI = 100 - min(Fact, Evidence, Law, Exposure)",
+      "missing_link_threshold": 60,
+      "link_scale": "0-100 integer",
+      "prd_ref": "\u00a78"
+    },
+    "relief_root": {
+      "node_id": "R1",
+      "node_role": "relief_root",
+      "label": "Partition of the ancestral house",
+      "jurisdiction": "India",
+      "relief_ref": null
+    },
+    "limbs": [
+      {
+        "node_id": "L1",
+        "node_role": "argument_limb",
+        "parent": "R1",
+        "label": "Title passed by the registered sale deed of 1998",
+        "theory": "The sale deed conveyed the whole house to the appellant.",
+        "links": {
+          "Fact": 80,
+          "Evidence": 35,
+          "Law": 75,
+          "Exposure": 70
+        },
+        "anchors": [
+          {
+            "node_id": "A1",
+            "node_role": "anchor_leaf",
+            "kind": "fact",
+            "ref": "f-deed",
+            "text": "The vendor executed a registered sale deed on 12 March 1998 conveying the whole house",
+            "case_graph_path": null
+          },
+          {
+            "node_id": "A2",
+            "node_role": "anchor_leaf",
+            "kind": "evidence",
+            "ref": "ex-p7",
+            "text": "Exhibit P-7 is the certified copy of the sale deed",
+            "case_graph_path": null
+          },
+          {
+            "node_id": "A3",
+            "node_role": "anchor_leaf",
+            "kind": "law",
+            "ref": "ta-s54",
+            "text": "Section 54 of the Transfer of Property Act governs sale of immovable property",
+            "case_graph_path": null
+          }
+        ]
+      },
+      {
+        "node_id": "L2",
+        "node_role": "argument_limb",
+        "parent": "R1",
+        "label": "The suit is within limitation",
+        "theory": "Possession became adverse only in 2005 so the suit is in time.",
+        "links": {
+          "Fact": 70,
+          "Evidence": 65,
+          "Law": 45,
+          "Exposure": 60
+        },
+        "anchors": [
+          {
+            "node_id": "A4",
+            "node_role": "anchor_leaf",
+            "kind": "fact",
+            "ref": "f-adverse",
+            "text": "Possession of the respondent became adverse only in 2005",
+            "case_graph_path": null
+          },
+          {
+            "node_id": "A5",
+            "node_role": "anchor_leaf",
+            "kind": "law",
+            "ref": "lim-65",
+            "text": "Article 65 of the Limitation Act applies to suits based on title",
+            "case_graph_path": null
+          }
+        ]
+      },
+      {
+        "node_id": "L3",
+        "node_role": "argument_limb",
+        "parent": "R1",
+        "label": "The brothers divided the house orally in 2010",
+        "theory": "An oral partition among the brothers took effect in 2010.",
+        "links": {
+          "Fact": 50,
+          "Evidence": 20,
+          "Law": 70,
+          "Exposure": 55
+        },
+        "anchors": [
+          {
+            "node_id": "A6",
+            "node_role": "anchor_leaf",
+            "kind": "fact",
+            "ref": "f-oral",
+            "text": "The brothers orally partitioned the ancestral house in 2010",
+            "case_graph_path": null
+          },
+          {
+            "node_id": "A7",
+            "node_role": "anchor_leaf",
+            "kind": "evidence",
+            "ref": "ev-none",
+            "text": "No document records the oral partition",
+            "case_graph_path": null
+          }
+        ]
+      },
+      {
+        "node_id": "L4",
+        "node_role": "argument_limb",
+        "parent": "R1",
+        "label": "Partition by metes and bounds is the proper relief",
+        "theory": "Relief follows once title is shown.",
+        "links": {
+          "Fact": 85,
+          "Evidence": 80,
+          "Law": 90,
+          "Exposure": 75
+        },
+        "anchors": [
+          {
+            "node_id": "A8",
+            "node_role": "anchor_leaf",
+            "kind": "law",
+            "ref": "pa-2",
+            "text": "Section 2 of the Partition Act 1893 allows division by metes and bounds",
+            "case_graph_path": null
+          },
+          {
+            "node_id": "A9",
+            "node_role": "anchor_leaf",
+            "kind": "fact",
+            "ref": "f-divisible",
+            "text": "The house can be physically divided",
+            "case_graph_path": null
+          }
+        ]
+      }
+    ],
+    "meta": {
+      "status": "GOLDEN",
+      "authoritative": true,
+      "fixture_id": "G-SCRIPTS/timed_rehearsal_core",
+      "difficulty": null
+    }
+  },
+  "missing_link_rank": [
+    "ml:L3:Evidence",
+    "ml:L1:Evidence",
+    "ml:L2:Law",
+    "ml:L3:Fact",
+    "ml:L3:Exposure"
+  ],
+  "limb_level_targets": [
+    "limb:L4"
+  ],
+  "responses": {
+    "r1": "My first point is title. The registered sale deed of 12 March 1998 conveyed the whole house to the appellant, exhibit P-7, under section 54 of the Transfer of Property Act.",
+    "r2": "On the sale deed again, the recitals show the vendor delivered possession.",
+    "r3": "The certified copy of the sale deed is exhibit P-7 and it is registered.",
+    "r4": "The exhibit was proved by the sub-registrar and the sale deed was admitted.",
+    "r5": "Turning to limitation, Article 65 of the Limitation Act: possession became adverse only in 2005.",
+    "r6": "The respondent's possession was never hostile before 2005, so the suit is in time.",
+    "r7": "In conclusion, partition by metes and bounds is the proper relief.",
+    "oral": "The brothers divided the house orally in 2010; the oral partition was acted upon.",
+    "polite": "May it please the court. I thank my learned friend for the courtesy."
+  },
+  "reach_cases": [
+    {
+      "text": "My first point is title. The registered sale deed of 12 March 1998 conveyed the whole house to the appellant, exhibit P-7, under section 54 of the Transfer of Property Act.",
+      "reaches": [
+        "L1"
+      ]
+    },
+    {
+      "text": "On the sale deed again, the recitals show the vendor delivered possession.",
+      "reaches": [
+        "L1"
+      ]
+    },
+    {
+      "text": "The certified copy of the sale deed is exhibit P-7 and it is registered.",
+      "reaches": [
+        "L1"
+      ]
+    },
+    {
+      "text": "The exhibit was proved by the sub-registrar and the sale deed was admitted.",
+      "reaches": [
+        "L1"
+      ]
+    },
+    {
+      "text": "Turning to limitation, Article 65 of the Limitation Act: possession became adverse only in 2005.",
+      "reaches": [
+        "L2"
+      ]
+    },
+    {
+      "text": "The respondent's possession was never hostile before 2005, so the suit is in time.",
+      "reaches": [
+        "L2"
+      ]
+    },
+    {
+      "text": "In conclusion, partition by metes and bounds is the proper relief.",
+      "reaches": [
+        "L4"
+      ]
+    },
+    {
+      "text": "The brothers divided the house orally in 2010; the oral partition was acted upon.",
+      "reaches": [
+        "L3"
+      ]
+    },
+    {
+      "text": "May it please the court. I thank my learned friend for the courtesy.",
+      "reaches": []
+    }
+  ],
+  "interruption_text": {
+    "ml:L1:Evidence": "Counsel, on \"Title passed by the registered sale deed of 1998\": the evidence is weak (35 of 100; the threshold is 60). What is your answer?",
+    "ml:L2:Law": "Counsel, on \"The suit is within limitation\": the legal authority is weak (45 of 100; the threshold is 60). What is your answer?",
+    "ml:L3:Evidence": "Counsel, on \"The brothers divided the house orally in 2010\": the evidence is weak (20 of 100; the threshold is 60). What is your answer?",
+    "ml:L3:Fact": "Counsel, on \"The brothers divided the house orally in 2010\": the factual basis is weak (50 of 100; the threshold is 60). What is your answer?",
+    "ml:L3:Exposure": "Counsel, on \"The brothers divided the house orally in 2010\": the exposure to the other side's answer is weak (55 of 100; the threshold is 60). What is your answer?",
+    "limb:L4": "Counsel, on \"Partition by metes and bounds is the proper relief\": this is one of your weaker points (vulnerability 25 of 100). What is your answer?"
+  },
+  "session_five_minutes": {
+    "slot_seconds": 300,
+    "rate": "MEDIUM",
+    "archetype_id": "evidence_heavy",
+    "responses": [
+      {
+        "at_s": 20,
+        "key": "r1"
+      },
+      {
+        "at_s": 70,
+        "key": "r2"
+      },
+      {
+        "at_s": 100,
+        "key": "r3"
+      },
+      {
+        "at_s": 130,
+        "key": "r4"
+      },
+      {
+        "at_s": 170,
+        "key": "r5"
+      },
+      {
+        "at_s": 200,
+        "key": "r6"
+      },
+      {
+        "at_s": 240,
+        "key": "r7"
+      }
+    ],
+    "final_poll_ms": 300400,
+    "expect": {
+      "ended_by": "TIME_EXPIRED",
+      "events": [
+        {
+          "t_ms": 0,
+          "kind": "SESSION_START",
+          "limb_node_id": null,
+          "turn_id": null,
+          "grounding_ref": null
+        },
+        {
+          "t_ms": 20000,
+          "kind": "USER_RESPONSE",
+          "limb_node_id": "L1",
+          "turn_id": "t1",
+          "grounding_ref": null
+        },
+        {
+          "t_ms": 20000,
+          "kind": "LIMB_REACHED",
+          "limb_node_id": "L1",
+          "turn_id": "t1",
+          "grounding_ref": null
+        },
+        {
+          "t_ms": 70000,
+          "kind": "USER_RESPONSE",
+          "limb_node_id": "L1",
+          "turn_id": "t2",
+          "grounding_ref": null
+        },
+        {
+          "t_ms": 100000,
+          "kind": "USER_RESPONSE",
+          "limb_node_id": "L1",
+          "turn_id": "t3",
+          "grounding_ref": null
+        },
+        {
+          "t_ms": 100000,
+          "kind": "INTERRUPTION",
+          "limb_node_id": "L1",
+          "turn_id": "t3",
+          "grounding_ref": "ml:L1:Evidence"
+        },
+        {
+          "t_ms": 130000,
+          "kind": "USER_RESPONSE",
+          "limb_node_id": "L1",
+          "turn_id": "t4",
+          "grounding_ref": null
+        },
+        {
+          "t_ms": 170000,
+          "kind": "USER_RESPONSE",
+          "limb_node_id": "L2",
+          "turn_id": "t5",
+          "grounding_ref": null
+        },
+        {
+          "t_ms": 170000,
+          "kind": "LIMB_REACHED",
+          "limb_node_id": "L2",
+          "turn_id": "t5",
+          "grounding_ref": null
+        },
+        {
+          "t_ms": 200000,
+          "kind": "USER_RESPONSE",
+          "limb_node_id": "L2",
+          "turn_id": "t6",
+          "grounding_ref": null
+        },
+        {
+          "t_ms": 200000,
+          "kind": "INTERRUPTION",
+          "limb_node_id": "L2",
+          "turn_id": "t6",
+          "grounding_ref": "ml:L2:Law"
+        },
+        {
+          "t_ms": 240000,
+          "kind": "TIME_WARNING",
+          "limb_node_id": null,
+          "turn_id": null,
+          "grounding_ref": null
+        },
+        {
+          "t_ms": 240000,
+          "kind": "USER_RESPONSE",
+          "limb_node_id": "L4",
+          "turn_id": "t7",
+          "grounding_ref": null
+        },
+        {
+          "t_ms": 240000,
+          "kind": "LIMB_REACHED",
+          "limb_node_id": "L4",
+          "turn_id": "t7",
+          "grounding_ref": null
+        },
+        {
+          "t_ms": 270000,
+          "kind": "TIME_WARNING",
+          "limb_node_id": null,
+          "turn_id": null,
+          "grounding_ref": null
+        },
+        {
+          "t_ms": 300000,
+          "kind": "TIME_EXPIRED",
+          "limb_node_id": null,
+          "turn_id": null,
+          "grounding_ref": null
+        },
+        {
+          "t_ms": 300000,
+          "kind": "SESSION_END",
+          "limb_node_id": null,
+          "turn_id": null,
+          "grounding_ref": null
+        }
+      ],
+      "limbs": [
+        {
+          "limb_node_id": "L1",
+          "reached": true,
+          "first_reached_ms": 20000,
+          "time_spent_ms": 130000,
+          "interruptions": 1
+        },
+        {
+          "limb_node_id": "L2",
+          "reached": true,
+          "first_reached_ms": 170000,
+          "time_spent_ms": 70000,
+          "interruptions": 1
+        },
+        {
+          "limb_node_id": "L3",
+          "reached": false,
+          "first_reached_ms": null,
+          "time_spent_ms": 0,
+          "interruptions": 0
+        },
+        {
+          "limb_node_id": "L4",
+          "reached": true,
+          "first_reached_ms": 240000,
+          "time_spent_ms": 100000,
+          "interruptions": 0
+        }
+      ],
+      "findings": [
+        {
+          "text": "You did not reach \"The brothers divided the house orally in 2010\" in this slot.",
+          "source": {
+            "kind": "TIMELINE_LIMB",
+            "limb_node_id": "L3",
+            "event_index": null
+          }
+        },
+        {
+          "text": "You spent 130 s of 300 s (43%) on \"Title passed by the registered sale deed of 1998\".",
+          "source": {
+            "kind": "TIMELINE_LIMB",
+            "limb_node_id": "L1",
+            "event_index": null
+          }
+        },
+        {
+          "text": "You spent 70 s of 300 s (23%) on \"The suit is within limitation\".",
+          "source": {
+            "kind": "TIMELINE_LIMB",
+            "limb_node_id": "L2",
+            "event_index": null
+          }
+        },
+        {
+          "text": "You spent 100 s of 300 s (33%) on \"Partition by metes and bounds is the proper relief\".",
+          "source": {
+            "kind": "TIMELINE_LIMB",
+            "limb_node_id": "L4",
+            "event_index": null
+          }
+        },
+        {
+          "text": "The bench interrupted you at 01:40 on \"Title passed by the registered sale deed of 1998\" (from your Missing Links: evidence, 35 of 100).",
+          "source": {
+            "kind": "TIMELINE_EVENT",
+            "limb_node_id": "L1",
+            "event_index": 5
+          }
+        },
+        {
+          "text": "The bench interrupted you at 03:20 on \"The suit is within limitation\" (from your Missing Links: legal authority, 45 of 100).",
+          "source": {
+            "kind": "TIMELINE_EVENT",
+            "limb_node_id": "L2",
+            "event_index": 10
+          }
+        }
+      ],
+      "never_reached": [
+        "L3"
+      ]
+    }
+  },
+  "session_timer": {
+    "slot_seconds": 120,
+    "rate": "NONE",
+    "polls_ms": [
+      59999,
+      60000,
+      89999,
+      90000,
+      119999,
+      120000
+    ],
+    "expect_events_by_poll": {
+      "59999": [],
+      "60000": [
+        {
+          "t_ms": 60000,
+          "kind": "TIME_WARNING"
+        }
+      ],
+      "89999": [],
+      "90000": [
+        {
+          "t_ms": 90000,
+          "kind": "TIME_WARNING"
+        }
+      ],
+      "119999": [],
+      "120000": [
+        {
+          "t_ms": 120000,
+          "kind": "TIME_EXPIRED"
+        },
+        {
+          "t_ms": 120000,
+          "kind": "SESSION_END"
+        }
+      ]
+    },
+    "accepted_at_ms": 119999,
+    "refused_at_ms": [
+      120000,
+      120001
+    ],
+    "refusal_code": "CF_REHEARSAL_TIME_UP"
+  },
+  "session_shortest_slot": {
+    "slot_seconds": 60,
+    "expect_warning_times_ms": [
+      30000
+    ]
+  },
+  "session_rate_none": {
+    "slot_seconds": 600,
+    "rate": "NONE",
+    "response_times_s": [
+      10,
+      20,
+      30,
+      40,
+      50,
+      60,
+      70,
+      80,
+      90,
+      100,
+      110,
+      120,
+      130,
+      140,
+      150,
+      160,
+      170,
+      180,
+      190,
+      200,
+      210,
+      220,
+      230,
+      240,
+      250,
+      260,
+      270,
+      280,
+      290,
+      300,
+      310,
+      320,
+      330,
+      340,
+      350,
+      360,
+      370,
+      380,
+      390,
+      400,
+      410,
+      420,
+      430,
+      440,
+      450,
+      460,
+      470,
+      480,
+      490,
+      500,
+      510,
+      520,
+      530,
+      540,
+      550,
+      560,
+      570,
+      580
+    ],
+    "expect_interruptions": 0
+  },
+  "session_high": {
+    "slot_seconds": 360,
+    "rate": "HIGH",
+    "response_text_key": "oral",
+    "response_times_s": [
+      10,
+      20,
+      30,
+      40,
+      50,
+      60,
+      70,
+      80,
+      90,
+      100,
+      110,
+      120,
+      130,
+      140,
+      150,
+      160,
+      170,
+      180,
+      190,
+      200,
+      210,
+      220,
+      230,
+      240,
+      250,
+      260,
+      270,
+      280,
+      290,
+      300,
+      310,
+      320,
+      330,
+      340,
+      350
+    ],
+    "expect_interruptions_at_s": {
+      "50": "ml:L3:Evidence",
+      "100": "ml:L3:Fact",
+      "150": "ml:L3:Exposure",
+      "200": "ml:L1:Evidence",
+      "250": "ml:L2:Law",
+      "300": "limb:L4"
+    },
+    "expect_total_interruptions": 6
+  },
+  "interval_ms": {
+    "NONE": null,
+    "LOW": 180000,
+    "MEDIUM": 90000,
+    "HIGH": 45000
+  },
+  "default_rate_by_archetype_interruption": [
+    {
+      "interruption": 70,
+      "rate": "HIGH"
+    },
+    {
+      "interruption": 45,
+      "rate": "MEDIUM"
+    },
+    {
+      "interruption": 40,
+      "rate": "MEDIUM"
+    },
+    {
+      "interruption": 35,
+      "rate": "LOW"
+    },
+    {
+      "interruption": 30,
+      "rate": "LOW"
+    },
+    {
+      "interruption": 0,
+      "rate": "NONE"
+    }
+  ],
+  "slot_validation": {
+    "ok_seconds": [
+      60,
+      120,
+      300,
+      600,
+      900,
+      1800,
+      7200
+    ],
+    "refused_seconds": [
+      0,
+      59,
+      7201,
+      -5
+    ]
+  },
+  "start_refused": [
+    {
+      "case": "no limbs in the tree",
+      "code": "CF_REHEARSAL_NO_TREE"
+    },
+    {
+      "case": "unknown rate",
+      "code": "CF_REHEARSAL_BAD_RATE"
+    },
+    {
+      "case": "slot out of range",
+      "code": "CF_REHEARSAL_BAD_SLOT"
+    }
+  ]
+}

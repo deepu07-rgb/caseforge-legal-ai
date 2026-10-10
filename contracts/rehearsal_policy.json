@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.0.0",
+  "product": "CaseForge",
+  "batch": "B-S4-12",
+  "status": "PROPOSED_AWAITING_OWNER_APPROVAL",
+  "description": "Rules of Timed Oral Rehearsal (PRD v4.0 section 7.7). Data, not code. The slot presets and the timer accuracy are the PROPOSED thresholds S4.rehearsal.slot_presets_min and S4.rehearsal.timer_accuracy_max_s; the other values are this batch's proposals and are open to the owner. Pinned before the engine with golden/G-SCRIPTS/fixtures/timed_rehearsal_core.json.",
+  "threshold_ids": [
+    "S4.rehearsal.timer_accuracy_max_s",
+    "S4.rehearsal.slot_presets_min"
+  ],
+  "slot": {
+    "presets_seconds": [
+      120,
+      300,
+      600,
+      900,
+      1800
+    ],
+    "min_seconds": 60,
+    "max_seconds": 7200
+  },
+  "timer_accuracy_max_ms": 1000,
+  "warnings_remaining_seconds": [
+    60,
+    30
+  ],
+  "expiry": "A response arriving at or after the limit is refused with CF_REHEARSAL_TIME_UP; the session has already ended and nothing is lost: the unsent text stays on screen.",
+  "interruption_interval_ms": {
+    "NONE": null,
+    "LOW": 180000,
+    "MEDIUM": 90000,
+    "HIGH": 45000
+  },
+  "interruption_rule": "After a response at time t, the bench interrupts if the rate is not NONE and t - (time of the last interruption, or 0) >= the interval and an unused target remains.",
+  "default_rate_by_archetype_interruption": [
+    {
+      "min_interruption": 60,
+      "rate": "HIGH"
+    },
+    {
+      "min_interruption": 40,
+      "rate": "MEDIUM"
+    },
+    {
+      "min_interruption": 1,
+      "rate": "LOW"
+    },
+    {
+      "min_interruption": 0,
+      "rate": "NONE"
+    }
+  ],
+  "target_order": [
+    "The matched limb's unused Missing Links, in Missing Link rank order",
+    "else the highest-ranked unused Missing Link overall",
+    "else the limbs that have no Missing Link, weakest first (highest VI)"
+  ],
+  "reach": {
+    "min_token_length": 4,
+    "weight_one_limb": 1.0,
+    "weight_two_limbs": 0.5,
+    "weight_three_or_more": 0.0,
+    "min_score": 2.0,
+    "stopwords": [
+      "that",
+      "this",
+      "with",
+      "from",
+      "have",
+      "been",
+      "were",
+      "will",
+      "would",
+      "shall",
+      "their",
+      "there",
+      "which",
+      "about",
+      "under",
+      "again",
+      "before",
+      "after",
+      "into",
+      "upon",
+      "only",
+      "also",
+      "then",
+      "than",
+      "them",
+      "they",
+      "your",
+      "what",
+      "when",
+      "where",
+      "while",
+      "does",
+      "done",
+      "made",
+      "make",
+      "most",
+      "more",
+      "much",
+      "must",
+      "never",
+      "over",
+      "such",
+      "some",
+      "same",
+      "very",
+      "show",
+      "shows"
+    ],
+    "vocabulary": "label, theory and every anchor's text and ref of the limb; tokens are lower-case runs of letters and digits"
+  },
+  "time_attribution": "Time between the last bench event (or the previous response) and a response goes to the limbs that response reached, split equally; with none reached it goes to the limb the user was last on. At the end the time since the last response goes to the limb the user was last on."
+}
