@@ -1,6 +1,6 @@
 {
   "batch": "B-S4-00",
-  "generated_at": "2026-10-07T22:19:03Z",
+  "generated_at": "2026-10-11T11:15:24Z",
   "default_model": "qwen2.5:7b",
   "addon_model": null,
   "tier_contracts_valid": true,
@@ -8,14 +8,14 @@
     "AC-S4-00.1": {
       "status": "WAIVED",
       "waiver": "W-AC-S4-00.1",
-      "measured_gib": 5.082,
+      "measured_gib": 5.093,
       "cap_gib": 4.0,
       "target_gib": 3.0,
       "breakdown_gib": {
         "default_model": 4.377,
         "speech": 0.453,
         "runtime_core": 0.143,
-        "app": 0.109
+        "app": 0.12
       },
       "excluded_optional_gib": {
         "addon_model": 0.0,
@@ -81,12 +81,13 @@
       "reason": null
     },
     "AC-S4-00.7": {
-      "status": "FAIL",
+      "status": "WAIVED",
       "report": "b_s4_00_heldout_inj_qwen2_5_7b_default.json",
       "score": 0.875,
       "failed": [
         "INJ2-US-1"
-      ]
+      ],
+      "waiver": "W-AC-S4-00.7"
     },
     "AC-S4-00.8": {
       "status": "PASS",
@@ -102,7 +103,17 @@
       "src-tauri/src/authority/mod.rs",
       "src-tauri/src/packs/mod.rs",
       "src-tauri/src/guardrails/mod.rs",
-      "src-tauri/src/answer_feedback.rs"
+      "src-tauri/src/answer_feedback.rs",
+      "src-tauri/src/reasoning.rs",
+      "src-tauri/src/deadlines.rs",
+      "src-tauri/src/foundation.rs",
+      "src-tauri/src/issue_matrix.rs",
+      "src-tauri/src/treatment.rs",
+      "src-tauri/src/record_only.rs",
+      "src-tauri/src/chambers_lookup.rs",
+      "src-tauri/src/cause_list.rs",
+      "src-tauri/src/judgment_scaffold.rs",
+      "src-tauri/src/g8.rs"
     ],
     "offenders": []
   },

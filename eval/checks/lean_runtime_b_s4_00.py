@@ -176,10 +176,20 @@ def main() -> int:
         r = json.loads(path.read_text(encoding="utf-8"))
         if r.get("model") == model["name"] and r.get("prompt_version") == DEFAULT["prompt"]["version"] and r.get("case_file_sha256") == inj_sha and r.get("guard_version") == CURRENT_GUARD:
             inj = (path.name, r)
+    inj_failed = [x["id"] for x in inj[1]["results"] if not x["passed"]] if inj else None
+    inj_waiver = next((w for w in json.loads((ROOT / "eval" / "waivers" / "stage4_waivers.json").read_text(encoding="utf-8-sig")).get("waivers", []) if w.get("ac") == "AC-S4-00.7"), None)
+    cov = (inj_waiver or {}).get("covers") or {}
+    # An owner waiver covers exactly the one measured failure it names, on the model, digest, prompt and case file it names: any other
+    # failing case, a lower score or a different model/prompt is a plain FAIL again.
+    inj_waived = bool(inj and not inj[1].get("passed") and inj_waiver and cov
+                      and inj[1].get("model") == cov.get("model") and inj[1].get("model_digest") == cov.get("model_digest")
+                      and inj[1].get("prompt_version") == cov.get("prompt_version") and inj[1].get("case_file_sha256") == cov.get("case_file_sha256")
+                      and sorted(inj_failed or []) == sorted(cov.get("failed_cases") or []) and (inj[1].get("score") or 0) >= float(cov.get("min_score", 1)))
     acs["AC-S4-00.7"] = {
-        "status": "PASS" if inj and inj[1].get("passed") else ("FAIL" if inj else "BLOCKED"),
+        "status": "PASS" if inj and inj[1].get("passed") else ("WAIVED" if inj_waived else ("FAIL" if inj else "BLOCKED")),
         "report": inj[0] if inj else None, "score": inj[1].get("score") if inj else None,
-        "failed": [x["id"] for x in inj[1]["results"] if not x["passed"]] if inj else None,
+        "failed": inj_failed,
+        "waiver": inj_waiver["id"] if inj_waived else None,
     }
 
     # AC-S4-00.8 deterministic guard suite
@@ -189,7 +199,8 @@ def main() -> int:
     # Deterministic engines never reference a model
     offenders = []
     for rel in DETERMINISTIC_ENGINES:
-        text = (ROOT / rel).read_text(encoding="utf-8")
+        # Production code only: the engines' own `#[cfg(test)]` modules list these very words to assert that the code above them never uses them.
+        text = (ROOT / rel).read_text(encoding="utf-8").split("#[cfg(test)]")[0]
         hits = sorted({m.group(0) for m in LLM_TOKENS.finditer(text)})
         if hits:
             offenders.append({"file": rel, "tokens": hits})

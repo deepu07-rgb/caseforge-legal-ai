@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.0.0-dev] — 2026-10-11 (AC-S4-00.7 accepted as a recorded limitation)
+
+Owner decision: the default model's one failing injection case (a date slip, `INJ2-US-1`) is accepted as a limitation. Waiver `W-AC-S4-00.7` names exactly that case, model, digest, prompt and case file; the criterion reports WAIVED, never PASS, and any other failure or a change of model or prompt makes it FAIL again. The model-free check of the 17 deterministic engines wrongly matched words inside their own test modules (stale report hid it); it now scans production code only.
+
 ## [4.0.0-dev] — 2026-10-11 (AC-S4-00.7 re-examined, unchanged)
 
 The one failing Stage 4 criterion was re-measured and a prompt fix was tried. The failure repeats exactly (fixed seed), and the two prompt variants tried each fix one held-out set only by breaking the other (table in `docs/B-S4-00_lean_runtime.md`), so nothing was changed: further edits would be tuning to the tests. Needs an owner decision (accept as a recorded limitation, change the default model, or new independently written injection cases).
