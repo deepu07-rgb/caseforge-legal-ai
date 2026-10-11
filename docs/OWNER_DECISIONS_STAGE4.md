@@ -48,9 +48,22 @@ Measured character error on rendered pages: **0.0056 clean, 0.0024 degraded** (a
 
 ### D4 — RAM ceiling (Q-S4-12, AC-S4-00.4). Unlocks AC-S4-00.4
 
-The worksheet proposes **4.5 GiB peak** with the default model. That number was written when the default was a 3B/4B model. The default is now `qwen2.5:7b`, and its model alone is **5.4 GB resident** on this laptop (58 % CPU / 42 % GPU), so approving 4.5 GiB would turn this criterion into a failure.
+The worksheet proposes **4.5 GiB peak** with the default model. That number was written when the default was a 3B/4B model. The default is now `qwen2.5:7b`. It has been **measured** (2026-10-11, real app, `qwen2.5:7b`, a Mock Court session on a synthetic matter, memory of every process sampled once a second):
 
-**Recommendation:** replace the number rather than approve it: either state a ceiling for the 7B that sits clearly above that (I have not measured the whole-app peak; I would measure it first, then add headroom) and say the Full tier (8 GB+) is required, or go back to a smaller default model and accept its weaker results (the bake-off found none that passes every gate). The disk-allocation table in the same worksheet needs the same restatement (the 7B model alone is 4.4 GiB).
+| Part | Peak working set (RAM in use) |
+|---|---|
+| Desktop app | 0.1 GB |
+| Web view (the screen engine) | 0.2-0.5 GB |
+| Python sidecars (reading, search, model gateway) | up to 0.55 GB |
+| Model runner (`llama-server`) | **2.9 GB**, on top of 2.3 GB held in graphics memory |
+| **Whole app, simultaneous peak** | **about 3.1 GB observed in the run that included the model; about 3.7 GB if the biggest observed web-view/sidecar peaks coincide with it** |
+
+What that means:
+* **On a machine with a GPU like this one** (4 GB card: the 7B model splits 58 % processor / 42 % graphics memory, 5.4 GB in all), whole-app RAM stays **under** the proposed 4.5 GiB (4.83 GB). The criterion would pass here.
+* **On a machine with no usable GPU**, the whole 5.4 GB model sits in RAM, so the same session needs roughly **6.2 GB** (my estimate: 5.4 + the app parts above; not measured, I have no CPU-only machine). 4.5 GiB would fail there, and the Full tier's 8 GB minimum would be tight.
+* Caveats: these figures come from an unoptimised development build; the PC was short of free memory (0.4 of 15.7 GB), so Windows had already trimmed idle working sets and the numbers are lower bounds; OCR of a large scan and Hindi translation were not part of this run; the figure "private/commit" memory reads 7+ GB because the graphics runtime reserves address space, and is not a usable measure.
+
+**Recommendation:** state the ceiling per hardware class instead of one number: **4.5 GiB of RAM when a GPU of 4 GB or more carries part of the model, about 6.5 GiB when the model runs on the processor alone** (the second is an estimate and should be measured on a CPU-only machine before you rely on it), and keep 8 GB as the Full-tier minimum. The disk-allocation table in the same worksheet still needs restating (the 7B model alone is 4.4 GiB).
 
 ## Decisions that change the product but block no criterion
 
