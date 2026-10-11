@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.0.0-dev] — 2026-10-11 (Mock Court turn limit kept at 15 s)
+
+Owner decision: the 15-second Mock Court turn limit stays. On hardware below the Full reference tier a model turn may fall back to the labelled deterministic rehearsal; no tuning for smaller machines. Recorded in `docs/E2E_RUN_2026-10-11.md`.
+
 ## [4.0.0-dev] — 2026-10-11 (AC-S4-00.7 accepted as a recorded limitation)
 
 Owner decision: the default model's one failing injection case (a date slip, `INJ2-US-1`) is accepted as a limitation. Waiver `W-AC-S4-00.7` names exactly that case, model, digest, prompt and case file; the criterion reports WAIVED, never PASS, and any other failure or a change of model or prompt makes it FAIL again. The model-free check of the 17 deterministic engines wrongly matched words inside their own test modules (stale report hid it); it now scans production code only.
