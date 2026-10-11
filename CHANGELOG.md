@@ -10,7 +10,7 @@ The one failing Stage 4 criterion was re-measured and a prompt fix was tried. Th
 
 ## [4.0.0-dev] — 2026-10-11 (Mock Court's model is ready, and a long prompt can reach it)
 
-Found by driving the real app. The local model is kept loaded for the app's own two-minute idle window and is loaded when the Mock Court screen opens, so the first turn no longer pays a 12 s cold start inside its 15 s limit on a 4 GB laptop. A long rehearsal prompt failed to start the model at all on Windows (the request was a command-line argument, over the 32,000-character limit; os error 206); it now goes in on standard input as UTF-8. Gate: `eval/checks/model_warmup_e2e.py`. A real turn's timing on this PC was not re-measured after the second fix.
+Found by driving the real app. The local model is kept loaded for the app's own two-minute idle window and is loaded when the Mock Court screen opens, so the first turn no longer pays a 12 s cold start inside its 15 s limit on a 4 GB laptop. A long rehearsal prompt failed to start the model at all on Windows (the request was a command-line argument, over the 32,000-character limit; os error 206); it now goes in on standard input as UTF-8. Gate: `eval/checks/model_warmup_e2e.py`. Re-measured in the real app afterwards: the model is loaded and the long request reaches it, but on this 4 GB-GPU laptop a full turn still takes over 15 s (generation alone is 14-16 s at 7 tokens a second), so it falls back to the labelled deterministic rehearsal; the limit and the token cap are left as they are (owner decision).
 
 ## [4.0.0-dev] — 2026-10-11 (relief, exhibits and authority suggestions)
 
