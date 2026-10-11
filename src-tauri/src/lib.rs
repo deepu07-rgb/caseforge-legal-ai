@@ -1897,6 +1897,12 @@ fn impeach_model_scan(app: AppHandle, vault: State<'_, VaultState>, case_id: Str
                           "model_fingerprint": fingerprint}))
 }
 
+/// Loads the local model in the background (a Mock Court screen asks for it on opening). Runs off the main thread; a failure is not an error.
+#[tauri::command(async)]
+fn llm_warm() -> serde_json::Value {
+    infer_llm::warm()
+}
+
 #[tauri::command]
 fn llm_status() -> infer_llm::LlmStatus {
     infer_llm::status()
@@ -5202,6 +5208,7 @@ pub fn run() {
             working_set_confirm_regime,
             working_set_select_for_output,
             llm_status,
+            llm_warm,
             audit_draft,
             audit_certificate_issue,
             audit_certificate_verify,

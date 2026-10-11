@@ -105,6 +105,7 @@ jobs:
           python eval/checks/editions_b_s4_22.py --cargo-log cargo-test.log --evidence-dir evidence
           python eval/checks/timed_rehearsal_b_s4_12.py --cargo-log cargo-test.log --evidence-dir evidence
           python eval/checks/bundle_b_s4_16.py --cargo-log cargo-test.log --evidence-dir evidence
+          python eval/checks/model_warmup_e2e.py
           python eval/checks/translation_b_s4_15.py --cargo-log cargo-test.log --evidence-dir evidence
           python eval/checks/goldens_b_s4_02.py
           python eval/checks/ship_gate_b_s4_23.py --cargo-log cargo-test.log --evidence-dir evidence

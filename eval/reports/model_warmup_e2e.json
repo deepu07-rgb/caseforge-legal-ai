@@ -1,0 +1,6 @@
+{
+  "batch": "B-S4-e2e",
+  "keep_alive_seconds": 120,
+  "choreography_idle_seconds": 120,
+  "errors": []
+}

@@ -39,6 +39,7 @@ import {
   speechStatus,
   speechStt,
   speechWarmup,
+  llmWarm,
   type DebriefTurnInput,
   type AnswerFeedback,
   type MockCourtDebriefV2,
@@ -155,6 +156,11 @@ export default function MockCourtView({
     const t = window.setInterval(() => setTick((n) => n + 1), 1000);
     return () => window.clearInterval(t);
   }, []);
+
+  // load the model while the lawyer reads the screen and types, so the first turn is not a cold start inside its 15-second limit
+  useEffect(() => {
+    void llmWarm().catch(() => undefined);
+  }, [activeCase?.case_id]);
 
   useEffect(() => {
     setSessionTurns([]);

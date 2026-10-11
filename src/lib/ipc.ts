@@ -171,6 +171,11 @@ export async function llmStatus(): Promise<LlmStatus> {
   return invoke<LlmStatus>("llm_status");
 }
 
+/** Ask the host to load the local model now (best effort, returns when it is loaded or could not be). */
+export async function llmWarm(): Promise<{ warmed: boolean; elapsed_ms?: number; reason?: string }> {
+  return invoke("llm_warm");
+}
+
 export async function llmTiers(): Promise<LlmTiers> {
   return invoke<LlmTiers>("llm_tiers");
 }

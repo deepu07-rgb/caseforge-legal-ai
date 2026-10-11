@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-11T01:27:49Z",
+  "generated_at": "2026-10-11T06:42:23Z",
   "steps": [
     {
       "name": "rust_tests",
@@ -11,17 +11,17 @@
     {
       "name": "ci_gates",
       "exit": 0,
-      "seconds": 9.0,
+      "seconds": 11.5,
       "gates": [
         {
           "gate": "contracts_b_s4_01.py",
           "exit": 0,
-          "seconds": 0.8
+          "seconds": 0.7
         },
         {
           "gate": "injection_guard_b_s4_00.py",
           "exit": 0,
-          "seconds": 0.3
+          "seconds": 0.2
         },
         {
           "gate": "answer_feedback_b_s4_00b.py",
@@ -41,12 +41,12 @@
         {
           "gate": "opposing_scan_b_s4_06.py",
           "exit": 0,
-          "seconds": 0.4
+          "seconds": 0.3
         },
         {
           "gate": "witness_matrix_b_s4_07.py",
           "exit": 0,
-          "seconds": 0.3
+          "seconds": 0.4
         },
         {
           "gate": "impeachment_b_s4_08.py",
@@ -56,7 +56,7 @@
         {
           "gate": "rule_tables_b_s4_03.py",
           "exit": 0,
-          "seconds": 0.1
+          "seconds": 0.2
         },
         {
           "gate": "code_bridge_b_s4_09.py",
@@ -71,7 +71,7 @@
         {
           "gate": "deadlines_b_s4_11.py",
           "exit": 0,
-          "seconds": 0.3
+          "seconds": 0.4
         },
         {
           "gate": "foundation_b_s4_10.py",
@@ -81,7 +81,7 @@
         {
           "gate": "issue_matrix_b_s4_18.py",
           "exit": 0,
-          "seconds": 0.4
+          "seconds": 0.3
         },
         {
           "gate": "treatment_b_s4_13.py",
@@ -101,12 +101,12 @@
         {
           "gate": "cause_list_b_s4_20.py",
           "exit": 0,
-          "seconds": 0.3
+          "seconds": 0.4
         },
         {
           "gate": "judgment_scaffold_b_s4_21.py",
           "exit": 0,
-          "seconds": 0.4
+          "seconds": 2.0
         },
         {
           "gate": "editions_b_s4_22.py",
@@ -116,22 +116,27 @@
         {
           "gate": "timed_rehearsal_b_s4_12.py",
           "exit": 0,
-          "seconds": 0.4
+          "seconds": 0.7
         },
         {
           "gate": "bundle_b_s4_16.py",
           "exit": 0,
-          "seconds": 0.4
+          "seconds": 0.9
+        },
+        {
+          "gate": "model_warmup_e2e.py",
+          "exit": 0,
+          "seconds": 0.1
         },
         {
           "gate": "translation_b_s4_15.py",
           "exit": 0,
-          "seconds": 0.5
+          "seconds": 0.6
         },
         {
           "gate": "goldens_b_s4_02.py",
           "exit": 0,
-          "seconds": 0.5
+          "seconds": 0.4
         }
       ]
     }

@@ -217,8 +217,7 @@ fn run_rpc(method: &str, params: Value, timeout_secs: u64) -> Result<Value, Stri
     cmd.env("CASEFORGE_LLM_TIER", current_tier())
         .arg(&script)
         .arg("--once")
-        .arg(&payload)
-        .stdin(Stdio::null())
+        .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::piped());
 
@@ -231,6 +230,16 @@ fn run_rpc(method: &str, params: Value, timeout_secs: u64) -> Result<Value, Stri
             e
         )
     })?;
+
+    // The request goes in on stdin, not as an argument: a Mock Court prompt carrying the case record is longer than the ~32,000 characters
+    // Windows allows on a command line (os error 206, found by driving the real app). Written from its own thread so a large request cannot
+    // block on the pipe while the child is starting.
+    if let Some(mut stdin) = child.stdin.take() {
+        use std::io::Write;
+        thread::spawn(move || {
+            let _ = stdin.write_all(payload.as_bytes());
+        });
+    }
 
     let started = Instant::now();
     loop {
@@ -285,6 +294,11 @@ fn run_rpc(method: &str, params: Value, timeout_secs: u64) -> Result<Value, Stri
     resp.get("result")
         .cloned()
         .ok_or_else(|| "infer-llm response missing result".to_string())
+}
+
+/// Load the model ahead of the first turn so a rehearsal does not pay the cold start inside its turn limit. Best effort; never an error.
+pub fn warm() -> Value {
+    run_rpc("llm.warm", json!({}), 200).unwrap_or_else(|e| json!({"warmed": false, "reason": e}))
 }
 
 pub fn status() -> LlmStatus {

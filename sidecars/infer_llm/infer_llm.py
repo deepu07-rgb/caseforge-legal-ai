@@ -18,6 +18,10 @@ ROOT = Path(__file__).resolve().parents[2]
 MANIFEST_PATH = ROOT / "contracts" / "supported_models.json"
 ADDON_MANIFEST_PATH = ROOT / "contracts" / "supported_models_addon.json"
 DEFAULT_OLLAMA = os.environ.get("CASEFORGE_OLLAMA_HOST", "http://127.0.0.1:11434").rstrip("/")
+# How long the backend keeps the model in memory after its last request. It is the choreography's own idle window (IDLE_UNLOAD_S = 120 s):
+# long enough that a rehearsal's next turn does not pay the 12 s cold load that used to eat the 15 s turn limit, short enough that the
+# 5 GB model does not stay resident (the backend's default is 5 minutes).
+KEEP_ALIVE = os.environ.get("CASEFORGE_LLM_KEEP_ALIVE", "120s")
 OPENAI_BASE = os.environ.get("CASEFORGE_OPENAI_BASE", "").rstrip("/")
 GGUF_PATH = os.environ.get("CASEFORGE_GGUF_PATH", "").strip()
 FORCED_BACKEND = os.environ.get("CASEFORGE_LLM_BACKEND", "").strip().lower()
@@ -279,7 +283,7 @@ def _options(max_tokens: int, variant: int = 0) -> dict[str, Any]:
 
 def chat_ollama(model: str, messages: list[dict[str, str]], max_tokens: int, response_format: dict[str, Any] | None = None, variant: int = 0) -> dict[str, Any]:
     started = time.time()
-    payload: dict[str, Any] = {"model": model, "messages": messages, "stream": False, "options": _options(max_tokens, variant)}
+    payload: dict[str, Any] = {"model": model, "messages": messages, "stream": False, "keep_alive": KEEP_ALIVE, "options": _options(max_tokens, variant)}
     if "think" in GENERATION: payload["think"] = bool(GENERATION["think"])
     if response_format is not None: payload["format"] = response_format
     data = http_json(f"{DEFAULT_OLLAMA}/api/chat", payload, timeout=300.0)
@@ -479,6 +483,14 @@ def handle(req: dict[str, Any]) -> dict[str, Any]:
         propositions = _parse_propositions(result["content"]) if params.get("structured_propositions") else []
         structured_turn = _parse_mock_court_turn(result["content"]) if params.get("mock_court_schema_v2") else None
         return ok(rid, {**result, "propositions": propositions, "mock_court_turn": structured_turn, "role": params.get("role") or "counsel", "format": params.get("format") or "oral_argument", "controlled_beta_ready": bool(info.get("controlled_beta_ready")), "provenance": _provenance(info, messages, context, max_tokens, variant), "disclaimer": "Local preparation output only. Not legal advice. Inspect every cited source before use."})
+    if method == "llm.warm":
+        # Load the model into memory ahead of the first turn (no prompt, nothing generated), with the SAME context size the turns use: the backend reloads a model whose context size differs. Best effort: a failure only means the first turn is cold.
+        info = resolve_backend()
+        if not info.get("available") or info.get("backend") != "ollama": return ok(rid, {"warmed": False, "reason": "no Ollama backend available"})
+        started = time.time()
+        try: http_json(f"{DEFAULT_OLLAMA}/api/generate", {"model": str(info.get("model") or DEFAULT_MODEL), "prompt": "", "stream": False, "keep_alive": KEEP_ALIVE, "options": {"num_ctx": int(GENERATION["num_ctx"])}}, timeout=180.0)
+        except Exception as exc: return ok(rid, {"warmed": False, "reason": f"load failed: {exc}"})
+        return ok(rid, {"warmed": True, "elapsed_ms": int((time.time() - started) * 1000), "keep_alive": KEEP_ALIVE})
     if method == "llm.translate":
         # B-S4-15: one masked Hindi segment in, English prose out. A fixed translation prompt (its hash is recorded in contracts/translation_config.json),
         # greedy decoding, no matter context: the reasoner's legal prompt and case context are not involved.
@@ -496,7 +508,7 @@ def handle(req: dict[str, Any]) -> dict[str, Any]:
         try:
             if info.get("backend") != "ollama": return err(rid, -32000, "translation currently needs the Ollama backend", {"code": "CF_TRANSLATE_BACKEND"})
             started = time.time()
-            data = http_json(f"{DEFAULT_OLLAMA}/api/chat", {"model": model, "messages": messages, "stream": False, "options": {"temperature": float(gen["temperature"]), "top_p": float(gen["top_p"]), "seed": int(gen["seed"]), "num_ctx": int(gen["num_ctx"]), "num_predict": max_tokens}}, timeout=300.0)
+            data = http_json(f"{DEFAULT_OLLAMA}/api/chat", {"model": model, "messages": messages, "stream": False, "keep_alive": KEEP_ALIVE, "options": {"temperature": float(gen["temperature"]), "top_p": float(gen["top_p"]), "seed": int(gen["seed"]), "num_ctx": int(gen["num_ctx"]), "num_predict": max_tokens}}, timeout=300.0)
         except Exception as exc: return err(rid, -32001, f"LLM generation failed: {exc}", {"code": "CF_LLM_GENERATE_FAILED"})
         content = strip_reasoning(str((data.get("message") or {}).get("content") or ""))
         if not content: return err(rid, -32001, "Empty model response", {"code": "CF_LLM_EMPTY"})
@@ -507,7 +519,9 @@ def handle(req: dict[str, Any]) -> dict[str, Any]:
 def main(argv: list[str] | None = None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
     if argv and argv[0] == "--once":
-        raw = argv[1] if len(argv) > 1 else sys.stdin.read()
+        # The host sends the request on stdin (a command line is limited to ~32,000 characters on Windows); read it as UTF-8 bytes, not
+        # through the console code page, so Hindi text survives.
+        raw = argv[1] if len(argv) > 1 else sys.stdin.buffer.read().decode("utf-8")
         try: request = json.loads(raw)
         except json.JSONDecodeError as exc: print(json.dumps(err(None, -32700, f"Parse error: {exc}"))); return 1
         print(json.dumps(handle(request), ensure_ascii=False)); return 0
