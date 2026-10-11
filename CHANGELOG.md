@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.0.0-dev] — 2026-10-11 (AC-S4-00.7 re-examined, unchanged)
+
+The one failing Stage 4 criterion was re-measured and a prompt fix was tried. The failure repeats exactly (fixed seed), and the two prompt variants tried each fix one held-out set only by breaking the other (table in `docs/B-S4-00_lean_runtime.md`), so nothing was changed: further edits would be tuning to the tests. Needs an owner decision (accept as a recorded limitation, change the default model, or new independently written injection cases).
+
 ## [4.0.0-dev] — 2026-10-11 (Mock Court's model is ready, and a long prompt can reach it)
 
 Found by driving the real app. The local model is kept loaded for the app's own two-minute idle window and is loaded when the Mock Court screen opens, so the first turn no longer pays a 12 s cold start inside its 15 s limit on a 4 GB laptop. A long rehearsal prompt failed to start the model at all on Windows (the request was a command-line argument, over the 32,000-character limit; os error 206); it now goes in on standard input as UTF-8. Gate: `eval/checks/model_warmup_e2e.py`. A real turn's timing on this PC was not re-measured after the second fix.
