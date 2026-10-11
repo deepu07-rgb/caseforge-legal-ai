@@ -1,22 +1,26 @@
 {
-  "generated_at": "2026-10-11T06:42:23Z",
+  "generated_at": "2026-10-11T14:59:01Z",
   "steps": [
+    {
+      "name": "production_build",
+      "exit": 0,
+      "seconds": 12.7
+    },
     {
       "name": "rust_tests",
       "exit": 0,
-      "seconds": 0,
-      "log": "cargo-test.log",
-      "note": "existing log used"
+      "seconds": 820.0,
+      "log": "cargo-test.log"
     },
     {
       "name": "ci_gates",
       "exit": 0,
-      "seconds": 11.5,
+      "seconds": 9.6,
       "gates": [
         {
           "gate": "contracts_b_s4_01.py",
           "exit": 0,
-          "seconds": 0.7
+          "seconds": 0.8
         },
         {
           "gate": "injection_guard_b_s4_00.py",
@@ -26,12 +30,12 @@
         {
           "gate": "answer_feedback_b_s4_00b.py",
           "exit": 0,
-          "seconds": 0.3
+          "seconds": 0.4
         },
         {
           "gate": "citation_audit_b_s4_04.py",
           "exit": 0,
-          "seconds": 0.2
+          "seconds": 0.1
         },
         {
           "gate": "certificate_b_s4_05.py",
@@ -41,17 +45,17 @@
         {
           "gate": "opposing_scan_b_s4_06.py",
           "exit": 0,
-          "seconds": 0.3
+          "seconds": 0.4
         },
         {
           "gate": "witness_matrix_b_s4_07.py",
           "exit": 0,
-          "seconds": 0.4
+          "seconds": 0.3
         },
         {
           "gate": "impeachment_b_s4_08.py",
           "exit": 0,
-          "seconds": 0.3
+          "seconds": 0.4
         },
         {
           "gate": "rule_tables_b_s4_03.py",
@@ -61,7 +65,7 @@
         {
           "gate": "code_bridge_b_s4_09.py",
           "exit": 0,
-          "seconds": 0.3
+          "seconds": 0.4
         },
         {
           "gate": "reasoning_b_s4_28.py",
@@ -76,17 +80,17 @@
         {
           "gate": "foundation_b_s4_10.py",
           "exit": 0,
-          "seconds": 0.3
+          "seconds": 0.4
         },
         {
           "gate": "issue_matrix_b_s4_18.py",
           "exit": 0,
-          "seconds": 0.3
+          "seconds": 0.4
         },
         {
           "gate": "treatment_b_s4_13.py",
           "exit": 0,
-          "seconds": 1.0
+          "seconds": 1.2
         },
         {
           "gate": "chambers_record_only_b_s4_17.py",
@@ -106,22 +110,22 @@
         {
           "gate": "judgment_scaffold_b_s4_21.py",
           "exit": 0,
-          "seconds": 2.0
+          "seconds": 0.5
         },
         {
           "gate": "editions_b_s4_22.py",
           "exit": 0,
-          "seconds": 0.5
+          "seconds": 0.4
         },
         {
           "gate": "timed_rehearsal_b_s4_12.py",
           "exit": 0,
-          "seconds": 0.7
+          "seconds": 0.4
         },
         {
           "gate": "bundle_b_s4_16.py",
           "exit": 0,
-          "seconds": 0.9
+          "seconds": 0.4
         },
         {
           "gate": "model_warmup_e2e.py",
@@ -131,12 +135,12 @@
         {
           "gate": "translation_b_s4_15.py",
           "exit": 0,
-          "seconds": 0.6
+          "seconds": 0.5
         },
         {
           "gate": "goldens_b_s4_02.py",
           "exit": 0,
-          "seconds": 0.4
+          "seconds": 0.5
         }
       ]
     }
