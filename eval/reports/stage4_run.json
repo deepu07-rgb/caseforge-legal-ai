@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-11T00:27:42Z",
+  "generated_at": "2026-10-11T01:27:49Z",
   "steps": [
     {
       "name": "rust_tests",
@@ -26,7 +26,7 @@
         {
           "gate": "answer_feedback_b_s4_00b.py",
           "exit": 0,
-          "seconds": 0.4
+          "seconds": 0.3
         },
         {
           "gate": "citation_audit_b_s4_04.py",
@@ -41,7 +41,7 @@
         {
           "gate": "opposing_scan_b_s4_06.py",
           "exit": 0,
-          "seconds": 0.3
+          "seconds": 0.4
         },
         {
           "gate": "witness_matrix_b_s4_07.py",
@@ -51,17 +51,17 @@
         {
           "gate": "impeachment_b_s4_08.py",
           "exit": 0,
-          "seconds": 0.4
+          "seconds": 0.3
         },
         {
           "gate": "rule_tables_b_s4_03.py",
           "exit": 0,
-          "seconds": 0.2
+          "seconds": 0.1
         },
         {
           "gate": "code_bridge_b_s4_09.py",
           "exit": 0,
-          "seconds": 0.4
+          "seconds": 0.3
         },
         {
           "gate": "reasoning_b_s4_28.py",
@@ -81,7 +81,7 @@
         {
           "gate": "issue_matrix_b_s4_18.py",
           "exit": 0,
-          "seconds": 0.3
+          "seconds": 0.4
         },
         {
           "gate": "treatment_b_s4_13.py",
@@ -106,7 +106,7 @@
         {
           "gate": "judgment_scaffold_b_s4_21.py",
           "exit": 0,
-          "seconds": 0.5
+          "seconds": 0.4
         },
         {
           "gate": "editions_b_s4_22.py",
@@ -126,12 +126,12 @@
         {
           "gate": "translation_b_s4_15.py",
           "exit": 0,
-          "seconds": 0.4
+          "seconds": 0.5
         },
         {
           "gate": "goldens_b_s4_02.py",
           "exit": 0,
-          "seconds": 0.4
+          "seconds": 0.5
         }
       ]
     }

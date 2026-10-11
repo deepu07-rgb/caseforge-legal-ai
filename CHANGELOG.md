@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.0.0-dev] — 2026-10-11 (relief, exhibits and authority suggestions)
+
+Found by driving the real app on a memo of appeal. A `PRAYER` paragraph or "prays that ..." sentence is now read as relief and an exhibit cited in running text ("Exhibit P-3") as evidence, once each; before, only one-line labelled forms were read and the Digest showed 0 for both. For a plainly civil matter the authority suggestions no longer lead with the criminal codes; what was left out is listed on the screen with the reason. Tests in `docpipe::skeleton` and `working_set`.
+
 ## [4.0.0-dev] — 2026-10-11 (expired licence is read-only everywhere)
 
 An expired licence now makes every write to a matter fail with `CF_VAULT_READ_ONLY`, not just three: it puts each open matter database in SQLite's query-only mode from one place. Reading, listing and exporting still work; a valid licence lifts it. Found by driving the real app, where a document upload still worked on an expired licence. Test: `vault::tests::an_expired_licence_makes_every_matter_write_read_only_and_a_valid_one_lifts_it`; the editions gate (AC-S3-22.8) requires it.

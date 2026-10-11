@@ -1354,6 +1354,8 @@ export interface LegalWorkingSet {
   schema_version: string; case_id: string; version: number; regime_status: "PENDING_CONFIRMATION" | "COUNSEL_CONFIRMED";
   confirmed_regime_id: string | null; regime_candidates: RegimeCandidate[]; items: WorkingSetItem[];
   usable_authority_ids: string[]; updated_at_unix_ms: number;
+  /** Suggestions left out because they plainly do not fit the matter (e.g. a criminal code for a civil appeal); counsel can still add them by hand. */
+  suppressed_proposals?: { title: string; section_label: string; reason: string }[];
 }
 export interface WorkingSetSelection { output_id: string; output_kind: string; case_id: string; working_set_version: number; authority_ids: string[]; selected_at_unix_ms: number; }
 export async function workingSetGet(caseId: string): Promise<LegalWorkingSet> { return invoke("working_set_get", { caseId }); }

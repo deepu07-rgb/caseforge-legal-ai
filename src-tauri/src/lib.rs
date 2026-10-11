@@ -4017,15 +4017,27 @@ fn working_set_suggest(
         &small,
         &[],
     )?;
-    let proposals: Vec<working_set::WorkingSetItemInput> = found
+    let all: Vec<working_set::WorkingSetItemInput> = found
         .hits
         .iter()
         .filter_map(|hit| found.chunks.iter().find(|chunk| chunk.chunk_id == hit.chunk_id))
         .map(|chunk| working_set::item_from_chunk(chunk, &found.corpus_checksum))
         .collect();
+    // a clear mismatch (a criminal code for a civil matter) is left out of the list and named beside it
+    let mut proposals = Vec::new();
+    let mut suppressed = Vec::new();
+    for item in all {
+        match working_set::misfit(&profile, graph.as_ref(), &item.title) {
+            Some(reason) => suppressed.push(json!({"title": item.title, "section_label": item.section_label, "reason": reason})),
+            None => proposals.push(item),
+        }
+    }
     let regimes = working_set::regime_candidates(&profile, graph.as_ref());
-    mgr.working_set_merge_suggestions(&case_id, &proposals, &regimes)
-        .map_err(|e| e.to_string())
+    let mut set = mgr
+        .working_set_merge_suggestions(&case_id, &proposals, &regimes)
+        .map_err(|e| e.to_string())?;
+    set["suppressed_proposals"] = serde_json::Value::Array(suppressed);
+    Ok(set)
 }
 
 #[tauri::command]

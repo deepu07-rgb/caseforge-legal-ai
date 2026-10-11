@@ -160,3 +160,61 @@ pub fn policy() -> serde_json::Value {
         "text_policy": "Exact source chunk is retained only with stable IDs, checksums, pack, path, and source reference"
     })
 }
+
+/// Codes that govern criminal proceedings only. (Evidence law is not listed: it serves civil and criminal matters alike.)
+const CRIMINAL_ONLY_TITLES: &[&str] = &["nyaya sanhita", "nagarik suraksha", "indian penal code", "code of criminal procedure"];
+const CRIMINAL_MATTER_WORDS: &[&str] = &["criminal", "bail", "sessions", "offence", "accused", "magistrate", "prosecution", "fir ", "habeas", "anticipatory"];
+const CIVIL_MATTER_WORDS: &[&str] = &["civil", "partition", "property", "contract", "suit", "decree", "tenancy", "commercial", "probate", "injunction", "specific performance", "money recovery", "succession"];
+
+/// Why a suggested authority does not fit this matter, or None when it fits or we cannot tell. Found by running the real app: for a civil
+/// partition appeal the suggestions led with sections of the criminal procedure code. A suggestion is only ever a proposal, and counsel can
+/// still search for and add anything by hand, so a clear mismatch is left out of the list and *named* beside it, never silently dropped.
+pub fn misfit(profile: &crate::vault::CaseSummary, graph: Option<&serde_json::Value>, title: &str) -> Option<String> {
+    let nature = format!("{} {} {}", profile.matter_type, profile.cause_title, profile.court).to_ascii_lowercase();
+    let civil = CIVIL_MATTER_WORDS.iter().any(|w| nature.contains(w));
+    let criminal = CRIMINAL_MATTER_WORDS.iter().any(|w| nature.contains(w));
+    let t = title.to_ascii_lowercase();
+    if !(civil && !criminal) || !CRIMINAL_ONLY_TITLES.iter().any(|c| t.contains(c)) {
+        return None;
+    }
+    // the matter's own papers cite a criminal code: then it is relevant after all
+    let cited = graph
+        .map(|g| g["statutes"].to_string().to_ascii_lowercase())
+        .unwrap_or_default();
+    if CRIMINAL_ONLY_TITLES.iter().any(|c| cited.contains(c)) || ["ipc", "crpc", "bnss", "bns "].iter().any(|c| cited.contains(c)) {
+        return None;
+    }
+    Some("a criminal code, and this is a civil matter whose papers cite none".into())
+}
+
+#[cfg(test)]
+mod misfit_tests {
+    use super::*;
+    fn profile(matter: &str, title: &str) -> crate::vault::CaseSummary {
+        crate::vault::CaseSummary { case_id: "c".into(), created_at_unix_ms: 0, label: "l".into(), cause_title: title.into(), court: "High Court".into(), jurisdiction: "India".into(), matter_type: matter.into(), user_side: "Appellant".into(), code_era: "".into(), language: "en".into(), is_open: true }
+    }
+    #[test]
+    fn a_civil_matter_is_not_offered_criminal_codes_but_a_criminal_one_is() {
+        let civil = profile("Civil", "Ravi v. Suresh (partition appeal)");
+        assert!(misfit(&civil, None, "The Bharatiya Nagarik Suraksha Sanhita, 2023").is_some());
+        assert!(misfit(&civil, None, "The Bharatiya Nyaya Sanhita, 2023").is_some());
+        assert!(misfit(&civil, None, "The Limitation Act, 1963").is_none(), "civil law is offered");
+        assert!(misfit(&civil, None, "The Bharatiya Sakshya Adhiniyam, 2023").is_none(), "evidence law serves both");
+        let criminal = profile("Criminal", "State v. Mohan");
+        assert!(misfit(&criminal, None, "The Bharatiya Nagarik Suraksha Sanhita, 2023").is_none());
+        let mixed = profile("Civil and criminal complaint", "Acme v. Northern");
+        assert!(misfit(&mixed, None, "The Bharatiya Nyaya Sanhita, 2023").is_none(), "when the matter says both, nothing is left out");
+    }
+    #[test]
+    fn a_civil_matter_whose_papers_cite_a_criminal_code_still_gets_it() {
+        let civil = profile("Civil", "Acme v. Northern");
+        let graph = serde_json::json!({"statutes": [{"label": "Section 420 of the Indian Penal Code"}]});
+        assert!(misfit(&civil, Some(&graph), "The Bharatiya Nyaya Sanhita, 2023").is_none());
+        let graph = serde_json::json!({"statutes": [{"label": "Article 116 of the Limitation Act, 1963"}]});
+        assert!(misfit(&civil, Some(&graph), "The Bharatiya Nyaya Sanhita, 2023").is_some());
+    }
+    #[test]
+    fn an_unclear_matter_is_never_filtered() {
+        assert!(misfit(&profile("", "A v. B"), None, "The Bharatiya Nyaya Sanhita, 2023").is_none());
+    }
+}

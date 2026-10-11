@@ -1,7 +1,7 @@
 {
   "batch": "B-S4-23",
   "release": "Stage 4 (v4.0) - not a release",
-  "generated_at": "2026-10-11T00:27:42Z",
+  "generated_at": "2026-10-11T01:27:49Z",
   "verdict": "NOT READY",
   "answer_to_the_question": "No, not yet. Blocking: 1 criterion(s) failing (AC-S4-00.7); 0 not built or unreported | 9 criterion(s) could not be measured here: AC-S4-00.4, AC-S4-01.3, AC-S4-02.2, AC-S4-03.1, AC-S4-04.1, AC-S4-05.1, AC-S4-06.1, AC-S4-09.1, AC-S4-10.3 | no legal-editor sign-off for AC-S4-04.1, AC-S4-05.1, AC-S4-06.1 | Production build (tsc -b && vite build) was not run. What does hold, and is tested, is that no decision is made by the machine.",
   "reasons": [
@@ -99,7 +99,7 @@
       "title": "Rust tests (cargo test --lib)",
       "status": "PASS",
       "hard": false,
-      "detail": "280 passed, 0 failed, 1 ignored",
+      "detail": "287 passed, 0 failed, 1 ignored",
       "evidence": {
         "ignored": [
           "retrieval::store::tests::b_s4_29_scale_benchmark"
@@ -474,9 +474,9 @@
   },
   "run": {
     "source": "eval/run_stage4.py",
-    "generated_at": "2026-10-11T00:27:42Z"
+    "generated_at": "2026-10-11T01:27:49Z"
   },
-  "report_sha256": "ff1a2f55056a5cfc5ef695613aeb982ccd573dd11b95605c87a9a93698548bff",
+  "report_sha256": "7d1d398b6b580dbf1facea03494ac7e4435e7dbf98c93cdd20802c42bf116276",
   "signature": {
     "status": "UNSIGNED",
     "reason": "no release signing key exists; the owner decides who signs a release (set CASEFORGE_RELEASE_KEY_PEM to sign). The report_sha256 above fixes the content."

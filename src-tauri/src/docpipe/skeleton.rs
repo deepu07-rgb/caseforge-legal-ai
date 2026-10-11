@@ -401,6 +401,12 @@ pub fn extract_case_graph(
             .unwrap();
     let procedure_re =
         Regex::new(r"(?im)^\s*(?:procedural history|procedure|posture)\s*:\s*(.{4,400})$").unwrap();
+    // How a pleading actually states its prayer and cites its exhibits (found by running the real app: a memo with a PRAYER paragraph and
+    // "Exhibit P-3" in running text produced no relief and no evidence, because only one-line labelled forms were read).
+    let prayer_head_re = Regex::new(r"(?im)^[ \t]*(?:prayer(?:[ \t]+for[ \t]+relief)?|reliefs?[ \t]+(?:sought|claimed)|wherefore)[ \t]*:?[ \t]*$").unwrap();
+    let prays_re = Regex::new(r"(?is)\b(?:humbly[ \t]+)?pray(?:s|ed)?[ \t]+(?:that|for|to)\b[^.;\n]{5,380}").unwrap();
+    let list_item_re = Regex::new(r"^(?:\(?[A-Za-z0-9]{1,4}[\).]|[-*•])[ \t]+\S").unwrap();
+    let exhibit_ref_re = Regex::new(r"(?i)\b(exhibit|annexure|ex\.)[ \t]*([A-Z]{1,3}[-/ ]?[0-9]{1,3}[A-Za-z]?)\b").unwrap();
 
     for page in pages {
         if page.text.trim().is_empty() {
@@ -701,6 +707,107 @@ pub fn extract_case_graph(
                 p.clone(),
             ));
             evidence.push(json!({"evidence_id":id,"label":label,"doc_id":page.doc_id,"kind":node_kind,"provenance":p}));
+        }
+        // ---- relief stated as a PRAYER paragraph or as "prays that ..." ----
+        let mut relief_candidates: Vec<(usize, usize, String)> = Vec::new();
+        for head in prayer_head_re.find_iter(text) {
+            let mut cursor = head.end();
+            let mut items: Vec<(usize, usize, String)> = Vec::new();
+            let mut numbered = false;
+            for line in text[head.end()..].split_inclusive('\n') {
+                let start = cursor;
+                cursor += line.len();
+                let t = line.trim();
+                if t.is_empty() {
+                    if items.is_empty() {
+                        continue;
+                    }
+                    break;
+                }
+                // a new heading in capitals ends the prayer
+                if t.len() < 40 && t.chars().any(|c| c.is_alphabetic()) && t == t.to_uppercase() && !list_item_re.is_match(t) {
+                    break;
+                }
+                let lead = line.len() - line.trim_start().len();
+                if list_item_re.is_match(t) {
+                    numbered = true;
+                    items.push((start + lead, cursor, t.to_string()));
+                } else if numbered {
+                    if let Some(last) = items.last_mut() {
+                        last.1 = cursor;
+                        last.2 = format!("{} {}", last.2, t);
+                    }
+                } else if let Some(last) = items.last_mut() {
+                    last.1 = cursor;
+                    last.2 = format!("{} {}", last.2, t);
+                } else {
+                    items.push((start + lead, cursor, t.to_string()));
+                }
+                if items.len() >= 12 {
+                    break;
+                }
+            }
+            relief_candidates.extend(items);
+        }
+        for m in prays_re.find_iter(text) {
+            relief_candidates.push((m.start(), m.end(), m.as_str().to_string()));
+        }
+        for (start, end, raw) in relief_candidates {
+            let label = compact(&raw, 420);
+            let key = label.to_lowercase();
+            if label.chars().count() < 12 || relief.iter().any(|r| {
+                let t = r["text"].as_str().unwrap_or("").to_lowercase();
+                t == key || t.contains(&key) || key.contains(&t)
+            }) {
+                continue;
+            }
+            let p = provenance(
+                pointer(&page.doc_id, page.page_index, start, end, &text[start..end]),
+                base.min(0.84),
+                "EXTRACTED",
+                &at,
+                "relief from a prayer paragraph or a 'prays that' sentence",
+            );
+            let id = format!("relief_{:04}", relief.len() + 1);
+            nodes.push(node(
+                id.clone(),
+                "relief",
+                label.clone(),
+                "pleaded",
+                attr(Value::Null, Value::Null, Value::Null, Value::Null, Value::Null, Value::Null, Value::Null, Value::Null, Value::Null, vec![]),
+                p.clone(),
+            ));
+            relief.push(json!({"relief_id":id,"text":label,"quantum":null,"provenance":p}));
+        }
+        // ---- exhibits cited in running text ("Exhibit P-3"), once each ----
+        for caps in exhibit_ref_re.captures_iter(text) {
+            let m = caps.get(0).unwrap();
+            let kind = caps[1].to_ascii_lowercase();
+            let id_part = caps[2].to_uppercase().replace(' ', "");
+            let tag = format!("{} {}", if kind.starts_with("annex") { "Annexure" } else { "Exhibit" }, id_part);
+            if evidence.iter().any(|e| e["label"].as_str().unwrap_or("").to_uppercase().contains(&tag.to_uppercase())) {
+                continue;
+            }
+            let line_start = text[..m.start()].rfind('\n').map(|i| i + 1).unwrap_or(0);
+            let line_end = text[m.end()..].find('\n').map(|i| m.end() + i).unwrap_or(text.len());
+            let label = format!("{} — {}", tag, compact(&text[line_start..line_end], 220));
+            let p = provenance(
+                pointer(&page.doc_id, page.page_index, m.start(), m.end(), m.as_str()),
+                base.min(0.86),
+                "EXTRACTED",
+                &at,
+                "exhibit cited in running text",
+            );
+            let id = format!("evidence_{:04}", evidence.len() + 1);
+            nodes.push(node(
+                id.clone(),
+                "exhibit",
+                label.clone(),
+                "unknown",
+                attr(Value::Null, Value::Null, Value::Null, Value::Null, Value::Null, Value::Null, json!(page.doc_id), Value::Null, Value::Null, vec![]),
+                p.clone(),
+            ));
+            evidence.push(json!({"evidence_id":id,"label":label,"doc_id":page.doc_id,"kind":"exhibit","provenance":p}));
         }
         if procedural.is_none() {
             if let Some(c) = procedure_re.captures(text) {
@@ -1028,6 +1135,46 @@ mod tests {
             text: text.into(),
             mean_confidence: 0.93,
         }
+    }
+    #[test]
+    fn a_prayer_paragraph_and_a_prays_that_sentence_are_relief() {
+        let g = extract_case_graph("c", "India", &[page("5. The appeal is within time.\n\nPRAYER\n(a) set aside the decree dated 30 August 2022;\n(b) declare partition in terms of the registered deed.\n\nThe appellant also prays that costs be awarded.")], "triage", "recognize");
+        let texts: Vec<String> = g["prayer_relief"].as_array().unwrap().iter().map(|r| r["text"].as_str().unwrap().to_string()).collect();
+        assert_eq!(texts.len(), 3, "{texts:?}");
+        assert!(texts[0].contains("set aside the decree"), "{texts:?}");
+        assert!(texts.iter().any(|t| t.contains("declare partition")) && texts.iter().any(|t| t.contains("costs be awarded")), "{texts:?}");
+        // every item points at its own words in the page
+        for r in g["prayer_relief"].as_array().unwrap() {
+            assert_eq!(r["provenance"]["origin"], "EXTRACTED");
+            assert!(r["provenance"]["source"]["quote"].as_str().unwrap().len() > 5);
+        }
+        assert!(assert_extracted_sources(&g).is_empty());
+    }
+    #[test]
+    fn an_unnumbered_prayer_is_one_relief_and_prose_without_a_prayer_gives_none() {
+        let one = extract_case_graph("c", "India", &[page("PRAYER\nThe appellant prays that the decree be set aside and partition be declared.\n")], "triage", "recognize");
+        assert_eq!(one["prayer_relief"].as_array().unwrap().len(), 1, "the heading block and the sentence are the same relief, not two");
+        let none = extract_case_graph("c", "India", &[page("The tribunal heard the matter. It was a long prayer meeting at the temple.")], "triage", "recognize");
+        assert!(none["prayer_relief"].as_array().unwrap().is_empty());
+    }
+    #[test]
+    fn an_exhibit_cited_in_running_text_is_evidence_once() {
+        let g = extract_case_graph("c", "India", &[page("3. The appellant paid Rs 2,50,000, as the mutation entry (Exhibit P-3) shows.\n4. See also Exhibit P-3 and Annexure A-2.\nThe exhibit that was filed was long.")], "triage", "recognize");
+        let labels: Vec<String> = g["evidence"].as_array().unwrap().iter().map(|e| e["label"].as_str().unwrap().to_string()).collect();
+        assert_eq!(labels.len(), 2, "{labels:?}");
+        assert!(labels[0].starts_with("Exhibit P-3") && labels[1].starts_with("Annexure A-2"), "{labels:?}");
+        assert!(assert_extracted_sources(&g).is_empty());
+    }
+    #[test]
+    fn the_pinned_chronology_pages_state_a_prayer_and_cite_an_exhibit_and_both_are_found() {
+        let text = include_str!("../../../golden/G-CASE-IN/fixtures/synth_chrono_40/pages/page_01.txt");
+        let g = extract_case_graph("c", "India", &[page(text)], "triage", "recognize");
+        let relief: Vec<&str> = g["prayer_relief"].as_array().unwrap().iter().map(|r| r["text"].as_str().unwrap()).collect();
+        assert!(relief.iter().any(|t| t.contains("interim protection") && t.contains("1,25,000")), "{relief:?}");
+        let evidence: Vec<&str> = g["evidence"].as_array().unwrap().iter().map(|e| e["label"].as_str().unwrap()).collect();
+        assert!(evidence.iter().any(|t| t.starts_with("Exhibit A-1")), "{evidence:?}");
+        // the dated events found before are still found
+        assert!(g["chronology"].as_array().unwrap().iter().any(|e| e["date"] == "2023-03-12"));
     }
     #[test]
     fn ambiguous_numeric_date_stays_ambiguous() {
