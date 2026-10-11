@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.0.0-dev] — 2026-10-11 (expired licence is read-only everywhere)
+
+An expired licence now makes every write to a matter fail with `CF_VAULT_READ_ONLY`, not just three: it puts each open matter database in SQLite's query-only mode from one place. Reading, listing and exporting still work; a valid licence lifts it. Found by driving the real app, where a document upload still worked on an expired licence. Test: `vault::tests::an_expired_licence_makes_every_matter_write_read_only_and_a_valid_one_lifts_it`; the editions gate (AC-S3-22.8) requires it.
+
 ## [4.0.0-dev] — 2026-10-11
 
 ### Stage 4 — Hindi to English translation and guardrail G10 (B-S4-15)

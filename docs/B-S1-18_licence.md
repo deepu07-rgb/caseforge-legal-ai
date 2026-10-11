@@ -16,7 +16,7 @@ One-time **offline** activation with machine fingerprint **3-of-4**, Ed25519-sig
 | Fingerprint | `hostname`, `username`, `machine_guid`, `disk_root` (SHA-256 hex); **3-of-4** |
 | Signature | Ed25519 over canonical sorted JSON (no signature fields) |
 | Trust | `contracts/licence_trust.json` |
-| EXPIRED | **read-only vault** — data never ransomed/deleted |
+| EXPIRED | **read-only vault** — every write to a matter is refused (SQLite query-only mode on each open matter database); reading and export work; data never ransomed/deleted |
 | Air-gap | kills networking (companion refuse, fleet refuse) |
 | Case data network | **forbidden** (AC-13.1) |
 

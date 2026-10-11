@@ -660,7 +660,11 @@ impl VaultManager {
         // Ensure case vault has profile schema when opened (older stubs).
         let _ = sql::apply_pending_migrations(&conn, CASE_MIGRATIONS);
         g.cases.insert(case_id.to_string(), conn);
-        case_summary(&g, case_id)
+        let summary = case_summary(&g, case_id);
+        drop(g);
+        // a matter opened under an expired licence is opened read-only
+        let _ = self.licence_status_inner();
+        summary
     }
 
     pub fn close_case(&self, case_id: &str) -> VaultResult<()> {
@@ -4824,6 +4828,16 @@ impl VaultManager {
 
     // --- Licence / air-gap (B-S1-18) ---
 
+    /// The one place that makes an expired licence mean "read-only" for every matter. SQLite's query-only mode refuses every INSERT, UPDATE,
+    /// DELETE and schema change on the connection, whatever command issued it, so no write path (documents, graph, corrections, witness data,
+    /// translations, bundle imports, ...) can be forgotten. Reading is untouched. It is re-applied whenever the licence status is read and
+    /// whenever a matter is opened, and lifted as soon as a valid licence makes the vault writable again.
+    fn apply_write_policy(g: &VaultInner, writable: bool) {
+        for conn in g.cases.values() {
+            let _ = conn.pragma_update(None, "query_only", if writable { "OFF" } else { "ON" });
+        }
+    }
+
     /// EXPIRED => CF_VAULT_READ_ONLY. Never deletes or ransoms data.
     pub fn assert_vault_writable(&self) -> VaultResult<()> {
         let st = self.licence_status_inner()?;
@@ -4931,6 +4945,7 @@ impl VaultManager {
             }
         }
         let state = LicenceState::from_str_loose(&state_s);
+        Self::apply_write_policy(&g, state.vault_writable());
         Ok(crate::licence::LicenceStatus {
             state: state.as_str().into(),
             licence_id,
@@ -6047,6 +6062,71 @@ mod tests {
         assert!(err.contains("CF_VAULT_READ_ONLY"), "{err}");
         assert!(mgr.seat_deactivate().unwrap_err().to_string().contains("CF_SEAT_LICENCE_EXPIRED"));
         assert_eq!(mgr.list_cases().unwrap().len(), 1, "still there");
+
+        mgr.lock().unwrap();
+        crate::licence::test_trust::set(None);
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn an_expired_licence_makes_every_matter_write_read_only_and_a_valid_one_lifts_it() {
+        // Found by driving the real app: "read-only when expired" was enforced on three writes only, so a document upload still worked.
+        use base64::Engine as _;
+        let dir = std::env::temp_dir().join(format!("caseforge-readonly-test-{}", Uuid::new_v4()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let pass = "read only test passphrase";
+        let sk = ed25519_dalek::SigningKey::from_bytes(&[7u8; 32]);
+        crate::licence::test_trust::set(Some(std::collections::BTreeMap::from([("test-key".to_string(), hex::encode(sk.verifying_key().to_bytes()))])));
+        let mgr = VaultManager::new(dir.clone());
+        mgr.init_and_unlock(pass).unwrap();
+        let case = mgr
+            .create_case_with_wizard(pass, CaseWizardInput { cause_title: "Mine v Yours".into(), court: "High Court".into(), jurisdiction: "India".into(), matter_type: "Civil".into(), user_side: "Appellant".into(), code_era: None, language: None })
+            .unwrap()
+            .case_id;
+        mgr.open_case(&case, pass).unwrap();
+        let upload = |name: &str| DocumentIngestRequest { original_filename: name.into(), content_base64: base64::engine::general_purpose::STANDARD.encode("The agreement was signed on 12 March 2023."), type_tag: None, language_tag: None };
+        let graph = serde_json::json!({"schema_version": "1.0.0", "parties": [], "chronology": []});
+        let note = serde_json::json!({"n": 1});
+
+        // while the vault is writable, every kind of write works
+        let doc = mgr.doc_ingest(&case, upload("a.txt")).unwrap();
+        mgr.case_graph_put(&case, &graph).unwrap();
+        mgr.translation_kv_put(&case, "seg:x", &note).unwrap();
+        mgr.witness_kv_put(&case, "register:x", &note).unwrap();
+
+        // the licence ends
+        let day = 86_400_000i64;
+        let expired = signed_v2(&sk, |v| v["expires_at_unix_ms"] = serde_json::json!(now_ms() - 30 * day));
+        assert_eq!(mgr.licence_activate(&expired).unwrap().status.state, "EXPIRED");
+
+        // reading everything still works
+        assert_eq!(mgr.doc_list(&case).unwrap().len(), 1);
+        assert!(mgr.doc_text_preview(&case, &doc.doc_id, 100).unwrap().text.contains("12 March 2023"));
+        assert!(mgr.case_graph_get(&case).unwrap().is_some());
+        assert_eq!(mgr.translation_kv_list(&case, "seg:").unwrap().len(), 1);
+        assert_eq!(mgr.witness_kv_list(&case, "register:").unwrap().len(), 1);
+
+        // writing anything is refused with the read-only code, and nothing changes
+        let refused = |r: Result<(), VaultError>, what: &str| {
+            let e = r.expect_err(what).to_string();
+            assert!(e.contains("CF_VAULT_READ_ONLY"), "{what}: {e}");
+        };
+        refused(mgr.doc_ingest(&case, upload("b.txt")).map(|_| ()), "document upload");
+        refused(mgr.case_graph_put(&case, &graph), "case graph");
+        refused(mgr.translation_kv_put(&case, "seg:y", &note), "translation store");
+        refused(mgr.witness_kv_put(&case, "register:y", &note), "witness store");
+        assert_eq!(mgr.doc_list(&case).unwrap().len(), 1, "the refused upload left nothing behind");
+
+        // closing and reopening the matter does not lift it
+        mgr.close_case(&case).unwrap();
+        mgr.open_case(&case, pass).unwrap();
+        refused(mgr.doc_ingest(&case, upload("c.txt")).map(|_| ()), "upload after reopening");
+        assert_eq!(mgr.doc_list(&case).unwrap().len(), 1);
+
+        // a valid licence lifts it, without reopening
+        assert_eq!(mgr.licence_activate(&signed_v2(&sk, |_| {})).unwrap().status.state, "ACTIVE");
+        mgr.doc_ingest(&case, upload("d.txt")).unwrap();
+        assert_eq!(mgr.doc_list(&case).unwrap().len(), 2);
 
         mgr.lock().unwrap();
         crate::licence::test_trust::set(None);

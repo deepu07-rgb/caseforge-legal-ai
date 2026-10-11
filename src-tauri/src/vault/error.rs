@@ -74,8 +74,17 @@ impl From<std::io::Error> for VaultError {
     }
 }
 
+pub const READ_ONLY_DETAIL: &str = "CF_VAULT_READ_ONLY: licence EXPIRED — the matter vault is read-only; you can still open, read and export your work, and it is never deleted or held for ransom. Renew the licence to change it again.";
+
 impl From<rusqlite::Error> for VaultError {
     fn from(e: rusqlite::Error) -> Self {
+        // An expired licence puts every matter database in SQLite's query-only mode (see VaultManager::apply_write_policy); a write
+        // anywhere then comes back as this error and is shown as the read-only code.
+        if matches!(&e, rusqlite::Error::SqliteFailure(f, _) if f.code == rusqlite::ErrorCode::ReadOnly) {
+            return VaultError::Internal {
+                detail: READ_ONLY_DETAIL.into(),
+            };
+        }
         VaultError::Sql {
             detail: e.to_string(),
         }

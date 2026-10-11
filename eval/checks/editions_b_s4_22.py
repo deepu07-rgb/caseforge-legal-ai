@@ -66,6 +66,7 @@ TESTS = {
     "receipt": T + "a_release_receipt_verifies_and_any_change_to_it_breaks_it",
     "vault_seat": V + "b_s4_22_giving_a_seat_away_keeps_the_users_work_and_the_old_licence_file_cannot_take_it_back",
     "vault_expiry": V + "b_s4_22_when_the_licence_and_the_pack_subscription_have_both_ended_the_users_work_is_still_theirs",
+    "vault_read_only": V + "an_expired_licence_makes_every_matter_write_read_only_and_a_valid_one_lifts_it",
     "licence_read_only": "licence::tests::expired_not_writable",
     "licence_3_of_4": "licence::tests::fingerprint_3_of_4",
 }
@@ -333,6 +334,15 @@ def main() -> int:
             },
             "detail": "Each edition shows exactly the screens and runs exactly the host commands its licence entitles, from one map; a licence can only narrow its edition. The map in contracts is a DEVELOPMENT_ONLY placeholder (Q-S4-06) - the rules are pinned, the contents are the owner's to decide. Seat transfers are counted over a rolling year and every licence is re-checked at activation.",
         }
+        vault_src = (SRC / "vault" / "mod.rs").read_text(encoding="utf-8")
+        err_src = (SRC / "vault" / "error.rs").read_text(encoding="utf-8")
+        read_only_choke_point = (
+            'pragma_update(None, "query_only"' in vault_src and "fn apply_write_policy" in vault_src
+            and "Self::apply_write_policy(&g, state.vault_writable())" in vault_src
+            and "ErrorCode::ReadOnly" in err_src and "CF_VAULT_READ_ONLY" in err_src
+        )
+        if not read_only_choke_point:
+            errors.append("the expired-licence read-only policy is not enforced at the single choke point")
         s16_2 = all(block.values()) and ok("dates", "sub_state", "sub_install", "sub_updated_at", "stamp", "expired_all", "vault_expiry")
         acs["AC-S4-16.2"] = {
             "status": "PASS" if s16_2 and not errors else "FAIL",
@@ -340,8 +350,10 @@ def main() -> int:
             "detail": "The pack subscription is consulted in exactly one place, installing a pack. An expired subscription leaves installed packs usable and every citation shows the older date with an updates-expired notice; only newer official content is refused. The user's own custom packs, reading and exporting are never blocked.",
         }
         acs["AC-S3-22.8"] = {
-            "status": "PASS" if ok("vault_expiry", "licence_read_only", "licence_3_of_4") and not errors else "FAIL",
-            "detail": "An expired licence leaves cases readable and listed, refuses writes with the read-only code, and ransoms nothing - re-checked here with an expired v2 licence and an expired pack subscription together.",
+            "status": "PASS" if ok("vault_expiry", "vault_read_only", "licence_read_only", "licence_3_of_4") and read_only_choke_point and not errors else "FAIL",
+            "evidence": {"read_only_enforced_by": "SQLite query-only mode on every open matter database, set in one place (VaultManager::apply_write_policy) whenever the licence status is read or a matter is opened; a valid licence lifts it",
+                         "writes_proved_refused": "document upload, case graph, translation store, witness store; reads of the same proved working; reopening the matter does not lift it"},
+            "detail": "An expired licence leaves cases readable and listed, refuses EVERY write to a matter with the read-only code (one choke point, not a guard per command), and ransoms nothing - re-checked here with an expired v2 licence and an expired pack subscription together.",
         }
         for k, v in res.items():
             if v != "ok":

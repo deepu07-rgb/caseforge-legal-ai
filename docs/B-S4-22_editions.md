@@ -52,7 +52,11 @@ the app licence.
   (`CF_PACK_UPDATES_EXPIRED`).
 * **Where it is checked:** exactly one place, `pack_install`, before anything is installed. The gate scans the source and fails if the
   check appears anywhere else, in the vault, or in any read, search, audit, export or status command. The two dates are independent:
-  an expired app licence makes the vault read-only (v1 rule, unchanged); an expired subscription does not touch the vault.
+  an expired app licence makes the vault read-only (v1 rule); an expired subscription does not touch the vault.
+  Since 2026-10-11 "read-only" is enforced at one choke point: an expired licence puts every open matter database in SQLite's query-only mode
+  (`VaultManager::apply_write_policy`), so every write - document upload, graph, corrections, witness data, translations, bundle import - is refused
+  with `CF_VAULT_READ_ONLY`, while reading, listing and exporting keep working; reopening a matter does not lift it and a valid licence does.
+  (Before, only case creation, the lexicon and the experience store were guarded; found by running the real app.)
 
 ## 3. Seat transfer — offline, with a yearly limit
 

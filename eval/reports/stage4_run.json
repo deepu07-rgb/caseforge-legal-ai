@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-10T19:27:34Z",
+  "generated_at": "2026-10-11T00:27:42Z",
   "steps": [
     {
       "name": "rust_tests",
@@ -11,27 +11,27 @@
     {
       "name": "ci_gates",
       "exit": 0,
-      "seconds": 8.2,
+      "seconds": 9.0,
       "gates": [
         {
           "gate": "contracts_b_s4_01.py",
           "exit": 0,
-          "seconds": 0.6
+          "seconds": 0.8
         },
         {
           "gate": "injection_guard_b_s4_00.py",
           "exit": 0,
-          "seconds": 0.2
+          "seconds": 0.3
         },
         {
           "gate": "answer_feedback_b_s4_00b.py",
           "exit": 0,
-          "seconds": 0.3
+          "seconds": 0.4
         },
         {
           "gate": "citation_audit_b_s4_04.py",
           "exit": 0,
-          "seconds": 0.1
+          "seconds": 0.2
         },
         {
           "gate": "certificate_b_s4_05.py",
@@ -51,7 +51,7 @@
         {
           "gate": "impeachment_b_s4_08.py",
           "exit": 0,
-          "seconds": 0.3
+          "seconds": 0.4
         },
         {
           "gate": "rule_tables_b_s4_03.py",
@@ -61,7 +61,7 @@
         {
           "gate": "code_bridge_b_s4_09.py",
           "exit": 0,
-          "seconds": 0.3
+          "seconds": 0.4
         },
         {
           "gate": "reasoning_b_s4_28.py",
@@ -106,12 +106,12 @@
         {
           "gate": "judgment_scaffold_b_s4_21.py",
           "exit": 0,
-          "seconds": 0.4
+          "seconds": 0.5
         },
         {
           "gate": "editions_b_s4_22.py",
           "exit": 0,
-          "seconds": 0.4
+          "seconds": 0.5
         },
         {
           "gate": "timed_rehearsal_b_s4_12.py",
